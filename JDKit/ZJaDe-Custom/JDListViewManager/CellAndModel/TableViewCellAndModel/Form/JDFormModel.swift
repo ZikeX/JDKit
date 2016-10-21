@@ -34,12 +34,11 @@ enum JDTitleHeightStyle {
 }
 
 class JDFormModel: JDTableViewModel {
-    init(image:UIImage? = nil,title:String? = nil) {
-        super.init()
+    convenience init(image:UIImage? = nil,title:String? = nil) {
+        self.init()
         self.title.value = title
         self.image.value = image
     }
-    
     
     override func configModelInit() {
         super.configModelInit()

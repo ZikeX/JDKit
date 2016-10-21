@@ -14,7 +14,6 @@ class BaseTableView: JDTableView {
 }
 class BaseTableViewController: JDTableViewController,ScrollProperty {
     
-    
     var scrollView: UIScrollView {
         return self.tableView
     }

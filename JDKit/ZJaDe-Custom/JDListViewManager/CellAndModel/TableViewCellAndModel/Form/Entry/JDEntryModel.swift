@@ -13,8 +13,8 @@ class JDEntryModel: JDFormModel {
     var text = Variable("")
     var placeholder = Variable("")
     
-    init(image:UIImage? = nil,title:String? = nil,text:String = "",placeholder:String = "") {
-        super.init(image: image, title: title)
+    convenience init(image:UIImage? = nil,title:String? = nil,text:String = "",placeholder:String = "") {
+        self.init(image: image, title: title)
         self.text.value = text
         self.placeholder.value = placeholder
     }

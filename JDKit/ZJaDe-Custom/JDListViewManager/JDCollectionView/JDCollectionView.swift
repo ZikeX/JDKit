@@ -1,16 +1,14 @@
 //
-//  BaseCollectionView.swift
+//  JDCollectionView.swift
 //  ZiWoYou
 //
-//  Created by 茶古电子商务 on 16/10/9.
+//  Created by Z_JaDe on 2016/10/21.
 //  Copyright © 2016年 Z_JaDe. All rights reserved.
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
 
-class BaseCollectionView: UICollectionView {
+class JDCollectionView: UICollectionView {
     convenience init() {
         let flowLayout = UICollectionViewFlowLayout()
         self.init(collectionViewLayout:flowLayout);
@@ -25,4 +23,5 @@ class BaseCollectionView: UICollectionView {
     func configInit() {
         self.backgroundColor = Color.white
     }
+
 }

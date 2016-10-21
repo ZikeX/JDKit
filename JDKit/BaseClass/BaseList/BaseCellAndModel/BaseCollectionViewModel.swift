@@ -10,7 +10,5 @@ import UIKit
 import HandyJSON
 
 class BaseCollectionViewModel: JDCollectionViewModel,HandyJSON {
-    required override init() {
-        super.init()
-    }
+
 }

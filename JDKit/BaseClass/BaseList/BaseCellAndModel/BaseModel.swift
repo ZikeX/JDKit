@@ -12,10 +12,6 @@ import HandyJSON
 class BaseModel: JDCustomModel,HandyJSON {
     var id:Int? = nil
     
-    required override init() {
-        super.init()
-    }
-    
     func mapping(mapper: HelpingMapper) {
         
     }

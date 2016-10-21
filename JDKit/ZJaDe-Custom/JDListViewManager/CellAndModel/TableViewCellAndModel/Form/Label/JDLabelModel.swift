@@ -17,8 +17,8 @@ class JDLabelModel: JDFormModel {
         detailTitleLabel.numberOfLines = 0
         detailTitleLabel.textAlignment = .right
     }
-    init(image:UIImage? = nil,title:String? = nil,detailTitle:String? = nil) {
-        super.init(image: image, title: title)
+    convenience init(image:UIImage? = nil,title:String? = nil,detailTitle:String? = nil) {
+        self.init(image: image, title: title)
         self.detailTitle.value = detailTitle
     }
     override func configModelInit() {

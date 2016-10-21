@@ -21,7 +21,7 @@ class JDModel: NSObject {
     lazy var reuseIdentifier:String = self.cellName
     
     /*************** init ***************/
-    override init() {
+    required override init() {
         super.init()
         configModelInit()
     }
