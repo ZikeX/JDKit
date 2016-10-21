@@ -1,0 +1,30 @@
+
+
+import Foundation
+
+extension Double {
+    var toString: String { return String(self) }
+    var toInt: Int { return Int(self) }
+
+    /// ZJaDe: 返回一个四舍五入保留places位的小数
+    func getRoundedByPlaces(_ places: Int) -> Double {
+        let divisor = pow(10.0, Double(places)) as Double
+        var result = Double(self * divisor) / divisor
+        result.round(.toNearestOrAwayFromZero)
+        return result
+    }
+
+    /// ZJaDe: 转换成一个四舍五入保留places位的小数
+    mutating func roundByPlaces(_ places: Int) {
+        let divisor = pow(10.0, Double(places))
+        var result = (self * divisor) / divisor
+        result.round(.toNearestOrAwayFromZero)
+        self = result
+    }
+    
+    /// ZJaDe: 返回一个直接截取保留places位的小数
+    func getCeiledByPlaces(_ places: Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return Foundation.ceil(self * divisor) / divisor
+    }
+}
