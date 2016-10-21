@@ -8,13 +8,7 @@
 
 import UIKit
 
-class BaseCollectionViewCell: UICollectionViewCell {
+class BaseCollectionViewCell: JDCollectionViewCell {
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        configCollectionViewCellInit()
-    }
-    func configCollectionViewCellInit() {
-        
-    }
+    
 }
