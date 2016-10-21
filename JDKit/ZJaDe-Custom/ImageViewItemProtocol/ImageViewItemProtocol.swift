@@ -31,6 +31,7 @@ extension URL:ImageDataProtocol,ImageViewItemProtocol {
     func setImageInView(imageView: UIImageView) {
         imageView.image = R.image.ic_defalut_image()
     }
+    
 }
 extension UIImage:ImageDataProtocol,ImageViewItemProtocol {
     var imageView: UIImageView {
