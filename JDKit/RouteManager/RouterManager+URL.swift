@@ -9,6 +9,7 @@
 enum RouteUrl {
     case route_活动详情(id:Int)
     case route_活动报名的人
+    case route_活动报名页面
 }
 import UIKit
 
@@ -20,6 +21,9 @@ extension RouterManager {
             return activityVC
         case .route_活动报名的人:
             let vc = JDActivityEnrolNumViewController()
+            return vc
+        case .route_活动报名页面:
+            let vc = JDActivityEnrollViewController()
             return vc
         }
     }

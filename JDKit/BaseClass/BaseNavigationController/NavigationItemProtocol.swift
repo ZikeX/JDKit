@@ -19,14 +19,7 @@ protocol NavigationItemProtocol {
     func configInitAboutNavBar()
 }
 extension NavigationItemProtocol where Self:UIViewController {
-    //如果isTranslucent 设置为true,设置了setBackgroundImage，barTintColor无效
-    //但是isTranslucent 设置为false时，nav的子控制器的大小又不是整个屏幕了
-    //如果加上navigationBar.barStyle = .black 就能解决问题
-    private func botttomLineColor(navigationBar:UINavigationBar,color:UIColor? = nil) {
-        navigationBar.barStyle = .black
-        navigationBar.isTranslucent = true
-        navigationBar.shadowImage = color != nil ? UIImage.imageWithColor(color) : UIImage()
-    }
+    
     fileprivate func configNavBar(_ navBar:UINavigationBar?,animated:Bool) {
         guard self.navigationController is BaseNavigationController else {
             //限制navigationController必须为JDNavigationController
@@ -110,25 +103,43 @@ extension UIViewController:NavigationItemProtocol {
     var navBarShadowColor: UIColor? {
         get {
             let _navBarShadowColor = objc_getAssociatedObject(self, &jd_navBarShadowColorKey) as? UIColor
-            return _navBarShadowColor ?? Color.white
+            return _navBarShadowColor ?? Color.viewBackground
         }
         set {
             objc_setAssociatedObject(self, &jd_navBarShadowColorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            self.botttomLineColor(navigationBar: self.navBar, color: newValue)
         }
     }
 }
 extension UIViewController {
-    func changeAlpha(alpha:CGFloat,navBar:UINavigationBar?) {
+    //如果isTranslucent 设置为true,设置了setBackgroundImage，barTintColor无效
+    //但是isTranslucent 设置为false时，nav的子控制器的大小又不是整个屏幕了
+    //如果加上navigationBar.barStyle = .black 就能解决问题
+    fileprivate func botttomLineColor(navigationBar:UINavigationBar?,color:UIColor?) {
+        navigationBar?.barStyle = .black
+        navigationBar?.isTranslucent = true
+        navigationBar?.shadowImage = color != nil ? UIImage.imageWithColor(color) : nil
+        setNavBarBackgroundImage()
+    }
+    fileprivate func changeAlpha(alpha:CGFloat,navBar:UINavigationBar?) {
         navBar?.setValue(alpha, forKeyPath: "_backgroundView.alpha")
     }
-    func changeTintColor(navBar:UINavigationBar?) {
+    fileprivate func changeTintColor(navBar:UINavigationBar?) {
         navBar?.tintColor = self.navTintColor
         navBar?.titleTextAttributes = [NSForegroundColorAttributeName:self.navTintColor]
     }
-    func changeBarTintColor(navBar:UINavigationBar?) {
+    fileprivate func changeBarTintColor(navBar:UINavigationBar?) {
         navBar?.barTintColor = self.navBarTintColor
+        setNavBarBackgroundImage()
     }
-    func changeIsHidden(navVC:UINavigationController?) {
+    private func setNavBarBackgroundImage() {
+        if navBar?.shadowImage != nil {
+        navBar?.setBackgroundImage(UIImage.imageWithColor(self.navBarTintColor), for: .default)
+        }else {
+        navBar?.setBackgroundImage(nil, for: .default)
+        }
+    }
+    fileprivate func changeIsHidden(navVC:UINavigationController?) {
         navVC?.isNavigationBarHidden = self.navBarIsHidden
     }
 }

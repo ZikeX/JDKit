@@ -144,6 +144,10 @@ extension jd {
         return self.topMostVC?.traitCollection.verticalSizeClass ?? UIUserInterfaceSizeClass.unspecified
     }
     
+    /// ZJaDe: 返回屏幕scale
+    static var screenScale:CGFloat {
+        return UIScreen.main.scale
+    }
     /// ZJaDe: 根据设备品种和方向，返回屏幕宽度
     static var screenWidth: CGFloat {
         
@@ -161,7 +165,6 @@ extension jd {
             
         #endif
     }
-    
     /// ZJaDe: 根据设备品种和方向，返回屏幕高度
     static var screenHeight: CGFloat {
         
