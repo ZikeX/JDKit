@@ -1,5 +1,5 @@
 //
-//  BaseTextField.swift
+//  SearchTextField.swift
 //  ZiWoYou
 //
 //  Created by 茶古电子商务 on 16/9/29.
@@ -14,7 +14,7 @@ enum TextFieldType {
 let defaultWidth:CGFloat = jd.screenWidth
 let defaultHeight:CGFloat = 34
 
-class BaseTextField: UITextField {
+class SearchTextField: UITextField {
     var textFieldType:TextFieldType
     
     init(textFieldType:TextFieldType) {
@@ -64,7 +64,7 @@ class BaseTextField: UITextField {
     }
 }
 // MARK:  - WhiteSearchBarWithCityButton
-extension BaseTextField {
+extension SearchTextField {
     func createWhiteLeftView() -> UIView {
         let contentView = UIView(frame:CGRect(x: 0, y: 0, width: defaultHeight*2.3, height: defaultHeight))
         contentView.addBorderRight(padding: 7)
