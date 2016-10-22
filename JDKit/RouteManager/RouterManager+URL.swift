@@ -8,6 +8,7 @@
 /// ZJaDe: 路线地址
 enum RouteUrl {
     case route_活动详情(id:Int)
+    case route_活动报名的人
 }
 import UIKit
 
@@ -17,6 +18,9 @@ extension RouterManager {
         case .route_活动详情(id:_):
             let activityVC = JDActivityDetailViewController()
             return activityVC
+        case .route_活动报名的人:
+            let vc = JDActivityEnrolNumViewController()
+            return vc
         }
     }
 }

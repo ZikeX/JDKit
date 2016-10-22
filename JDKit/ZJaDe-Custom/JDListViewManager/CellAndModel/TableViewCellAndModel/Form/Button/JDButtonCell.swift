@@ -26,8 +26,8 @@ class JDButtonCell: JDFormCell {
         guard let buttonModel = element as? JDButtonModel else {
             return
         }
-        buttonModel.title.asObservable().bindTo(button.titleLabel.rx.text).addDisposableTo(disposeBag)
-        buttonModel.image.asObservable().bindTo(button.imageView.rx.image).addDisposableTo(disposeBag)
+        buttonModel.title.asObservable().bindTo(button.textLabel.rx.text).addDisposableTo(disposeBag)
+        buttonModel.image.asObservable().bindTo(button.imgView.rx.image).addDisposableTo(disposeBag)
         buttonModel.buttonAppearanceClosure(button)
         button.rx.tap.bindTo(buttonModel.buttonClick).addDisposableTo(disposeBag)
     }

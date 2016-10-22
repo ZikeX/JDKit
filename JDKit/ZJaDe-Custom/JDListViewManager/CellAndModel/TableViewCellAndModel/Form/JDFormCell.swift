@@ -11,7 +11,6 @@ import RxCocoa
 import RxSwift
 
 class JDFormCell: JDTableViewCell {
-    var disposeBag = DisposeBag()
     
     let stackView = UIStackView(alignment: .center ,spacing:8)
     var titleLabel = UILabel()
@@ -75,10 +74,6 @@ class JDFormCell: JDTableViewCell {
                 maker.height.equalTo(titleLabel.intrinsicContentSize.height)
             })
         }
-    }
-    override func cellDidDisappear(_ element: JDTableViewModel) {
-        super.cellDidDisappear(element)
-        disposeBag = DisposeBag()
     }
 }
 extension JDFormCell {//cell第一响应者 焦点View

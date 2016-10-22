@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import RxSwift
 enum CellAppearAnimatedStyle {
     case zoomIn //从中心往外放大
     case showOut //从内而外显示，同时透明度从0到1
@@ -20,6 +20,8 @@ enum CellHighlightAnimatedStyle {
     case none //无动画
 }
 class JDTableViewCell: UITableViewCell {
+    var disposeBag = DisposeBag()
+    
     var isTempCell = false
     
     var appearAnimatedStyle = CellAppearAnimatedStyle.zoomIn
@@ -114,7 +116,7 @@ class JDTableViewCell: UITableViewCell {
     }
     // MARK: - cell已经消失,element解绑cell
     func cellDidDisappear(_ element: JDTableViewModel) {
-        
+        disposeBag = DisposeBag()
     }
     // MARK: - 如果返回大于零，可以不用使用自动计算高度
     func calculateJDContentViewHeight(_ jdContentViewWidth:CGFloat,elementModel:JDTableViewModel) -> CGFloat {
@@ -138,6 +140,30 @@ extension JDTableViewCell {//cell高亮或者点击
             break
         }
     }
+}
+extension JDTableViewCell {//cellReload
+    func cellReload(model:JDTableViewModel) {
+        model.invalidateCellHeight()
+        if let indexPath = self.indexPath,let tableView = self.tableView {
+            tableView.reloadItemsAtIndexPaths([indexPath], animationStyle: tableView.reloadDataSource.rowAnimation)
+        }
+    }
+    var tableView:JDTableView? {
+        var _tableView = self.superview
+        while true {
+            if _tableView is JDTableView {
+                return _tableView as? JDTableView
+            }else if _tableView == nil {
+                return nil
+            }else {
+                _tableView = _tableView?.superview
+            }
+        }
+    }
+    var indexPath:IndexPath? {
+        return self.tableView?.indexPath(for: self)
+    }
+    
 }
 // MARK: -
 class MyContentView:UIView {

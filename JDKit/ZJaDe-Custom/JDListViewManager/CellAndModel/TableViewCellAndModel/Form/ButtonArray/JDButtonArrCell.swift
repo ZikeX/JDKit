@@ -65,8 +65,8 @@ class JDButtonArrCell: JDFormCell {
                         buttonArrModel.buttonsSelectedAppearance(button,offset,button.isSelected)
                         button.isUserInteractionEnabled = true
                     }else {
-                        button.titleLabel.text = nil
-                        button.imageView.image = nil
+                        button.textStr = nil
+                        button.img = nil
                         button.isUserInteractionEnabled = false
                     }
                 })

@@ -21,16 +21,16 @@ class Button: UIControl {
     let disposeBag = DisposeBag()
     
     lazy private(set) var stackView = UIStackView()
-    let titleLabel = UILabel()
-    let imageView = UIImageView()
+    let textLabel = UILabel()
+    let imgView = UIImageView()
     @IBInspectable var textStr:String? = nil {
         didSet {
-            self.titleLabel.text = textStr
+            self.textLabel.text = textStr
         }
     }
     @IBInspectable var img:UIImage? = nil {
         didSet {
-            self.imageView.image = img
+            self.imgView.image = img
         }
     }
     @IBInspectable var contentEdgeInsets = UIEdgeInsets()
@@ -58,15 +58,15 @@ class Button: UIControl {
     
     override var tintColor: UIColor! {
         didSet {
-            self.titleLabel.textColor = tintColor
-            self.imageView.tintColor = tintColor
+            self.textLabel.textColor = tintColor
+            self.imgView.tintColor = tintColor
         }
     }
     //如果 title或者image为空，代表没有对应的Label或者imgView
     convenience init(title:String? = nil,image:UIImage? = nil) {
         self.init(frame:CGRect())
-        self.titleLabel.text = title
-        self.imageView.image = image
+        self.textLabel.text = title
+        self.imgView.image = image
     }
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -82,30 +82,30 @@ class Button: UIControl {
 }
 extension Button {
     func observeConfig() {
-        let imgViewImgObserve = self.imageView.rx.observe(UIImage.self, "image")
-        let titleLabelTextObserve = self.titleLabel.rx.observe(String.self, "text")
-        Observable.combineLatest(imgViewImgObserve, titleLabelTextObserve) {($0, $1)}.distinctUntilChanged{$0.0 == $1.0 && $0.1 == $1.1}.subscribe({ (event) in
-            self.addSubViews(element: event.element)
+        let imgViewImgObserve = self.imgView.rx.observe(UIImage.self, "image")
+        let textLabelTextObserve = self.textLabel.rx.observe(String.self, "text")
+        Observable.combineLatest(imgViewImgObserve, textLabelTextObserve) {($0, $1)}.distinctUntilChanged{$0.0 == $1.0 && $0.1 == $1.1}.subscribe({ (event) in
+            self.configSubViews(element: event.element)
         }).addDisposableTo(disposeBag)
     }
 }
 extension Button {
-    func addSubViews(element:(UIImage?,String?)?) {
+    func configSubViews(element:(UIImage?,String?)?) {
         self.removeAllSubviews()
         self.stackView.removeAllSubviews()
         switch element {
         case (nil,nil)?,nil:
             break
         case (nil,_)?:
-            self.addSubview(self.titleLabel)
-            self.titleLabel.snp.makeConstraints({ (maker) in
+            self.addSubview(self.textLabel)
+            self.textLabel.snp.makeConstraints({ (maker) in
                 maker.center.equalToSuperview()
                 maker.left.greaterThanOrEqualTo(self)
                 maker.top.greaterThanOrEqualTo(self)
             })
         case (_,nil)?:
-            self.addSubview(self.imageView)
-            self.imageView.snp.makeConstraints({ (maker) in
+            self.addSubview(self.imgView)
+            self.imgView.snp.makeConstraints({ (maker) in
                 maker.center.equalToSuperview()
                 maker.left.greaterThanOrEqualTo(self)
                 maker.top.greaterThanOrEqualTo(self)
@@ -126,20 +126,20 @@ extension Button {
         var width:CGFloat = contentEdgeInsets.left + contentEdgeInsets.right
         var height:CGFloat = contentEdgeInsets.top + contentEdgeInsets.bottom
         
-        switch (self.imageView.image,self.titleLabel.text) {
+        switch (self.imgView.image,self.textLabel.text) {
         case (nil,nil):
             break
         case (nil,_):
-            let titleSize = titleLabel.intrinsicContentSize
+            let titleSize = textLabel.intrinsicContentSize
             width += titleSize.width
             height += titleSize.height
         case (_,nil):
-            let imageSize = imageView.intrinsicContentSize
+            let imageSize = imgView.intrinsicContentSize
             width += imageSize.width
             height += imageSize.height
         case (_,_):
-            let imageSize = imageView.intrinsicContentSize
-            let titleSize = titleLabel.intrinsicContentSize
+            let imageSize = imgView.intrinsicContentSize
+            let titleSize = textLabel.intrinsicContentSize
             switch self.stackView.axis {
             case .horizontal:
                 width = imageSize.width + titleSize.width + stackView.spacing
@@ -154,6 +154,7 @@ extension Button {
 }
 extension Button {
     func configStackView() {
+        self.stackView.isUserInteractionEnabled = false
         self.stackView.spacing = 5
         self.stackView.alignment = .center
     }
@@ -168,8 +169,8 @@ extension Button {
     func addAndSortStackSubViews() {
         let titleIndex = titleInLeading ? 0 : 1
         let imageIndex = titleInLeading ? 1 : 0
-        self.stackView.insertArrangedSubview(self.titleLabel, at: titleIndex)
-        self.stackView.insertArrangedSubview(self.imageView, at: imageIndex)
+        self.stackView.insertArrangedSubview(self.textLabel, at: titleIndex)
+        self.stackView.insertArrangedSubview(self.imgView, at: imageIndex)
     }
 }
 extension Reactive where Base: Button {
