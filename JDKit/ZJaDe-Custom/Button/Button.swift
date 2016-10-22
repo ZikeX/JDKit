@@ -23,14 +23,20 @@ class Button: UIControl {
     lazy private(set) var stackView = UIStackView()
     let textLabel = UILabel()
     let imgView = UIImageView()
-    @IBInspectable var textStr:String? = nil {
-        didSet {
-            self.textLabel.text = textStr
+    @IBInspectable var textStr:String? {
+        get {
+            return self.textLabel.text
+        }
+        set {
+            self.textLabel.text = newValue
         }
     }
-    @IBInspectable var img:UIImage? = nil {
-        didSet {
-            self.imgView.image = img
+    @IBInspectable var img:UIImage? {
+        get {
+            return self.imgView.image
+        }
+        set {
+            self.imgView.image = newValue
         }
     }
     @IBInspectable var contentEdgeInsets = UIEdgeInsets()
