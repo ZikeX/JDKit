@@ -51,13 +51,13 @@ class JDTableViewCell: UITableViewCell {
     }
     // MARK: - cell初始化
     func configCellInit() {
-        self.jdContentView.removeFromSuperview()
-        self.contentView.addSubview(jdContentView)
-        self.contentView.addSubview(separatorLineView)
+        
     }
     // MARK: - 做一些数据初始化
     func cellDidInit() {
-        
+        self.jdContentView.removeFromSuperview()
+        self.contentView.addSubview(jdContentView)
+        self.contentView.addSubview(separatorLineView)
     }
     // MARK: - cell加载完毕，初始化数据及约束
     func cellDidLoad(_ element: JDTableViewModel) {

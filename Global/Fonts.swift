@@ -14,4 +14,22 @@ class Font {
     static var h3 = UIFont(name:"PingFang SC", size: 14.5)!
     static var h4 = UIFont(name:"PingFang SC", size: 13.5)!
     static var h5 = UIFont(name:"PingFang SC", size: 12)!
+    
+    
+    static func size(num:Int) -> UIFont {
+        switch num {
+        case 1:
+            return Font.h1
+        case 2:
+            return Font.h2
+        case 3:
+            return Font.h3
+        case 4:
+            return Font.h4
+        case 5:
+            return Font.h5
+        default:
+            return Font.h1
+        }
+    }
 }

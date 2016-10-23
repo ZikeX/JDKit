@@ -23,6 +23,25 @@ class Button: UIControl {
     lazy private(set) var stackView = UIStackView()
     let textLabel = UILabel()
     let imgView = UIImageView()
+    
+    var contentEdgeInsets = UIEdgeInsets()
+    var titleAndImgLocation:TitleAndImgLocation {
+        get {
+            for (key,value) in locationDict {
+                if value.0 == titleInLeading && value.1 == stackView.axis {
+                    return key
+                }
+            }
+            return .leftToRight
+        }
+        set {
+            if let (titleInLeading,axis) = locationDict[newValue] {
+                self.titleInLeading = titleInLeading
+                self.stackView.axis = axis
+            }
+        }
+    }
+    // MARK: - @IBInspectable
     @IBInspectable var textStr:String? {
         get {
             return self.textLabel.text
@@ -43,6 +62,11 @@ class Button: UIControl {
             }
         }
     }
+    @IBInspectable var labelFont:Int = 0 {
+        didSet {
+            self.textLabel.font = Font.size(num: labelFont)
+        }
+    }
     @IBInspectable var itemSpace:CGFloat {
         get {
             return self.stackView.spacing
@@ -53,27 +77,17 @@ class Button: UIControl {
     }
     @IBInspectable var isTemplate: Bool = false
     
-    @IBInspectable var contentEdgeInsets = UIEdgeInsets()
-    
-    @IBInspectable var titleInLeading = true {
+    @IBInspectable var titleInLeading: Bool = true {
         didSet {
             addAndSortStackSubViews()
         }
     }
-    var titleAndImgLocation:TitleAndImgLocation {
+    @IBInspectable var isHorizontal: Bool {
         get {
-            for (key,value) in locationDict {
-                if value.0 == titleInLeading && value.1 == stackView.axis {
-                    return key
-                }
-            }
-            return .leftToRight
+            return self.stackView.axis == .horizontal
         }
         set {
-            if let (titleInLeading,axis) = locationDict[newValue] {
-                self.titleInLeading = titleInLeading
-                self.stackView.axis = axis
-            }
+            self.stackView.axis = newValue ? .horizontal : .vertical
         }
     }
     @IBInspectable override var tintColor: UIColor! {
@@ -82,6 +96,9 @@ class Button: UIControl {
             self.imgView.tintColor = tintColor
         }
     }
+    @IBInspectable var IBSize:CGSize = CGSize()
+
+    // MARK: -
     //如果 title或者image为空，代表没有对应的Label或者imgView
     convenience init(title:String? = nil,image:UIImage? = nil) {
         self.init(frame:CGRect())
@@ -151,23 +168,26 @@ extension Button {
         return self.intrinsicContentSize
     }
     override var intrinsicContentSize:CGSize {
+        #if TARGET_INTERFACE_BUILDER
+            return self.IBSize
+        #endif
         var width:CGFloat = contentEdgeInsets.left + contentEdgeInsets.right
         var height:CGFloat = contentEdgeInsets.top + contentEdgeInsets.bottom
         
-        switch (self.imgView.image,self.textLabel.text) {
+        switch (self.img,self.textStr) {
         case (nil,nil):
             return CGSize(width: 60, height: 30)
         case (nil,_):
-            let titleSize = textLabel.sizeThatFits(CGSize())
-            width += titleSize.width
-            height += titleSize.height
+            let titleSize = textLabel.intrinsicContentSize
+            width = width + titleSize.width
+            height = height + titleSize.height
         case (_,nil):
-            let imageSize = imgView.sizeThatFits(CGSize())
+            let imageSize = imgView.intrinsicContentSize
             width += imageSize.width
             height += imageSize.height
         case (_,_):
-            let imageSize = imgView.sizeThatFits(CGSize())
-            let titleSize = textLabel.sizeThatFits(CGSize())
+            let imageSize = imgView.intrinsicContentSize
+            let titleSize = textLabel.intrinsicContentSize
             switch self.stackView.axis {
             case .horizontal:
                 width = imageSize.width + titleSize.width + stackView.spacing
