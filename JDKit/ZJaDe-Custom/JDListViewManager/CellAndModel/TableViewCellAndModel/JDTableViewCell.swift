@@ -36,22 +36,28 @@ class JDTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         loadContentView()
         configCellInit()
+        cellDidInit()
     }
     func loadContentView() {
         self.jdContentView = MyContentView()
     }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        configCellInit()
     }
     override func awakeFromNib() {
         super.awakeFromNib()
-        configCellInit()
+        cellDidInit()
     }
     // MARK: - cell初始化
     func configCellInit() {
         self.jdContentView.removeFromSuperview()
         self.contentView.addSubview(jdContentView)
         self.contentView.addSubview(separatorLineView)
+    }
+    // MARK: - 做一些数据初始化
+    func cellDidInit() {
+        
     }
     // MARK: - cell加载完毕，初始化数据及约束
     func cellDidLoad(_ element: JDTableViewModel) {

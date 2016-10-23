@@ -36,11 +36,31 @@ class Button: UIControl {
             return self.imgView.image
         }
         set {
-            self.imgView.image = newValue
+            if isTemplate {
+                self.imgView.image = newValue?.templateImage
+            }else {
+                self.imgView.image = newValue
+            }
         }
     }
+    @IBInspectable var itemSpace:CGFloat {
+        get {
+            return self.stackView.spacing
+        }
+        set {
+            self.stackView.spacing = newValue
+        }
+    }
+    @IBInspectable var isTemplate: Bool = false
+    
     @IBInspectable var contentEdgeInsets = UIEdgeInsets()
-    @IBInspectable var titleAndImgLocation:TitleAndImgLocation {
+    
+    @IBInspectable var titleInLeading = true {
+        didSet {
+            addAndSortStackSubViews()
+        }
+    }
+    var titleAndImgLocation:TitleAndImgLocation {
         get {
             for (key,value) in locationDict {
                 if value.0 == titleInLeading && value.1 == stackView.axis {
@@ -56,13 +76,7 @@ class Button: UIControl {
             }
         }
     }
-    var titleInLeading = true {
-        didSet {
-            addAndSortStackSubViews()
-        }
-    }
-    
-    override var tintColor: UIColor! {
+    @IBInspectable override var tintColor: UIColor! {
         didSet {
             self.textLabel.textColor = tintColor
             self.imgView.tintColor = tintColor
@@ -72,14 +86,22 @@ class Button: UIControl {
     convenience init(title:String? = nil,image:UIImage? = nil) {
         self.init(frame:CGRect())
         self.textLabel.text = title
-        self.imgView.image = image
+        if isTemplate {
+            self.imgView.image = image?.templateImage
+        }else {
+            self.imgView.image = image
+        }
     }
     override init(frame: CGRect) {
         super.init(frame: frame)
         configInit()
     }
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        configInit()
+    }
+    override func awakeFromNib() {
+        super.awakeFromNib()
     }
     func configInit() {
         configStackView()
@@ -134,18 +156,18 @@ extension Button {
         
         switch (self.imgView.image,self.textLabel.text) {
         case (nil,nil):
-            break
+            return CGSize(width: 60, height: 30)
         case (nil,_):
-            let titleSize = textLabel.intrinsicContentSize
+            let titleSize = textLabel.sizeThatFits(CGSize())
             width += titleSize.width
             height += titleSize.height
         case (_,nil):
-            let imageSize = imgView.intrinsicContentSize
+            let imageSize = imgView.sizeThatFits(CGSize())
             width += imageSize.width
             height += imageSize.height
         case (_,_):
-            let imageSize = imgView.intrinsicContentSize
-            let titleSize = textLabel.intrinsicContentSize
+            let imageSize = imgView.sizeThatFits(CGSize())
+            let titleSize = textLabel.sizeThatFits(CGSize())
             switch self.stackView.axis {
             case .horizontal:
                 width = imageSize.width + titleSize.width + stackView.spacing
