@@ -11,8 +11,8 @@ import UIKit
 class BaseNavigationController: UINavigationController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationBar.backIndicatorImage = R.image.ic_back()
-        self.navigationBar.backIndicatorTransitionMaskImage = R.image.ic_back()
+//        self.navigationBar.backIndicatorImage = R.image.ic_back()
+//        self.navigationBar.backIndicatorTransitionMaskImage = R.image.ic_back()
         
     }
 

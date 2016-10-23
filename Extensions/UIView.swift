@@ -38,6 +38,18 @@ extension UIView {
         self.layer.shadowOffset = CGSize(width: 0, height: 1)
         self.layer.shadowRadius = 1
     }
+    func addShadow(isButton:Bool = false) {
+        if self.backgroundColor == nil {
+            self.backgroundColor = Color.white
+        }
+        self.layer.shadowColor = Color.shadow.cgColor
+        self.layer.shadowOpacity = 0.15
+        self.layer.shadowOffset = CGSize(width: 0, height: 1)
+        self.layer.shadowRadius = isButton ? 1.5 : 2.5
+    }
+    func addButtonShadow() {
+        self.addShadow(isButton: true)
+    }
 }
 
 extension UIView {//Frame
