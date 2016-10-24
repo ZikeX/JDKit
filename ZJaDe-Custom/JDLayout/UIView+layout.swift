@@ -1,5 +1,5 @@
 //
-//  UIView+snp.swift
+//  UIView+layout.swift
 //  ZiWoYou
 //
 //  Created by ZJaDe on 16/10/15.
@@ -24,12 +24,22 @@ extension UIView {
     func edgesToView() {
         self.jdLayout.edgesAlign().activate()
     }
+    /// ZJaDe: 设置宽高
+    func widthValue(width:CGFloat) {
+        self.jdLayout.sizeValue(width: width).activate()
+    }
+    func heightValue(height:CGFloat) {
+        self.jdLayout.sizeValue(height: height).activate()
+    }
+    func sizeValue(width:CGFloat,height:CGFloat) {
+        self.jdLayout.sizeValue(width: width, height: height).activate()
+    }
     /// ZJaDe: 宽比高
-    func widthHeightSacle(scale:CGFloat) {
-        self.jdLayout.widthHeightSacle(scale).activate()
+    func width_height(scale:CGFloat) {
+        self.jdLayout.width_height(scale).activate()
     }
     /// ZJaDe: 高比宽
-    func heightWidthScale(scale:CGFloat) {
+    func height_width(scale:CGFloat) {
         self.jdLayout.heightWidthSacle(scale).activate()
     }
 }

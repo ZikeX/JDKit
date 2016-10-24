@@ -30,7 +30,7 @@ extension ImagesCellProtocol where Self:BaseCell {
     func configImgsStackView(itemArray:[ImageDataProtocol]) {
         for (index,imageView) in (imgsStackView.arrangedSubviews as! [UIImageView]).enumerated() {
             if index < itemArray.count {
-                itemArray[index].setImageInView(imageView: imageView)
+                imageView.setImage(imageData: itemArray[index])
             }else {
                 imageView.image = UIImage()
             }

@@ -8,13 +8,14 @@
 import UIKit
 
 class PageScrollView: UIScrollView {
+    
     lazy var stackView:UIStackView = {
         let stackView = UIStackView(alignment: .fill, distribution: .fillEqually)
         self.addSubview(stackView)
         return stackView
     }()
     
-    var imgArray = [ImageViewItemProtocol]() {
+    var imgArray = [ImageDataProtocol]() {
         didSet {
             stackView.snp.removeConstraints()
             stackView.edgesToView()
@@ -24,7 +25,11 @@ class PageScrollView: UIScrollView {
             }
             stackView.removeAllSubviews()
             imgArray.forEach { (item) in
-                stackView.addArrangedSubview(item.imageView)
+                let imageView = UIImageView()
+                imageView.contentMode = .scaleAspectFill
+                imageView.clipsToBounds = true
+                imageView.setImage(imageData: item)
+                stackView.addArrangedSubview(imageView)
             }
             self.totalPageNum = imgArray.count
         }

@@ -49,6 +49,12 @@ class JDLayout {
     }
 }
 extension JDLayout {
+    func widthValue(width:CGFloat) -> JDLayout {
+        return self.sizeValue(width: width)
+    }
+    func heightValue(height:CGFloat) -> JDLayout {
+        return self.sizeValue(height: height)
+    }
     func sizeValue(width:CGFloat? = nil,height:CGFloat? = nil) -> JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
             if let width = width {
@@ -61,7 +67,7 @@ extension JDLayout {
         self.constraintArr.append(contentsOf: constraints)
         return self
     }
-    func widthHeightSacle(_ scale:CGFloat,view:UIView? = nil,offset:CGFloat = 0) -> JDLayout {
+    func width_height(_ scale:CGFloat,view:UIView? = nil,offset:CGFloat = 0) -> JDLayout {
         let view = view ?? self.view
         let constraints = self.view.snp.prepareConstraints { (maker) in
             maker.width.equalTo(view.snp.height).multipliedBy(scale).offset(offset)

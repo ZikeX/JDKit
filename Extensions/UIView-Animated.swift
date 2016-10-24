@@ -2,12 +2,15 @@
 import UIKit
 
 private let UIViewAnimationDuration: TimeInterval = 0.25
-private let UIViewAnimationSpringDamping: CGFloat = 0.5
+private let UIViewAnimationSpringDamping: CGFloat = 0.8
 private let UIViewAnimationSpringVelocity: CGFloat = 0.5
 
 // MARK: Animation Extensions
 extension UIView {
-    static func spring(duration:TimeInterval = UIViewAnimationDuration, animations: @escaping (() -> Void), completion: ((Bool) -> Void)? = nil) {
+    static func spring(duration:TimeInterval, animations: @escaping (() -> Void)) {
+        self.spring(duration: duration, animations: animations, completion: nil)
+    }
+    static func spring(duration:TimeInterval, animations: @escaping (() -> Void), completion: ((Bool) -> Void)?) {
         UIView.animate(
             withDuration: duration,
             delay: 0,

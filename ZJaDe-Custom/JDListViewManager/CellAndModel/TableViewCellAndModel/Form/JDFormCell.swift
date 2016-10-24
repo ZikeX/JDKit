@@ -42,7 +42,7 @@ class JDFormCell: JDTableViewCell {
         if !formModel.imageIsEmpty {
             stackView.addArrangedSubview(imgView)
             let imageSize = formModel.image.value!.size
-            imgView.widthHeightSacle(scale: imageSize.width / imageSize.height)
+            imgView.width_height(scale: imageSize.width / imageSize.height)
         }
         if !formModel.titleIsEmpty {
             stackView.addArrangedSubview(titleLabel)

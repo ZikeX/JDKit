@@ -81,7 +81,7 @@ class JDTableViewCell: UITableViewCell {
         separatorLineView.jdLayout
         .bottomAlign(offset: -element.separatorInset.bottom)
         .topSpace(jdContentView, space: element.spaceEdges.bottom + element.separatorInset.top)
-        .sizeValue(height: element.lineHeight)
+        .heightValue(height: element.lineHeight)
         .activate()
     }
     // MARK: - cell将要显示，做动画，element绑定cell
