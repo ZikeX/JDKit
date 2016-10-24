@@ -20,6 +20,14 @@ enum TitleAndImgLocation:Int {
 class Button: UIControl {
     let disposeBag = DisposeBag()
     
+    /// ZJaDe: contentView 根据情况不同，等于下面三个View中的一个
+    fileprivate var contentView:UIView? {
+        didSet {
+            if oldValue != contentView {
+                layoutContentView()
+            }
+        }
+    }
     lazy private(set) var stackView = UIStackView()
     let textLabel = UILabel()
     let imgView = UIImageView()
@@ -129,9 +137,16 @@ extension Button {
     func observeConfig() {
         let imgViewImgObserve = self.imgView.rx.observe(UIImage.self, "image")
         let textLabelTextObserve = self.textLabel.rx.observe(String.self, "text")
-        Observable.combineLatest(imgViewImgObserve, textLabelTextObserve) {($0, $1)}.distinctUntilChanged{$0.0 == $1.0 && $0.1 == $1.1}.subscribe({ (event) in
+        Observable.combineLatest(imgViewImgObserve, textLabelTextObserve) {($0, $1)}.distinctUntilChanged{ [unowned self] in
+            return self.checkEmptyEqual($0,$1)
+        }.subscribe({ (event) in
             self.configSubViews(element: event.element)
         }).addDisposableTo(disposeBag)
+    }
+    func checkEmptyEqual<I:Equatable,T:Equatable>(_ element1:(I?,T?),_ element2:(I?,T?)) -> Bool {
+        let firstIsEqual = (element1.0 == nil && element2.0 == nil) || (element1.0 != nil && element2.0 != nil)
+        let secondIsEqual = (element1.1 == nil && element2.1 == nil) || (element1.1 != nil && element2.1 != nil)
+        return firstIsEqual && secondIsEqual
     }
 }
 extension Button {
@@ -143,25 +158,47 @@ extension Button {
             break
         case (nil,_)?:
             self.addSubview(self.textLabel)
-            self.textLabel.snp.makeConstraints({ (maker) in
-                maker.center.equalToSuperview()
-                maker.left.greaterThanOrEqualTo(self)
-                maker.top.greaterThanOrEqualTo(self)
-            })
         case (_,nil)?:
             self.addSubview(self.imgView)
-            self.imgView.snp.makeConstraints({ (maker) in
-                maker.center.equalToSuperview()
-                maker.left.greaterThanOrEqualTo(self)
-                maker.top.greaterThanOrEqualTo(self)
-            })
         case (_,_)?:
             self.addSubview(self.stackView)
-            self.stackView.snp.makeConstraints { (maker) in
-                maker.center.equalToSuperview()
-            }
             self.addAndSortStackSubViews()
         }
+        self.contentView = self.subviews.first
+    }
+    func layoutContentView() {
+        self.contentView?.snp.makeConstraints({ (maker) in
+            switch self.contentHorizontalAlignment {
+            case .center:
+                maker.centerX.equalToSuperview()
+                maker.left.greaterThanOrEqualTo(self)
+                maker.right.lessThanOrEqualTo(self)
+            case .fill:
+                maker.left.equalToSuperview()
+                maker.right.equalToSuperview()
+            case .left:
+                maker.left.equalToSuperview()
+                maker.right.lessThanOrEqualTo(self)
+            case .right:
+                maker.left.greaterThanOrEqualTo(self)
+                maker.right.equalToSuperview()
+            }
+            switch self.contentVerticalAlignment {
+            case .center:
+                maker.centerY.equalToSuperview()
+                maker.top.greaterThanOrEqualTo(self)
+                maker.bottom.lessThanOrEqualTo(self)
+            case .fill:
+                maker.top.equalToSuperview()
+                maker.bottom.equalToSuperview()
+            case .top:
+                maker.top.equalToSuperview()
+                maker.bottom.lessThanOrEqualTo(self)
+            case .bottom:
+                maker.top.greaterThanOrEqualTo(self)
+                maker.bottom.equalToSuperview()
+            }
+        })
     }
     
     override func sizeThatFits(_ size: CGSize) -> CGSize {

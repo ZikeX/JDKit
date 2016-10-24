@@ -27,7 +27,7 @@ class JDLabelCell: JDFormCell {
         if !labelModel.detailTitleIsEmpty {
             detailTitleLabel.snp.makeConstraints({ (maker) in
                 maker.top.right.equalToSuperview()
-                maker.left.equalTo(stackView.snp.right).offset(8)
+                maker.leftSpace(stackView, space: 8)
                 maker.bottom.lessThanOrEqualTo(jdContentView)
             })
         }

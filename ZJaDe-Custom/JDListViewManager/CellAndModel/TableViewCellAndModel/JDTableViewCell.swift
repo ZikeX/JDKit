@@ -62,28 +62,27 @@ class JDTableViewCell: UITableViewCell {
     // MARK: - cell加载完毕，初始化数据及约束
     func cellDidLoad(_ element: JDTableViewModel) {
         /// ZJaDe:horizontal
-        jdContentView.edgesToView(direction: .horizontal, insets: element.spaceEdges)
+        _ = jdContentView.jdLayout.edgesAlign(.horizontal, inset: element.spaceEdges)
         separatorLineView.snp.makeConstraints { (maker) in
             if element.separatorInset.left > 0 {
-                maker.left.equalToSuperview().offset(element.separatorInset.left)
+                _ = separatorLineView.jdLayout.leftAlign(offset: element.separatorInset.left)
             }else {
-                maker.left.equalTo(self).offset(-element.separatorInset.left)
+                _ = separatorLineView.jdLayout.leftAlign(self,offset: -element.separatorInset.left)
             }
             if element.separatorInset.right > 0 {
-                maker.right.equalToSuperview().offset(-element.separatorInset.right)
+                _ = separatorLineView.jdLayout.rightAlign(offset: -element.separatorInset.right)
             }else {
-                maker.right.equalTo(self).offset(element.separatorInset.right)
+                _ = separatorLineView.jdLayout.rightAlign(self,offset: element.separatorInset.right)
             }
         }
         /// ZJaDe:vertical
-        jdContentView.snp.makeConstraints { (maker) in
-            maker.top.equalToSuperview().offset(element.spaceEdges.top)
-        }
-        separatorLineView.snp.makeConstraints { (maker) in
-            maker.bottom.equalToSuperview().offset(-element.separatorInset.bottom)
-            maker.top.equalTo(jdContentView.snp.bottom).offset(element.spaceEdges.bottom + element.separatorInset.top)
-            maker.height.equalTo(element.lineHeight)
-        }
+        jdContentView.jdLayout.topAlign(offset: element.spaceEdges.top).activate()
+        
+        separatorLineView.jdLayout
+        .bottomAlign(offset: -element.separatorInset.bottom)
+        .topSpace(jdContentView, space: element.spaceEdges.bottom + element.separatorInset.top)
+        .sizeValue(height: element.lineHeight)
+        .activate()
     }
     // MARK: - cell将要显示，做动画，element绑定cell
     final func cellWillAppear(_ element: JDTableViewModel) {

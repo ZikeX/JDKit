@@ -12,6 +12,7 @@ import JDAnimatedTabBarController
 class BaseTabBarController: JDAnimatedTabBarController {
     override func configInit() {
         super.configInit()
+        self.automaticallyAdjustsScrollViewInsets = false
         configInitAboutNavBar()
         configInitAboutViewState()
     }

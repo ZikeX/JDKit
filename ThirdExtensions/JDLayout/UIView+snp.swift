@@ -76,3 +76,10 @@ extension UIView {
         }
     }
 }
+extension UIView {
+    func topSpace(_ toView:UIView,_ space:CGFloat) {
+        self.snp.makeConstraints { (maker) in
+            
+        }
+    }
+}

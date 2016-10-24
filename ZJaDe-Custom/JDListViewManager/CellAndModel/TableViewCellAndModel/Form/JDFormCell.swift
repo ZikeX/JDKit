@@ -29,10 +29,10 @@ class JDFormCell: JDTableViewCell {
             maker.height.greaterThanOrEqualTo(28)
             maker.bottom.lessThanOrEqualTo(jdContentView)
         }
-        stackView.setContentHuggingPriority(UILayoutPriorityRequired, for: .horizontal)
-        stackView.setContentHuggingPriority(UILayoutPriorityRequired, for: .vertical)
-        stackView.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .horizontal)
-        stackView.setContentCompressionResistancePriority(UILayoutPriorityRequired, for: .vertical)
+        stackView.contentHuggingHorizontalPriority = UILayoutPriorityRequired
+        stackView.contentHuggingVerticalPriority = UILayoutPriorityRequired
+        stackView.contentCompressionResistanceVerticalPriority = UILayoutPriorityRequired
+        stackView.contentCompressionResistanceHorizontalPriority = UILayoutPriorityRequired
     }
     override func cellDidLoad(_ element: JDTableViewModel) {
         super.cellDidLoad(element)
@@ -42,12 +42,12 @@ class JDFormCell: JDTableViewCell {
         if !formModel.imageIsEmpty {
             stackView.addArrangedSubview(imgView)
             let imageSize = formModel.image.value!.size
-            imgView.aspectRatio(scale: imageSize.width / imageSize.height)
+            imgView.widthHeightSacle(scale: imageSize.width / imageSize.height)
         }
         if !formModel.titleIsEmpty {
             stackView.addArrangedSubview(titleLabel)
         }
-        stackView.snpSize(width: formModel.stackViewWidth)
+        stackView.jdLayout.sizeValue(width: formModel.stackViewWidth).activate()
     }
     override func configCellWithElement(_ element: JDTableViewModel) {
         super.configCellWithElement(element)

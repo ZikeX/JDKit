@@ -42,7 +42,7 @@ class JDButtonArrCell: JDFormCell {
                 lineStackView.distribution = .fillEqually
                 buttonArrModel.stackView.addArrangedSubview(lineStackView)
                 buttonArr.forEach({ (button) in
-                    button.aspectRatio(scale: buttonArrModel.sizeScale)
+                    button.widthHeightSacle(scale: buttonArrModel.sizeScale)
                 })
             })
         }else {
