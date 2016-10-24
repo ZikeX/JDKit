@@ -12,9 +12,9 @@ class Banner: UIView {
     fileprivate let disposeBag = DisposeBag()
     
     fileprivate let scrollView = PageScrollView()
-    fileprivate let pageControl = SnakePageControl()
+    let pageControl = SnakePageControl()
     
-    var dataArray = [ImageDataProtocol]() {
+    var dataArray:[ImageDataProtocol] = [R.image.ic_defalut_image()!] {
         didSet {
             self.scrollView.imgArray = dataArray
             self.pageControl.pageCount = dataArray.count
@@ -34,7 +34,7 @@ class Banner: UIView {
         self.scrollView.edgesToView()
         self.addSubview(self.pageControl)
         self.pageControl.jdLayout
-            .centerXAlign()
+            .rightAlign(offset: -20)
             .bottomAlign(offset: -10)
             .activate()
         

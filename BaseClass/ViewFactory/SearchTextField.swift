@@ -9,7 +9,8 @@
 import UIKit
 enum TextFieldType {
     case BlackSearchBar
-    case WhiteSearchBarWithCityButton
+    case ClearWhiteSearchBarWithCityButton
+    case LightWhiteSearchBarWithCityButton
 }
 let defaultWidth:CGFloat = jd.screenWidth
 let defaultHeight:CGFloat = 34
@@ -27,35 +28,17 @@ class SearchTextField: UITextField {
     }
 
     func configInit() {
+        self.isEnabled = false
+        self.addBorder()
+        self.font = Font.h4
+        
         switch self.textFieldType {
         case .BlackSearchBar:
-            self.isEnabled = false
-            self.backgroundColor = Color.darkBlack.withAlphaComponent(0.2)
-            self.addBorder()
-            self.cornerRadius = 5
-            self.leftView = UIImageView(image: R.image.ic_searchIcon()?.templateImage)
-            self.leftView?.contentMode = .center
-            self.leftView?.bounds = CGRect(x: 0, y: 0, width: defaultHeight, height: defaultHeight)
-            self.leftViewMode = .always
-            self.text = "目的地、景点、酒店、"
-            self.textColor = Color.white
-            self.font = Font.h4
-        case .WhiteSearchBarWithCityButton:
-            self.isEnabled = false
-            self.addBorder()
-            self.cornerRadius = defaultHeight / 2
-            
-            self.leftView = self.createWhiteLeftView()
-            self.leftViewMode = .always
-            
-            self.rightView = UIImageView(image: R.image.ic_searchIcon()?.templateImage)
-            self.rightView?.contentMode = .center
-            self.rightView?.bounds = CGRect(x: 0, y: 0, width: defaultHeight * 1.5, height: defaultHeight)
-            self.rightViewMode = .always
-            
-            self.text = "   目的地、景点、酒店、"
-            self.textColor = Color.lightGray
-            self.font = Font.h4
+            self.configBlackSearchBar()
+        case .ClearWhiteSearchBarWithCityButton:
+            self.configClearWhiteSearchBarWithCityButton()
+        case .LightWhiteSearchBarWithCityButton:
+            self.configLightWhiteSearchBarWithCityButton()
         }
     }
     
@@ -63,18 +46,70 @@ class SearchTextField: UITextField {
         return CGSize(width: defaultWidth, height: defaultHeight)
     }
 }
-// MARK:  - WhiteSearchBarWithCityButton
+// MARK:  -
 extension SearchTextField {
-    func createWhiteLeftView() -> UIView {
-        let contentView = UIView(frame:CGRect(x: 0, y: 0, width: defaultHeight*2.3, height: defaultHeight))
-        contentView.addBorderRight(padding: 7)
-        let button = Button(title: "杭州", image: R.image.ic_location()?.templateImage)
-        button.tintColor = Color.tintColor
-        contentView.addSubview(button)
-        button.snp.makeConstraints { (maker) in
-            maker.centerY.equalToSuperview()
-            maker.right.equalToSuperview().offset(-10)
-        }
-        return contentView
+    func configBlackSearchBar() {
+        self.backgroundColor = Color.darkBlack.withAlphaComponent(0.2)
+        self.cornerRadius = 5
+        self.leftView = UIImageView(image: R.image.ic_searchIcon()?.templateImage)
+        self.leftView?.contentMode = .center
+        self.leftView?.bounds = CGRect(x: 0, y: 0, width: defaultHeight, height: defaultHeight)
+        self.leftViewMode = .always
+        self.textColor = Color.white
+    }
+}
+extension SearchTextField {
+    func configClearWhiteSearchBarWithCityButton() {
+        
+        self.cornerRadius = defaultHeight / 2
+        
+        self.leftView = {
+            let contentView = UIView(frame:CGRect(x: 0, y: 0, width: defaultHeight*2.3, height: defaultHeight))
+            contentView.addBorderRight(padding: 7)
+            let button = Button(title: "杭州", image: R.image.ic_location()?.templateImage)
+            button.textLabel.font = Font.h3
+            button.tintColor = Color.tintColor
+            contentView.addSubview(button)
+            button.snp.makeConstraints { (maker) in
+                maker.centerY.equalToSuperview()
+                maker.right.equalToSuperview().offset(-10)
+            }
+            return contentView
+        }()
+        self.leftViewMode = .always
+        
+        self.rightView = UIImageView(image: R.image.ic_searchIcon()?.templateImage)
+        self.rightView?.contentMode = .center
+        self.rightView?.bounds = CGRect(x: 0, y: 0, width: defaultHeight * 1.5, height: defaultHeight)
+        self.rightViewMode = .always
+        self.textColor = Color.lightGray
+    }
+}
+extension SearchTextField {
+    func configLightWhiteSearchBarWithCityButton() {
+        self.cornerRadius = 5
+        self.backgroundColor = Color.white.withAlphaComponent(0.55)
+        
+        self.leftView = {
+            let contentView = UIView(frame:CGRect(x: 0, y: 0, width: defaultHeight*2.3, height: defaultHeight))
+            contentView.addBorderRight(color:Color.white,padding: 7)
+            let button = Button(title: "杭州", image: R.image.ic_location()?.templateImage)
+            button.textLabel.font = Font.h3
+            button.tintColor = Color.tintColor
+            contentView.addSubview(button)
+            button.snp.makeConstraints { (maker) in
+                maker.center.equalToSuperview()
+            }
+            return contentView
+        }()
+        self.leftViewMode = .always
+        
+        self.rightView = UIImageView(image: R.image.ic_searchIcon()?.templateImage)
+        self.rightView?.tintColor = Color.black
+        self.rightView?.contentMode = .center
+        self.rightView?.bounds = CGRect(x: 0, y: 0, width: defaultHeight * 1.5, height: defaultHeight)
+        self.rightViewMode = .always
+        
+        self.textColor = Color.lightGray
     }
 }

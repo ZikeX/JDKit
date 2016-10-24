@@ -36,6 +36,7 @@ extension JDSegmentedControl {
         switch style {
         case .wavyLine:
             self.scrollEnabled = false
+            self.addBorderBottom(boderWidth:0.5,color:Color.viewBackground)
         case .canScroll:
             self.scrollEnabled = true
             self.addBorderBottom(boderWidth:0.5,color:Color.tintColor)
