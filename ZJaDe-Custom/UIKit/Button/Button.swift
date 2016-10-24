@@ -206,7 +206,9 @@ extension Button {
     }
     override var intrinsicContentSize:CGSize {
         #if TARGET_INTERFACE_BUILDER
-            return self.IBSize
+            if self.IBSize != CGSize() {
+                return self.IBSize
+            }
         #endif
         var width:CGFloat = contentEdgeInsets.left + contentEdgeInsets.right
         var height:CGFloat = contentEdgeInsets.top + contentEdgeInsets.bottom

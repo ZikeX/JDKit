@@ -13,7 +13,7 @@ extension JDTableViewModel { //创建cell
         var cell:UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier)
         if cell == nil {
             if isNibCell {
-                tableView.register(UINib(nibName:cellName,bundle:nil), forCellReuseIdentifier: reuseIdentifier)
+                tableView.register(UINib(nibName:reuseIdentifier,bundle:nil), forCellReuseIdentifier: reuseIdentifier)
             }else {
                 tableView.register(NSClassFromString(cellClassName), forCellReuseIdentifier: reuseIdentifier)
             }

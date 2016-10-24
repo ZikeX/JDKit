@@ -15,5 +15,5 @@ class BaseModel: JDCustomModel,HandyJSON {
     func mapping(mapper: HelpingMapper) {
         
     }
-    
 }
+

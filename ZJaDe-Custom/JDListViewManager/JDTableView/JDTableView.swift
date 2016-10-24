@@ -41,10 +41,7 @@ extension JDTableView {
     func configDataSource() {
         reloadDataSource.configureCell = {(dataSource, tableView, indexPath, model) in
             let cell =  model.createCellWithTableView(tableView, indexPath: indexPath)!
-            if let cell = cell as? JDTableViewCell {
-                cell.cellDidLoad(model)
-                _ = model.calculateCellHeight(tableView)
-            }
+            _ = model.calculateCellHeight(tableView)
             return cell
         }
         self.dataArray.asObservable().bindTo(self.rx.items(dataSource: reloadDataSource)).addDisposableTo(disposeBag)
@@ -55,6 +52,7 @@ extension JDTableView {
             }
             if let cell = element.cell as? JDTableViewCell,
                 let model = try? self.rx.model(element.indexPath) as JDTableViewModel {
+                cell.cellDidLoad(model)
                 cell.cellWillAppear(model)
             }
         }
