@@ -19,6 +19,7 @@ class BaseTableViewController: JDTableViewController,ScrollProperty {
     }
     override func configInit() {
         super.configInit()
+        self.jdTableView.backgroundColor = Color.viewBackground
         configInitAboutNavBar()
         configInitAboutViewState()
     }

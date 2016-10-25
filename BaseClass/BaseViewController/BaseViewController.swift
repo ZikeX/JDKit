@@ -16,7 +16,6 @@ class BaseViewController: UIViewController {
     lazy var messageButton:Button = {
         let button = Button(image:R.image.ic_home_消息()?.templateImage)
         button.tintColor = Color.black
-        button.addShadowInWhiteView()
         button.sizeToFit()
         _ = button.rx.tap.subscribe({ (event) in
             // TODO: 点击消息按钮时
