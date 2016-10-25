@@ -13,5 +13,5 @@ class JDCustomCell: JDTableViewCell {
     override func configCellInit() {
         super.configCellInit()
     }
-
 }
+

@@ -22,7 +22,7 @@ extension JDTableView {
         }
         var items = dataArray.value.first?.items ?? [JDTableViewModel]()
         items.append(contentsOf: modelArray)
-        dataArray.value = [SectionModel(model: JDSection(), items: items)]
+        dataArray.value = [SectionModel(model: JDTableViewSection(), items: items)]
     }
 }
 extension JDTableView {// mj_header, mj_footer

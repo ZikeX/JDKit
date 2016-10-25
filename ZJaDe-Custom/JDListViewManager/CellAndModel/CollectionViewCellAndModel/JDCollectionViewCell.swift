@@ -31,15 +31,24 @@ class JDCollectionViewCell: UICollectionViewCell {
     func cellDidInit() {
         
     }
+    // MARK: - cell加载完毕，初始化数据及约束
     func cellDidLoad(_ element: JDCollectionViewModel) {
         
     }
+    // MARK: - cell将要显示，做动画，element绑定cell
     final func cellWillAppear(_ element: JDCollectionViewModel) {
-        self.configCellWithElement(element)
+        configCellWithElement(element)
+        cellUpdateConstraints(element)
     }
+    // MARK: cell根据element绑定数据
     func configCellWithElement(_ element: JDCollectionViewModel) {
         
     }
+    // MARK: cell设置数据后,如果需要在这里更新约束
+    func cellUpdateConstraints(_ element: JDCollectionViewModel) {
+        
+    }
+    // MARK: - cell已经消失,element解绑cell
     func cellDidDisappear(_ element: JDCollectionViewModel) {
         
     }
