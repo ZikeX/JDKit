@@ -10,6 +10,7 @@ enum RouteUrl {
     case route_活动详情(id:Int)
     case route_活动报名的人
     case route_活动报名页面
+    case route_酒店首页
     case route_酒店详情
     case route_餐饮
 }
@@ -22,17 +23,20 @@ extension RouterManager {
             let activityVC = JDActivityDetailViewController()
             return activityVC
         case .route_活动报名的人:
-            let vc = JDActivityEnrolNumViewController()
-            return vc
+            let viewCon = JDActivityEnrolNumViewController()
+            return viewCon
         case .route_活动报名页面:
-            let vc = JDActivityEnrollViewController()
-            return vc
+            let viewCon = JDActivityEnrollViewController()
+            return viewCon
+        case .route_酒店首页:
+            let viewCon = JDHotelViewController()
+            return viewCon
         case .route_酒店详情:
-            let vc = JDHotelViewController()
-            return vc
+            let viewCon = JDHotelDetailViewController()
+            return viewCon
         case .route_餐饮:
-            let vc = JDDiningViewController()
-            return vc
+            let viewCon = JDDiningViewController()
+            return viewCon
         }
     }
 }

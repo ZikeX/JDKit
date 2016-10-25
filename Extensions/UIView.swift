@@ -246,6 +246,22 @@ extension UIView {
             self.layer.masksToBounds = newValue > 0
         }
     }
+    @IBInspectable var boderColor:UIColor {
+        get {
+            return Color.boderLine
+        }
+        set {
+            self.layer.borderColor = newValue.cgColor
+        }
+    }
+    @IBInspectable var boderWidth:CGFloat {
+        get {
+            return self.layer.borderWidth
+        }
+        set {
+            self.layer.borderWidth = newValue
+        }
+    }
     var backgroundColorAlpha:CGFloat {
         get {
             var a: CGFloat = 0
@@ -268,7 +284,6 @@ extension UIView {
     func addBorder(width: CGFloat = 1, color: UIColor = Color.boderLine) {
         layer.borderWidth = width
         layer.borderColor = color.cgColor
-        layer.masksToBounds = true
     }
 }
 // MARK: Render Extensions

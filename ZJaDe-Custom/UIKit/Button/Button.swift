@@ -208,6 +208,8 @@ extension Button {
         #if TARGET_INTERFACE_BUILDER
             if self.IBSize != CGSize() {
                 return self.IBSize
+            }else {
+                return CGSize(width: 70, height: 30)
             }
         #endif
         var width:CGFloat = contentEdgeInsets.left + contentEdgeInsets.right

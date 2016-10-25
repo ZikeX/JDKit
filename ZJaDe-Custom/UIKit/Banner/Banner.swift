@@ -14,10 +14,11 @@ class Banner: UIView {
     fileprivate let scrollView = PageScrollView()
     let pageControl = SnakePageControl()
     
-    var dataArray:[ImageDataProtocol] = [R.image.ic_defalut_image()!] {
+    var dataArray:[ImageDataProtocol] = [ImageDataProtocol]() {
         didSet {
             self.scrollView.imgArray = dataArray
             self.pageControl.pageCount = dataArray.count
+            self.pageControl.isHidden = dataArray.count <= 1
         }
     }
     
@@ -44,5 +45,7 @@ class Banner: UIView {
             let progress = CGFloat(page) + progressInPage
             self.pageControl.progress = progress
         }.addDisposableTo(disposeBag)
+        
+        self.dataArray = [R.image.ic_defalut_image()!]
     }
 }
