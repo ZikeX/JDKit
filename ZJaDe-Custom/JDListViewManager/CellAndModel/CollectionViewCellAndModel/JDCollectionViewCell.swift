@@ -31,4 +31,16 @@ class JDCollectionViewCell: UICollectionViewCell {
     func cellDidInit() {
         
     }
+    func cellDidLoad(_ element: JDCollectionViewModel) {
+        
+    }
+    final func cellWillAppear(_ element: JDCollectionViewModel) {
+        self.configCellWithElement(element)
+    }
+    func configCellWithElement(_ element: JDCollectionViewModel) {
+        
+    }
+    func cellDidDisappear(_ element: JDCollectionViewModel) {
+        
+    }
 }

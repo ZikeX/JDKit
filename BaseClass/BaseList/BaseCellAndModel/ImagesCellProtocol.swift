@@ -1,5 +1,5 @@
 //
-//  ImagesCellAndModelProtocol.swift
+//  ImagesCellProtocol.swift
 //  ZiWoYou
 //
 //  Created by Z_JaDe on 2016/10/24.
@@ -12,7 +12,7 @@ protocol ImagesCellProtocol:class {
     var imgsStackView:UIStackView! {get set}
     func configImgsStackView(itemArray:[ImageDataProtocol])
 }
-extension ImagesCellProtocol where Self:BaseCell {
+extension ImagesCellProtocol {
     /// ZJaDe: 代码创建ImgsStackView
     func createImgsStackView(count:Int,stackViewClosure:((UIStackView)->())? = nil,imageViewClosure:((UIStackView,UIImageView)->())? = nil) -> UIStackView {
         let stackView = UIStackView(alignment: .fill, distribution:.fillEqually, spacing: 4)
