@@ -42,7 +42,6 @@ class JDFormModel: JDTableViewModel {
     
     override func configModelInit() {
         super.configModelInit()
-        autoAdjustHeight = false
     }
     /*************** 附件类型 ***************/
     var accessoryType = Variable(UITableViewCellAccessoryType.none)

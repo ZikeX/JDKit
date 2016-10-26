@@ -11,6 +11,11 @@ import RxSwift
 
 class JDTextFieldModel: JDEntryModel {
     
+    override func configModelInit() {
+        super.configModelInit()
+        self.cellHeight = 45
+    }
+    
     var textFieldAppearanceClosure:TextFieldAppearanceClosure = { (textField) in
         textField.backgroundColor = Color.viewBackground
         textField.cornerRadius = 5

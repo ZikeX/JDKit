@@ -23,7 +23,6 @@ class JDLabelModel: JDFormModel {
     }
     override func configModelInit() {
         super.configModelInit()
-        autoAdjustHeight = true
     }
 }
 extension JDLabelModel {    

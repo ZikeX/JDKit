@@ -13,7 +13,6 @@ class JDTextViewModel: JDEntryModel {
     
     override func configModelInit() {
         super.configModelInit()
-        autoAdjustHeight = true
     }
     var textViewAppearanceClosure:TextViewAppearanceClosure = { (textView) in
         textView.backgroundColor = Color.viewBackground

@@ -15,7 +15,7 @@ class JDButtonModel: JDFormModel {
         super.configModelInit()
         spaceEdges = UIEdgeInsetsMake(8, 20, 8, 20)
         cellBackgroundColor = Color.clear
-        cellContentHeight = 50
+        self.cellHeight = 64
         
     }
     var buttonAppearanceClosure:ButtonAppearanceClosure = { (button) in

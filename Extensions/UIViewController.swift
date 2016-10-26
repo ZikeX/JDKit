@@ -5,7 +5,7 @@ extension UIViewController {
         func clearNavigationItem() {
             self.navigationItem.titleView?.removeFromSuperview()
             self.navigationItem.titleView = nil
-            self.navigationItem.title = ""
+            self.navigationItem.title = nil
             self.navigationItem.leftBarButtonItems = [UIBarButtonItem]()
             self.navigationItem.rightBarButtonItems = [UIBarButtonItem]()
         }

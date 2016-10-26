@@ -6,33 +6,67 @@
 //  Copyright © 2016年 Z_JaDe. All rights reserved.
 //
 import UIKit
-
+private var UIImageViewActivityIndicatorKey: UInt8 = 0
 extension UIImageView {
-    func setImage(imageData:ImageDataProtocol?,defaultImage:UIImage? = nil) {
+    fileprivate var activityIndicator:UIActivityIndicatorView? {
+        get {
+            return objc_getAssociatedObject(self, &UIImageViewActivityIndicatorKey) as? UIActivityIndicatorView
+        }
+        set {
+            objc_setAssociatedObject(self, &UIImageViewActivityIndicatorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    fileprivate func addActivityIndicator(style:UIActivityIndicatorViewStyle) {
+        if self.activityIndicator == nil {
+            self.activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: style)
+            
+            DispatchQueue.main.async {
+                self.addSubview(self.activityIndicator!)
+                self.activityIndicator!.edgesToView()
+            }
+        }
+        DispatchQueue.main.async {
+            self.activityIndicator?.startAnimating()
+        }
+    }
+    fileprivate func removeActivityIndicator() {
+        if self.activityIndicator != nil {
+            self.activityIndicator?.removeFromSuperview()
+            self.activityIndicator = nil
+        }
+    }
+    func setImage(imageData:ImageDataProtocol?,placeholderImage:UIImage? = nil,style:UIActivityIndicatorViewStyle? = nil) {
         if imageData == nil {
-            self.image = defaultImage ?? R.image.ic_defalut_image()
+            self.image = placeholderImage ?? R.image.ic_defalut_image()
         }else {
-            imageData!.injectImageToView(imageView:self)
+            imageData!.injectImageToView(imageView:self,style: style)
         }
     }
 }
 
 protocol ImageDataProtocol {
-    func injectImageToView(imageView:UIImageView)
+    func injectImageToView(imageView:UIImageView,style:UIActivityIndicatorViewStyle?)
 }
 
 extension String:ImageDataProtocol {
-    func injectImageToView(imageView: UIImageView) {
-        imageView.image = R.image.ic_defalut_image()
+    func injectImageToView(imageView: UIImageView,style:UIActivityIndicatorViewStyle? = nil) {
+        let url = URL(string: self)
+        if url != nil {
+            url!.injectImageToView(imageView: imageView, style: style)
+        }else {
+            logError("\(self) -> 不是一个有效的URL")
+        }
     }
 }
 extension URL:ImageDataProtocol {
-    func injectImageToView(imageView: UIImageView) {
+    func injectImageToView(imageView: UIImageView,style:UIActivityIndicatorViewStyle? = nil) {
+        imageView.addActivityIndicator(style: style ?? .white)
         imageView.image = R.image.ic_defalut_image()
+        imageView.removeActivityIndicator()
     }
 }
 extension UIImage:ImageDataProtocol {
-    func injectImageToView(imageView: UIImageView) {
+    func injectImageToView(imageView: UIImageView,style:UIActivityIndicatorViewStyle? = nil) {
         imageView.image = self
     }
 }

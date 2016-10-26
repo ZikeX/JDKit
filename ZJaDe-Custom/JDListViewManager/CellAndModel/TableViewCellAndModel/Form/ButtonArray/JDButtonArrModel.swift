@@ -12,7 +12,6 @@ class JDButtonArrModel: JDFormModel {
     
     override func configModelInit() {
         super.configModelInit()
-        autoAdjustHeight = true
     }
     var stackView = UIStackView(alignment: .fill, distribution: .fillEqually)
     var sizeScale:CGFloat = 3

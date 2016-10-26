@@ -24,9 +24,9 @@ protocol CellManagerProtocol {
     // MARK: - cell已经消失,element解绑cell
     func cellDidDisappear(_ element: ModelType)
 }
-extension JDCollectionViewCell:CellManagerProtocol {
+extension JDCollectionViewCell : CellManagerProtocol {
     typealias ModelType = JDCollectionViewModel
 }
-extension JDTableViewCell:CellManagerProtocol {
+extension JDTableViewCell : CellManagerProtocol {
     typealias ModelType = JDTableViewModel
 }
