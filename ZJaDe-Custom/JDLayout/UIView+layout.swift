@@ -36,11 +36,11 @@ extension UIView {
     }
     /// ZJaDe: 宽比高
     func width_height(scale:CGFloat) {
-        self.jdLayout.width_height(scale).activate()
+        self.jdLayout.width_height(scale: scale).activate()
     }
     /// ZJaDe: 高比宽
     func height_width(scale:CGFloat) {
-        self.jdLayout.heightWidthSacle(scale).activate()
+        self.jdLayout.height_width(scale: scale).activate()
     }
 }
 extension UIView {
@@ -78,5 +78,20 @@ extension UIView {
         set {
             self.setContentCompressionResistancePriority(newValue, for: .vertical)
         }
+    }
+}
+private var centerLayoutViewKey:UInt8 = 0
+extension UIView {
+    var centerLayoutView:UIView {
+        var centerLayoutView: UIView
+        if let existing = objc_getAssociatedObject(self, &centerLayoutViewKey) as? UIView {
+            centerLayoutView = existing
+        }else {
+            centerLayoutView = UIView()
+            self.addSubview(centerLayoutView)
+            centerLayoutView.jdLayout.centerAlign().activate()
+            objc_setAssociatedObject(self, &centerLayoutViewKey, centerLayoutView, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+        return centerLayoutView
     }
 }

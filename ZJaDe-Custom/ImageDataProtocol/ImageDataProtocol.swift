@@ -36,11 +36,8 @@ extension UIImageView {
         }
     }
     func setImage(imageData:ImageDataProtocol?,placeholderImage:UIImage? = nil,style:UIActivityIndicatorViewStyle? = nil) {
-        if imageData == nil {
-            self.image = placeholderImage ?? R.image.ic_defalut_image()
-        }else {
-            imageData!.injectImageToView(imageView:self,style: style)
-        }
+        self.image = placeholderImage ?? R.image.ic_defalut_image()
+        imageData?.injectImageToView(imageView:self,style: style)
     }
 }
 

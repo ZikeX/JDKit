@@ -12,6 +12,7 @@ enum RouteUrl {
     case route_活动报名页面
     
     case route_吃喝分类_默认(title:String)
+    case route_吃喝分类_国内游首页
     case route_吃喝分类_景点首页
     case route_吃喝分类_酒店首页
     case route_吃喝分类_酒店_详情
@@ -37,6 +38,10 @@ extension RouterManager {
             let viewCon = JDDefaultCategoryViewController()
             viewCon.title = title
             return viewCon
+        case .route_吃喝分类_国内游首页:
+        let viewCon = JDDomesticTravelViewController()
+        viewCon.title = "国内游"
+        return viewCon
         case .route_吃喝分类_景点首页:
             let viewCon = JDTouristViewController()
             viewCon.title = "景点"
