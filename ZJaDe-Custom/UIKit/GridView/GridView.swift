@@ -12,7 +12,9 @@ class GridView<ItemType:UIView>: UIView {
     /// ZJaDe:columns 总列数
     var columns:Int = 0 {
         didSet {
-            configItemsArray()
+            if itemArray.count > 0 {
+                configItemsArray()
+            }
         }
     }
     /// ZJaDe: 总行数
@@ -32,7 +34,9 @@ class GridView<ItemType:UIView>: UIView {
     }
     var horizontalSpace:CGFloat = 0 {
         didSet {
-            configItemsArray()
+            itemsStackViews.forEach({ (stackView) in
+                stackView.spacing = self.horizontalSpace
+            })
         }
     }
     var verticalSpace:CGFloat = 0 {
