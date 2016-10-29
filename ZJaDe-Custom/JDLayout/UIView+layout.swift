@@ -3,7 +3,7 @@
 //  ZiWoYou
 //
 //  Created by ZJaDe on 16/10/15.
-//  Copyright © 2016年 Z_JaDe. All rights reserved.
+//  Copyright © 2016 Z_JaDe. All rights reserved.
 //
 
 import UIKit
@@ -81,6 +81,7 @@ extension UIView {
     }
 }
 private var centerLayoutViewKey:UInt8 = 0
+private var centerStackViewKey:UInt8 = 0
 extension UIView {
     var centerLayoutView:UIView {
         var centerLayoutView: UIView
@@ -93,5 +94,17 @@ extension UIView {
             objc_setAssociatedObject(self, &centerLayoutViewKey, centerLayoutView, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         return centerLayoutView
+    }
+    var centerStackView:UIStackView {
+        var centerStackView: UIStackView
+        if let existing = objc_getAssociatedObject(self, &centerStackViewKey) as? UIStackView {
+            centerStackView = existing
+        }else {
+            centerStackView = UIStackView(alignment: .center, distribution: .equalCentering)
+            self.addSubview(centerLayoutView)
+            centerLayoutView.jdLayout.centerAlign().activate()
+            objc_setAssociatedObject(self, &centerStackViewKey, centerLayoutView, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+        return centerStackView
     }
 }

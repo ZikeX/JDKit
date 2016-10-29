@@ -3,7 +3,7 @@
 //  ZiWoYou
 //
 //  Created by Z_JaDe on 16/9/15.
-//  Copyright © 2016年 Z_JaDe. All rights reserved.
+//  Copyright © 2016 Z_JaDe. All rights reserved.
 //
 
 import Foundation

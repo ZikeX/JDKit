@@ -3,7 +3,7 @@
 //  ZiWoYou
 //
 //  Created by ZJaDe on 16/10/25.
-//  Copyright © 2016年 Z_JaDe. All rights reserved.
+//  Copyright © 2016 Z_JaDe. All rights reserved.
 //
 
 import UIKit
@@ -14,15 +14,15 @@ protocol PriceCellProtocol {
 }
 extension PriceCellProtocol {
     func setPriceLabelText(price:CGFloat,suffix:String? = nil,suffixFont:UIFont? = nil) {
-        let attriStr = NSMutableAttributedString()
-        attriStr.append(NSAttributedString(string: "￥\(price)", attributes: [NSForegroundColorAttributeName:Color.orange]))
+        let attrStr = NSMutableAttributedString()
+        attrStr.append(NSAttributedString(string: "￥\(price)", attributes: [NSForegroundColorAttributeName:Color.orange]))
         if suffix != nil {
             if suffixFont != nil {
-                attriStr.append(NSAttributedString(string: suffix!, attributes: [NSForegroundColorAttributeName:Color.gray,NSFontAttributeName:suffixFont!]))
+                attrStr.append(NSAttributedString(string: suffix!, attributes: [NSForegroundColorAttributeName:Color.gray,NSFontAttributeName:suffixFont!]))
             }else {
-                attriStr.append(NSAttributedString(string: suffix!, attributes: [NSForegroundColorAttributeName:Color.gray]))
+                attrStr.append(NSAttributedString(string: suffix!, attributes: [NSForegroundColorAttributeName:Color.gray]))
             }
         }
-        priceLabel.attributedText = attriStr
+        priceLabel.attributedText = attrStr
     }
 }
