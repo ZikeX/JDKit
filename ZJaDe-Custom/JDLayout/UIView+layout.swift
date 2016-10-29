@@ -90,7 +90,11 @@ extension UIView {
         }else {
             centerLayoutView = UIView()
             self.addSubview(centerLayoutView)
-            centerLayoutView.jdLayout.centerAlign().activate()
+            centerLayoutView.snp.makeConstraints({ (maker) in
+                maker.center.equalToSuperview()
+                maker.left.greaterThanOrEqualTo(self)
+                maker.top.greaterThanOrEqualTo(self)
+            })
             objc_setAssociatedObject(self, &centerLayoutViewKey, centerLayoutView, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         return centerLayoutView
@@ -101,9 +105,13 @@ extension UIView {
             centerStackView = existing
         }else {
             centerStackView = UIStackView(alignment: .center, distribution: .equalCentering)
-            self.addSubview(centerLayoutView)
-            centerLayoutView.jdLayout.centerAlign().activate()
-            objc_setAssociatedObject(self, &centerStackViewKey, centerLayoutView, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            self.addSubview(centerStackView)
+            centerStackView.snp.makeConstraints({ (maker) in
+                maker.center.equalToSuperview()
+                maker.left.greaterThanOrEqualTo(self)
+                maker.top.greaterThanOrEqualTo(self)
+            })
+            objc_setAssociatedObject(self, &centerStackViewKey, centerStackView, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
         return centerStackView
     }

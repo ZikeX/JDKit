@@ -315,4 +315,14 @@ extension UIView {
         }
         return parentView.rootView()
     }
+    func viewController<T:UIViewController>(_ vcType:T.Type) -> T? {
+        var responder = self.next
+        repeat {
+            if responder is T {
+                return responder as? T
+            }
+            responder = responder?.next
+        }while (responder != nil)
+        return nil
+    }
 }
