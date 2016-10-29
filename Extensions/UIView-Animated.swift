@@ -3,7 +3,7 @@ import UIKit
 
 private let UIViewAnimationDuration: TimeInterval = 0.25
 private let UIViewAnimationSpringDamping: CGFloat = 0.8
-private let UIViewAnimationSpringVelocity: CGFloat = 0.5
+private let UIViewAnimationSpringVelocity: CGFloat = 10
 
 // MARK: Animation Extensions
 extension UIView {
@@ -43,10 +43,10 @@ extension UIView {
         })
     }
     func zoomInOut(_ animatedDuration:TimeInterval = UIViewAnimationDuration, ZoomIn:Bool) {
-        UIView.animate(withDuration: animatedDuration, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 10, options: UIViewAnimationOptions(), animations: {
+        UIView.spring(duration: animatedDuration) {
             let scale:CGFloat = ZoomIn ? 0.95 : 1.0;
             self.layer.transform = CATransform3DMakeScale(scale, scale, scale);
-            }, completion: nil)
+        }
     }
     func showOut(_ animatedDuration:TimeInterval = UIViewAnimationDuration) {
         self.layer.transform = CATransform3DMakeScale(1, 1, 0.1)

@@ -10,7 +10,7 @@ import UIKit
 // MARK: - ImagesCellProtocol
 protocol ImagesCellProtocol:class {
     var imgsStackView:UIStackView! {get set}
-    func configImgsStackView(itemArray:[ImageDataProtocol])
+    func configImgsStackView(itemArray:[ImageDataProtocol]?)
 }
 extension ImagesCellProtocol {
     /// ZJaDe: 代码创建ImgsStackView
@@ -25,11 +25,18 @@ extension ImagesCellProtocol {
         return stackView
     }
     /// ZJaDe: 配置数据
-    func configImgsStackView(itemArray:[ImageDataProtocol]) {
+    func configImgsStackView(itemArray:[ImageDataProtocol]?) {
+        guard itemArray != nil && itemArray!.count > 0 else {
+            imgsStackView.isHidden = true
+            return
+        }
+        imgsStackView.isHidden = false
         for (index,imageView) in (imgsStackView.arrangedSubviews as! [UIImageView]).enumerated() {
-            if index < itemArray.count {
-                imageView.setImage(imageData: itemArray[index])
+            if index < itemArray?.count ?? -1 {
+                imageView.isHidden = false
+                imageView.setImage(imageData: itemArray![index])
             }else {
+                imageView.isHidden = true
                 imageView.image = nil
             }
         }
@@ -38,15 +45,5 @@ extension ImagesCellProtocol {
 // MARK: - ImagesModelProtocol
 protocol ImagesModelProtocol {
     var imgDataArr:[ImageDataProtocol]? {set get}
-    func configReuseIdentifier()
 }
-extension ImagesModelProtocol where Self:BaseModel {
-    func configReuseIdentifier() {
-        let count = self.imgDataArr?.count ?? 0
-        if count > 0 {
-            self.reuseIdentifier = "\(self.cellName)-Images"
-        }else {
-            self.reuseIdentifier = self.cellName
-        }
-    }
-}
+
