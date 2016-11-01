@@ -15,8 +15,10 @@ class Font {
     static var h4 = UIFont(name:"PingFang SC", size: 13.5)!
     static var h5 = UIFont(name:"PingFang SC", size: 12)!
     
-    
-    static func size(num:Int) -> UIFont {
+    static func size(size:CGFloat) -> UIFont {
+        return UIFont(name:"PingFang SC", size: size)!
+    }
+    static func num(num:Int) -> UIFont {
         switch num {
         case 1:
             return Font.h1

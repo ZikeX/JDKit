@@ -37,27 +37,23 @@ extension RouterManager {
             return viewCon
         
         case .route_吃喝分类_默认(title: let title):
-            let viewCon = JDDefaultCategoryViewController()
-            viewCon.title = title
+            let viewCon = JDDefaultCategoryViewController(title: title)
             return viewCon
         case .route_吃喝分类_国内游首页:
-        let viewCon = JDDomesticTravelViewController()
-        viewCon.title = "国内游"
+        let viewCon = JDDomesticTravelViewController(title: "国内游")
         return viewCon
         case .route_吃喝分类_景点首页:
-            let viewCon = JDTouristViewController()
-            viewCon.title = "景点"
+            let viewCon = JDTouristViewController(title: "景点")
             return viewCon
         case .route_吃喝分类_酒店首页:
-            let viewCon = JDHotelViewController()
-            viewCon.title = "酒店"
+            let viewCon = JDHotelViewController(title: "酒店")
             return viewCon
         case .route_吃喝分类_餐饮or特产(title: let title):
-            let viewCon = JDDiningViewController()
+            let viewCon = JDDiningViewController(title: title)
             viewCon.title = title
             return viewCon
         case .route_吃喝分类_健康or休闲(title: let title):
-            let viewCon = JDHealthViewController()
+            let viewCon = JDHealthViewController(title: title)
             viewCon.title = title
             return viewCon
             
@@ -65,8 +61,7 @@ extension RouterManager {
             let viewCon = JDHotelDetailViewController()
             return viewCon
         case .route_酒店_房间详情(title: let title):
-            let viewCon = JDRoomDetailViewController()
-            viewCon.title = title
+            let viewCon = JDRoomDetailViewController(title:title)
             return viewCon
             
         }

@@ -8,26 +8,20 @@ extension UIView {
             return pan
         }else {
             let pan = UIPanGestureRecognizer()
+            self.addGestureRecognizer(pan)
             objc_setAssociatedObject(self, &jd_panKey, pan, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             return pan
         }
     }
-    func getTap(numberOfTapsRequired:Int = 1,numberOfTouchesRequired:Int = 1) -> UITapGestureRecognizer {
-        if (self.gestureRecognizers?.count ?? -1) > 0 {
-            for tap in self.gestureRecognizers! {
-                if let tap = tap as? UITapGestureRecognizer,
-                    let (numberOfTapsRequired,numberOfTouchesRequired) = objc_getAssociatedObject(tap, &jd_tapKey) as? (Int,Int),
-                    tap.numberOfTapsRequired == numberOfTapsRequired,
-                    tap.numberOfTouchesRequired == numberOfTouchesRequired {
-                    return tap
-                }
-            }
+    func getTap() -> UITapGestureRecognizer {
+        let tap:UITapGestureRecognizer
+        if let existing = objc_getAssociatedObject(self, &jd_tapKey) as? UITapGestureRecognizer {
+            tap = existing
+        }else {
+            tap = UITapGestureRecognizer()
+            self.addGestureRecognizer(tap)
+            objc_setAssociatedObject(self, &jd_tapKey, tap, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
-        let tap = UITapGestureRecognizer()
-        tap.numberOfTapsRequired = numberOfTapsRequired
-        tap.numberOfTouchesRequired = numberOfTouchesRequired
-        objc_setAssociatedObject(tap, &jd_tapKey, (numberOfTapsRequired,numberOfTouchesRequired), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        self.addGestureRecognizer(tap)
         return tap
     }
 }

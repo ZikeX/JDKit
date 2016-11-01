@@ -72,7 +72,7 @@ class Button: UIControl {
     }
     @IBInspectable var labelFont:Int = 0 {
         didSet {
-            self.textLabel.font = Font.size(num: labelFont)
+            self.textLabel.font = Font.num(num: labelFont)
         }
     }
     @IBInspectable var itemSpace:CGFloat {

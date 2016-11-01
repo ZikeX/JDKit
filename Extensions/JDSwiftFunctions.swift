@@ -84,8 +84,14 @@ extension jd {
     }
 }
 extension jd {
+    static var keyWindow:UIWindow {
+        return UIApplication.shared.keyWindow!
+    }
+    static var rootWindow:UIWindow {
+        return UIApplication.shared.delegate!.window!!
+    }
     /// ZJaDe: 返回最顶端的控制器
-    static func visibleVC(_ base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+    static func visibleVC(_ base: UIViewController? = rootWindow.rootViewController) -> UIViewController? {
         if let nav = base as? UINavigationController {
             return visibleVC(nav.visibleViewController)
         }
@@ -101,7 +107,7 @@ extension jd {
     }
     /// ZJaDe: 返回modal时最上层的控制器
     static var topMostVC: UIViewController? {
-        var presentedVC = UIApplication.shared.keyWindow?.rootViewController
+        var presentedVC = rootWindow.rootViewController
         while let pVC = presentedVC?.presentedViewController {
             presentedVC = pVC
         }
@@ -120,7 +126,7 @@ extension jd {
         return currentNavigationController
     }
     static var appRootVC:UIViewController {
-        return UIApplication.shared.delegate!.window!!.rootViewController!
+        return rootWindow.rootViewController!
     }
 }
 extension jd {
