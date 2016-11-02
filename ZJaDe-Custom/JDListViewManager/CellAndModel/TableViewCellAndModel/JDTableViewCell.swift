@@ -63,17 +63,15 @@ class JDTableViewCell: UITableViewCell {
     func cellDidLoad(_ element: JDTableViewModel) {
         /// ZJaDe:horizontal
         _ = jdContentView.jdLayout.edgesAlign(.horizontal, inset: element.spaceEdges)
-        separatorLineView.snp.makeConstraints { (maker) in
-            if element.separatorInset.left > 0 {
-                _ = separatorLineView.jdLayout.leftAlign(offset: element.separatorInset.left)
-            }else {
-                _ = separatorLineView.jdLayout.leftAlign(self,offset: -element.separatorInset.left)
-            }
-            if element.separatorInset.right > 0 {
-                _ = separatorLineView.jdLayout.rightAlign(offset: -element.separatorInset.right)
-            }else {
-                _ = separatorLineView.jdLayout.rightAlign(self,offset: element.separatorInset.right)
-            }
+        if element.separatorInset.left > 0 {
+            _ = separatorLineView.jdLayout.leftAlign(offset: element.separatorInset.left)
+        }else {
+            _ = separatorLineView.jdLayout.leftAlign(self,offset: -element.separatorInset.left)
+        }
+        if element.separatorInset.right > 0 {
+            _ = separatorLineView.jdLayout.rightAlign(offset: -element.separatorInset.right)
+        }else {
+            _ = separatorLineView.jdLayout.rightAlign(self,offset: element.separatorInset.right)
         }
         /// ZJaDe:vertical
         jdContentView.jdLayout.topAlign(offset: element.spaceEdges.top).activate()

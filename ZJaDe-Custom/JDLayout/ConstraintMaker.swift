@@ -8,6 +8,24 @@
 import UIKit
 import SnapKit
 extension ConstraintMaker {
+    /// ZJaDe: 宽比高
+    func width_height(scale:CGFloat) {
+        self.width.equalTo(self.view.snp.height).multipliedBy(scale)
+    }
+    /// ZJaDe: 高比宽
+    func height_width(scale:CGFloat) {
+        self.height.equalTo(self.view.snp.width).multipliedBy(scale)
+    }
+}
+extension ConstraintMaker {
+    @discardableResult
+    func edgesAlign(_ view:UIView?=nil,inset:UIEdgeInsets)->ConstraintMakerEditable {
+        if let view = view {
+            return self.edges.equalTo(view).inset(inset)
+        }else {
+            return self.edges.equalToSuperview().inset(inset)
+        }
+    }
     @discardableResult
     func centerAlign(_ view:UIView?=nil)->ConstraintMakerEditable {
         if let view = view{

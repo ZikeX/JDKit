@@ -20,6 +20,8 @@ enum RouteUrl {
 
     case route_酒店_详情
     case route_酒店_房间详情(title:String)
+    
+    case route_我的店铺
 }
 import UIKit
 
@@ -64,6 +66,9 @@ extension RouterManager {
             let viewCon = JDRoomDetailViewController(title:title)
             return viewCon
             
+        case .route_我的店铺:
+            let viewCon = JDShopViewController()
+            return viewCon
         }
     }
 }

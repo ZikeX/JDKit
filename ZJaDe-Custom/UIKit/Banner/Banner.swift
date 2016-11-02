@@ -34,10 +34,10 @@ class Banner: UIView {
         self.addSubview(self.scrollView)
         self.scrollView.edgesToView()
         self.addSubview(self.pageControl)
-        self.pageControl.jdLayout
-            .rightAlign(offset: -20)
-            .bottomAlign(offset: -10)
-            .activate()
+        self.pageControl.snp.makeConstraints { (maker) in
+            maker.rightAlign(offset: -20)
+            maker.bottomAlign(offset: -10)
+        }
         
         self.scrollView.rx.contentOffset.subscribe { (event) in
             let page = self.scrollView.contentOffset.x / self.scrollView.bounds.width

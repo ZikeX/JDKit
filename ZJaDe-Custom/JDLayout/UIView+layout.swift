@@ -22,7 +22,7 @@ extension UIView {
         self.jdLayout.edgesAlignToVC(viewController).activate()
     }
     func edgesToView() {
-        self.jdLayout.edgesAlign().activate()
+        self.jdLayout.edgesAlign(inset:UIEdgeInsets()).activate()
     }
     /// ZJaDe: 设置宽高
     func widthValue(width:CGFloat) {

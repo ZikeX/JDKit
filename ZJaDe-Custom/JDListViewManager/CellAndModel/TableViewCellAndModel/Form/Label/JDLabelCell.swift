@@ -14,19 +14,33 @@ class JDLabelCell: JDFormCell {
     override func configCellInit() {
         super.configCellInit()
         jdContentView.addSubview(detailTitleLabel)
-        stackView.snp.makeConstraints { (maker) in
-            maker.left.top.equalToSuperview()
-            maker.bottom.lessThanOrEqualTo(jdContentView)
-        }
+        
     }
     override func cellDidLoad(_ element: JDTableViewModel) {
         super.cellDidLoad(element)
         guard let labelModel = element as? JDLabelModel else {
             return
         }
+        stackView.jdLayout.deactivate()
+        if !labelModel.detailTitleIsEmpty {
+            detailTitleLabel.jdLayout.deactivate()
+        }
+        
+        switch labelModel.labelAlignment {
+        case .center:
+            stackView.jdLayout.centerYAlign(offset: 0).activate()
+            if !labelModel.detailTitleIsEmpty {
+                detailTitleLabel.jdLayout.centerYAlign(offset: 0).activate()
+            }
+        case .top:
+            stackView.jdLayout.topAlign(offset: 0).activate()
+            if !labelModel.detailTitleIsEmpty {
+                detailTitleLabel.jdLayout.topAlign(offset: 0).activate()
+            }
+        }
         if !labelModel.detailTitleIsEmpty {
             detailTitleLabel.snp.makeConstraints({ (maker) in
-                maker.top.right.equalToSuperview()
+                maker.right.equalToSuperview()
                 maker.leftSpace(stackView, space: 8)
                 maker.bottom.lessThanOrEqualTo(jdContentView)
             })

@@ -80,7 +80,9 @@ extension JDSegmentedControl:JDSegmentedControlDelegate {
             stackView.addArrangedSubview(item.imageView)
         }
         item.addSubview(stackView)
-        stackView.jdLayout.centerAlign().activate()
+        stackView.snp.makeConstraints { (maker) in
+            maker.centerAlign()
+        }
         switch segmentedControl.style {
         case .wavyLine:
             break

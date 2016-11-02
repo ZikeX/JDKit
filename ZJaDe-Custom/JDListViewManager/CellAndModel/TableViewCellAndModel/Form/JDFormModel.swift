@@ -9,28 +9,9 @@
 import UIKit
 import RxSwift
 
-enum JDTitleHeightStyle {
-    case fixed(CGFloat)//title的高度固定
-    case alignSuper //根据对齐jdContentView
-    case min //根据高度降到最小
-    case auto //自动调节
-    
-    var fixHeight:CGFloat? {
-        switch self {
-        case .fixed(let value):
-            return value
-        default:
-            return nil
-        }
-    }
-    var isAuto:Bool {
-        switch self {
-        case .auto:
-            return true
-        default:
-            return false
-        }
-    }
+enum LabelAlignment {
+    case center
+    case top
 }
 
 class JDFormModel: JDTableViewModel {
@@ -45,6 +26,9 @@ class JDFormModel: JDTableViewModel {
     }
     /*************** 附件类型 ***************/
     var accessoryType = Variable(UITableViewCellAccessoryType.none)
+    
+    var labelAlignment:LabelAlignment = .center
+    
     var title:Variable<String?> = Variable(nil)
     var image:Variable<UIImage?> = Variable(nil)
     var stackViewWidth:CGFloat? = nil
