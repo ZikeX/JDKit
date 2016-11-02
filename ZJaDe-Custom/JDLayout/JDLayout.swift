@@ -111,8 +111,8 @@ extension JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
             switch direction {
             case .horizontal,.all:
-                maker.leftAlign(viewController.view).offset(inset.left)
-                maker.rightAlign(viewController.view).offset(-inset.right)
+                maker.leftAlign(viewController.view,offset: inset.left)
+                maker.rightAlign(viewController.view,offset: -inset.right)
                 if direction == .all {
                     fallthrough
                 }
@@ -129,14 +129,14 @@ extension JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
             switch direction {
             case .horizontal,.all:
-                maker.leftAlign(view).offset(inset.left)
-                maker.rightAlign(view).offset(-inset.right)
+                maker.leftAlign(view,offset: inset.left)
+                maker.rightAlign(view,offset: -inset.right)
                 if direction == .all {
                     fallthrough
                 }
             case .vertical:
-                maker.topAlign(view).offset(inset.top)
-                maker.bottomAlign(view).offset(-inset.bottom)
+                maker.topAlign(view,offset:inset.top)
+                maker.bottomAlign(view,offset:-inset.bottom)
             }
         }
         self.constraintArr.append(contentsOf: constraints)
@@ -228,32 +228,28 @@ extension JDLayout {
     }
 }
 extension JDLayout {
-    func topSpace(_ view:UIView? = nil, space:CGFloat) -> JDLayout {
-        let view = view ?? self.view.superview
+    func topSpace(_ view:UIView, space:CGFloat) -> JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
             maker.topSpace(view, space: space)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
     }
-    func bottomSpace(_ view:UIView? = nil, space:CGFloat) -> JDLayout {
-        let view = view ?? self.view.superview
+    func bottomSpace(_ view:UIView, space:CGFloat) -> JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
             maker.bottomSpace(view, space: space)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
     }
-    func leftSpace(_ view:UIView? = nil, space:CGFloat) -> JDLayout {
-        let view = view ?? self.view.superview
+    func leftSpace(_ view:UIView, space:CGFloat) -> JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
             maker.leftSpace(view, space: space)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
     }
-    func rightSpace(_ view:UIView? = nil, space:CGFloat) -> JDLayout {
-        let view = view ?? self.view.superview
+    func rightSpace(_ view:UIView, space:CGFloat) -> JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
             maker.rightSpace(view, space: space)
         }

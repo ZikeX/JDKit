@@ -45,7 +45,7 @@ extension ConstraintMaker {
 }
 extension ConstraintMaker {
     @discardableResult
-    func centerXAlign(_ view:UIView?=nil, offset:ConstraintOffsetTarget = 0)->ConstraintMakerEditable {
+    func centerXAlign(_ view:UIView?=nil, offset:ConstraintOffsetTarget)->ConstraintMakerEditable {
         if let view = view {
             return self.centerX.equalTo(view).offset(offset)
         }else {
@@ -53,7 +53,7 @@ extension ConstraintMaker {
         }
     }
     @discardableResult
-    func centerYAlign(_ view:UIView?=nil, offset:ConstraintOffsetTarget = 0)->ConstraintMakerEditable {
+    func centerYAlign(_ view:UIView?=nil, offset:ConstraintOffsetTarget)->ConstraintMakerEditable {
         if let view = view {
             return self.centerY.equalTo(view).offset(offset)
         }else {
@@ -61,7 +61,7 @@ extension ConstraintMaker {
         }
     }
     @discardableResult
-    func topAlign(_ view:UIView?=nil, offset:ConstraintOffsetTarget = 0)->ConstraintMakerEditable {
+    func topAlign(_ view:UIView?=nil, offset:ConstraintOffsetTarget)->ConstraintMakerEditable {
         if let view = view {
             return self.top.equalTo(view).offset(offset)
         }else {
@@ -69,7 +69,7 @@ extension ConstraintMaker {
         }
     }
     @discardableResult
-    func bottomAlign(_ view:UIView?=nil, offset:ConstraintOffsetTarget = 0)->ConstraintMakerEditable {
+    func bottomAlign(_ view:UIView?=nil, offset:ConstraintOffsetTarget)->ConstraintMakerEditable {
         if let view = view {
             return self.bottom.equalTo(view).offset(offset)
         }else {
@@ -77,7 +77,7 @@ extension ConstraintMaker {
         }
     }
     @discardableResult
-    func leftAlign(_ view:UIView?=nil, offset:ConstraintOffsetTarget = 0)->ConstraintMakerEditable {
+    func leftAlign(_ view:UIView?=nil, offset:ConstraintOffsetTarget)->ConstraintMakerEditable {
         if let view = view {
             return self.left.equalTo(view).offset(offset)
         }else {
@@ -85,7 +85,7 @@ extension ConstraintMaker {
         }
     }
     @discardableResult
-    func rightAlign(_ view:UIView?=nil, offset:ConstraintOffsetTarget = 0)->ConstraintMakerEditable {
+    func rightAlign(_ view:UIView?=nil, offset:ConstraintOffsetTarget)->ConstraintMakerEditable {
         if let view = view {
             return self.right.equalTo(view).offset(offset)
         }else {
@@ -105,35 +105,19 @@ extension ConstraintMaker {
 }
 extension ConstraintMaker {
     @discardableResult
-    func topSpace(_ view:UIView?=nil, space:ConstraintOffsetTarget = 0)->ConstraintMakerEditable {
-        if let view = view{
-            return self.top.equalTo(view.snp.bottom).offset(space)
-        }else {
-            return self.top.equalToSuperview().offset(space)
-        }
+    func topSpace(_ view:UIView, space:ConstraintOffsetTarget)->ConstraintMakerEditable {
+        return self.top.equalTo(view.snp.bottom).offset(space)
     }
     @discardableResult
-    func bottomSpace(_ view:UIView?=nil, space:ConstraintOffsetTarget = 0)->ConstraintMakerEditable {
-        if let view = view {
-            return self.bottom.equalTo(view.snp.top).offset(space)
-        }else {
-            return self.bottom.equalToSuperview().offset(space)
-        }
+    func bottomSpace(_ view:UIView, space:ConstraintOffsetTarget)->ConstraintMakerEditable {
+        return self.bottom.equalTo(view.snp.top).offset(space)
     }
     @discardableResult
-    func leftSpace(_ view:UIView?=nil, space:ConstraintOffsetTarget = 0)->ConstraintMakerEditable {
-        if let view = view {
-            return self.left.equalTo(view.snp.right).offset(space)
-        }else {
-            return self.left.equalToSuperview().offset(space)
-        }
+    func leftSpace(_ view:UIView, space:ConstraintOffsetTarget)->ConstraintMakerEditable {
+        return self.left.equalTo(view.snp.right).offset(space)
     }
     @discardableResult
-    func rightSpace(_ view:UIView?=nil, space:ConstraintOffsetTarget = 0)->ConstraintMakerEditable {
-        if let view = view {
-            return self.right.equalTo(view.snp.left).offset(space)
-        }else {
-            return self.right.equalToSuperview().offset(space)
-        }
+    func rightSpace(_ view:UIView, space:ConstraintOffsetTarget)->ConstraintMakerEditable {
+        return self.right.equalTo(view.snp.left).offset(space)
     }
 }

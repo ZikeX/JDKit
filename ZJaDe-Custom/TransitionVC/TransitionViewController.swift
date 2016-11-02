@@ -52,7 +52,6 @@ class TransitionViewController: UIViewController {
             titleViewChanged()
         }
     }
-    //var layoutToViewTop = false
     var bottomView:UIView? {
         didSet {
             bottomViewChanged()
@@ -117,17 +116,13 @@ extension TransitionViewController {
             maker.left.centerX.equalToSuperview()
             /// ZJaDe: titleView
             if let titleView = self.titleView {
-                maker.topSpace(titleView)
+                maker.topSpace(titleView, space: 0)
             }else {
-//                if self.layoutToViewTop {
-                    maker.topSpace()
-//                }else {
-//                    maker.topSpaceToVC(self)
-//                }
+                maker.topAlign(offset: 0)
             }
             /// ZJaDe: bottomView
             if let bottomView = self.bottomView {
-                maker.bottomSpace(bottomView)
+                maker.bottomSpace(bottomView,space: 0)
             }else {
                 maker.bottomSpaceToVC(self)
             }
@@ -152,7 +147,7 @@ extension TransitionViewController {
                 scrollView.addSubview(headerView)
                 headerView.snp.makeConstraints { (maker) in
                     maker.left.centerX.equalTo(self.view)
-                    maker.bottomSpace(scrollView)
+                    maker.bottomSpace(scrollView,space: 0)
                 }
             }
             

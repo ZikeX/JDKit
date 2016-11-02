@@ -22,8 +22,10 @@ enum RouteUrl {
     case route_酒店_房间详情(title:String)
     
     case route_我的店铺
+    case route_我的店铺_tabbarVC(index:Int)
 }
 import UIKit
+import JDAnimatedTabBarController
 
 extension RouterManager {
     static func createVC(routeUrl:RouteUrl) -> UIViewController {
@@ -69,6 +71,56 @@ extension RouterManager {
         case .route_我的店铺:
             let viewCon = JDShopViewController()
             return viewCon
+        case .route_我的店铺_tabbarVC(index:let index):
+            let viewCon = BaseTabBarController()
+            self.configShopTabbarVC(tabbarVC:viewCon)
+            viewCon.selectedIndex = index
+            return viewCon
         }
+    }
+}
+extension RouterManager {
+    static func configShopTabbarVC(tabbarVC:BaseTabBarController) {
+        
+        tabbarVC.jdTabBar.selectedLayerBackgroundColor = Color.white
+        tabbarVC.jdTabBar.jdSeparatorLineColor = Color.white
+        tabbarVC.jdTabBar.jdBackgroundColor = Color.viewBackground
+        
+        func configTabbar(viewCon:BaseViewController,item:JDTabBarItem) {
+            viewCon.tabBarItem = item
+            item.tabbarColor = (Color.gray,Color.tintColor)
+            item.textFont = Font.h5
+        }
+        let preview:BaseViewController = {
+            let viewCon = BaseViewController()
+            let item = JDTabBarItem(title: "预览", image: R.image.ic_shop_tabbar_预览(), tag: 1)
+            item.animation = JDFlipTopTransitionItemAnimations()
+            configTabbar(viewCon:viewCon,item: item)
+            return viewCon
+        }()
+        let QrCode:JDRrCodeViewController = {
+            let viewCon = JDRrCodeViewController()
+            let item = JDTabBarItem(title: "二维码", image: R.image.ic_shop_tabbar_二维码(), tag: 2)
+            item.animation = JDLeftRotationAnimation()
+            configTabbar(viewCon:viewCon,item: item)
+            return viewCon
+        }()
+        
+        let scan:JDScanViewController = {
+            let viewCon = JDScanViewController()
+            let item = JDTabBarItem(title: "扫一扫", image: R.image.ic_shop_tabbar_扫一扫(), tag: 3)
+            item.animation = JDBounceAnimation()
+            configTabbar(viewCon:viewCon,item: item)
+            return viewCon
+        }()
+        
+        let share:BaseViewController = {
+            let viewCon = BaseViewController()
+            let item = JDTabBarItem(title: "分享", image: R.image.ic_shop_tabbar_分享(), tag: 4)
+            item.animation = JDFlipLeftTransitionItemAnimations()
+            configTabbar(viewCon:viewCon,item: item)
+            return viewCon
+        }()
+        tabbarVC.viewControllers = [preview,QrCode,scan,share]
     }
 }

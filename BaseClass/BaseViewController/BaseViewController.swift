@@ -40,6 +40,15 @@ class BaseViewController: UIViewController {
         })
         return button
     }()
+    lazy var cacelButton:Button = {
+        let button = Button(image: R.image.ic_cancel()?.templateImage)
+        button.tintColor = Color.black
+        button.sizeToFit()
+        _ = button.rx.tap.subscribe({ (event) in
+            self.navigationController?.dismissVC()
+        })
+        return button
+    }()
     // MARK: -
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)

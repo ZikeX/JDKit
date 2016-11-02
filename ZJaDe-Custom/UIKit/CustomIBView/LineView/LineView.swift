@@ -30,7 +30,7 @@ class LineView: CustomIBView {
             }
         }
         set {
-            switch lineType {
+            switch newValue {
             case .dotted(width: let width, space: let space):
                 dottedWidth = width
                 dottedSpace = space

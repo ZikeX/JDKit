@@ -118,7 +118,7 @@ extension UIViewController {
     fileprivate func botttomLineColor(navigationBar:UINavigationBar?,color:UIColor?) {
         navigationBar?.barStyle = .black
         navigationBar?.isTranslucent = true
-        navigationBar?.shadowImage = color != nil ? UIImage.imageWithColor(color) : nil
+        navigationBar?.shadowImage = color != self.navBarTintColor ? UIImage.imageWithColor(color) : nil
         setNavBarBackgroundImage()
     }
     fileprivate func changeAlpha(alpha:CGFloat,navBar:UINavigationBar?) {
@@ -134,9 +134,9 @@ extension UIViewController {
     }
     private func setNavBarBackgroundImage() {
         if navBar?.shadowImage != nil {
-        navBar?.setBackgroundImage(UIImage.imageWithColor(self.navBarTintColor), for: .default)
+            navBar?.setBackgroundImage(UIImage.imageWithColor(self.navBarTintColor), for: .default)
         }else {
-        navBar?.setBackgroundImage(nil, for: .default)
+            navBar?.setBackgroundImage(nil, for: .default)
         }
     }
     fileprivate func changeIsHidden(navVC:UINavigationController?) {

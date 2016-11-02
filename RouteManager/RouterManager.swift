@@ -36,11 +36,13 @@ class RouterManager {
         case .push:
             currentNavc.pushViewController(viewController, animated: true)
         case .present:
+            let viewCon:UINavigationController
             if viewController is UINavigationController {
-                currentNavc.present(viewController, animated: true, completion: completion)
+                viewCon = viewController as! UINavigationController
             }else {
-                currentNavc.present(BaseNavigationController(rootViewController: viewController), animated: true, completion: completion)
+                viewCon = BaseNavigationController(rootViewController: viewController)
             }
+            currentNavc.present(viewCon, animated: true, completion: completion)
         }
     }
 }
