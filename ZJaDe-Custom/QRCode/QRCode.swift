@@ -10,39 +10,61 @@ import UIKit
 
 class QRCode {
     // MARK:- 生成高清二维码图片
-    static func image(qrString: String, sizeWH: CGFloat,logo:UIImage?) -> UIImage {
-        let stringData = qrString.data(using: String.Encoding.utf8,
-                                                    allowLossyConversion: false)
-            // 创建一个二维码的滤镜
-        let qrFilter = CIFilter(name: "CIQRCodeGenerator")!
+    static func image(qrString: String, imageSize: CGFloat, logo:UIImage? = nil, fillColor:UIColor = Color.darkBlack, backColor:UIColor = Color.white) -> UIImage? {
+        guard qrString.length > 0 && imageSize > 10 else {
+            return nil
+        }
+        let stringData = qrString.data(using: String.Encoding.utf8)
+        /// ZJaDe: 生成
+        let qrFilter = CIFilter(name: "CIQRCodeGenerator")!;
         qrFilter.setValue(stringData, forKey: "inputMessage")
-        qrFilter.setValue("H", forKey: "inputCorrectionLevel")
-        let qrCIImage = qrFilter.outputImage
-        // 创建一个颜色滤镜,黑白色
-        let colorFilter = CIFilter(name: "CIFalseColor")!
-        colorFilter.setDefaults()
-        colorFilter.setValue(qrCIImage, forKey: "inputImage")
-        colorFilter.setValue(CIColor(red: 0, green: 0, blue: 0), forKey: "inputColor0")
-        colorFilter.setValue(CIColor(red: 1, green: 1, blue: 1), forKey: "inputColor1")
-        // 返回二维码image
-        let codeImage = UIImage(ciImage: colorFilter.outputImage!
-            .applying(CGAffineTransform(scaleX: sizeWH/23.0, y: sizeWH/23.0)))
-        // 通常,二维码都是定制的,中间都会放想要表达意思的图片
-        if let iconImage = UIImage.scaleTo(image: logo!, w: 50, h: 50).round(10) {
-            let rect = CGRect(x: 0, y: 0, width: codeImage.size.width, height: codeImage.size.height)
-            
-            UIGraphicsBeginImageContext(rect.size)
-                 
-            codeImage.draw(in: rect)
-            let avatarSize = CGSize(width: rect.size.width * 0.25, height: rect.size.height * 0.25)
-            let x = (rect.width - avatarSize.width) * 0.5
-            let y = (rect.height - avatarSize.height) * 0.5
-            iconImage.draw(in: CGRect(x:x, y:y, width:avatarSize.width, height:avatarSize.height))
-            let resultImage = UIGraphicsGetImageFromCurrentImageContext()
-                 
-            UIGraphicsEndImageContext()
-            return resultImage!
+        qrFilter.setValue("M", forKey: "inputCorrectionLevel")
+        
+        /// ZJaDe: 上色
+        let colorFilter = CIFilter(name: "CIFalseColor", withInputParameters: ["inputImage":qrFilter.outputImage!,"inputColor0":CIColor(cgColor: fillColor.cgColor),"inputColor1":CIColor(cgColor: backColor.cgColor)])!
+        
+        let qrImage = colorFilter.outputImage!
+        
+        /// ZJaDe: 绘制
+        let imgSize = CGSize(width:imageSize, height:imageSize);
+        let cgImage = CIContext().createCGImage(qrImage, from: qrImage.extent)!
+        UIGraphicsBeginImageContext(imgSize)
+        let context = UIGraphicsGetCurrentContext()!
+        context.interpolationQuality = .none
+        context.scaleBy(x: 1.0, y: -1.0)
+        context.draw(cgImage, in: context.boundingBoxOfClipPath)
+        let codeImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        /// ZJaDe:subImage
+        if let subImage = logo {
+            return self.addSubImage(image: codeImage!, subImage: subImage)
         }
         return codeImage
+    }
+    // MARK:- 从图片中读取二维码
+    static func scan(qrImage:UIImage) -> String? {
+        let context = CIContext()
+        let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: context, options: [CIDetectorAccuracy:CIDetectorAccuracyHigh])
+        let image = CIImage.init(cgImage: qrImage.cgImage!)
+        let features = detector?.features(in: image)
+        let feature = features?.first as? CIQRCodeFeature
+        let result = feature?.messageString
+        return result
+    }
+}
+
+extension QRCode {
+    static func addSubImage(image:UIImage,subImage:UIImage) -> UIImage {
+        let width:Int = Int(image.size.width)
+        let height:Int = Int(image.size.height)
+        let subWidth:Int = Int(subImage.size.width)
+        let subHeight:Int = Int(subImage.size.height)
+        
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        let context = CGContext.init(data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 4*width, space: colorSpace, bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)!
+        context.draw(image.cgImage!, in: CGRect(x: 0, y: 0, width: width, height: height))
+        context.draw(subImage.cgImage!, in: CGRect(x: (width-subWidth)/2, y: (height - subHeight)/2, width: subWidth, height: subHeight))
+        return UIImage(cgImage: context.makeImage()!)
     }
 }

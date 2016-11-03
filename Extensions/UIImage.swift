@@ -9,25 +9,27 @@ extension UIImage {
     var originalImage:UIImage {
         return self.withRenderingMode(.alwaysOriginal)
     }
-    func round(_ cornerRadius:CGFloat? = nil) -> UIImage? {
-        let layer = CALayer()
-        layer.contents = self.cgImage
-        layer.bounds = CGRect(origin: CGPoint(), size: self.size)
-        layer.cornerRadius = cornerRadius ?? min(size.width, size.height)
-        layer.masksToBounds = true
-        return type(of: self).getImage(layer, size: layer.frame.size)
+    func round(_ cornerRadius:CGFloat? = nil) -> UIImage {
+        return self.scaleTo(size: self.size, cornerRadius: cornerRadius)
     }
-    class func imageWithColor(_ color:UIColor?,size:CGSize = CGSize(width: 1,height: 1),isRound:Bool = false) -> UIImage? {
+    /// ZJaDe: scales image
+    func scaleTo(size:CGSize,cornerRadius:CGFloat? = nil) -> UIImage {
+        let layer = CALayer()
+        layer.frame.size = size
+        layer.contents = self.cgImage
+        layer.masksToBounds = true
+        layer.cornerRadius = cornerRadius ?? min(size.width, size.height)
+        return type(of: self).getImage(layer, size: layer.frame.size)!
+    }
+    class func imageWithColor(_ color:UIColor?,size:CGSize = CGSize(width: 1,height: 1),cornerRadius:CGFloat? = nil) -> UIImage? {
         guard color != nil else {
             return nil
         }
         let layer = CALayer()
         layer.frame.size = size
         layer.backgroundColor = color!.cgColor
-        if isRound {
-            layer.masksToBounds = true
-            layer.cornerRadius = min(size.width, size.height)
-        }
+        layer.masksToBounds = true
+        layer.cornerRadius = cornerRadius ?? min(size.width, size.height)
         return self.getImage(layer, size: layer.frame.size)
     }
     class func getImage(_ layer:CALayer, size:CGSize) -> UIImage? {
@@ -55,15 +57,7 @@ extension UIImage {
         let sizeAsBytes = getSizeAsBytes()
         return sizeAsBytes != 0 ? sizeAsBytes / 1024 : 0
     }
-    /// ZJaDe: scales image
-    class func scaleTo(image: UIImage, w: CGFloat, h: CGFloat) -> UIImage {
-        let newSize = CGSize(width: w, height: h)
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
-        image.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
-        let newImage: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        return newImage
-    }
+    // MARK: -
     /// ZJaDe: Returns resized image with width. Might return low quality
     func resizeWithWidth(_ width: CGFloat) -> UIImage {
         let aspectSize = CGSize (width: width, height: aspectHeightForWidth(width))

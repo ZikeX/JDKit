@@ -45,10 +45,13 @@ class BaseViewController: UIViewController {
         button.tintColor = Color.black
         button.sizeToFit()
         _ = button.rx.tap.subscribe({ (event) in
-            self.navigationController?.dismissVC()
+            self.cacelVC()
         })
         return button
     }()
+    func cacelVC() {
+        self.navigationController?.dismissVC()
+    }
     // MARK: -
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
