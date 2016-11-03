@@ -41,7 +41,7 @@ extension JDServiceType {
 }
 private struct ServiceStruct:TargetType {
     var baseURL = URL(string:"http://www.ziwoyou.com")!
-    var method:Moya.Method = .POST
+    var method:Moya.Method = .post
     var task: Task = .request
     var sampleData = Data()
     var parameters: [String: Any]?

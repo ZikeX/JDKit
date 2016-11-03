@@ -35,7 +35,7 @@ class JDTextFieldCell: JDEntryCell {
         }
         textFieldModel.textFieldAppearanceClosure(textField)
         
-        textFieldModel.text.asObservable().bindTo(textField.rx.text).addDisposableTo(disposeBag)
+        textFieldModel.text.asObservable().bindTo(textField.rx.text).addDisposableTo(disposeBag);
         textField.rx.text.bindTo(textFieldModel.text).addDisposableTo(disposeBag)
         
         textFieldModel.placeholder.asObservable().subscribe { (event) in

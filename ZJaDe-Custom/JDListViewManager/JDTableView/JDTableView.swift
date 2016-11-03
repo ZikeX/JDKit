@@ -54,15 +54,15 @@ extension JDTableView:UITableViewDelegate {
     }
     // MARK: - display
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if let cell = cell as? JDTableViewCell,
-            let model = try? self.rx.model(indexPath) as JDTableViewModel {
+        if let cell = cell as? JDTableViewCell {
+            let model = reloadDataSource[indexPath]
             cell.cellDidLoad(model)
             cell.cellWillAppear(model)
         }
     }
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if let cell = cell as? JDTableViewCell,
-            let model = try? self.rx.model(indexPath) as JDTableViewModel {
+        if let cell = cell as? JDTableViewCell {
+            let model = reloadDataSource[indexPath]
             cell.cellDidDisappear(model)
         }
     }
@@ -74,27 +74,26 @@ extension JDTableView:UITableViewDelegate {
     }
     // MARK: - cellHeight
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if let model = try? tableView.rx.model(indexPath) as JDTableViewModel {
-            model.perform(#selector(JDTableViewModel.calculateCellHeight(_:)), on: Thread.main, with: self, waitUntilDone: false,modes:[RunLoopMode.defaultRunLoopMode.rawValue])
-            return model.cellHeight
-        }
-        return 33.33333
+        let model = reloadDataSource[indexPath]
+        model.perform(#selector(JDTableViewModel.calculateCellHeight(_:)), on: Thread.main, with: self, waitUntilDone: false,modes:[RunLoopMode.defaultRunLoopMode.rawValue])
+        return model.cellHeight
     }
     // MARK: - headerView And footerView
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let sectionModel = reloadDataSource.sectionAtIndex(section).model
+        let sectionModel = reloadDataSource[section].model
+        //let sectionModel = reloadDataSource.sectionAtIndex(section).model
         return sectionModel.headerView
     }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let sectionModel = reloadDataSource.sectionAtIndex(section).model
+        let sectionModel = reloadDataSource[section].model
         return sectionModel.footerView
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        let sectionModel = reloadDataSource.sectionAtIndex(section).model
+        let sectionModel = reloadDataSource[section].model
         return sectionModel.headerViewHeight
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        let sectionModel = reloadDataSource.sectionAtIndex(section).model
+        let sectionModel = reloadDataSource[section].model
         return sectionModel.footerViewHeight
     }
 }

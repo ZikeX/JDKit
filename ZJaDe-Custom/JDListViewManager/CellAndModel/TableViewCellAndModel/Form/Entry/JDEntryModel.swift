@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 class JDEntryModel: JDFormModel {
-    var text = Variable("")
+    var text:Variable<String?> = Variable("")
     var placeholder = Variable("")
     
     convenience init(image:UIImage? = nil,title:String? = nil,text:String = "",placeholder:String = "") {

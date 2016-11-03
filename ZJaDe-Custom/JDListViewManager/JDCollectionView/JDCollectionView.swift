@@ -49,15 +49,15 @@ extension JDCollectionView:UICollectionViewDelegate {
     }
     // MARK: - display
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let cell = cell as? JDCollectionViewCell,
-            let model = try? self.rx.model(indexPath) as JDCollectionViewModel {
+        if let cell = cell as? JDCollectionViewCell {
+            let model = reloadDataSource[indexPath]
             cell.cellDidLoad(model)
             cell.cellWillAppear(model)
         }
     }
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let cell = cell as? JDCollectionViewCell,
-            let model = try? self.rx.model(indexPath) as JDCollectionViewModel {
+        if let cell = cell as? JDCollectionViewCell {
+            let model = reloadDataSource[indexPath]
             cell.cellDidDisappear(model)
         }
     }

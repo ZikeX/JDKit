@@ -9,11 +9,12 @@ extension UIImage {
     var originalImage:UIImage {
         return self.withRenderingMode(.alwaysOriginal)
     }
-    var round:UIImage? {
+    func round(_ cornerRadius:CGFloat? = nil) -> UIImage? {
         let layer = CALayer()
         layer.contents = self.cgImage
+        layer.bounds = CGRect(origin: CGPoint(), size: self.size)
+        layer.cornerRadius = cornerRadius ?? min(size.width, size.height)
         layer.masksToBounds = true
-        layer.cornerRadius = min(size.width, size.height)
         return type(of: self).getImage(layer, size: layer.frame.size)
     }
     class func imageWithColor(_ color:UIColor?,size:CGSize = CGSize(width: 1,height: 1),isRound:Bool = false) -> UIImage? {

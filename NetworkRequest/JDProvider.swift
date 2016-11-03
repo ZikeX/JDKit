@@ -12,7 +12,7 @@ import Moya
 class JDProvider: MoyaProvider<JDServiceType> {
     init(endpointClosure: @escaping EndpointClosure = JDProvider.JDEndpointMapping,
          requestClosure: @escaping RequestClosure = JDProvider.JDRequestMapping,
-         stubClosure: @escaping StubClosure = MoyaProvider.NeverStub,
+         stubClosure: @escaping StubClosure = MoyaProvider.neverStub,
          plugins: [PluginType] = [],
          trackInflights: Bool = false) {
         
@@ -29,10 +29,9 @@ extension JDProvider {
     final class func JDRequestMapping(_ endpoint: Endpoint<Target>, closure: RequestResultClosure) {
         if var request = endpoint.urlRequest {
             request.timeoutInterval = 20
-            return closure(.success(endpoint.urlRequest))
+            closure(.success(request))
         }else {
-            let error = NSError(domain: NSCocoaErrorDomain, code: 0, userInfo: nil)
-            return closure(.failure(Moya.Error.underlying(error)))
+            closure(.failure(Moya.Error.requestMapping(endpoint.URL)))
         }
     }
 }
