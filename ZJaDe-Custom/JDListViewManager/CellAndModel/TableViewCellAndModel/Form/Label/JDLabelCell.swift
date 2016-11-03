@@ -13,6 +13,7 @@ class JDLabelCell: JDFormCell {
     
     override func configCellInit() {
         super.configCellInit()
+        highlightAnimatedStyle = .shadow
         jdContentView.addSubview(detailTitleLabel)
         
     }

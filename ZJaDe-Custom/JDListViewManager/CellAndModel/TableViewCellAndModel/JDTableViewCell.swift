@@ -16,6 +16,7 @@ enum CellAppearAnimatedStyle {
 }
 enum CellHighlightAnimatedStyle {
     case zoomInOut //按下缩小，抬起来还原
+    case shadow //阴影
     case custom //自定义
     case none //无动画
 }
@@ -136,7 +137,11 @@ extension JDTableViewCell {//cell高亮或者点击
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         switch highlightAnimatedStyle {
         case .zoomInOut:
+            super.setHighlighted(highlighted, animated: animated)
             self.zoomInOut(self.animatedDuration, ZoomIn: highlighted)
+        case .shadow:
+            super.setHighlighted(highlighted, animated: animated)
+            self.shadow(self.animatedDuration, isHighlighted: highlighted,animated:animated)
         case .custom:
             super.setHighlighted(highlighted, animated: animated)
         case .none:
