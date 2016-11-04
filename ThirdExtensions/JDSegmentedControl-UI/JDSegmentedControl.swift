@@ -81,7 +81,7 @@ extension JDSegmentedControl:JDSegmentedControlDelegate {
         }
         item.addSubview(stackView)
         stackView.snp.makeConstraints { (maker) in
-            maker.centerAlign()
+            maker.center.equalToSuperview()
         }
         switch segmentedControl.style {
         case .wavyLine:

@@ -24,7 +24,7 @@ class JDTextFieldCell: JDEntryCell {
         super.cellDidLoad(element)
         textField.snp.makeConstraints({ (maker) in
             maker.top.right.equalToSuperview()
-            maker.leftSpace(stackView, space: 8)
+            maker.leftSpace(stackView).offset(8)
             maker.bottom.lessThanOrEqualTo(jdContentView)
         })
     }

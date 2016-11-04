@@ -111,14 +111,14 @@ extension JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
             switch direction {
             case .horizontal,.all:
-                maker.leftAlign(viewController.view,offset: inset.left)
-                maker.rightAlign(viewController.view,offset: -inset.right)
+                maker.left.equalTo(viewController.view).offset(inset.left)
+                maker.right.equalTo(viewController.view).offset(-inset.right)
                 if direction == .all {
                     fallthrough
                 }
             case .vertical:
-                maker.top.equalTo(viewController.topLayoutGuide.snp.bottom).offset(inset.top)
-                maker.bottom.equalTo(viewController.bottomLayoutGuide.snp.top).offset(-inset.bottom)
+                maker.topSpaceToVC(viewController).offset(inset.top)
+                maker.bottomSpaceToVC(viewController).offset(-inset.bottom)
             }
         }
         self.constraintArr.append(contentsOf: constraints)
@@ -129,14 +129,14 @@ extension JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
             switch direction {
             case .horizontal,.all:
-                maker.leftAlign(view,offset: inset.left)
-                maker.rightAlign(view,offset: -inset.right)
+                maker.left.equalTo(view).offset(inset.left)
+                maker.right.equalTo(view).offset(-inset.right)
                 if direction == .all {
                     fallthrough
                 }
             case .vertical:
-                maker.topAlign(view,offset:inset.top)
-                maker.bottomAlign(view,offset:-inset.bottom)
+                maker.top.equalTo(view).offset(inset.top)
+                maker.bottom.equalTo(view).offset(-inset.bottom)
             }
         }
         self.constraintArr.append(contentsOf: constraints)
@@ -145,7 +145,7 @@ extension JDLayout {
     func sizeAlign(_ view:UIView? = nil) -> JDLayout {
         let view = view ?? self.view.superview!
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.sizeAlign(view)
+            maker.size.equalTo(view)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
@@ -153,7 +153,7 @@ extension JDLayout {
     func centerAlign(_ view:UIView? = nil) -> JDLayout {
         let view = view ?? self.view.superview!
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.centerAlign(view)
+            maker.center.equalTo(view)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
@@ -163,7 +163,7 @@ extension JDLayout {
     func centerXAlign(_ view:UIView? = nil, offset:CGFloat) -> JDLayout {
         let view = view ?? self.view.superview
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.centerXAlign(view, offset: offset)
+            maker.centerX.equalTo(view!).offset(offset)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
@@ -171,7 +171,7 @@ extension JDLayout {
     func centerYAlign(_ view:UIView? = nil, offset:CGFloat) -> JDLayout {
         let view = view ?? self.view.superview
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.centerYAlign(view, offset: offset)
+            maker.centerY.equalTo(view!).offset(offset)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
@@ -181,7 +181,7 @@ extension JDLayout {
     func topAlign(_ view:UIView? = nil, offset:CGFloat) -> JDLayout {
         let view = view ?? self.view.superview
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.topAlign(view, offset: offset)
+            maker.top.equalTo(view!).offset(offset)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
@@ -189,7 +189,7 @@ extension JDLayout {
     func bottomAlign(_ view:UIView? = nil, offset:CGFloat) -> JDLayout {
         let view = view ?? self.view.superview
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.bottomAlign(view, offset: offset)
+            maker.bottom.equalTo(view!).offset(offset)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
@@ -197,7 +197,7 @@ extension JDLayout {
     func leftAlign(_ view:UIView? = nil, offset:CGFloat) -> JDLayout {
         let view = view ?? self.view.superview
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.leftAlign(view, offset: offset)
+            maker.left.equalTo(view!).offset(offset)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
@@ -205,7 +205,7 @@ extension JDLayout {
     func rightAlign(_ view:UIView? = nil, offset:CGFloat) -> JDLayout {
         let view = view ?? self.view.superview
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.rightAlign(view, offset: offset)
+            maker.right.equalTo(view!).offset(offset)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
@@ -214,14 +214,14 @@ extension JDLayout {
 extension JDLayout {
     func topSpaceToVC(_ viewController:UIViewController, space:CGFloat) -> JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.topSpaceToVC(viewController, space: space)
+            maker.topSpaceToVC(viewController).offset(space)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
     }
     func bottomSpaceToVC(viewController:UIViewController, space:CGFloat) -> JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.bottomSpaceToVC(viewController, space: space)
+            maker.bottomSpaceToVC(viewController).offset(space)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
@@ -230,28 +230,28 @@ extension JDLayout {
 extension JDLayout {
     func topSpace(_ view:UIView, space:CGFloat) -> JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.topSpace(view, space: space)
+            maker.topSpace(view).offset(space)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
     }
     func bottomSpace(_ view:UIView, space:CGFloat) -> JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.bottomSpace(view, space: space)
+            maker.bottomSpace(view).offset(space)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
     }
     func leftSpace(_ view:UIView, space:CGFloat) -> JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.leftSpace(view, space: space)
+            maker.leftSpace(view).offset(space)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self
     }
     func rightSpace(_ view:UIView, space:CGFloat) -> JDLayout {
         let constraints = self.view.snp.prepareConstraints { (maker) in
-            maker.rightSpace(view, space: space)
+            maker.rightSpace(view).offset(space)
         }
         self.constraintArr.append(contentsOf: constraints)
         return self

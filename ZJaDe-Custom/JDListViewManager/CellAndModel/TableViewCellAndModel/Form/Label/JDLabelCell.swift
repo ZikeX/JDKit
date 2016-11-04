@@ -34,15 +34,15 @@ class JDLabelCell: JDFormCell {
                 detailTitleLabel.jdLayout.centerYAlign(offset: 0).activate()
             }
         case .top:
-            stackView.jdLayout.topAlign(offset: 0).activate()
+            stackView.jdLayout.topAlign(offset:0).activate()
             if !labelModel.detailTitleIsEmpty {
-                detailTitleLabel.jdLayout.topAlign(offset: 0).activate()
+                detailTitleLabel.jdLayout.topAlign(offset:0).activate()
             }
         }
         if !labelModel.detailTitleIsEmpty {
             detailTitleLabel.snp.makeConstraints({ (maker) in
                 maker.right.equalToSuperview()
-                maker.leftSpace(stackView, space: 8)
+                maker.leftSpace(stackView).offset(8)
                 maker.bottom.lessThanOrEqualTo(jdContentView)
             })
         }

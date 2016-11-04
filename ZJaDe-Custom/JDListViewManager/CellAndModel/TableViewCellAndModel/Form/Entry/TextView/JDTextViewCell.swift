@@ -23,7 +23,7 @@ class JDTextViewCell: JDEntryCell {
         super.cellDidLoad(element)
         textView.snp.makeConstraints({ (maker) in
             maker.top.right.equalToSuperview()
-            maker.leftSpace(stackView, space: 8)
+            maker.leftSpace(stackView).offset(8)
             maker.bottom.lessThanOrEqualTo(jdContentView)
             maker.height.equalTo(100)
         })

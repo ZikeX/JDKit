@@ -35,8 +35,8 @@ class Banner: UIView {
         self.scrollView.edgesToView()
         self.addSubview(self.pageControl)
         self.pageControl.snp.makeConstraints { (maker) in
-            maker.rightAlign(offset: -20)
-            maker.bottomAlign(offset: -10)
+            maker.right.equalToSuperview().offset(-20)
+            maker.bottom.equalToSuperview().offset(-10)
         }
         
         self.scrollView.rx.contentOffset.subscribe { (event) in

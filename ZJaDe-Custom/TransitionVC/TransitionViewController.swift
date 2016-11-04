@@ -116,13 +116,13 @@ extension TransitionViewController {
             maker.left.centerX.equalToSuperview()
             /// ZJaDe: titleView
             if let titleView = self.titleView {
-                maker.topSpace(titleView, space: 0)
+                maker.topSpace(titleView)
             }else {
-                maker.topAlign(offset: 0)
+                maker.top.equalToSuperview()
             }
             /// ZJaDe: bottomView
             if let bottomView = self.bottomView {
-                maker.bottomSpace(bottomView,space: 0)
+                maker.bottomSpace(bottomView)
             }else {
                 maker.bottomSpaceToVC(self)
             }
@@ -147,7 +147,7 @@ extension TransitionViewController {
                 scrollView.addSubview(headerView)
                 headerView.snp.makeConstraints { (maker) in
                     maker.left.centerX.equalTo(self.view)
-                    maker.bottomSpace(scrollView,space: 0)
+                    maker.bottomSpace(scrollView)
                 }
             }
             

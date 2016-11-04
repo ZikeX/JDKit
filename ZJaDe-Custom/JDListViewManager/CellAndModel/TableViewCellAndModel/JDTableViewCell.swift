@@ -65,12 +65,12 @@ class JDTableViewCell: UITableViewCell {
         /// ZJaDe:horizontal
         _ = jdContentView.jdLayout.edgesAlign(.horizontal, inset: element.spaceEdges)
         if element.separatorInset.left > 0 {
-            _ = separatorLineView.jdLayout.leftAlign(offset: element.separatorInset.left)
+            _ = separatorLineView.jdLayout.leftAlign(offset:element.separatorInset.left)
         }else {
             _ = separatorLineView.jdLayout.leftAlign(self,offset: -element.separatorInset.left)
         }
         if element.separatorInset.right > 0 {
-            _ = separatorLineView.jdLayout.rightAlign(offset: -element.separatorInset.right)
+            _ = separatorLineView.jdLayout.rightAlign(offset:-element.separatorInset.right)
         }else {
             _ = separatorLineView.jdLayout.rightAlign(self,offset: element.separatorInset.right)
         }
@@ -78,7 +78,7 @@ class JDTableViewCell: UITableViewCell {
         jdContentView.jdLayout.topAlign(offset: element.spaceEdges.top).activate()
         
         separatorLineView.jdLayout
-        .bottomAlign(offset: -element.separatorInset.bottom)
+            .bottomAlign(offset:-element.separatorInset.bottom)
         .topSpace(jdContentView, space: element.spaceEdges.bottom + element.separatorInset.top)
         .heightValue(height: element.lineHeight)
         .activate()
