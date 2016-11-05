@@ -3,10 +3,11 @@
 import UIKit
 
 class SwiftTimer {
+    
     private let internalTimer: DispatchSourceTimer
     private var isRunning = false
     
-    init(interval: DispatchTimeInterval, repeats: Bool = true, queue: DispatchQueue = .main , handler: DispatchSourceProtocol.DispatchSourceHandler?) {
+    init(interval: DispatchTimeInterval, repeats: Bool = true, queue: DispatchQueue = .main , handler:(()->())? = nil) {
         internalTimer = DispatchSource.makeTimerSource(queue: queue)
         internalTimer.setEventHandler(handler: handler)
         if repeats {
