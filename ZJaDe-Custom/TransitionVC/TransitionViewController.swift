@@ -14,7 +14,9 @@ import SnapKit
 protocol ScrollProperty {
     var scrollView:UIScrollView {get}
 }
-
+class TransitionMainView: UIView {
+    
+}
 class TransitionViewController: UIViewController {
     let disposeBag = DisposeBag()
     
@@ -46,7 +48,7 @@ class TransitionViewController: UIViewController {
         }
     }
     
-    var mainView = UIView()
+    var mainView = TransitionMainView()
     var titleView:UIView? {
         didSet {
             titleViewChanged()
@@ -93,8 +95,10 @@ class TransitionViewController: UIViewController {
 }
 extension TransitionViewController {
     func titleViewChanged() {
-        if let titleView = titleView,titleView.superview == nil {
-            self.view.addSubview(titleView)
+        if let titleView = titleView {
+            if titleView.superview == nil {
+                self.view.addSubview(titleView)
+            }
             titleView.snp.makeConstraints({ (maker) in
                 maker.left.centerX.top.equalToSuperview()
             })
@@ -102,8 +106,10 @@ extension TransitionViewController {
         updateMainView()
     }
     func bottomViewChanged() {
-        if let bottomView = bottomView,bottomView.superview == nil {
-            self.view.addSubview(bottomView)
+        if let bottomView = bottomView {
+            if bottomView.superview == nil {
+                self.view.addSubview(bottomView)
+            }
             bottomView.snp.makeConstraints({ (maker) in
                 maker.left.centerX.bottom.equalToSuperview()
             })
@@ -111,7 +117,7 @@ extension TransitionViewController {
         updateMainView()
     }
     func updateMainView() {
-        self.view.addSubview(mainView)
+        self.view.insertSubview(mainView, at: 0)
         mainView.snp.remakeConstraints({ (maker) in
             maker.left.centerX.equalToSuperview()
             /// ZJaDe: titleView

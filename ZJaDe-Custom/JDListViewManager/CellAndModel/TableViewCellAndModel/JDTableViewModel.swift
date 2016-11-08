@@ -36,6 +36,7 @@ class JDTableViewModel:JDModel {
     var cellSelectedBackgroundView = UIView()
     var cellSelectedBackgroundColor:UIColor? = Color.selectedCell
     var cellBackgroundColor:UIColor?
+    var contentBackgroundColor:UIColor?
     
     //高度计算出来之后，最终的约束
     var theEndLayoutClosure:((CGFloat) -> ())?

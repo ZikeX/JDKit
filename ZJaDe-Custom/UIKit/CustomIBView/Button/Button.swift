@@ -16,8 +16,8 @@ enum TitleAndImgLocation:Int {
     case topToBottom = 2
     case bottomToTop = 3
 }
-@IBDesignable
-class Button: UIControl {
+
+class Button: CustomIBControl {
     let disposeBag = DisposeBag()
     
     /// ZJaDe: contentView 根据情况不同，等于下面三个View中的一个
@@ -118,18 +118,8 @@ class Button: UIControl {
             self.imgView.image = image
         }
     }
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        configInit()
-    }
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        configInit()
-    }
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-    func configInit() {
+    override func configInit() {
+        super.configInit()
         configStackView()
         observeConfig()
     }
