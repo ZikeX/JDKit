@@ -32,17 +32,18 @@ extension UIView {
         self.layer.shadowOffset = CGSize(width: 0, height: 1)
         self.layer.shadowRadius = 1
     }
-    func addShadow(isButton:Bool = false) {
+    func addShadow(offset: CGSize = CGSize(width: 0, height: 1), color:UIColor = Color.shadow,opacity:Float = 0.15,radius:CGFloat = 2.5) {
         if self.backgroundColor == nil {
             self.backgroundColor = Color.white
         }
-        self.layer.shadowColor = Color.shadow.cgColor
-        self.layer.shadowOpacity = 0.15
-        self.layer.shadowOffset = CGSize(width: 0, height: 1)
-        self.layer.shadowRadius = isButton ? 1.5 : 2.5
+        self.layer.shadowColor = color.cgColor
+        self.layer.shadowOpacity = opacity
+        
+        self.layer.shadowOffset = offset
+        self.layer.shadowRadius = radius
     }
     func addButtonShadow() {
-        self.addShadow(isButton: true)
+        self.addShadow(radius:1.5)
     }
 }
 
@@ -266,15 +267,7 @@ extension UIView {
             self.backgroundColor = self.backgroundColor?.withAlphaComponent(newValue)
         }
     }
-    func addShadow(offset: CGSize, radius: CGFloat, color: UIColor, opacity: Float, cornerRadius: CGFloat? = nil) {
-        self.layer.shadowOffset = offset
-        self.layer.shadowRadius = radius
-        self.layer.shadowOpacity = opacity
-        self.layer.shadowColor = color.cgColor
-        if let r = cornerRadius {
-            self.layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: r).cgPath
-        }
-    }
+    
     func addBorder(width: CGFloat = 1, color: UIColor = Color.boderLine) {
         layer.borderWidth = width
         layer.borderColor = color.cgColor

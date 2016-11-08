@@ -21,7 +21,7 @@ extension UIImage {
         layer.cornerRadius = cornerRadius ?? min(size.width, size.height)
         return type(of: self).getImage(layer, size: layer.frame.size)!
     }
-    class func imageWithColor(_ color:UIColor?,size:CGSize = CGSize(width: 1,height: 1),cornerRadius:CGFloat? = nil) -> UIImage? {
+    class func imageWithColor(_ color:UIColor?,size:CGSize = CGSize(width: 1,height: 1),cornerRadius:CGFloat? = 0) -> UIImage? {
         guard color != nil else {
             return nil
         }

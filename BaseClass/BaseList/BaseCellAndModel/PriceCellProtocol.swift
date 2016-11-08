@@ -9,20 +9,6 @@
 import UIKit
 
 protocol PriceCellProtocol {
-    weak var priceLabel:UILabel! {get set}
-    func setPriceLabelText(price:CGFloat,suffix:String?,suffixFont:UIFont?)
+    func setPriceLabelText(price:CGFloat)
 }
-extension PriceCellProtocol {
-    func setPriceLabelText(price:CGFloat,suffix:String? = nil,suffixFont:UIFont? = nil) {
-        let attrStr = NSMutableAttributedString()
-        attrStr.append(NSAttributedString(string: "￥\(price)", attributes: [NSForegroundColorAttributeName:Color.orange]))
-        if suffix != nil {
-            if suffixFont != nil {
-                attrStr.append(NSAttributedString(string: suffix!, attributes: [NSForegroundColorAttributeName:Color.gray,NSFontAttributeName:suffixFont!]))
-            }else {
-                attrStr.append(NSAttributedString(string: suffix!, attributes: [NSForegroundColorAttributeName:Color.gray]))
-            }
-        }
-        priceLabel.attributedText = attrStr
-    }
-}
+

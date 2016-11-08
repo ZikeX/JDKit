@@ -102,6 +102,7 @@ class Button: UIControl {
         didSet {
             self.textLabel.textColor = tintColor
             self.imgView.tintColor = tintColor
+            self.layer.borderColor = tintColor.cgColor
         }
     }
     @IBInspectable var IBSize:CGSize = CGSize()

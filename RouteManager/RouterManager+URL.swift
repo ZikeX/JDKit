@@ -23,6 +23,10 @@ enum RouteUrl {
     
     case route_我的店铺
     case route_我的店铺_tabbarVC(index:Int)
+    case route_我的店铺_店铺活动
+    
+    case route_优惠券_查看
+    case route_优惠券_编辑
 }
 import UIKit
 import JDAnimatedTabBarController
@@ -75,6 +79,16 @@ extension RouterManager {
             let viewCon = BaseTabBarController()
             self.configShopTabbarVC(tabbarVC:viewCon)
             viewCon.selectedIndex = index
+            return viewCon
+        case .route_我的店铺_店铺活动:
+            let viewCon = JDShopActivityViewController()
+            return viewCon
+            
+        case .route_优惠券_查看:
+            let viewCon = JDShowCouponsViewController()
+            return viewCon
+        case .route_优惠券_编辑:
+            let viewCon = JDEditCouponsViewController()
             return viewCon
         }
     }
