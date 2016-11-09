@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 
 class JDTextFieldModel: JDEntryModel {
+    var entryType:EntryType?
     
     override func configModelInit() {
         super.configModelInit()
@@ -19,11 +20,12 @@ class JDTextFieldModel: JDEntryModel {
     var textFieldAppearanceClosure:TextFieldAppearanceClosure = { (textField) in
         textField.backgroundColor = Color.viewBackground
         textField.cornerRadius = 5
+        textField.textColor = Color.black
         textField.addBorder()
     }
     var textFieldEditingState = PublishSubject<UIControlEvents>()
     
-    var textFieldCellLayout:TextFieldCellLayoutClosure = { (stackView,textField) in
+    var configLayout:TextFieldCellLayoutClosure = { (stackView,textField) in
         stackView.snp.makeConstraints { (maker) in
             maker.top.centerY.equalToSuperview()
         }

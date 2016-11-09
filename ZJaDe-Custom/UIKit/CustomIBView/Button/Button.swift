@@ -123,6 +123,16 @@ class Button: CustomIBControl {
         configStackView()
         observeConfig()
     }
+    var hasShadowAnimate:Bool = false
+}
+extension Button {
+    override var isHighlighted: Bool {
+        didSet {
+            if hasShadowAnimate {
+                self.shadow(isHighlighted: isHighlighted, animated: true)
+            }
+        }
+    }
 }
 extension Button {
     func observeConfig() {

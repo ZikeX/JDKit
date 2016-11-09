@@ -15,32 +15,28 @@ class JDTextViewCell: JDEntryCell {
         super.configCellInit()
         self.jdFocusView = textView
         jdContentView.addSubview(textView)
-        stackView.snp.makeConstraints { (maker) in
-            maker.top.equalToSuperview()
-        }
+        
     }
     override func cellDidLoad(_ element: JDTableViewModel) {
         super.cellDidLoad(element)
-        textView.snp.makeConstraints({ (maker) in
-            maker.top.right.equalToSuperview()
-            maker.leftSpace(stackView).offset(8)
-            maker.bottom.lessThanOrEqualTo(jdContentView)
-            maker.height.equalTo(100)
-        })
+        guard let model = element as? JDTextViewModel else {
+            return
+        }
+        model.configLayout(stackView,textView)
     }
     
     override func configCellWithElement(_ element: JDTableViewModel) {
         super.configCellWithElement(element)
-        guard let textViewModel = element as? JDTextViewModel else {
+        guard let model = element as? JDTextViewModel else {
             return
         }
-        textViewModel.textViewAppearanceClosure(textView)
-        textViewModel.contentSizeChanged.bindTo(textView.contentSizeChanged).addDisposableTo(disposeBag)
+        model.textViewAppearanceClosure(textView)
+        model.contentSizeChanged.bindTo(textView.contentSizeChanged).addDisposableTo(disposeBag)
         
-        textViewModel.text.asObservable().bindTo(textView.rx.text).addDisposableTo(disposeBag)
-        textView.rx.text.bindTo(textViewModel.text).addDisposableTo(disposeBag)
+        model.text.asObservable().bindTo(textView.rx.text).addDisposableTo(disposeBag)
+        textView.rx.text.bindTo(model.text).addDisposableTo(disposeBag)
         
-        textViewModel.placeholder.asObservable().subscribe { (event) in
+        model.placeholder.asObservable().subscribe { (event) in
             self.textView.placeholder = event.element ?? ""
         }.addDisposableTo(disposeBag)
     }

@@ -24,7 +24,9 @@ class JDButtonModel: JDFormModel {
     var buttonAppearanceClosure:ButtonAppearanceClosure = { (button) in
         button.backgroundColor = Color.tintColor
         button.cornerRadius = 5
-        button.tintColor = Color.black
+        button.tintColor = Color.white
+        button.textLabel.font = Font.h2
+        button.hasShadowAnimate = true
     }
     var buttonClick = PublishSubject<Void>()
 }

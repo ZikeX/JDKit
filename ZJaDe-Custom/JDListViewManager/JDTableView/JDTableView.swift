@@ -52,6 +52,9 @@ extension JDTableView:UITableViewDelegate {
     func configDelegate() {
         self.rx.setDelegate(self).addDisposableTo(disposeBag)
     }
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        self.endEditing(true)
+    }
     // MARK: - display
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? JDTableViewCell {

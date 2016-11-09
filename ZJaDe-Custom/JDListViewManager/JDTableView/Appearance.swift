@@ -21,5 +21,9 @@ typealias LabelAppearanceClosure = (UILabel) -> ()
 typealias ImgViewAppearanceClosure = (UIImageView) -> ()
 
 
-typealias TextFieldCellLayoutClosure = (UIStackView,UITextField) -> ()
 typealias LabelCellLayoutClosure = (UIStackView,UILabel) -> ()
+
+typealias TextFieldCellLayoutClosure = (UIStackView,ComposeTextField) -> ()
+typealias DoubleTextFieldCellLayoutClosure = (UIStackView,ComposeTextField,UILabel,ComposeTextField) -> ()
+
+typealias TextViewCellLayoutClosure = (UIStackView,PlaceholderTextView) -> ()

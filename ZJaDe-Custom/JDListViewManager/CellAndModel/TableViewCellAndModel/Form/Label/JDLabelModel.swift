@@ -25,7 +25,7 @@ class JDLabelModel: JDFormModel {
         super.configModelInit()
     }
     
-    var labelCellLayout:LabelCellLayoutClosure = { (stackView,label) in
+    var configLayout:LabelCellLayoutClosure = { (stackView,label) in
         stackView.snp.makeConstraints { (maker) in
             maker.top.centerY.equalToSuperview()
         }
@@ -33,6 +33,7 @@ class JDLabelModel: JDFormModel {
             maker.centerY.top.right.equalToSuperview()
             maker.leftSpace(stackView).offset(8)
         })
+        label.contentHuggingHorizontalPriority = 249
     }
 }
 extension JDLabelModel {    

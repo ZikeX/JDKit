@@ -9,11 +9,6 @@
 import UIKit
 import RxSwift
 
-enum LabelAlignment {
-    case center
-    case top
-}
-
 class JDFormModel: JDTableViewModel {
     convenience init(image:UIImage? = nil,title:String? = nil) {
         self.init()

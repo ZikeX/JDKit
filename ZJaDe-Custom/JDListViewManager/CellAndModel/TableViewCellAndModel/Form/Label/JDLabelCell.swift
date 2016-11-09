@@ -22,7 +22,7 @@ class JDLabelCell: JDFormCell {
         guard let labelModel = element as? JDLabelModel else {
             return
         }
-        labelModel.labelCellLayout(stackView,detailTitleLabel)
+        labelModel.configLayout(stackView,detailTitleLabel)
     }
     override func configCellWithElement(_ element: JDTableViewModel) {
         super.configCellWithElement(element)

@@ -19,40 +19,45 @@ class JDTextFieldCell: JDEntryCell {
     }
     override func cellDidLoad(_ element: JDTableViewModel) {
         super.cellDidLoad(element)
-        guard let textFieldModel = element as? JDTextFieldModel else {
+        guard let model = element as? JDTextFieldModel else {
             return
         }
-        textFieldModel.textFieldCellLayout(stackView,textField)
+        model.configLayout(stackView,textField)
     }
     override func configCellWithElement(_ element: JDTableViewModel) {
         super.configCellWithElement(element)
-        guard let textFieldModel = element as? JDTextFieldModel else {
+        guard let model = element as? JDTextFieldModel else {
             return
         }
-        textFieldModel.textFieldAppearanceClosure(textField)
+        textField.entryType = model.entryType
+        model.textFieldAppearanceClosure(textField)
         
-        textFieldModel.text.asObservable()
+        model.text.asObservable()
             .bindTo(textField.rx.text)
             .addDisposableTo(disposeBag);
-        textField.rx.text.bindTo(textFieldModel.text).addDisposableTo(disposeBag)
+        textField.rx.text.bindTo(model.text).addDisposableTo(disposeBag)
         
-        textFieldModel.placeholder.asObservable().subscribe { (event) in
+        model.placeholder.asObservable().subscribe { (event) in
             self.textField.placeholder = event.element
         }.addDisposableTo(disposeBag)
         
+        controlEvents(textField: textField, editingState: model.textFieldEditingState)
+    }
+}
+extension JDTextFieldCell {
+    func controlEvents(textField:ComposeTextField,editingState:PublishSubject<UIControlEvents>) {
         textField.rx.controlEvent(.editingDidBegin).subscribe { (event) in
-            textFieldModel.textFieldEditingState.onNext(.editingDidBegin)
+            editingState.onNext(.editingDidBegin)
             }.addDisposableTo(disposeBag)
         textField.rx.controlEvent(.editingChanged).subscribe { (event) in
-            textFieldModel.textFieldEditingState.onNext(.editingChanged)
+            editingState.onNext(.editingChanged)
             }.addDisposableTo(disposeBag)
         textField.rx.controlEvent(.editingDidEnd).subscribe { (event) in
-            textFieldModel.textFieldEditingState.onNext(.editingDidEnd)
+            editingState.onNext(.editingDidEnd)
             }.addDisposableTo(disposeBag)
         textField.rx.controlEvent(.editingDidEndOnExit).subscribe { (event) in
-            textFieldModel.textFieldEditingState.onNext(.editingDidEndOnExit)
+            editingState.onNext(.editingDidEndOnExit)
             }.addDisposableTo(disposeBag)
     }
-
 }
 
