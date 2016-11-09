@@ -237,12 +237,15 @@ extension jd {
         CFRunLoopAddTimer(CFRunLoopGetCurrent(), timer, CFRunLoopMode.commonModes)
         return timer!
     }
-    /// ZJaDe:RunLoop beforeWaiting时调用
-    func runWhenBeforeWaiting(closure:@escaping (()->(Bool))) {
+    
+    /// RunLoop beforeWaiting时调用
+    ///
+    /// - Parameter closure: 返回是否需要注销
+    static func runWhenBeforeWaiting(closure:@escaping (()->(Bool))) {
         let runLoop = CFRunLoopGetCurrent();
         let runLoopMode = CFRunLoopMode.defaultMode;
         let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.beforeWaiting.rawValue, true, 0) { (observer, activity) in
-            if !closure() {
+            if closure() {
                 CFRunLoopRemoveObserver(runLoop, observer, runLoopMode);
                 return
             }

@@ -23,4 +23,14 @@ class BaseTableViewController: JDTableViewController,ScrollProperty {
         configInitAboutNavBar()
         configInitAboutViewState()
     }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.configTableView()
+    }
+    final private func configTableView() {
+        self.jdTableView.dataArray.value = getSectionModels()
+    }
+    func getSectionModels() -> [SectionModel<JDTableViewSection,JDTableViewModel>] {
+        fatalError("子类实现")
+    }
 }
