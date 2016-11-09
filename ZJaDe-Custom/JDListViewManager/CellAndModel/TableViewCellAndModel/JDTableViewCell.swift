@@ -109,13 +109,8 @@ class JDTableViewCell: UITableViewCell {
         if let color = element.cellSelectedBackgroundColor {
             self.selectedBackgroundView?.backgroundColor = color
         }
-        if let color = element.cellBackgroundColor {
-            self.backgroundColor = color
-        }
-        if let color = element.contentBackgroundColor {
-            self.jdContentView.backgroundColor = color
-        }
         separatorLineView.backgroundColor = element.lineColor
+        element.cellAppearanceClosure(self)
     }
     // MARK: cell设置数据后,如果需要在这里更新约束
     func cellUpdateConstraints(_ element: JDTableViewModel) {

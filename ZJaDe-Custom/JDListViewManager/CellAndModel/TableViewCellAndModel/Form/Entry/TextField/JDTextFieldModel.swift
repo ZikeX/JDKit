@@ -23,6 +23,14 @@ class JDTextFieldModel: JDEntryModel {
     }
     var textFieldEditingState = PublishSubject<UIControlEvents>()
     
-    
+    var textFieldCellLayout:TextFieldCellLayoutClosure = { (stackView,textField) in
+        stackView.snp.makeConstraints { (maker) in
+            maker.top.centerY.equalToSuperview()
+        }
+        textField.snp.makeConstraints({ (maker) in
+            maker.centerY.top.right.equalToSuperview()
+            maker.leftSpace(stackView).offset(8)
+        })
+    }
 }
 

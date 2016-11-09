@@ -16,17 +16,13 @@ class JDTextFieldCell: JDEntryCell {
         super.configCellInit()
         self.jdFocusView = textField
         jdContentView.addSubview(textField)
-        stackView.snp.makeConstraints { (maker) in
-            maker.top.equalToSuperview()
-        }
     }
     override func cellDidLoad(_ element: JDTableViewModel) {
         super.cellDidLoad(element)
-        textField.snp.makeConstraints({ (maker) in
-            maker.top.right.equalToSuperview()
-            maker.leftSpace(stackView).offset(8)
-            maker.bottom.lessThanOrEqualTo(jdContentView)
-        })
+        guard let textFieldModel = element as? JDTextFieldModel else {
+            return
+        }
+        textFieldModel.textFieldCellLayout(stackView,textField)
     }
     override func configCellWithElement(_ element: JDTableViewModel) {
         super.configCellWithElement(element)
@@ -35,7 +31,9 @@ class JDTextFieldCell: JDEntryCell {
         }
         textFieldModel.textFieldAppearanceClosure(textField)
         
-        textFieldModel.text.asObservable().bindTo(textField.rx.text).addDisposableTo(disposeBag);
+        textFieldModel.text.asObservable()
+            .bindTo(textField.rx.text)
+            .addDisposableTo(disposeBag);
         textField.rx.text.bindTo(textFieldModel.text).addDisposableTo(disposeBag)
         
         textFieldModel.placeholder.asObservable().subscribe { (event) in

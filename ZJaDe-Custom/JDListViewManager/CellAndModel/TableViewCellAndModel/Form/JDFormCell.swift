@@ -47,22 +47,19 @@ class JDFormCell: JDTableViewCell {
         if !formModel.titleIsEmpty {
             stackView.addArrangedSubview(titleLabel)
         }
-        stackView.jdLayout.sizeValue(width: formModel.stackViewWidth).activate()
     }
     override func configCellWithElement(_ element: JDTableViewModel) {
         super.configCellWithElement(element)
         guard let formModel = element as? JDFormModel else {
             return
         }
-        formModel.accessoryType.asObservable().subscribe { (event) in
-            if let accessoryType = event.element {
-                self.accessoryType = accessoryType
-            }
-        }.addDisposableTo(disposeBag)
         formModel.title.asObservable().bindTo(titleLabel.rx.text).addDisposableTo(disposeBag)
         formModel.image.asObservable().bindTo(imgView.rx.image).addDisposableTo(disposeBag)
-        formModel.titleLabelAppearanceClosure?(titleLabel)
-        formModel.imageViewAppearanceClosure?(imgView)
+        
+        formModel.cellAppearanceClosure(self)
+        
+        formModel.titleLabelAppearanceClosure(titleLabel)
+        formModel.imageViewAppearanceClosure(imgView)
     }
     override func cellUpdateConstraints(_ element: JDTableViewModel) {
         super.cellUpdateConstraints(element)

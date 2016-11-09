@@ -22,30 +22,7 @@ class JDLabelCell: JDFormCell {
         guard let labelModel = element as? JDLabelModel else {
             return
         }
-        stackView.jdLayout.deactivate()
-        if !labelModel.detailTitleIsEmpty {
-            detailTitleLabel.jdLayout.deactivate()
-        }
-        
-        switch labelModel.labelAlignment {
-        case .center:
-            stackView.jdLayout.centerYAlign(offset: 0).activate()
-            if !labelModel.detailTitleIsEmpty {
-                detailTitleLabel.jdLayout.centerYAlign(offset: 0).activate()
-            }
-        case .top:
-            stackView.jdLayout.topAlign(offset:0).activate()
-            if !labelModel.detailTitleIsEmpty {
-                detailTitleLabel.jdLayout.topAlign(offset:0).activate()
-            }
-        }
-        if !labelModel.detailTitleIsEmpty {
-            detailTitleLabel.snp.makeConstraints({ (maker) in
-                maker.right.equalToSuperview()
-                maker.leftSpace(stackView).offset(8)
-                maker.bottom.lessThanOrEqualTo(jdContentView)
-            })
-        }
+        labelModel.labelCellLayout(stackView,detailTitleLabel)
     }
     override func configCellWithElement(_ element: JDTableViewModel) {
         super.configCellWithElement(element)

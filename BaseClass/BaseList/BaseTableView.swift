@@ -25,7 +25,9 @@ class BaseTableViewController: JDTableViewController,ScrollProperty {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configTableView()
+        DispatchQueue.main.async {
+            self.configTableView()
+        }
     }
     final private func configTableView() {
         self.jdTableView.dataArray.value = getSectionModels()

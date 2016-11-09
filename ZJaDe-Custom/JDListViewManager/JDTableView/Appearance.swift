@@ -8,6 +8,8 @@
 
 import UIKit
 
+typealias CellAppearanceClosure = (JDTableViewCell) -> ()
+
 typealias ButtonAppearanceClosure = (Button) -> ()
 typealias ButtonsSelectedAppearanceClosure = (Button,Int,Bool) -> ()
 typealias TextFieldAppearanceClosure = (ComposeTextField) -> ()
@@ -17,3 +19,7 @@ typealias DatePickerAppearanceClosure = (UIDatePicker) -> ()
 typealias SwitchAppearanceClosure = (UISwitch) -> ()
 typealias LabelAppearanceClosure = (UILabel) -> ()
 typealias ImgViewAppearanceClosure = (UIImageView) -> ()
+
+
+typealias TextFieldCellLayoutClosure = (UIStackView,UITextField) -> ()
+typealias LabelCellLayoutClosure = (UIStackView,UILabel) -> ()

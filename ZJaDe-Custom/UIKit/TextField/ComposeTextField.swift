@@ -8,10 +8,33 @@
 
 import UIKit
 
+enum EntryType {
+    case Phone
+    case Email
+    case Price
+    case Count
+    case Date
+}
 
 class ComposeTextField: UITextField {
     var prefix:String?
     var suffix:String?
+    var entryType:EntryType? {
+        didSet {
+            switch entryType! {
+            case .Phone:
+                self.keyboardType = .phonePad
+            case .Email:
+                self.keyboardType = .emailAddress
+            case .Price:
+                self.keyboardType = .decimalPad
+            case .Count:
+                self.keyboardType = .numberPad
+            case .Date:
+                DatePicker().show(title: placeholder ?? "日期")
+            }
+        }
+    }
 }
 extension ComposeTextField {
     override func drawText(in rect: CGRect) {

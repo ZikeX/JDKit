@@ -8,7 +8,8 @@
 
 import UIKit
 
-extension JDTableViewModel { //创建cell
+extension JDTableViewModel {
+    /// ZJaDe: 创建cell
     func createCellWithTableView(_ tableView:UITableView,indexPath:IndexPath? = nil) -> UITableViewCell? {
         var cell:UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier)
         if cell == nil {
@@ -21,8 +22,7 @@ extension JDTableViewModel { //创建cell
         }
         return cell
     }
-}
-extension JDTableViewModel { //计算高度
+    /// ZJaDe: 计算高度
     func calculateCellHeight(_ tableView:UITableView) -> CGFloat {
         if autoAdjustHeight && !cellHeightIsCanUse {
             let tableViewWidth = tableView.frame.width
@@ -50,9 +50,10 @@ extension JDTableViewModel { //计算高度
         return cellHeight
     }
 }
+
 extension JDTableViewModel {
     /*************** 计算JDContentView高度 ***************/
-    func frameLayoutJDContentViewHeight(_ tableView:UITableView,tempCell:JDTableViewCell,contentWidth:CGFloat) -> CGFloat? {
+    fileprivate func frameLayoutJDContentViewHeight(_ tableView:UITableView,tempCell:JDTableViewCell,contentWidth:CGFloat) -> CGFloat? {
         let jdContentViewWidth = contentWidth - spaceEdges.left - spaceEdges.right
         let jdContentViewHeight = tempCell.calculateJDContentViewHeight(jdContentViewWidth,elementModel: self)
         if jdContentViewHeight > 0 {
@@ -61,7 +62,7 @@ extension JDTableViewModel {
             return nil
         }
     }
-    func autoLayoutCellHeight(_ tableView:UITableView,tempCell:JDTableViewCell,contentWidth:CGFloat) -> CGFloat {
+    fileprivate func autoLayoutCellHeight(_ tableView:UITableView,tempCell:JDTableViewCell,contentWidth:CGFloat) -> CGFloat {
         tempCell.contentView.snp.makeConstraints { (maker) in
             maker.width.equalTo(contentWidth)
         }
@@ -81,7 +82,7 @@ extension JDTableViewModel {
             cellContentHeight = newValue - separatorFillHeight
         }
     }
-    var jdContentViewHeight:CGFloat {
+    fileprivate var jdContentViewHeight:CGFloat {
         get {
             return (cellContentHeight ?? 44) - contentViewVerticalEdge
         }
@@ -89,14 +90,14 @@ extension JDTableViewModel {
             cellContentHeight = newValue + contentViewVerticalEdge
         }
     }
-    var contentViewVerticalEdge:CGFloat {
+    fileprivate var contentViewVerticalEdge:CGFloat {
         return spaceEdges.top + spaceEdges.bottom
     }
-    var separatorFillHeight:CGFloat {
+    fileprivate var separatorFillHeight:CGFloat {
         return separatorInset.top + separatorInset.bottom + lineHeight
     }
     
-    func getContentViewWidth(_ tableView:UITableView,cell:JDTableViewCell) -> CGFloat {
+    fileprivate func getContentViewWidth(_ tableView:UITableView,cell:JDTableViewCell) -> CGFloat {
         var contentViewWidth = tableView.frame.width
         if cell.accessoryView != nil {
             contentViewWidth -= 16 + cell.accessoryView!.frame.width
@@ -119,7 +120,7 @@ extension JDTableViewModel {
 }
 private var tempCells = [String:JDTableViewCell]()
 extension JDTableViewModel { //tempCell
-    func getTempCell(_ tableView:UITableView) -> JDTableViewCell  {
+    fileprivate func getTempCell(_ tableView:UITableView) -> JDTableViewCell  {
         if let tempCell = tempCells[reuseIdentifier] {
             return tempCell
         }else {
@@ -129,7 +130,7 @@ extension JDTableViewModel { //tempCell
             return tempCell
         }
     }
-    func bindingDataAndConstraint(_ tempCell:JDTableViewCell) {
+    fileprivate func bindingDataAndConstraint(_ tempCell:JDTableViewCell) {
         tempCell.cellDidLoad(self)
         tempCell.configCellWithElement(self)
         tempCell.cellUpdateConstraints(self)

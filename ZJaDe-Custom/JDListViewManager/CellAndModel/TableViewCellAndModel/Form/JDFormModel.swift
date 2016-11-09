@@ -21,26 +21,18 @@ class JDFormModel: JDTableViewModel {
         self.image.value = image
     }
     
-    override func configModelInit() {
-        super.configModelInit()
-    }
-    /*************** 附件类型 ***************/
-    var accessoryType = Variable(UITableViewCellAccessoryType.none)
-    
-    var labelAlignment:LabelAlignment = .center
-    
     var title:Variable<String?> = Variable(nil)
     var image:Variable<UIImage?> = Variable(nil)
-    var stackViewWidth:CGFloat? = nil
-    var titleLabelAppearanceClosure:LabelAppearanceClosure? = { (titleLabel) in
+    
+    var titleLabelAppearanceClosure:LabelAppearanceClosure = { (titleLabel) in
         titleLabel.textColor = Color.black
         titleLabel.font = Font.h3
         titleLabel.numberOfLines = 1
-//        titleLabel.textAlignment = .right
     }
-    var imageViewAppearanceClosure:ImgViewAppearanceClosure? = { (imgView) in
+    var imageViewAppearanceClosure:ImgViewAppearanceClosure = { (imgView) in
         
     }
+
 }
 extension JDFormModel {
     var titleIsEmpty:Bool {

@@ -24,6 +24,16 @@ class JDLabelModel: JDFormModel {
     override func configModelInit() {
         super.configModelInit()
     }
+    
+    var labelCellLayout:LabelCellLayoutClosure = { (stackView,label) in
+        stackView.snp.makeConstraints { (maker) in
+            maker.top.centerY.equalToSuperview()
+        }
+        label.snp.makeConstraints({ (maker) in
+            maker.centerY.top.right.equalToSuperview()
+            maker.leftSpace(stackView).offset(8)
+        })
+    }
 }
 extension JDLabelModel {    
     var detailTitleIsEmpty:Bool {

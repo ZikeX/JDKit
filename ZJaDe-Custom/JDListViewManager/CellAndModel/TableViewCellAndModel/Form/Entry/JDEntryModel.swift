@@ -9,7 +9,10 @@
 import UIKit
 import RxSwift
 
+
+
 class JDEntryModel: JDFormModel {
+    
     var text:Variable<String?> = Variable("")
     var placeholder = Variable("")
     

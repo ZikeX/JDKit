@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import RxSwift
 
 class DatePicker: CustomIBControl {
+    let dateObservable = PublishSubject<(Date)>()
+    
     lazy var titleLabel:UILabel = {
         let label = UILabel(color: Color.black, font: Font.h1)
         label.textAlignment = .center
@@ -27,6 +30,7 @@ class DatePicker: CustomIBControl {
         let button = Button(title: "确定")
         button.textLabel.font = Font.h1
         _ = button.rx.tap.subscribe({ (event) in
+            self.dateObservable.onNext(self.datePicker.date)
             self.hide()
         })
         return button
@@ -54,7 +58,6 @@ extension DatePicker {
         stackView.axis = .vertical
         self.addSubview(stackView)
         stackView.edgesToView()
-        
     }
 }
 extension DatePicker {

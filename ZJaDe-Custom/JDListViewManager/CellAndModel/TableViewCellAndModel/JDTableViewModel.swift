@@ -16,7 +16,7 @@ class JDTableViewModel:JDModel {
     var lineHeight:CGFloat = 1
     /// ZJaDe: 分割线inset
     var separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
-    /// ZJaDe: cellContentHeight 不包含分割线的高度
+    /// ZJaDe: cellContentHeight 不包含分割线的高度,但是包括edges的高度
     var cellContentHeight:CGFloat?
     var autoAdjustHeight = true
     
@@ -35,8 +35,10 @@ class JDTableViewModel:JDModel {
     
     var cellSelectedBackgroundView = UIView()
     var cellSelectedBackgroundColor:UIColor? = Color.selectedCell
-    var cellBackgroundColor:UIColor?
-    var contentBackgroundColor:UIColor?
+    
+    var cellAppearanceClosure:CellAppearanceClosure = { (cell) in
+        
+    }
     
     //高度计算出来之后，最终的约束
     var theEndLayoutClosure:((CGFloat) -> ())?
