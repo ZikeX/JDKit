@@ -238,7 +238,7 @@ extension UIView {
         }
         set {
             self.layer.cornerRadius = newValue
-            self.layer.masksToBounds = newValue > 0
+            //self.clipsToBounds = newValue > 0
         }
     }
     @IBInspectable var boderColor:UIColor {

@@ -47,12 +47,12 @@ extension JDSegmentedControl {
         return CGSize(width: jd.screenWidth, height: 44)
     }
     /// ZJaDe: 获取indicatorImageView
-    func indicatorImageView() -> UIImageView {
+    func indicatorImageView() -> ImageView {
         let tag = 13
-        if let imageView = indicatorView.viewWithTag(tag) as? UIImageView {
+        if let imageView = indicatorView.viewWithTag(tag) as? ImageView {
             return imageView
         }
-        let imageView = UIImageView()
+        let imageView = ImageView()
         indicatorView.addSubview(imageView)
         imageView.tag = tag
         return imageView

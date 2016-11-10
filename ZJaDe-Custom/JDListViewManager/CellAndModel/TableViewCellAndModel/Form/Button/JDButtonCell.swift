@@ -13,12 +13,11 @@ class JDButtonCell: JDFormCell {
     
     override func configCellInit() {
         super.configCellInit()
-        titleLabel.removeFromSuperview()
-        imgView.removeFromSuperview()
         jdContentView.addSubview(button)
     }
     override func cellDidLoad(_ element: JDTableViewModel) {
         super.cellDidLoad(element)
+        stackView.removeFromSuperview()
         button.edgesToView()
     }
     override func configCellWithElement(_ element: JDTableViewModel) {

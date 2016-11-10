@@ -18,7 +18,7 @@ typealias PickerViewAppearanceClosure = (UIPickerView) -> ()
 typealias DatePickerAppearanceClosure = (UIDatePicker) -> ()
 typealias SwitchAppearanceClosure = (UISwitch) -> ()
 typealias LabelAppearanceClosure = (UILabel) -> ()
-typealias ImgViewAppearanceClosure = (UIImageView) -> ()
+typealias ImgViewAppearanceClosure = (ImageView) -> ()
 
 
 typealias LabelCellLayoutClosure = (UIStackView,UILabel) -> ()

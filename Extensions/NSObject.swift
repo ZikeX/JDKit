@@ -6,13 +6,13 @@ extension NSObject {
         return type(of: self).className
     }
     static var className:String {
-        return jd.namespace + "." + self.name
+        return jd.namespace + "." + self.classStr
     }
     
-    var name: String {
-        return type(of: self).name
+    var classStr: String {
+        return type(of: self).classStr
     }
-    static var name: String {
+    static var classStr: String {
         return String(describing: self)
     }
 }

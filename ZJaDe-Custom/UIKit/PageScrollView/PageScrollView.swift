@@ -25,7 +25,7 @@ class PageScrollView: UIScrollView {
             }
             stackView.removeAllSubviews()
             imgArray.forEach { (item) in
-                let imageView = UIImageView()
+                let imageView = ImageView()
                 imageView.contentMode = .scaleAspectFill
                 imageView.clipsToBounds = true
                 imageView.setImage(imageData: item)

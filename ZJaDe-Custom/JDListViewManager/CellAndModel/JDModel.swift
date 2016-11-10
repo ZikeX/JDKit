@@ -13,7 +13,7 @@ class JDModel: NSObject {
         return jd.namespace + "." + self.cellName
     }()
     lazy var cellName:String = {
-        var cellName = self.name
+        var cellName = self.classStr
         let range = Range(cellName.characters.index(cellName.endIndex, offsetBy: -5) ..<  cellName.endIndex)
         cellName.replaceSubrange(range, with: "Cell")
         return cellName

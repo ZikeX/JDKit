@@ -14,11 +14,11 @@ protocol ImagesCellProtocol:class {
 }
 extension ImagesCellProtocol {
     /// ZJaDe: 代码创建ImgsStackView
-    func createImgsStackView(count:Int,stackViewClosure:((UIStackView)->())? = nil,imageViewClosure:((UIStackView,UIImageView)->())? = nil) -> UIStackView {
+    func createImgsStackView(count:Int,stackViewClosure:((UIStackView)->())? = nil,imageViewClosure:((UIStackView,ImageView)->())? = nil) -> UIStackView {
         let stackView = UIStackView(alignment: .fill, distribution:.fillEqually, spacing: 4)
         stackViewClosure?(stackView)
         for _ in 0..<count {
-            let imageView = UIImageView()
+            let imageView = ImageView()
             stackView.addArrangedSubview(imageView)
             imageViewClosure?(stackView,imageView)
         }
@@ -31,7 +31,7 @@ extension ImagesCellProtocol {
             return
         }
         imgsStackView.isHidden = false
-        for (index,imageView) in (imgsStackView.arrangedSubviews as! [UIImageView]).enumerated() {
+        for (index,imageView) in (imgsStackView.arrangedSubviews as! [ImageView]).enumerated() {
             if index < itemArray?.count ?? -1 {
                 imageView.isHidden = false
                 imageView.setImage(imageData: itemArray![index])

@@ -44,7 +44,28 @@ extension UIView {
     }
 }
 extension UIView {
-    var contentHuggingHorizontalPriority: Float {
+    func contentPriority(_ priority:UILayoutPriority) {
+        self.contentHuggingPriority(priority)
+        self.contentCompressionResistancePriority(priority)
+    }
+    func contentVerticalPriority(_ priority:UILayoutPriority) {
+        self.contentHuggingVerticalPriority = priority
+        self.contentCompressionResistanceVerticalPriority = priority
+    }
+    func contentHorizontalPriority(_ priority:UILayoutPriority) {
+        self.contentCompressionResistanceHorizontalPriority = priority
+        self.contentHuggingHorizontalPriority = priority
+    }
+    func contentHuggingPriority(_ priority:UILayoutPriority) {
+        self.contentHuggingVerticalPriority = priority
+        self.contentHuggingHorizontalPriority = priority
+    }
+    func contentCompressionResistancePriority(_ priority:UILayoutPriority) {
+        self.contentCompressionResistanceHorizontalPriority = priority
+        self.contentCompressionResistanceVerticalPriority = priority
+    }
+    // MARK: -
+    var contentHuggingHorizontalPriority: UILayoutPriority {
         get {
             return self.contentHuggingPriority(for: .horizontal)
         }
@@ -53,7 +74,7 @@ extension UIView {
         }
     }
     
-    var contentHuggingVerticalPriority: Float {
+    var contentHuggingVerticalPriority: UILayoutPriority {
         get {
             return self.contentHuggingPriority(for: .vertical)
         }
@@ -62,7 +83,7 @@ extension UIView {
         }
     }
     
-    var contentCompressionResistanceHorizontalPriority: Float {
+    var contentCompressionResistanceHorizontalPriority: UILayoutPriority {
         get {
             return self.contentCompressionResistancePriority(for: .horizontal)
         }
@@ -71,7 +92,7 @@ extension UIView {
         }
     }
     
-    var contentCompressionResistanceVerticalPriority: Float {
+    var contentCompressionResistanceVerticalPriority: UILayoutPriority {
         get {
             return self.contentCompressionResistancePriority(for: .vertical)
         }

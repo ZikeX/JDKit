@@ -21,7 +21,7 @@ extension UITextField {
     func addLeftIcon(image: UIImage?, frame: CGRect, imageSize: CGSize) {
         let leftView = UIView()
         leftView.frame = frame
-        let imgView = UIImageView()
+        let imgView = ImageView()
         imgView.frame = CGRect(x: frame.width - 8 - imageSize.width, y: (frame.height - imageSize.height) / 2, width: imageSize.width, height: imageSize.height)
         imgView.image = image
         leftView.addSubview(imgView)

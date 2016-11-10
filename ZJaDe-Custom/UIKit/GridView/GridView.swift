@@ -78,8 +78,8 @@ extension GridView {
     }
     /// ZJaDe: 核心布局方法
     func configItemsArray() {
-        guard columns > 1 else {
-            logError("总列数必须大于1")
+        guard columns > 0 else {
+            logError("总列数必须大于0")
             return
         }
         guard itemArray.count > 0 else {

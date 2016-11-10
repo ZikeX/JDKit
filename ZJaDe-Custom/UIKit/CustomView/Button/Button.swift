@@ -30,7 +30,7 @@ class Button: CustomIBControl {
     }
     lazy private(set) var stackView = UIStackView()
     let textLabel = UILabel()
-    let imgView = UIImageView()
+    let imgView = ImageView()
     
     var contentEdgeInsets = UIEdgeInsets()
     var titleAndImgLocation:TitleAndImgLocation {
@@ -122,16 +122,6 @@ class Button: CustomIBControl {
         super.configInit()
         configStackView()
         observeConfig()
-    }
-    var hasShadowAnimate:Bool = false
-}
-extension Button {
-    override var isHighlighted: Bool {
-        didSet {
-            if hasShadowAnimate {
-                self.shadow(isHighlighted: isHighlighted, animated: true)
-            }
-        }
     }
 }
 extension Button {

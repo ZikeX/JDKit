@@ -30,7 +30,7 @@ class StarRatingLogicView: CustomIBView {
             updateImageViewArray()
         }
     }
-    fileprivate var imageViewArray = [UIImageView]()
+    fileprivate var imageViewArray = [ImageView]()
     lazy fileprivate var percentLayer:CALayer = {
         let layer = CALayer()
         layer.contents = self.starImageSelected.cgImage
@@ -59,7 +59,7 @@ class StarRatingLogicView: CustomIBView {
             }
         }
     }
-    func setImagePercent(percentScore:CGFloat,imageView:UIImageView) {
+    func setImagePercent(percentScore:CGFloat,imageView:ImageView) {
         if percentScore > 0 {
             CATransaction.begin()
             CATransaction.setDisableActions(true)
@@ -77,7 +77,7 @@ class StarRatingLogicView: CustomIBView {
     }
 }
 extension StarRatingLogicView {
-    func resetStackView(imageViewArray:[UIImageView]) {
+    func resetStackView(imageViewArray:[ImageView]) {
         self.removeAllSubviews()
         let stackView = UIStackView(arrangedSubviews:imageViewArray)
         stackView.alignment = .center
@@ -87,7 +87,7 @@ extension StarRatingLogicView {
         self.stackView = stackView
     }
     func updateImageViewArray() {
-        self.imageViewArray.countIsEqual(maxStarCount) {return UIImageView(image: self.starImageUnSelected)}
+        self.imageViewArray.countIsEqual(maxStarCount) {return ImageView(image: self.starImageUnSelected)}
         self.resetStackView(imageViewArray: self.imageViewArray)
     }
 }

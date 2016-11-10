@@ -14,7 +14,7 @@ class JDFormCell: JDTableViewCell {
     
     let stackView = UIStackView(alignment: .center ,spacing:8)
     var titleLabel = UILabel()
-    var imgView = UIImageView()
+    var imgView = ImageView()
     var jdFocusView:UIView?
     
     override func configCellInit() {
@@ -29,10 +29,7 @@ class JDFormCell: JDTableViewCell {
             maker.height.greaterThanOrEqualTo(28)
             maker.bottom.lessThanOrEqualTo(jdContentView)
         }
-        stackView.contentHuggingHorizontalPriority = UILayoutPriorityRequired
-        stackView.contentHuggingVerticalPriority = UILayoutPriorityRequired
-        stackView.contentCompressionResistanceVerticalPriority = UILayoutPriorityRequired
-        stackView.contentCompressionResistanceHorizontalPriority = UILayoutPriorityRequired
+        stackView.contentPriority(UILayoutPriorityRequired)
     }
     override func cellDidLoad(_ element: JDTableViewModel) {
         super.cellDidLoad(element)
@@ -53,13 +50,16 @@ class JDFormCell: JDTableViewCell {
         guard let formModel = element as? JDFormModel else {
             return
         }
-        formModel.title.asObservable().bindTo(titleLabel.rx.text).addDisposableTo(disposeBag)
-        formModel.image.asObservable().bindTo(imgView.rx.image).addDisposableTo(disposeBag)
-        
+        if !formModel.imageIsEmpty {
+            formModel.image.asObservable().bindTo(imgView.rx.image).addDisposableTo(disposeBag)
+            formModel.imageViewAppearanceClosure(imgView)
+        }
+        if !formModel.titleIsEmpty {
+            formModel.title.asObservable().bindTo(titleLabel.rx.text).addDisposableTo(disposeBag)
+            formModel.titleLabelAppearanceClosure(titleLabel)
+        }
         formModel.cellAppearanceClosure(self)
         
-        formModel.titleLabelAppearanceClosure(titleLabel)
-        formModel.imageViewAppearanceClosure(imgView)
     }
     override func cellUpdateConstraints(_ element: JDTableViewModel) {
         super.cellUpdateConstraints(element)

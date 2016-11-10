@@ -48,15 +48,15 @@ extension UIViewController {
     }
 }
 extension UIViewController {
-    /// ZJaDe: Adds image named: as a UIImageView in the Background
+    /// ZJaDe: Adds image named: as a ImageView in the Background
     func setBackgroundImage(_ named: String) {
         let image = UIImage(named: named)
         setBackgroundImage(image)
     }
 
-    /// ZJaDe: Adds UIImage as a UIImageView in the Background
+    /// ZJaDe: Adds UIImage as a ImageView in the Background
     @nonobjc func setBackgroundImage(_ image: UIImage?) {
-        let imageView = UIImageView(frame: view.frame)
+        let imageView = ImageView(frame: view.frame)
         imageView.image = image
         view.addSubview(imageView)
         view.sendSubview(toBack: imageView)

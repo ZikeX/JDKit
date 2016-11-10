@@ -37,7 +37,7 @@ class CoreLaunch {
         guard let image = image ?? self.launchImage else {
             return
         }
-        let imageView = UIImageView(frame: UIScreen.main.bounds)
+        let imageView = ImageView(frame: UIScreen.main.bounds)
         imageView.image = image
         
         window.rootViewController?.view.addSubview(imageView)

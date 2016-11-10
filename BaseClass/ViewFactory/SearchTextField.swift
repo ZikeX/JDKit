@@ -51,7 +51,7 @@ extension SearchTextField {
     func configBlackSearchBar() {
         self.backgroundColor = Color.darkBlack.withAlphaComponent(0.2)
         self.cornerRadius = 5
-        self.leftView = UIImageView(image: R.image.ic_searchIcon()?.templateImage)
+        self.leftView = ImageView(image: R.image.ic_searchIcon()?.templateImage)
         self.leftView?.contentMode = .center
         self.leftView?.bounds = CGRect(x: 0, y: 0, width: defaultHeight, height: defaultHeight)
         self.leftViewMode = .always
@@ -78,7 +78,7 @@ extension SearchTextField {
         }()
         self.leftViewMode = .always
         
-        self.rightView = UIImageView(image: R.image.ic_searchIcon()?.templateImage)
+        self.rightView = ImageView(image: R.image.ic_searchIcon()?.templateImage)
         self.rightView?.contentMode = .center
         self.rightView?.bounds = CGRect(x: 0, y: 0, width: defaultHeight * 1.5, height: defaultHeight)
         self.rightViewMode = .always
@@ -104,7 +104,7 @@ extension SearchTextField {
         }()
         self.leftViewMode = .always
         
-        self.rightView = UIImageView(image: R.image.ic_searchIcon()?.templateImage)
+        self.rightView = ImageView(image: R.image.ic_searchIcon()?.templateImage)
         self.rightView?.tintColor = Color.black
         self.rightView?.contentMode = .center
         self.rightView?.bounds = CGRect(x: 0, y: 0, width: defaultHeight * 1.5, height: defaultHeight)
