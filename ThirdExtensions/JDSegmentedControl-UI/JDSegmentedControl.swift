@@ -66,7 +66,12 @@ extension JDSegmentedControl:JDSegmentedControlDelegate {
         if isSelectedItem {
             item.titleLabel.textColor = Color.tintColor
         }else {
-            item.titleLabel.textColor = Color.black
+            switch self.style {
+            case .wavyLine:
+                item.titleLabel.textColor = Color.gray
+            case .canScroll:
+                item.titleLabel.textColor = Color.black
+            }
         }
         return item
     }

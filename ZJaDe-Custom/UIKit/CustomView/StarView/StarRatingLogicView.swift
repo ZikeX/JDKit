@@ -13,6 +13,7 @@ import RxSwift
 class StarRatingLogicView: CustomIBView {
     let starImageSelected:UIImage = R.image.ic_star_selected()!
     let starImageUnSelected:UIImage = R.image.ic_star_unSelected()!
+    
     @IBInspectable var score:CGFloat = 0.0 {
         didSet {
             self.setNeedsLayout()
