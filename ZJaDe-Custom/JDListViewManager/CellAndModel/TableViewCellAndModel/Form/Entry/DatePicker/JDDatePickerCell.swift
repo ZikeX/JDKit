@@ -16,6 +16,7 @@ class JDDatePickerCell: JDTextFieldCell {
         textField.inputView = self.datePicker
     }
     override func configCellWithElement(_ element: JDTableViewModel) {
+        super.configCellWithElement(element)
         guard let datePickerModel = element as? JDDatePickerModel else {
             return
         }

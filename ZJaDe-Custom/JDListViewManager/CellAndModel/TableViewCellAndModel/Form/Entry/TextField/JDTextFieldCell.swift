@@ -25,6 +25,7 @@ class JDTextFieldCell: JDEntryCell {
         model.configLayout(stackView,textField)
     }
     override func configCellWithElement(_ element: JDTableViewModel) {
+        super.configCellWithElement(element)
         guard let model = element as? JDTextFieldModel else {
             return
         }

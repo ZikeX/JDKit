@@ -10,8 +10,5 @@ import UIKit
 
 class JDCustomCell: JDTableViewCell {
     
-    override func configCellInit() {
-        super.configCellInit()
-    }
 }
 

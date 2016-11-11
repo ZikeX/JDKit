@@ -21,6 +21,7 @@ class JDButtonCell: JDFormCell {
         button.edgesToView()
     }
     override func configCellWithElement(_ element: JDTableViewModel) {
+        super.configCellWithElement(element)
         guard let buttonModel = element as? JDButtonModel else {
             return
         }

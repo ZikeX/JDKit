@@ -28,6 +28,7 @@ class JDDoubleTextFieldCell: JDTextFieldCell {
         textFieldModel.configDoubleTextFieldCellLayout(stackView,textField,intervalLabel,secondTextField)
     }
     override func configCellWithElement(_ element: JDTableViewModel) {
+        super.configCellWithElement(element)
         guard let model = element as? JDDoubleTextFieldModel else {
             return
         }

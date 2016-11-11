@@ -18,6 +18,7 @@ class JDSwitchCell: JDLabelCell {
         selectedAnimated = true
     }
     override func configCellWithElement(_ element: JDTableViewModel) {
+        super.configCellWithElement(element)
         guard let switchModel = element as? JDSwitchModel else {
             return
         }

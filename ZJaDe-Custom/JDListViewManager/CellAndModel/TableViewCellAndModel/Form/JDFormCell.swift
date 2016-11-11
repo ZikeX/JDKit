@@ -46,6 +46,7 @@ class JDFormCell: JDTableViewCell {
         }
     }
     override func configCellWithElement(_ element: JDTableViewModel) {
+        super.configCellWithElement(element)
         guard let formModel = element as? JDFormModel else {
             return
         }
@@ -57,8 +58,6 @@ class JDFormCell: JDTableViewCell {
             formModel.title.asObservable().bindTo(titleLabel.rx.text).addDisposableTo(disposeBag)
             formModel.titleLabelAppearanceClosure(titleLabel)
         }
-        formModel.cellAppearanceClosure(self)
-        
     }
     override func cellUpdateConstraints(_ element: JDTableViewModel) {
         super.cellUpdateConstraints(element)

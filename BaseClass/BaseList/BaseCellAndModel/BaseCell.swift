@@ -9,7 +9,38 @@
 import UIKit
 
 class BaseCell: JDCustomCell {
-    
+    final  override func cellDidLoad(_ element: JDTableViewModel) {
+        super.cellDidLoad(element)
+        guard let model = element as? BaseModel else {
+            return
+        }
+        self.configAndLayoutCell(model)
+    }
+    final override func configCellWithElement(_ element: JDTableViewModel) {
+        super.configCellWithElement(element)
+        guard let model = element as? BaseModel else {
+            return
+        }
+        self.bindingModel(model)
+    }
+    final override func cellDidDisappear(_ element: JDTableViewModel) {
+        super.cellDidDisappear(element)
+        guard let model = element as? BaseModel else {
+            return
+        }
+        self.unbindingModel(model)
+    }
+    // MARK: -
+    func configAndLayoutCell(_ model: BaseModel) {
+        
+    }
+    func bindingModel(_ model: BaseModel) {
+        
+    }
+    func unbindingModel(_ model: BaseModel) {
+        
+    }
 }
+
 
 

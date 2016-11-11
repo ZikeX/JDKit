@@ -41,7 +41,7 @@ class DatePicker: CustomIBControl {
         super.configInit()
         self.cornerRadius = 5
         self.backgroundColor = Color.white
-        self.datePicker.backgroundColor = Color.colorFromRGB("#F9F9F9")
+        self.datePicker.backgroundColor = Color.lightViewBackground
         self.datePicker.tintColor = Color.tintColor
         self.configLayout()
     }

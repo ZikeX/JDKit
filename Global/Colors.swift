@@ -12,6 +12,8 @@ class Color {
     
     static var clear = Color.colorFromRGB("#00ffffff")!
     static var red = Color.colorFromRGB("#f16568")!
+    static var blue = Color.colorFromRGB("#009bfe")!
+    static var green = Color.colorFromRGB("#54b022")!
     static var white = Color.colorFromRGB("#ffffff")!
     static var black = Color.colorFromRGB("#474747")!
     static var darkBlack = Color.colorFromRGB("#000000")!
@@ -22,9 +24,10 @@ class Color {
     static var orange = Color.colorFromRGB("#ff822e")!
     static var eggYellow = Color.colorFromRGB("#ffd05f")!
     
-    static var tintColor = Color.colorFromRGB("#54b022")!
+    static var tintColor = Color.green
     static var selectedCell = Color.colorFromRGB("#fffff0")!
     static var viewBackground = Color.colorFromRGB("#f3f3f3")!
+    static var lightViewBackground = Color.colorFromRGB("#f9f9f9")!
     static var separatorLine = Color.viewBackground
     static var boderLine = Color.colorFromRGB("#ececec")!
     static var shadow = Color.colorFromRGB("#000000")!

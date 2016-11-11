@@ -96,7 +96,6 @@ class JDTableViewCell: UITableViewCell {
         case .none:
             break
         }
-        self._configCellWithElement(element)
         self.configCellWithElement(element)
         self.cellUpdateConstraints(element)
     }
@@ -105,15 +104,13 @@ class JDTableViewCell: UITableViewCell {
         
     }
     // MARK: cell根据element绑定数据
-    final func _configCellWithElement(_ element: JDTableViewModel) {
+    func configCellWithElement(_ element: JDTableViewModel) {
         self.selectedBackgroundView = element.cellSelectedBackgroundView
         if let color = element.cellSelectedBackgroundColor {
             self.selectedBackgroundView?.backgroundColor = color
         }
         separatorLineView.backgroundColor = element.lineColor
         element.cellAppearanceClosure(self)
-    }
-    func configCellWithElement(_ element: JDTableViewModel) {
     }
     // MARK: cell设置数据后,如果需要在这里更新约束
     func cellUpdateConstraints(_ element: JDTableViewModel) {

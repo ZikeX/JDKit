@@ -15,6 +15,7 @@ class JDPickerViewCell: JDTextFieldCell {
         super.configCellInit()
     }
     override func configCellWithElement(_ element: JDTableViewModel) {
+        super.configCellWithElement(element)
         guard let pickerViewModel = element as? JDPickerViewModel else {
             return
         }
