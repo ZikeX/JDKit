@@ -21,16 +21,25 @@ class AttrStrContainer {
     init(_ str: String) {
         self.attrStr = NSMutableAttributedString(string: str)
     }
+    init(_ attrStr: NSAttributedString) {
+        self.attrStr = NSMutableAttributedString(attributedString: attrStr)
+    }
     
     func font(_ font:UIFont, range:NSRange? = nil) -> Self {
-        let range = range ?? (self.attrStr.string as NSString).range(of: self.attrStr.string)
+        let range = range ?? NSMakeRange(0, self.attrStr.length)
         self.attrStr.addAttribute(NSFontAttributeName, value: font, range: range)
         return self
     }
     
     func color(_ color:UIColor, range:NSRange? = nil) -> Self {
-        let range = range ?? (self.attrStr.string as NSString).range(of: self.attrStr.string)
+        let range = range ?? NSMakeRange(0, self.attrStr.length)
         self.attrStr.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
+        return self
+    }
+    func underLine(_ color:UIColor = Color.gray, range:NSRange? = nil) -> Self {
+        let range = range ?? NSMakeRange(0, self.attrStr.length)
+        let underLineStyle:NSUnderlineStyle = .styleSingle
+        self.attrStr.addAttributes([NSStrikethroughStyleAttributeName:NSNumber(value: underLineStyle.rawValue),NSStrikethroughColorAttributeName:color], range: range)
         return self
     }
 }
