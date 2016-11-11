@@ -62,26 +62,28 @@ class JDTableViewCell: UITableViewCell {
     }
     // MARK: - cell加载完毕，初始化数据及约束
     func cellDidLoad(_ element: JDTableViewModel) {
-        /// ZJaDe:horizontal
-        _ = jdContentView.jdLayout.edgesAlign(.horizontal, inset: element.spaceEdges)
-        if element.separatorInset.left > 0 {
-            _ = separatorLineView.jdLayout.leftAlign(offset:element.separatorInset.left)
-        }else {
-            _ = separatorLineView.jdLayout.leftAlign(self,offset: -element.separatorInset.left)
-        }
-        if element.separatorInset.right > 0 {
-            _ = separatorLineView.jdLayout.rightAlign(offset:-element.separatorInset.right)
-        }else {
-            _ = separatorLineView.jdLayout.rightAlign(self,offset: element.separatorInset.right)
-        }
-        /// ZJaDe:vertical
-        jdContentView.jdLayout.topAlign(offset: element.spaceEdges.top).activate()
-        
-        separatorLineView.jdLayout
-            .bottomAlign(offset:-element.separatorInset.bottom)
-        .topSpace(jdContentView, space: element.spaceEdges.bottom + element.separatorInset.top)
-        .heightValue(height: element.lineHeight)
-        .activate()
+        self.updateLayout.deactivate()
+        self.updateLayout.constraintArr += self.jdContentView.snp.prepareConstraints({ (maker) in
+            maker.left.equalToSuperview().offset(element.spaceEdges.left)
+            maker.right.equalToSuperview().offset(-element.spaceEdges.right)
+            maker.top.equalToSuperview().offset(element.spaceEdges.top)
+            maker.bottomSpace(self.separatorLineView).offset(-element.spaceEdges.bottom - element.separatorInset.top)
+        })
+        self.updateLayout.constraintArr += self.separatorLineView.snp.prepareConstraints({ (maker) in
+            maker.height.equalTo(element.lineHeight)
+            maker.bottom.equalToSuperview().offset(-element.separatorInset.bottom)
+            if element.separatorInset.left > 0 {
+                maker.left.equalToSuperview().offset(element.separatorInset.left)
+            }else {
+                maker.left.equalTo(self).offset(-element.separatorInset.left)
+            }
+            if element.separatorInset.right > 0 {
+                maker.right.equalToSuperview().offset(-element.separatorInset.right)
+            }else {
+                maker.right.equalTo(self).offset(element.separatorInset.right)
+            }
+        })
+        self.updateLayout.activate()
     }
     // MARK: - cell将要显示，做动画，element绑定cell
     final func cellWillAppear(_ element: JDTableViewModel) {

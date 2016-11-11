@@ -34,14 +34,20 @@ class Banner: UIView {
         self.addSubview(self.scrollView)
         self.scrollView.edgesToView()
         self.addSubview(self.pageControl)
-        self.pageControl.snp.makeConstraints { (maker) in
+        let updateLayout = self.pageControl.updateLayout
+        updateLayout.deactivate()
+        updateLayout.constraintArr += self.pageControl.snp.prepareConstraints({ (maker) in
             maker.right.equalToSuperview().offset(-20)
             maker.bottom.equalToSuperview().offset(-10)
-        }
+        })
+        updateLayout.activate()
         
         self.scrollView.rx.contentOffset.subscribe { (event) in
-            let page = self.scrollView.contentOffset.x / self.scrollView.bounds.width
-            let progressInPage = self.scrollView.contentOffset.x - (page * self.scrollView.bounds.width)
+            guard self.scrollView.width > 0 else {
+                return
+            }
+            let page = self.scrollView.contentOffset.x / self.scrollView.width
+            let progressInPage = self.scrollView.contentOffset.x - (page * self.scrollView.width)
             let progress = CGFloat(page) + progressInPage
             self.pageControl.progress = progress
         }.addDisposableTo(disposeBag)
