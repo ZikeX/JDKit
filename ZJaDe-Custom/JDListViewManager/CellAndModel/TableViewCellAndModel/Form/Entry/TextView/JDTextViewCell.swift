@@ -26,7 +26,6 @@ class JDTextViewCell: JDEntryCell {
     }
     
     override func configCellWithElement(_ element: JDTableViewModel) {
-        super.configCellWithElement(element)
         guard let model = element as? JDTextViewModel else {
             return
         }
