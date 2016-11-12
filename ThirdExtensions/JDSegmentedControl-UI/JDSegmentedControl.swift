@@ -15,21 +15,25 @@ enum JDSegmentedControlStyle {
     case wavyLine
     case canScroll
 }
-private var jd_JDSegmentedControlStyleKey = 0
-extension JDSegmentedControl {
-    var style:JDSegmentedControlStyle {
-        get {
-            return objc_getAssociatedObject(self, &jd_JDSegmentedControlStyleKey) as? JDSegmentedControlStyle ?? .canScroll
-        }
-        set {
-            objc_setAssociatedObject(self, &jd_JDSegmentedControlStyleKey, newValue, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+class SegmentedControlModel:JDSegmentedControlModel {
+    
+}
+class SegmentedControl: JDSegmentedControl {
+    var style:JDSegmentedControlStyle = .canScroll {
+        didSet {
+            configWithStyle(style:style)
         }
     }
-    convenience init(style:JDSegmentedControlStyle) {
-        self.init()
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    init(style:JDSegmentedControlStyle) {
+        super.init(frame: CGRect())
         self.style = style
         configWithStyle(style: style)
     }
+    
     func configWithStyle(style:JDSegmentedControlStyle) {
         self.delegate = self
         self.backgroundColor = Color.white
@@ -58,8 +62,11 @@ extension JDSegmentedControl {
         return imageView
     }
 }
-extension JDSegmentedControl:JDSegmentedControlDelegate {
+extension SegmentedControl:JDSegmentedControlDelegate {
     public func createItem(segmentedControl: JDSegmentedControl, model: JDSegmentedControlModel, isSelectedItem: Bool) -> JDSegmentedControlItem {
+        guard segmentedControl is SegmentedControl else {
+            return JDSegmentedControlItem()
+        }
         let item = JDSegmentedControlItem()
         item.titleLabel.text = model.title
         item.titleLabel.font = Font.h3
@@ -76,6 +83,9 @@ extension JDSegmentedControl:JDSegmentedControlDelegate {
         return item
     }
     public func layoutItem(segmentedControl:JDSegmentedControl,model:JDSegmentedControlModel,isSelectedItem:Bool) {
+        guard let segmentedControl = segmentedControl as? SegmentedControl else {
+            return
+        }
         let item = isSelectedItem ? model.selectedItem! : model.item!
         let stackView = UIStackView(alignment:.center,spacing:5)
         if !model.title.isEmpty {
@@ -98,6 +108,9 @@ extension JDSegmentedControl:JDSegmentedControlDelegate {
         }
     }
     public func configIndicatorView(segmentedControl: JDSegmentedControl) {
+        guard let segmentedControl = segmentedControl as? SegmentedControl else {
+            return
+        }
         let imageView = segmentedControl.indicatorImageView()
         
         switch segmentedControl.style {
@@ -119,6 +132,9 @@ extension JDSegmentedControl:JDSegmentedControlDelegate {
         }
     }
     public func didSelectedItem(segmentedControl: JDSegmentedControl, index: Int) {
+        guard let segmentedControl = segmentedControl as? SegmentedControl else {
+            return
+        }
         segmentedControl.indicatorViewAnimate {
             if let item = segmentedControl.modelArray[index].item {
                 let indicatorView = segmentedControl.indicatorView
@@ -138,7 +154,7 @@ extension JDSegmentedControl:JDSegmentedControlDelegate {
         }
     }
 }
-extension Reactive where Base: JDSegmentedControl {
+extension Reactive where Base: SegmentedControl {
     var value: ControlProperty<Int> {
         return UIControl.rx.valuePublic(
             control: self.base,
@@ -149,5 +165,4 @@ extension Reactive where Base: JDSegmentedControl {
             }
         )
     }
-    
 }

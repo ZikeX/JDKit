@@ -72,3 +72,24 @@ class BaseViewController: UIViewController {
         self.view.backgroundColor = Color.viewBackground
     }
 }
+
+protocol TransitionProtocol {
+    var transitionVC:TransitionViewController {get set}
+    func configTransition(segmentedControl:SegmentedControl,closure:((Int)->BaseTableViewController))
+}
+extension TransitionProtocol where Self:BaseViewController {
+    func configTransition(segmentedControl:SegmentedControl,closure:((Int)->BaseTableViewController)) {
+        _ = segmentedControl.rx.value.asObservable().subscribe { (event) in
+            if let index = event.element,index < self.transitionVC.listArray.count {
+                self.transitionVC.selectedIndex = index
+            }
+        }
+        self.transitionVC.listArray = {
+            var array = [ScrollProperty]()
+            for index in 0..<segmentedControl.modelArray.count {
+                array.append(closure(index))
+            }
+            return array
+        }()
+    }
+}
