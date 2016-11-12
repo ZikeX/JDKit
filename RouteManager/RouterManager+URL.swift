@@ -33,6 +33,8 @@ enum RouteUrl {
     case route_满减活动_列表
     
     case route_限时折扣_列表
+    
+    case route_商品详情
 }
 import UIKit
 import JDAnimatedTabBarController
@@ -107,6 +109,10 @@ extension RouterManager {
             return viewCon
         case .route_限时折扣_列表:
             let viewCon = JDLimitedTimeDiscountViewController()
+            return viewCon
+            
+        case .route_商品详情:
+            let viewCon = JDGoodsViewController()
             return viewCon
         }
     }

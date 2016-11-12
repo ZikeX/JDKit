@@ -40,6 +40,14 @@ class BaseCell: JDCustomCell {
     func unbindingModel(_ model: BaseModel) {
         
     }
+    // MARK: - touchCell
+    var touchCell:(()->())?
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        if selected {
+            touchCell?()
+        }
+    }
 }
 
 

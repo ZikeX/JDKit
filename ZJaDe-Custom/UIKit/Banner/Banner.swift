@@ -31,9 +31,10 @@ class Banner: UIView {
         configInit()
     }
     func configInit() {
-        self.addSubview(self.scrollView)
-        self.scrollView.edgesToView()
+        self.insertSubview(self.scrollView, at: 0)
         self.addSubview(self.pageControl)
+        self.pageControl.bringSubview(toFront: self.pageControl)
+        self.scrollView.edgesToView()
         let updateLayout = self.pageControl.updateLayout
         updateLayout.deactivate()
         updateLayout.constraintArr += self.pageControl.snp.prepareConstraints({ (maker) in
@@ -52,6 +53,6 @@ class Banner: UIView {
             self.pageControl.progress = progress
         }.addDisposableTo(disposeBag)
         
-        self.dataArray = [R.image.ic_defalut_image()!]
+        self.dataArray = [R.image.ic_defalut_image()!,R.image.ic_defalut_image()!]
     }
 }

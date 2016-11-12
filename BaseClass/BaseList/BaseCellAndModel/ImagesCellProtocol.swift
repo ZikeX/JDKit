@@ -33,10 +33,10 @@ extension ImagesCellProtocol {
         imgsStackView.isHidden = false
         for (index,imageView) in (imgsStackView.arrangedSubviews as! [ImageView]).enumerated() {
             if index < itemArray?.count ?? -1 {
-                imageView.isHidden = false
+                //imageView.isHidden = false
                 imageView.setImage(imageData: itemArray![index])
             }else {
-                imageView.isHidden = true
+                //imageView.isHidden = true
                 imageView.image = nil
             }
         }

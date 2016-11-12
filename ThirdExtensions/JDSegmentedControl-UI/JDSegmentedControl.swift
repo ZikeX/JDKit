@@ -34,6 +34,17 @@ class SegmentedControl: JDSegmentedControl {
         configWithStyle(style: style)
     }
     
+    var strArr = [String]() {
+        didSet {
+            var array = [SegmentedControlModel]()
+            for str in strArr {
+                array.append(SegmentedControlModel(title: str))
+            }
+            self.modelArray = array
+        }
+    }
+    
+    
     func configWithStyle(style:JDSegmentedControlStyle) {
         self.delegate = self
         self.backgroundColor = Color.white
