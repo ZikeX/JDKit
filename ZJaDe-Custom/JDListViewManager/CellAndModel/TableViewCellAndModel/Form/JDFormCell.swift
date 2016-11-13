@@ -19,7 +19,7 @@ class JDFormCell: JDTableViewCell {
     
     override func configCellInit() {
         super.configCellInit()
-        appearAnimatedStyle = .showOut
+        appearAnimatedStyle = .fromInsideOut
         highlightAnimatedStyle = .none
         selectedAnimated = false
         

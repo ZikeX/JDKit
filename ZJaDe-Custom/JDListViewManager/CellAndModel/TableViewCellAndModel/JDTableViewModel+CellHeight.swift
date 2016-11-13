@@ -38,7 +38,7 @@ extension JDTableViewModel {
             if let jdContentViewHeight = frameLayoutJDContentViewHeight(tableView,tempCell: tempCell,contentWidth: contentWidth) {
                 self.jdContentViewHeight = jdContentViewHeight
                 makeCellHeightCanUse()
-                logDebug("Frame计算出cell->高度：\(cellHeight)")
+                logDebug("\(Thread.current)->Frame计算出cell->高度：\(cellHeight)")
             }else {
                 /*************** AutoLayout计算Cell的高度 ***************/
                 cellHeight = autoLayoutCellHeight(tableView, tempCell: tempCell, contentWidth: contentWidth)

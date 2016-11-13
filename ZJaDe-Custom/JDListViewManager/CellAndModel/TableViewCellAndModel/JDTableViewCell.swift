@@ -9,13 +9,13 @@
 import UIKit
 import RxSwift
 enum CellAppearAnimatedStyle {
-    case zoomIn //从中心往外放大
-    case showOut //从内而外显示，同时透明度从0到1
+    case outwardFromCenter //从中心往外放大
+    case fromInsideOut //从内而外显示，同时透明度从0到1
     case custom //自定义
     case none //无动画
 }
 enum CellHighlightAnimatedStyle {
-    case zoomInOut //按下缩小，抬起来还原
+    case touchZoomOut //按下缩小，抬起来还原
     case shadow //阴影
     case custom //自定义
     case none //无动画
@@ -25,8 +25,8 @@ class JDTableViewCell: UITableViewCell {
     
     var isTempCell = false
     
-    var appearAnimatedStyle = CellAppearAnimatedStyle.zoomIn
-    var highlightAnimatedStyle = CellHighlightAnimatedStyle.zoomInOut
+    var appearAnimatedStyle = CellAppearAnimatedStyle.outwardFromCenter
+    var highlightAnimatedStyle = CellHighlightAnimatedStyle.touchZoomOut
     var selectedAnimated = true
     var animatedDuration:TimeInterval = 0.25
     
@@ -88,10 +88,10 @@ class JDTableViewCell: UITableViewCell {
     // MARK: - cell将要显示，做动画，element绑定cell
     final func cellWillAppear(_ element: JDTableViewModel) {
         switch appearAnimatedStyle {
-        case .zoomIn:
-            self.zoomIn(self.animatedDuration)
-        case .showOut:
-            self.showOut(self.animatedDuration)
+        case .outwardFromCenter:
+            self.outwardFromCenter(self.animatedDuration)
+        case .fromInsideOut:
+            self.fromInsideOut(self.animatedDuration)
         case .custom:
             self.customAnimate(self.animatedDuration)
             break
@@ -136,9 +136,9 @@ extension JDTableViewCell {//cell高亮或者点击
     }
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         switch highlightAnimatedStyle {
-        case .zoomInOut:
+        case .touchZoomOut:
             super.setHighlighted(highlighted, animated: animated)
-            self.zoomInOut(self.animatedDuration, ZoomIn: highlighted)
+            self.touchZoomOut(self.animatedDuration, highlighted)
         case .shadow:
             super.setHighlighted(highlighted, animated: animated)
             self.shadow(self.animatedDuration, isHighlighted: highlighted,animated:animated)
@@ -153,7 +153,7 @@ extension JDTableViewCell {//cellReload
     func cellReload(model:JDTableViewModel) {
         model.invalidateCellHeight()
         if let indexPath = self.indexPath,let tableView = self.tableView {
-            tableView.reloadItemsAtIndexPaths([indexPath], animationStyle: tableView.reloadDataSource.rowAnimation)
+            tableView.reloadItemsAtIndexPaths([indexPath], animationStyle: tableView.rxDataSource.rowAnimation)
         }
     }
     var tableView:JDTableView? {

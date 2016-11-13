@@ -12,17 +12,15 @@ import RxSwift
 class JDTableView: UITableView {
     let disposeBag = DisposeBag()
     
-    let reloadDataSource = RxTableViewSectionedReloadDataSource<SectionModel<JDTableViewSection,JDTableViewModel>>()
-    var dataArray = Variable([SectionModel<JDTableViewSection,JDTableViewModel>]())
+    var sectionModels = Variable([AnimatableSectionModel<JDTableViewSection,JDTableViewModel>]())
+    let rxDataSource = RxTableViewSectionedAnimatedDataSource<AnimatableSectionModel<JDTableViewSection,JDTableViewModel>>()
+    public var dataArray = [(JDTableViewSection,[JDTableViewModel])]()
     var page = 1
     
     /// ZJaDe: - 自动取消选择
     var autoDeselectRow = true
     // MARK: -
-    convenience init() {
-        self.init(frame:CGRect(),style: .plain)
-    }
-    override init(frame: CGRect = CGRect(), style: UITableViewStyle) {
+    override init(frame: CGRect = CGRect(), style: UITableViewStyle = .plain) {
         super.init(frame: frame, style: style)
         self.configInit()
     }
@@ -37,17 +35,11 @@ class JDTableView: UITableView {
 //        let items = reloadDataSource.sectionModels.flatMap {$0.items}
 //        calculateCellHeights(modelArr: items)
     }
-}
-extension JDTableView {
-    func configDataSource() {
-        reloadDataSource.configureCell = {(dataSource, tableView, indexPath, model) in
-            let cell =  model.createCellWithTableView(tableView, indexPath: indexPath)!
-            _ = model.calculateCellHeight(tableView)
-            return cell
-        }
-        self.dataArray.asObservable().bindTo(self.rx.items(dataSource: reloadDataSource)).addDisposableTo(disposeBag)
+    func getLocalSectionModels() -> [(JDTableViewSection, [JDTableViewModel])]? {
+        return nil
     }
 }
+
 extension JDTableView:UITableViewDelegate {
     func configDelegate() {
         self.rx.setDelegate(self).addDisposableTo(disposeBag)
@@ -58,14 +50,14 @@ extension JDTableView:UITableViewDelegate {
     // MARK: - display
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? JDTableViewCell {
-            let model = reloadDataSource[indexPath]
+            let model = rxDataSource[indexPath]
             cell.cellDidLoad(model)
             cell.cellWillAppear(model)
         }
     }
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? JDTableViewCell {
-            let model = reloadDataSource[indexPath]
+            let model = rxDataSource[indexPath]
             cell.cellDidDisappear(model)
         }
     }
@@ -77,26 +69,45 @@ extension JDTableView:UITableViewDelegate {
     }
     // MARK: - cellHeight
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let model = reloadDataSource[indexPath]
-        model.perform(#selector(JDTableViewModel.calculateCellHeight(_:)), on: Thread.main, with: self, waitUntilDone: false,modes:[RunLoopMode.defaultRunLoopMode.rawValue])
+        self.perform(#selector(calculateCellHeight), on: Thread.main, with: indexPath, waitUntilDone: false,modes:[RunLoopMode.defaultRunLoopMode.rawValue])
+        let model = rxDataSource[indexPath]
         return model.cellHeight
+    }
+    func calculateCellHeight(indexPath:IndexPath) {
+        let model = rxDataSource[indexPath]
+        _ = model.calculateCellHeight(self)
     }
     // MARK: - headerView And footerView
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let sectionModel = reloadDataSource[section].model
-        //let sectionModel = reloadDataSource.sectionAtIndex(section).model
-        return sectionModel.headerView
+        if rxDataSource.sectionModels.count > section {
+            let sectionModel = rxDataSource[section].model
+            return sectionModel.headerView
+        }else {
+            return nil
+        }
     }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let sectionModel = reloadDataSource[section].model
-        return sectionModel.footerView
+        if rxDataSource.sectionModels.count > section {
+            let sectionModel = rxDataSource[section].model
+            return sectionModel.footerView
+        }else {
+            return nil
+        }
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        let sectionModel = reloadDataSource[section].model
-        return sectionModel.headerViewHeight
+        if rxDataSource.sectionModels.count > section {
+            let sectionModel = rxDataSource[section].model
+            return sectionModel.headerViewHeight
+        }else {
+            return 0
+        }
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        let sectionModel = reloadDataSource[section].model
-        return sectionModel.footerViewHeight
+        if rxDataSource.sectionModels.count > section {
+            let sectionModel = rxDataSource[section].model
+            return sectionModel.footerViewHeight
+        }else {
+            return 0
+        }
     }
 }

@@ -1,7 +1,13 @@
 
 import UIKit
-
-extension NSObject {
+protocol ClassNameProtocol {
+    var className:String {get}
+    static var className:String {get}
+    
+    var classStr: String {get}
+    static var classStr: String {get}
+}
+extension ClassNameProtocol {
     var className:String {
         return type(of: self).className
     }
@@ -14,5 +20,8 @@ extension NSObject {
     }
     static var classStr: String {
         return String(describing: self)
-    }
+    }    
+}
+extension NSObject:ClassNameProtocol {
+    
 }

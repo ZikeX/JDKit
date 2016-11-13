@@ -34,7 +34,7 @@ extension UIView {
             self.setScale(x: 1, y: 1)
             })
     }
-    func zoomIn(_ animatedDuration:TimeInterval = UIViewAnimationDuration) {
+    func outwardFromCenter(_ animatedDuration:TimeInterval = UIViewAnimationDuration) {
         self.layer.transform = CATransform3DMakeScale(0.1, 0.1, 0.1)
         self.alpha = 0
         UIView.animate(withDuration: animatedDuration, animations: {
@@ -42,9 +42,9 @@ extension UIView {
             self.layer.transform = CATransform3DIdentity
         })
     }
-    func zoomInOut(_ animatedDuration:TimeInterval = UIViewAnimationDuration, ZoomIn:Bool) {
+    func touchZoomOut(_ animatedDuration:TimeInterval = UIViewAnimationDuration, _ touching:Bool) {
         UIView.spring(duration: animatedDuration) {
-            let scale:CGFloat = ZoomIn ? 0.95 : 1.0;
+            let scale:CGFloat = touching ? 0.95 : 1.0;
             self.layer.transform = CATransform3DMakeScale(scale, scale, scale);
         }
     }
@@ -61,7 +61,7 @@ extension UIView {
         animate.fillMode = kCAFillModeForwards
         self.layer.add(animate, forKey: "shadowOpacityAnimate")
     }
-    func showOut(_ animatedDuration:TimeInterval = UIViewAnimationDuration) {
+    func fromInsideOut(_ animatedDuration:TimeInterval = UIViewAnimationDuration) {
         self.layer.transform = CATransform3DMakeScale(1, 1, 0.1)
         self.alpha = 0
         UIView.animate(withDuration: animatedDuration, animations: {

@@ -16,22 +16,34 @@ class JDTableViewController: UITableViewController {
         return self.tableView as! JDTableView
     }
     
-    var jdStyle:UITableViewStyle = .plain
+    private(set) var style:UITableViewStyle = .plain
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         configInit()
     }
     override init(style: UITableViewStyle = .plain) {
-        jdStyle = style
+        self.style = style
         super.init(style: style)
         configInit()
     }
     override func loadView() {
-        self.tableView = JDTableView(style: jdStyle)
+        self.tableView = JDTableView(style: style)
     }
     func configInit() {
         
     }
-    
+    // MARK: -
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.configTableView()
+        self.loadLocalSectionModels()
+    }
+    // MARK: -
+    open func configTableView() {
+        
+    }
+    func getLocalSectionModels() -> [(JDTableViewSection, [JDTableViewModel])]? {
+        return nil
+    }
 }

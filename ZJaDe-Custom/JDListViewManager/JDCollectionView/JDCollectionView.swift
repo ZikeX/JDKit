@@ -11,13 +11,13 @@ import RxSwift
 class JDCollectionView: UICollectionView {
     let disposeBag = DisposeBag()
     
-    let reloadDataSource = RxCollectionViewSectionedReloadDataSource<SectionModel<JDCollectionViewSection,JDCollectionViewModel>>()
-    var dataArray = Variable([SectionModel<JDCollectionViewSection,JDCollectionViewModel>]())
+    var sectionModels = Variable([AnimatableSectionModel<JDCollectionViewSection,JDCollectionViewModel>]())
+    let rxDataSource = RxCollectionViewSectionedAnimatedDataSource<AnimatableSectionModel<JDCollectionViewSection,JDCollectionViewModel>>()
+    var dataArray = [(JDCollectionViewSection,[JDCollectionViewModel])]()
     
     // MARK: - init
     convenience init() {
-        let flowLayout = UICollectionViewFlowLayout()
-        self.init(collectionViewLayout:flowLayout);
+        self.init(collectionViewLayout: UICollectionViewFlowLayout())
     }
     override init(frame: CGRect = CGRect(), collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -32,32 +32,25 @@ class JDCollectionView: UICollectionView {
         configDataSource()
         configDelegate()
     }
-}
-extension JDCollectionView {
-    func configDataSource() {
-        reloadDataSource.configureCell = {(dataSource,colectionView,indexPath,model) in
-            let cell = colectionView.dequeueReusableCell(withReuseIdentifier: model.reuseIdentifier, for: indexPath) as! JDCollectionViewCell
-            cell.cellDidLoad(model)
-            return cell
-        }
-        self.dataArray.asObservable().bindTo(self.rx.items(dataSource: reloadDataSource)).addDisposableTo(disposeBag)
+    func getLocalSectionModels() -> [(JDCollectionViewSection, [JDCollectionViewModel])]? {
+        return nil
     }
 }
 extension JDCollectionView:UICollectionViewDelegate {
     func configDelegate() {
-        self.rx.setDelegate(self).addDisposableTo(disposeBag)
+//        self.rx.setDelegate(self).addDisposableTo(disposeBag)
     }
     // MARK: - display
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let cell = cell as? JDCollectionViewCell {
-            let model = reloadDataSource[indexPath]
+            let model = rxDataSource[indexPath]
             cell.cellDidLoad(model)
             cell.cellWillAppear(model)
         }
     }
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let cell = cell as? JDCollectionViewCell {
-            let model = reloadDataSource[indexPath]
+            let model = rxDataSource[indexPath]
             cell.cellDidDisappear(model)
         }
     }
