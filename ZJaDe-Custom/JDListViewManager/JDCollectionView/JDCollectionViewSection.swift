@@ -8,6 +8,11 @@
 
 import UIKit
 
-class JDCollectionViewSection {
-
+class JDCollectionViewSection:NSObject {
+    var identity: Int {
+        return self.hashValue
+    }
+}
+extension JDCollectionViewSection: IdentifiableType {
+    
 }

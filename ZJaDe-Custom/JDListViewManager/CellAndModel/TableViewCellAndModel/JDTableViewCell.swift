@@ -152,8 +152,11 @@ extension JDTableViewCell {//cell高亮或者点击
 extension JDTableViewCell {//cellReload
     func cellReload(model:JDTableViewModel) {
         model.invalidateCellHeight()
-        if let indexPath = self.indexPath,let tableView = self.tableView {
-            tableView.reloadItemsAtIndexPaths([indexPath], animationStyle: tableView.rxDataSource.rowAnimation)
+        if let tableView = self.tableView {
+            model.setNeedUpload()
+            tableView.updateDataSource({ (oldDataArray) -> [(JDTableViewSection, [JDTableViewModel])]? in
+                return oldDataArray
+            })
         }
     }
     var tableView:JDTableView? {

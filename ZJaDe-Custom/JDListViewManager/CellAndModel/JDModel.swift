@@ -8,7 +8,7 @@
 
 import UIKit
 
-class JDModel {
+class JDModel:NSObject {
     lazy var cellClassName:String = {
         return jd.namespace + "." + self.cellName
     }()
@@ -21,10 +21,20 @@ class JDModel {
     lazy var reuseIdentifier:String = self.cellName
     
     /*************** init ***************/
-    required init() {
+    required override init() {
+        super.init()
         configModelInit()
     }
     func configModelInit() {
         
     }
+    // MARK: - 设置刷新
+    var needUpload:Bool = false
+    // MARK: - 
+    var identity: Int {
+        return self.hashValue
+    }
+}
+extension JDModel:IdentifiableType {
+    
 }

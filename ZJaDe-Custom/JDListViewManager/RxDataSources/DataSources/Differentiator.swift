@@ -551,6 +551,7 @@ struct CommandGenerator<S: AnimatableSectionModelType> {
                 case .moved, .movedAutomatically:
                     let finalItemIndex = try initialItemData[i][j].moveIndex.unwrap()
                     let finalItem = finalSections[finalItemIndex]
+                    
                     if finalItem != initialSections[i].items[j] {
                         updatedItems.append(ItemPath(sectionIndex: i, itemIndex: j))
                     }

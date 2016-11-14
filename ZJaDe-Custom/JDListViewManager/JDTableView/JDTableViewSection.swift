@@ -8,10 +8,17 @@
 
 import UIKit
 
-class JDTableViewSection {
+class JDTableViewSection:NSObject {
     var headerViewHeight:CGFloat = 0.1
     var footerViewHeight:CGFloat = 0.1
     
     var headerView:UIView? = UIView()
     var footerView:UIView? = UIView()
+    
+    var identity: Int {
+        return self.hashValue
+    }
+}
+extension JDTableViewSection:IdentifiableType {
+    
 }

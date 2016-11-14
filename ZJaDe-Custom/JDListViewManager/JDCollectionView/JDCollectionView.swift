@@ -11,7 +11,7 @@ import RxSwift
 class JDCollectionView: UICollectionView {
     let disposeBag = DisposeBag()
     
-    var sectionModels = Variable([AnimatableSectionModel<JDCollectionViewSection,JDCollectionViewModel>]())
+    var sectionModelsChanged = PublishSubject<[AnimatableSectionModel<JDCollectionViewSection,JDCollectionViewModel>]>()
     let rxDataSource = RxCollectionViewSectionedAnimatedDataSource<AnimatableSectionModel<JDCollectionViewSection,JDCollectionViewModel>>()
     var dataArray = [(JDCollectionViewSection,[JDCollectionViewModel])]()
     

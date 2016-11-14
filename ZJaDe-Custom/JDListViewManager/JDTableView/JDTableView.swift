@@ -12,7 +12,7 @@ import RxSwift
 class JDTableView: UITableView {
     let disposeBag = DisposeBag()
     
-    var sectionModels = Variable([AnimatableSectionModel<JDTableViewSection,JDTableViewModel>]())
+    var sectionModelsChanged = PublishSubject<[AnimatableSectionModel<JDTableViewSection,JDTableViewModel>]>()
     let rxDataSource = RxTableViewSectionedAnimatedDataSource<AnimatableSectionModel<JDTableViewSection,JDTableViewModel>>()
     public var dataArray = [(JDTableViewSection,[JDTableViewModel])]()
     var page = 1
@@ -69,13 +69,8 @@ extension JDTableView:UITableViewDelegate {
     }
     // MARK: - cellHeight
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        self.perform(#selector(calculateCellHeight), on: Thread.main, with: indexPath, waitUntilDone: false,modes:[RunLoopMode.defaultRunLoopMode.rawValue])
         let model = rxDataSource[indexPath]
         return model.cellHeight
-    }
-    func calculateCellHeight(indexPath:IndexPath) {
-        let model = rxDataSource[indexPath]
-        _ = model.calculateCellHeight(self)
     }
     // MARK: - headerView And footerView
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

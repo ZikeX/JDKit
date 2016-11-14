@@ -241,16 +241,25 @@ extension jd {
     /// RunLoop beforeWaiting时调用
     ///
     /// - Parameter closure: 返回是否需要注销
-    static func runWhenBeforeWaiting(closure:@escaping (()->(Bool))) {
-        let runLoop = CFRunLoopGetCurrent();
-        let runLoopMode = CFRunLoopMode.defaultMode;
+    @discardableResult
+    static func runWhenBeforeWaiting(closure:@escaping (()->(Bool))) -> CFRunLoopObserver? {
+        let runLoop = CFRunLoopGetCurrent()
+        let runLoopMode = CFRunLoopMode.defaultMode
         let observer = CFRunLoopObserverCreateWithHandler(kCFAllocatorDefault, CFRunLoopActivity.beforeWaiting.rawValue, true, 0) { (observer, activity) in
             if closure() {
                 CFRunLoopRemoveObserver(runLoop, observer, runLoopMode);
                 return
             }
         }
-        CFRunLoopAddObserver(runLoop, observer, runLoopMode);
+        CFRunLoopAddObserver(runLoop, observer, runLoopMode)
+        return observer
+    }
+    static func removeRunLoopObserver(observer:CFRunLoopObserver?) {
+        if observer != nil {
+            let runLoop = CFRunLoopGetCurrent()
+            let runLoopMode = CFRunLoopMode.defaultMode            
+            CFRunLoopRemoveObserver(runLoop, observer, runLoopMode)
+        }
     }
 }
 
