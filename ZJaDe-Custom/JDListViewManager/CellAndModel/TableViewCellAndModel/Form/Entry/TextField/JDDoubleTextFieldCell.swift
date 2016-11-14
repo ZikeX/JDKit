@@ -17,19 +17,21 @@ class JDDoubleTextFieldCell: JDTextFieldCell {
         jdContentView.addSubview(intervalLabel)
         jdContentView.addSubview(secondTextField)
     }
-    override func cellDidLoad(_ element: JDTableViewModel) {
-        guard let textFieldModel = element as? JDDoubleTextFieldModel else {
+}
+extension JDDoubleTextFieldCell {
+    override func configCell(_ model: JDTableViewModel) {
+        guard let textFieldModel = model as? JDDoubleTextFieldModel else {
             return
         }
         textFieldModel.configLayout = { (textField) in
             
         }
-        super.cellDidLoad(element)
+        super.configCell(model)
         textFieldModel.configDoubleTextFieldCellLayout(stackView,textField,intervalLabel,secondTextField)
     }
-    override func configCellWithElement(_ element: JDTableViewModel) {
-        super.configCellWithElement(element)
-        guard let model = element as? JDDoubleTextFieldModel else {
+    override func bindingModel(_ model: JDTableViewModel) {
+        super.bindingModel(model)
+        guard let model = model as? JDDoubleTextFieldModel else {
             return
         }
         intervalLabel.textColor = titleLabel.textColor

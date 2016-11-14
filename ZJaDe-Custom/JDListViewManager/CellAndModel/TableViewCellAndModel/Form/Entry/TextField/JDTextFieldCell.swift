@@ -17,16 +17,18 @@ class JDTextFieldCell: JDEntryCell {
         self.jdFocusView = textField
         jdContentView.addSubview(textField)
     }
-    override func cellDidLoad(_ element: JDTableViewModel) {
-        super.cellDidLoad(element)
-        guard let model = element as? JDTextFieldModel else {
+}
+extension JDTextFieldCell {
+    override func configCell(_ model: JDTableViewModel) {
+        super.configCell(model)
+        guard let model = model as? JDTextFieldModel else {
             return
         }
         model.configLayout(stackView,textField)
     }
-    override func configCellWithElement(_ element: JDTableViewModel) {
-        super.configCellWithElement(element)
-        guard let model = element as? JDTextFieldModel else {
+    override func bindingModel(_ model: JDTableViewModel) {
+        super.bindingModel(model)
+        guard let model = model as? JDTextFieldModel else {
             return
         }
         textField.entryType = model.entryType

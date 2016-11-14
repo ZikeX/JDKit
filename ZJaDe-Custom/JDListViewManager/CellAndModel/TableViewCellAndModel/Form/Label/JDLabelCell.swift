@@ -17,16 +17,18 @@ class JDLabelCell: JDFormCell {
         jdContentView.addSubview(detailTitleLabel)
         
     }
-    override func cellDidLoad(_ element: JDTableViewModel) {
-        super.cellDidLoad(element)
-        guard let labelModel = element as? JDLabelModel else {
+}
+extension JDLabelCell {
+    override func configCell(_ model: JDTableViewModel) {
+        super.configCell(model)
+        guard let labelModel = model as? JDLabelModel else {
             return
         }
         labelModel.configLayout(stackView,detailTitleLabel)
     }
-    override func configCellWithElement(_ element: JDTableViewModel) {
-        super.configCellWithElement(element)
-        guard let labelModel = element as? JDLabelModel else {
+    override func bindingModel(_ model: JDTableViewModel) {
+        super.bindingModel(model)
+        guard let labelModel = model as? JDLabelModel else {
             return
         }
         labelModel.detailTitle.asObservable().bindTo(detailTitleLabel.rx.text).addDisposableTo(disposeBag)

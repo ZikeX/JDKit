@@ -17,9 +17,11 @@ class JDSwitchCell: JDLabelCell {
         self.accessoryView = switchView
         selectedAnimated = true
     }
-    override func configCellWithElement(_ element: JDTableViewModel) {
-        super.configCellWithElement(element)
-        guard let switchModel = element as? JDSwitchModel else {
+}
+extension JDSwitchCell {
+    override func bindingModel(_ model: JDTableViewModel) {
+        super.bindingModel(model)
+        guard let switchModel = model as? JDSwitchModel else {
             return
         }
         switchModel.switchAppearanceClosure?(switchView)

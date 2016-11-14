@@ -12,7 +12,7 @@ import RxCocoa
 
 protocol UpdateDataSourceProtocol:class,SectionedViewType {
     associatedtype SectionType:IdentifiableType
-    associatedtype ModelType:IdentifiableType,Equatable,UpdateModelProtocol
+    associatedtype ModelType:IdentifiableType,Equatable,NeedUpdateProtocol
     typealias DataArrayType = [(SectionType,[ModelType])]
     typealias SectionModelType = AnimatableSectionModel<SectionType,ModelType>
     
@@ -53,8 +53,8 @@ extension UpdateDataSourceProtocol {
         var updateItems = [ItemPath]()
         for (i,(_,models)) in dataArray.enumerated() {
             for (j,model) in models.enumerated() {
-                if model.needUpload {
-                    model.needUpload = false
+                if model.needUpdate {
+                    model.needUpdate = false
                     updateItems.append(ItemPath(sectionIndex: i, itemIndex: j))
                 }
             }
@@ -83,7 +83,7 @@ extension JDTableView:UpdateDataSourceProtocol {
     func configDataSource() {
         rxDataSource.configureCell = {(dataSource, tableView, indexPath, model) in
             let cell =  model.createCellWithTableView(tableView, indexPath: indexPath)!
-            _ = model.calculateCellHeight(tableView)
+            cell.height = model.calculateCellHeight(tableView)
             return cell
         }
         self.sectionModelsChanged.asObservable().bindTo(self.rx.items(dataSource: rxDataSource)).addDisposableTo(disposeBag)

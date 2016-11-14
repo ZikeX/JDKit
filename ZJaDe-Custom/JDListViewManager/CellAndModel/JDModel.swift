@@ -28,9 +28,9 @@ class JDModel:NSObject {
     func configModelInit() {
         
     }
-    // MARK: - 设置刷新
-    var needUpload:Bool = false
-    // MARK: - 
+    // MARK: - UpdateModelProtocol
+    var needUpdate:Bool = false
+    // MARK: - IdentifiableType
     var identity: Int {
         return self.hashValue
     }

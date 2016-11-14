@@ -7,7 +7,8 @@
 //
 
 import UIKit
-protocol CellManagerProtocol {
+
+protocol CellProtocol {
     associatedtype ModelType
     // MARK: - cell初始化
     func configCellInit()
@@ -24,9 +25,5 @@ protocol CellManagerProtocol {
     // MARK: - cell已经消失,element解绑cell
     func cellDidDisappear(_ element: ModelType)
 }
-extension JDCollectionViewCell : CellManagerProtocol {
-    typealias ModelType = JDCollectionViewModel
-}
-extension JDTableViewCell : CellManagerProtocol {
-    typealias ModelType = JDTableViewModel
-}
+
+

@@ -17,17 +17,19 @@ class JDTextViewCell: JDEntryCell {
         jdContentView.addSubview(textView)
         
     }
-    override func cellDidLoad(_ element: JDTableViewModel) {
-        super.cellDidLoad(element)
-        guard let model = element as? JDTextViewModel else {
+}
+extension JDTextViewCell {
+    override func configCell(_ model: JDTableViewModel) {
+        super.configCell(model)
+        guard let model = model as? JDTextViewModel else {
             return
         }
         model.configLayout(stackView,textView)
     }
     
-    override func configCellWithElement(_ element: JDTableViewModel) {
-        super.configCellWithElement(element)
-        guard let model = element as? JDTextViewModel else {
+    override func bindingModel(_ model: JDTableViewModel) {
+        super.bindingModel(model)
+        guard let model = model as? JDTextViewModel else {
             return
         }
         model.textViewAppearanceClosure(textView)

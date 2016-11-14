@@ -17,13 +17,14 @@ class JDButtonArrCell: JDFormCell {
             }
         }
     }
-    
     override func configCellInit() {
         super.configCellInit()
     }
-    override func cellDidLoad(_ element: JDTableViewModel) {
-        super.cellDidLoad(element)
-        guard let buttonArrModel = element as? JDButtonArrModel else {
+}
+extension JDButtonArrCell {
+    override func configCell(_ model: JDTableViewModel) {
+        super.configCell(model)
+        guard let buttonArrModel = model as? JDButtonArrModel else {
             return
         }
         jdContentView.addSubview(buttonArrModel.stackView)
@@ -50,9 +51,9 @@ class JDButtonArrCell: JDFormCell {
             
         }
     }
-    override func configCellWithElement(_ element: JDTableViewModel) {
-        super.configCellWithElement(element)
-        guard let buttonArrModel = element as? JDButtonArrModel else {
+    override func bindingModel(_ model: JDTableViewModel) {
+        super.bindingModel(model)
+        guard let buttonArrModel = model as? JDButtonArrModel else {
             return
         }
         buttonArrModel.dataArray.asObservable().subscribe { (event) in

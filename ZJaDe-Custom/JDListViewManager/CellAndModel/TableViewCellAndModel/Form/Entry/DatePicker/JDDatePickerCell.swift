@@ -15,9 +15,11 @@ class JDDatePickerCell: JDTextFieldCell {
         super.configCellInit()
         textField.inputView = self.datePicker
     }
-    override func configCellWithElement(_ element: JDTableViewModel) {
-        super.configCellWithElement(element)
-        guard let datePickerModel = element as? JDDatePickerModel else {
+}
+extension JDDatePickerCell {
+    override func bindingModel(_ model: JDTableViewModel) {
+        super.bindingModel(model)
+        guard let datePickerModel = model as? JDDatePickerModel else {
             return
         }
         datePickerModel.datePickerAppearanceClosure?(datePicker)
@@ -44,7 +46,6 @@ class JDDatePickerCell: JDTextFieldCell {
             self.setTextFieldText(datePickerModel)
         }.addDisposableTo(disposeBag)
     }
-    
 }
 extension JDDatePickerCell {
     func setTextFieldText(_ datePickerModel:JDDatePickerModel) {

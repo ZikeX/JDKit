@@ -16,6 +16,7 @@ class JDTableViewModel:JDModel {
     var lineHeight:CGFloat = 1
     /// ZJaDe: 分割线inset
     var separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
+    // MARK: - cell高度
     /// ZJaDe: cellContentHeight 不包含分割线的高度,但是包括edges的高度
     var cellContentHeight:CGFloat?
     var autoAdjustHeight = true
@@ -30,16 +31,15 @@ class JDTableViewModel:JDModel {
     var cellHeightIsCanUse: Bool {
         return cellContentHeightIsInvalidated == false && cellContentHeight != nil
     }
-    
     var isNibCell = false
-    
+    //高度计算出来之后，最终的约束
+    var theEndLayoutClosure:((CGFloat) -> ())?
+    // MARK: -
     var cellSelectedBackgroundView = UIView()
     var cellSelectedBackgroundColor:UIColor? = Color.selectedCell
     
     var cellAppearanceClosure:CellAppearanceClosure = { (cell) in
         
     }
-    
-    //高度计算出来之后，最终的约束
-    var theEndLayoutClosure:((CGFloat) -> ())?
+    // MARK: -
 }

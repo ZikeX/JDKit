@@ -31,9 +31,10 @@ class JDFormCell: JDTableViewCell {
         }
         stackView.contentPriority(UILayoutPriorityRequired)
     }
-    override func cellDidLoad(_ element: JDTableViewModel) {
-        super.cellDidLoad(element)
-        guard let formModel = element as? JDFormModel else {
+}
+extension JDFormCell {
+    override func configCell(_ model: JDTableViewModel) {
+        guard let formModel = model as? JDFormModel else {
             return
         }
         if !formModel.imageIsEmpty {
@@ -45,9 +46,8 @@ class JDFormCell: JDTableViewCell {
             stackView.addArrangedSubview(titleLabel)
         }
     }
-    override func configCellWithElement(_ element: JDTableViewModel) {
-        super.configCellWithElement(element)
-        guard let formModel = element as? JDFormModel else {
+    override func bindingModel(_ model: JDTableViewModel) {
+        guard let formModel = model as? JDFormModel else {
             return
         }
         if !formModel.imageIsEmpty {
@@ -59,9 +59,8 @@ class JDFormCell: JDTableViewCell {
             formModel.titleLabelAppearanceClosure(titleLabel)
         }
     }
-    override func cellUpdateConstraints(_ element: JDTableViewModel) {
-        super.cellUpdateConstraints(element)
-        guard let formModel = element as? JDFormModel else {
+    override func didBindingModel(_ model: JDTableViewModel) {
+        guard let formModel = model as? JDFormModel else {
             return
         }
         if !formModel.titleIsEmpty && !formModel.imageIsEmpty {

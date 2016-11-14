@@ -43,7 +43,7 @@ extension JDTableViewModel {
                 /*************** AutoLayout计算Cell的高度 ***************/
                 cellHeight = autoLayoutCellHeight(tableView, tempCell: tempCell, contentWidth: contentWidth)
                 makeCellHeightCanUse()
-                logDebug("AutoLayout计算出cell->高度：\(cellHeight)")
+                logDebug("\(Thread.current)->AutoLayout计算出cell->高度：\(cellHeight)")
             }
             theEndLayoutClosure?(self.jdContentViewHeight)
         }

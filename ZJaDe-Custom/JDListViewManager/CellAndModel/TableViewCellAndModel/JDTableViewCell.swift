@@ -8,28 +8,17 @@
 
 import UIKit
 import RxSwift
-enum CellAppearAnimatedStyle {
-    case outwardFromCenter //从中心往外放大
-    case fromInsideOut //从内而外显示，同时透明度从0到1
-    case custom //自定义
-    case none //无动画
-}
-enum CellHighlightAnimatedStyle {
-    case touchZoomOut //按下缩小，抬起来还原
-    case shadow //阴影
-    case custom //自定义
-    case none //无动画
-}
+
 class JDTableViewCell: UITableViewCell {
     var disposeBag = DisposeBag()
     
     var isTempCell = false
-    
+    // MARK: - CellAnimateProtocol
     var appearAnimatedStyle = CellAppearAnimatedStyle.outwardFromCenter
     var highlightAnimatedStyle = CellHighlightAnimatedStyle.touchZoomOut
     var selectedAnimated = true
     var animatedDuration:TimeInterval = 0.25
-    
+    // MARK: -
     @IBOutlet var jdContentView:MyContentView!
     var separatorLineView = UIView()
     
@@ -50,113 +39,24 @@ class JDTableViewCell: UITableViewCell {
         super.awakeFromNib()
         cellDidInit()
     }
-    // MARK: - cell初始化
-    func configCellInit() {
-        
-    }
-    // MARK: - 做一些数据初始化
-    func cellDidInit() {
-        self.jdContentView.removeFromSuperview()
-        self.contentView.addSubview(jdContentView)
-        self.contentView.addSubview(separatorLineView)
-    }
-    // MARK: - cell加载完毕，初始化数据及约束
-    func cellDidLoad(_ element: JDTableViewModel) {
-        self.updateLayout.deactivate()
-        self.updateLayout.constraintArr += self.jdContentView.snp.prepareConstraints({ (maker) in
-            maker.left.equalToSuperview().offset(element.spaceEdges.left)
-            maker.right.equalToSuperview().offset(-element.spaceEdges.right)
-            maker.top.equalToSuperview().offset(element.spaceEdges.top)
-            maker.bottomSpace(self.separatorLineView).offset(-element.spaceEdges.bottom - element.separatorInset.top)
-        })
-        self.updateLayout.constraintArr += self.separatorLineView.snp.prepareConstraints({ (maker) in
-            maker.height.equalTo(element.lineHeight)
-            maker.bottom.equalToSuperview().offset(-element.separatorInset.bottom)
-            if element.separatorInset.left > 0 {
-                maker.left.equalToSuperview().offset(element.separatorInset.left)
-            }else {
-                maker.left.equalTo(self).offset(-element.separatorInset.left)
-            }
-            if element.separatorInset.right > 0 {
-                maker.right.equalToSuperview().offset(-element.separatorInset.right)
-            }else {
-                maker.right.equalTo(self).offset(element.separatorInset.right)
-            }
-        })
-        self.updateLayout.activate()
-    }
-    // MARK: - cell将要显示，做动画，element绑定cell
-    final func cellWillAppear(_ element: JDTableViewModel) {
-        switch appearAnimatedStyle {
-        case .outwardFromCenter:
-            self.outwardFromCenter(self.animatedDuration)
-        case .fromInsideOut:
-            self.fromInsideOut(self.animatedDuration)
-        case .custom:
-            self.customAnimate(self.animatedDuration)
-            break
-        case .none:
-            break
-        }
-        self.configCellWithElement(element)
-        self.cellUpdateConstraints(element)
-    }
-    // MARK: 自定义动画
-    func customAnimate(_ animatedDuration:TimeInterval) {
-        
-    }
-    // MARK: cell根据element绑定数据
-    func configCellWithElement(_ element: JDTableViewModel) {
-        self.selectedBackgroundView = element.cellSelectedBackgroundView
-        if let color = element.cellSelectedBackgroundColor {
-            self.selectedBackgroundView?.backgroundColor = color
-        }
-        separatorLineView.backgroundColor = element.lineColor
-        element.cellAppearanceClosure(self)
-    }
-    // MARK: cell设置数据后,如果需要在这里更新约束
-    func cellUpdateConstraints(_ element: JDTableViewModel) {
-        self.setNeedsUpdateConstraints()
-    }
-    // MARK: - cell已经消失,element解绑cell
-    func cellDidDisappear(_ element: JDTableViewModel) {
-        disposeBag = DisposeBag()
-    }
+    
     // MARK: - 如果返回大于零，可以不用使用自动计算高度
     func calculateJDContentViewHeight(_ jdContentViewWidth:CGFloat,elementModel:JDTableViewModel) -> CGFloat {
         return 0
     }
 }
-extension JDTableViewCell {//cell高亮或者点击
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        if self.selectedAnimated {
-            super.setSelected(selected, animated: animated)            
-        }
-    }
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-        switch highlightAnimatedStyle {
-        case .touchZoomOut:
-            super.setHighlighted(highlighted, animated: animated)
-            self.touchZoomOut(self.animatedDuration, highlighted)
-        case .shadow:
-            super.setHighlighted(highlighted, animated: animated)
-            self.shadow(self.animatedDuration, isHighlighted: highlighted,animated:animated)
-        case .custom:
-            super.setHighlighted(highlighted, animated: animated)
-        case .none:
-            break
-        }
-    }
-}
-extension JDTableViewCell {//cellReload
-    func cellReload(model:JDTableViewModel) {
-        model.invalidateCellHeight()
+extension JDTableViewCell {//updateCell
+    func updateCell(_ model:JDTableViewModel,_ closure:(()->())?) {
         if let tableView = self.tableView {
-            model.setNeedUpload()
-            tableView.updateDataSource({ (oldDataArray) -> [(JDTableViewSection, [JDTableViewModel])]? in
-                return oldDataArray
+            UIView.spring(duration: 0.75, animations: {
+                model.invalidateCellHeight()
+                _ = model.calculateCellHeight(tableView)
+                tableView.beginUpdates()
+                closure?()
+                tableView.endUpdates()
             })
+        }else {
+            logError("tableView竟然找不到，设计肯定有问题")
         }
     }
     var tableView:JDTableView? {

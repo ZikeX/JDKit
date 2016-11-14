@@ -15,14 +15,16 @@ class JDButtonCell: JDFormCell {
         super.configCellInit()
         jdContentView.addSubview(button)
     }
-    override func cellDidLoad(_ element: JDTableViewModel) {
-        super.cellDidLoad(element)
+}
+extension JDButtonCell {
+    override func configCell(_ model: JDTableViewModel) {
+        super.configCell(model)
         stackView.removeFromSuperview()
         button.edgesToView()
     }
-    override func configCellWithElement(_ element: JDTableViewModel) {
-        super.configCellWithElement(element)
-        guard let buttonModel = element as? JDButtonModel else {
+    override func bindingModel(_ model: JDTableViewModel) {
+        super.bindingModel(model)
+        guard let buttonModel = model as? JDButtonModel else {
             return
         }
         buttonModel.title.asObservable().bindTo(button.textLabel.rx.text).addDisposableTo(disposeBag)
