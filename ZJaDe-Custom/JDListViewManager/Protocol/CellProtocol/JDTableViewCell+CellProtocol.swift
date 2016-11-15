@@ -1,5 +1,5 @@
 //
-//  JDTableViewCell+CellProtocol.swift
+//  JDTableCell+CellProtocol.swift
 //  ZiWoYou
 //
 //  Created by Z_JaDe on 2016/11/14.
@@ -9,8 +9,8 @@
 import UIKit
 import RxSwift
 
-extension JDTableViewCell : CellProtocol {
-    typealias ModelType = JDTableViewModel
+extension JDTableCell : CellProtocol {
+    typealias ModelType = JDTableModel
     
     // MARK: - cell初始化
     func configCellInit() {
@@ -23,7 +23,7 @@ extension JDTableViewCell : CellProtocol {
         self.contentView.addSubview(separatorLineView)
     }
     // MARK: - cell加载完毕，初始化数据及约束
-    final func cellDidLoad(_ element: JDTableViewModel) {
+    final func cellDidLoad(_ element: JDTableModel) {
         self.updateLayout.deactivate()
         self.updateLayout.constraintArr += self.jdContentView.snp.prepareConstraints({ (maker) in
             maker.left.equalToSuperview().offset(element.spaceEdges.left)
@@ -50,13 +50,13 @@ extension JDTableViewCell : CellProtocol {
         self.configCell(element)
     }
     // MARK: - cell将要显示，做动画，element绑定cell
-    final func cellWillAppear(_ element: JDTableViewModel) {
+    final func cellWillAppear(_ element: JDTableModel) {
         self.cellAppearAnimate()
         self.configCellWithElement(element)
         self.cellUpdateConstraints(element)
     }
     // MARK: cell根据element绑定数据
-    final func configCellWithElement(_ element: JDTableViewModel) {
+    final func configCellWithElement(_ element: JDTableModel) {
         self.selectedBackgroundView = element.cellSelectedBackgroundView
         if let color = element.cellSelectedBackgroundColor {
             self.selectedBackgroundView?.backgroundColor = color
@@ -67,12 +67,12 @@ extension JDTableViewCell : CellProtocol {
         self.bindingModel(element)
     }
     // MARK: cell设置数据后,如果需要在这里更新约束
-    final func cellUpdateConstraints(_ element: JDTableViewModel) {
+    final func cellUpdateConstraints(_ element: JDTableModel) {
         self.didBindingModel(element)
         self.setNeedsUpdateConstraints()
     }
     // MARK: - cell已经消失,element解绑cell
-    final func cellDidDisappear(_ element: JDTableViewModel) {
+    final func cellDidDisappear(_ element: JDTableModel) {
         disposeBag = DisposeBag()
         
         self.unbindingModel(element)

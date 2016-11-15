@@ -8,7 +8,7 @@
 
 import UIKit
 
-class JDCustomCell: JDTableViewCell {
+class JDCustomCell: JDTableCell {
     // MARK: - touchCell
     var touchCell:(()->())?
     override func setSelected(_ selected: Bool, animated: Bool) {

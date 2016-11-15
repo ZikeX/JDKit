@@ -1,5 +1,5 @@
 //
-//  JDTableViewCell.swift
+//  JDTableCell.swift
 //  JDTableViewExtensionDemo
 //
 //  Created by 茶古电子商务 on 16/8/27.
@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-class JDTableViewCell: UITableViewCell {
+class JDTableCell: UITableViewCell {
     var disposeBag = DisposeBag()
     
     var isTempCell = false
@@ -41,12 +41,12 @@ class JDTableViewCell: UITableViewCell {
     }
     
     // MARK: - 如果返回大于零，可以不用使用自动计算高度
-    func calculateJDContentViewHeight(_ jdContentViewWidth:CGFloat,elementModel:JDTableViewModel) -> CGFloat {
+    func calculateJDContentViewHeight(_ jdContentViewWidth:CGFloat,elementModel:JDTableModel) -> CGFloat {
         return 0
     }
 }
-extension JDTableViewCell {//updateCell
-    func updateCell(_ model:JDTableViewModel,_ closure:(()->())?) {
+extension JDTableCell {//updateCell
+    func updateCell(_ model:JDTableModel,_ closure:(()->())?) {
         if let tableView = self.tableView {
             UIView.spring(duration: 0.75, animations: {
                 model.invalidateCellHeight()

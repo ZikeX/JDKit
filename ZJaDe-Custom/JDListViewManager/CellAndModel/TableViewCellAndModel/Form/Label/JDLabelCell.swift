@@ -19,14 +19,14 @@ class JDLabelCell: JDFormCell {
     }
 }
 extension JDLabelCell {
-    override func configCell(_ model: JDTableViewModel) {
+    override func configCell(_ model: JDTableModel) {
         super.configCell(model)
         guard let labelModel = model as? JDLabelModel else {
             return
         }
         labelModel.configLayout(stackView,detailTitleLabel)
     }
-    override func bindingModel(_ model: JDTableViewModel) {
+    override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
         guard let labelModel = model as? JDLabelModel else {
             return

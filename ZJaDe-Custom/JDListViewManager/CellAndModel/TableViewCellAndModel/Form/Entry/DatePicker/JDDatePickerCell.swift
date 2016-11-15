@@ -17,7 +17,7 @@ class JDDatePickerCell: JDTextFieldCell {
     }
 }
 extension JDDatePickerCell {
-    override func bindingModel(_ model: JDTableViewModel) {
+    override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
         guard let datePickerModel = model as? JDDatePickerModel else {
             return

@@ -1,5 +1,5 @@
 //
-//  JDCollectionViewModel.swift
+//  JDCollectionModel.swift
 //  ZiWoYou
 //
 //  Created by Z_JaDe on 2016/10/21.
@@ -8,6 +8,6 @@
 
 import UIKit
 
-class JDCollectionViewModel: JDModel {
+class JDCollectionModel: JDListModel {
 
 }

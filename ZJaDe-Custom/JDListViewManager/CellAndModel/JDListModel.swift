@@ -1,5 +1,5 @@
 //
-//  JDModel.swift
+//  JDListModel.swift
 //  ZiWoYou
 //
 //  Created by Z_JaDe on 2016/10/21.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class JDModel:NSObject {
+class JDListModel:NSObject {
     lazy var cellClassName:String = {
         return jd.namespace + "." + self.cellName
     }()
@@ -35,6 +35,6 @@ class JDModel:NSObject {
         return self.hashValue
     }
 }
-extension JDModel:IdentifiableType {
+extension JDListModel:IdentifiableType {
     
 }

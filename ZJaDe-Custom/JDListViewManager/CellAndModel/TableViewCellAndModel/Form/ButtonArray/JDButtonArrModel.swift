@@ -13,15 +13,12 @@ class JDButtonArrModel: JDFormModel {
     override func configModelInit() {
         super.configModelInit()
     }
-    var stackView = UIStackView(alignment: .fill, distribution: .fillEqually)
-    var sizeScale:CGFloat = 3
-    var maxColumn:Int = 0
     //最大可被选中的button的数量
     var maxSelectButtonCount:Int = 0
-    var selectedButtonIndexs = [Int]()
+    var selectedButtons = [Button]()
     var dataArray:Variable<[(String?,UIImage?)]> = Variable([(String?,UIImage?)]())
-    var buttonsSelectedAppearance:ButtonsSelectedAppearanceClosure = { (button,index,isSelected) in
-        if isSelected {
+    var buttonsSelectedAppearance:ButtonsSelectedAppearanceClosure = { (button) in
+        if button.isSelected {
             button.tintColor = Color.tintColor
             button.addBorder(color: Color.tintColor)
         }else {

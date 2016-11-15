@@ -1,5 +1,5 @@
 //
-//  JDTableViewModel.swift
+//  JDTableModel.swift
 //  JDTableViewExtensionDemo
 //
 //  Created by 茶古电子商务 on 16/8/26.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class JDTableViewModel:JDModel {
+class JDTableModel:JDListModel {
     /// ZJaDe: contentView的inset
     var spaceEdges = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
     var itemsSpace:CGFloat = 8
@@ -19,7 +19,7 @@ class JDTableViewModel:JDModel {
     // MARK: - cell高度
     /// ZJaDe: cellContentHeight 不包含分割线的高度,但是包括edges的高度
     var cellContentHeight:CGFloat?
-    var autoAdjustHeight = true
+    var needCalculateCellHeight = true
     
     private var cellContentHeightIsInvalidated = false
     func invalidateCellHeight() {
@@ -32,8 +32,6 @@ class JDTableViewModel:JDModel {
         return cellContentHeightIsInvalidated == false && cellContentHeight != nil
     }
     var isNibCell = false
-    //高度计算出来之后，最终的约束
-    var theEndLayoutClosure:((CGFloat) -> ())?
     // MARK: -
     var cellSelectedBackgroundView = UIView()
     var cellSelectedBackgroundColor:UIColor? = Color.selectedCell

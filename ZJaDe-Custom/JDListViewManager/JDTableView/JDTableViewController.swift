@@ -15,6 +15,11 @@ class JDTableViewController: UITableViewController {
     var jdTableView:JDTableView {
         return self.tableView as! JDTableView
     }
+    var viewModel:JDTableViewModel! {
+        didSet {
+            viewModel.listVC = self
+        }
+    }
     
     private(set) var style:UITableViewStyle = .plain
     
@@ -29,6 +34,7 @@ class JDTableViewController: UITableViewController {
     }
     override func loadView() {
         self.tableView = JDTableView(style: style)
+        self.jdTableView.viewModel = self.viewModel
     }
     func configInit() {
         
@@ -36,14 +42,7 @@ class JDTableViewController: UITableViewController {
     // MARK: -
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.configTableView()
-        self.loadLocalSectionModels()
-    }
-    // MARK: -
-    open func configTableView() {
-        
-    }
-    func getLocalSectionModels() -> [(JDTableViewSection, [JDTableViewModel])]? {
-        return nil
+        self.viewModel.configTableView()
+        self.viewModel.loadLocalSectionModels()
     }
 }

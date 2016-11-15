@@ -10,19 +10,21 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-protocol UpdateDataSourceProtocol:class,SectionedViewType {
+protocol UpdateDataSourceProtocol:class {
     associatedtype SectionType:IdentifiableType
     associatedtype ModelType:IdentifiableType,Equatable,NeedUpdateProtocol
     typealias DataArrayType = [(SectionType,[ModelType])]
     typealias SectionModelType = AnimatableSectionModel<SectionType,ModelType>
     
+    var listView:SectionedViewType? {get}
     typealias UpdateDataClosureType = (DataArrayType) -> DataArrayType?
     var dataArray:[(SectionType,[ModelType])] {get set}
     var sectionModelsChanged:PublishSubject<[SectionModelType]> {get set}
     @discardableResult
     func updateDataSource(_ closure:@escaping UpdateDataClosureType)
-    /// ZJaDe: 初始化dataSource
+    /// ZJaDe: 初始化dataSource 和 delegate
     func configDataSource()
+    func configDelegate()
     /// ZJaDe: 计算tableView的cell高度
     func calculateItemHeight()
 }
@@ -35,7 +37,7 @@ extension UpdateDataSourceProtocol {
                 var sectionModels = [AnimatableSectionModel<SectionType,ModelType>]()
                 for (section,models) in newData {
                     models.forEach({ (model) in
-                        if let model = model as? JDTableViewModel {
+                        if let model = model as? JDTableModel {
                             model.invalidateCellHeight()
                         }
                     })
@@ -60,7 +62,7 @@ extension UpdateDataSourceProtocol {
             }
         }
         let result = Changeset<SectionModelType>(updatedItems: updateItems)
-        self.performBatchUpdates(result, animationConfiguration: AnimationConfiguration(reloadAnimation:.automatic))
+        self.listView?.performBatchUpdates(result, animationConfiguration: AnimationConfiguration(reloadAnimation:.automatic))
     }
     
     func calculateItemHeight() {
@@ -68,7 +70,10 @@ extension UpdateDataSourceProtocol {
     }
 }
 private var JDTableViewRunloopObserverKey: UInt8 = 0
-extension JDTableView:UpdateDataSourceProtocol {
+extension JDTableViewModel:UpdateDataSourceProtocol {
+    var listView: SectionedViewType? {
+        return self.tableView
+    }
     var runloopObserver:CFRunLoopObserver? {
         get {
             return objc_getAssociatedObject(self, &JDTableViewRunloopObserverKey) as! CFRunLoopObserver?
@@ -78,15 +83,17 @@ extension JDTableView:UpdateDataSourceProtocol {
         }
     }
     
-    typealias SectionType = JDTableViewSection
-    typealias ModelType = JDTableViewModel
+    typealias SectionType = JDTableSection
+    typealias ModelType = JDTableModel
     func configDataSource() {
         rxDataSource.configureCell = {(dataSource, tableView, indexPath, model) in
-            let cell =  model.createCellWithTableView(tableView, indexPath: indexPath)!
-            cell.height = model.calculateCellHeight(tableView)
+            let cell = model.createCellWithTableView(tableView, indexPath: indexPath)!
+            _ = model.calculateCellHeight(tableView)
             return cell
         }
-        self.sectionModelsChanged.asObservable().bindTo(self.rx.items(dataSource: rxDataSource)).addDisposableTo(disposeBag)
+        self.tableView.dataSource = nil
+        self.tableView.delegate = nil
+        self.sectionModelsChanged.asObservable().bindTo(self.tableView.rx.items(dataSource: rxDataSource)).addDisposableTo(disposeBag)
     }
     func calculateItemHeight() {
         var indexPaths = [IndexPath]()
@@ -108,22 +115,29 @@ extension JDTableView:UpdateDataSourceProtocol {
         }
     }
     func calculateCellHeight(indexPath:IndexPath) {
-        if let model = (try? self.rxDataSource.model(at: indexPath)) as? JDTableViewModel {
-            _ = model.calculateCellHeight(self)
+        if let model = (try? self.rxDataSource.model(at: indexPath)) as? JDTableModel {
+            _ = model.calculateCellHeight(self.tableView)
         }
     }
-
+    func configDelegate() {
+        self.tableView.rx.setDelegate(self).addDisposableTo(disposeBag)
+    }
 }
-extension JDCollectionView:UpdateDataSourceProtocol {
-
-    typealias SectionType = JDCollectionViewSection
-    typealias ModelType = JDCollectionViewModel
+extension JDCollectionViewModel:UpdateDataSourceProtocol {
+    var listView: SectionedViewType? {
+        return self.collectionView
+    }
+    typealias SectionType = JDCollectionSection
+    typealias ModelType = JDCollectionModel
     func configDataSource() {
         rxDataSource.configureCell = {(dataSource,colectionView,indexPath,model) in
-            let cell = colectionView.dequeueReusableCell(withReuseIdentifier: model.reuseIdentifier, for: indexPath) as! JDCollectionViewCell
+            let cell = colectionView.dequeueReusableCell(withReuseIdentifier: model.reuseIdentifier, for: indexPath) as! JDCollectionCell
             cell.cellDidLoad(model)
             return cell
         }
-        self.sectionModelsChanged.asObservable().bindTo(self.rx.items(dataSource: rxDataSource)).addDisposableTo(disposeBag)
+        self.sectionModelsChanged.asObservable().bindTo(self.collectionView.rx.items(dataSource: rxDataSource)).addDisposableTo(disposeBag)
+    }
+    func configDelegate() {
+        self.collectionView.rx.setDelegate(self).addDisposableTo(disposeBag)
     }
 }

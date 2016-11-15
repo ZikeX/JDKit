@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-class JDFormModel: JDTableViewModel {
+class JDFormModel: JDTableModel {
     convenience init(image:UIImage? = nil,title:String? = nil) {
         self.init()
         self.title.value = title

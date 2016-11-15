@@ -19,7 +19,7 @@ class JDSwitchCell: JDLabelCell {
     }
 }
 extension JDSwitchCell {
-    override func bindingModel(_ model: JDTableViewModel) {
+    override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
         guard let switchModel = model as? JDSwitchModel else {
             return

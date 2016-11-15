@@ -8,29 +8,44 @@
 
 import Foundation
 protocol BindingModelProtocol {
-    associatedtype ModelType:JDModel
+    associatedtype ModelType:JDListModel
     func configCell(_ model: ModelType)
     func bindingModel(_ model: ModelType)
     func didBindingModel(_ model: ModelType)
     func unbindingModel(_ model: ModelType)
 }
-extension JDTableViewCell:BindingModelProtocol {
+extension JDTableCell:BindingModelProtocol {
     
-    func configCell(_ model: JDTableViewModel) {
+    func configCell(_ model: JDTableModel) {
         
     }
-    func bindingModel(_ model: JDTableViewModel) {
+    func bindingModel(_ model: JDTableModel) {
         
     }
-    func didBindingModel(_ model: JDTableViewModel) {
+    func didBindingModel(_ model: JDTableModel) {
         
     }
-    func unbindingModel(_ model: JDTableViewModel) {
+    func unbindingModel(_ model: JDTableModel) {
+        
+    }
+}
+extension JDCollectionCell:BindingModelProtocol {
+    
+    func configCell(_ model: JDCollectionModel) {
+        
+    }
+    func bindingModel(_ model: JDCollectionModel) {
+        
+    }
+    func didBindingModel(_ model: JDCollectionModel) {
+        
+    }
+    func unbindingModel(_ model: JDCollectionModel) {
         
     }
 }
 // MARK: - thunk
-struct BindingModelProtocolThunk<T:JDModel>:BindingModelProtocol {
+struct BindingModelProtocolThunk<T:JDListModel>:BindingModelProtocol {
 
     private let _configCell : (T) -> Void
     private let _bindingModel : (T) -> Void

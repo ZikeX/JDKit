@@ -17,12 +17,12 @@ class JDButtonCell: JDFormCell {
     }
 }
 extension JDButtonCell {
-    override func configCell(_ model: JDTableViewModel) {
+    override func configCell(_ model: JDTableModel) {
         super.configCell(model)
         stackView.removeFromSuperview()
         button.edgesToView()
     }
-    override func bindingModel(_ model: JDTableViewModel) {
+    override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
         guard let buttonModel = model as? JDButtonModel else {
             return

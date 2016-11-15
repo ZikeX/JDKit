@@ -8,7 +8,7 @@
 
 import UIKit
 
-class JDCustomModel: JDTableViewModel {
+class JDCustomModel: JDTableModel {
     override func configModelInit() {
         super.configModelInit()
         isNibCell = true

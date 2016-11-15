@@ -13,6 +13,8 @@ class JDTextViewModel: JDEntryModel {
     
     override func configModelInit() {
         super.configModelInit()
+        self.needCalculateCellHeight = false
+        self.cellHeight = 110
     }
     var textViewAppearanceClosure:TextViewAppearanceClosure = { (textView) in
         textView.backgroundColor = Color.viewBackground
@@ -27,10 +29,8 @@ class JDTextViewModel: JDEntryModel {
             maker.top.equalToSuperview()
         }
         textView.snp.makeConstraints({ (maker) in
-            maker.top.right.equalToSuperview()
+            maker.top.right.bottom.equalToSuperview()
             maker.leftSpace(stackView).offset(8)
-            maker.bottom.lessThanOrEqualTo(textView.superview!)
-            maker.height.equalTo(100)
         })
     }
 }

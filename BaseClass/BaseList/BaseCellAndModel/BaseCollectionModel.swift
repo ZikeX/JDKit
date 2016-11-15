@@ -1,5 +1,5 @@
 //
-//  BaseCollectionViewCell.swift
+//  BaseCollectionModel.swift
 //  ZiWoYou
 //
 //  Created by 茶古电子商务 on 16/10/9.
@@ -7,8 +7,8 @@
 //
 
 import UIKit
+import HandyJSON
 
-class BaseCollectionViewCell: JDCollectionViewCell {
+class BaseCollectionModel: JDCollectionModel,HandyJSON {
 
-    
 }

@@ -10,7 +10,7 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class JDFormCell: JDTableViewCell {
+class JDFormCell: JDTableCell {
     
     let stackView = UIStackView(alignment: .center ,spacing:8)
     var titleLabel = UILabel()
@@ -33,7 +33,7 @@ class JDFormCell: JDTableViewCell {
     }
 }
 extension JDFormCell {
-    override func configCell(_ model: JDTableViewModel) {
+    override func configCell(_ model: JDTableModel) {
         guard let formModel = model as? JDFormModel else {
             return
         }
@@ -46,7 +46,7 @@ extension JDFormCell {
             stackView.addArrangedSubview(titleLabel)
         }
     }
-    override func bindingModel(_ model: JDTableViewModel) {
+    override func bindingModel(_ model: JDTableModel) {
         guard let formModel = model as? JDFormModel else {
             return
         }
@@ -59,7 +59,7 @@ extension JDFormCell {
             formModel.titleLabelAppearanceClosure(titleLabel)
         }
     }
-    override func didBindingModel(_ model: JDTableViewModel) {
+    override func didBindingModel(_ model: JDTableModel) {
         guard let formModel = model as? JDFormModel else {
             return
         }

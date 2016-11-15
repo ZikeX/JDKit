@@ -1,5 +1,5 @@
 //
-//  JDCollectionViewCell.swift
+//  JDCollectionCell.swift
 //  ZiWoYou
 //
 //  Created by Z_JaDe on 2016/10/21.
@@ -7,8 +7,9 @@
 //
 
 import UIKit
-
-class JDCollectionViewCell: UICollectionViewCell {
+import RxSwift
+class JDCollectionCell: UICollectionViewCell {
+    var disposeBag = DisposeBag()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

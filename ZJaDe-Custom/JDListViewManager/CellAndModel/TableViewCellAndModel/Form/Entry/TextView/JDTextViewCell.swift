@@ -19,7 +19,7 @@ class JDTextViewCell: JDEntryCell {
     }
 }
 extension JDTextViewCell {
-    override func configCell(_ model: JDTableViewModel) {
+    override func configCell(_ model: JDTableModel) {
         super.configCell(model)
         guard let model = model as? JDTextViewModel else {
             return
@@ -27,7 +27,7 @@ extension JDTextViewCell {
         model.configLayout(stackView,textView)
     }
     
-    override func bindingModel(_ model: JDTableViewModel) {
+    override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
         guard let model = model as? JDTextViewModel else {
             return

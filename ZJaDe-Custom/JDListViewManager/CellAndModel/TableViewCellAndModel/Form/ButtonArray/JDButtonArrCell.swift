@@ -10,101 +10,70 @@ import UIKit
 import Dollar
 
 class JDButtonArrCell: JDFormCell {
-    var buttonArr = [Button]() {
+    // MARK: - Category
+    lazy var gridView:GridView<GridViewItemType> = self.createGridView()
+    var gridViewItemsData = [GridViewItemDataType](){
         didSet {
-            buttonArr.enumerated().forEach { (offset: Int, element: Button) in
-                element.tag = buttonTag(offset)
-            }
+            self.gridView.itemArray = getButtonArray(dataArray: gridViewItemsData)
         }
     }
     override func configCellInit() {
         super.configCellInit()
+        jdContentView.addSubview(self.gridView)
+        self.gridView.edgesToView()
     }
 }
 extension JDButtonArrCell {
-    override func configCell(_ model: JDTableViewModel) {
-        super.configCell(model)
-        guard let buttonArrModel = model as? JDButtonArrModel else {
-            return
-        }
-        jdContentView.addSubview(buttonArrModel.stackView)
-        buttonArrModel.stackView.edgesToView()
-        
-        if buttonArrModel.maxColumn > 0 {
-            var count = buttonArrModel.dataArray.value.count
-            let remainder = count % buttonArrModel.maxColumn
-            count -= remainder
-            count = remainder > 0 ? count + buttonArrModel.maxColumn : count
-            buttonArr.countIsEqual(count) { Button() }
-            
-            let buttonTwoArr = $.chunk(buttonArr, size: buttonArrModel.maxColumn)
-            buttonTwoArr.forEach({ (buttonArr) in
-                let lineStackView = UIStackView(arrangedSubviews: buttonArr)
-                lineStackView.distribution = .fillEqually
-                buttonArrModel.stackView.addArrangedSubview(lineStackView)
-                buttonArr.forEach({ (button) in
-                    button.width_height(scale: buttonArrModel.sizeScale)
-                })
-            })
-        }else {
-            buttonArr.countIsEqual(buttonArrModel.dataArray.value.count) { Button() }
-            
-        }
-    }
-    override func bindingModel(_ model: JDTableViewModel) {
+    override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
-        guard let buttonArrModel = model as? JDButtonArrModel else {
+        guard let model = model as? JDButtonArrModel else {
             return
         }
-        buttonArrModel.dataArray.asObservable().subscribe { (event) in
+        model.dataArray.asObservable().subscribe { (event) in
             if let array = event.element {
-                self.buttonArr.enumerated().forEach({ (offset: Int, button: Button) in
-                    if offset < array.count {
-                        button.textStr = array[offset].0
-                        button.img = array[offset].1
-                        button.isSelected = buttonArrModel.selectedButtonIndexs.contains(offset)
-                        buttonArrModel.buttonsSelectedAppearance(button,offset,button.isSelected)
-                        button.isUserInteractionEnabled = true
-                    }else {
-                        button.textStr = nil
-                        button.img = nil
-                        button.isUserInteractionEnabled = false
-                    }
-                })
+                self.gridViewItemsData = array
             }
         }.addDisposableTo(disposeBag)
-        
-        buttonArr.forEach { (button) in
-            button.rx.tap.subscribe({ (event) in
-                let buttonIndex = self.buttonIndex(button.tag)
+        self.gridView.itemArray.forEach { (button) in
+            button.isSelected = model.selectedButtons.contains(button)
+            model.buttonsSelectedAppearance(button)
+            button.rx.tap.subscribe({ (_) in
                 button.isSelected = !button.isSelected
-                
-                if button.isSelected && !buttonArrModel.selectedButtonIndexs.contains(buttonIndex) {
-                    buttonArrModel.selectedButtonIndexs.append(buttonIndex)
-                }else if !button.isSelected,let _index = buttonArrModel.selectedButtonIndexs.index(of: buttonIndex) {
-                    buttonArrModel.selectedButtonIndexs.remove(at: _index)
-                }
-                self.checkMaxCount(buttonArrModel: buttonArrModel)
-                buttonArrModel.buttonsSelectedAppearance(button,buttonIndex,button.isSelected)
+                model.buttonsSelectedAppearance(button)
+                self.checkMaxCount(model: model)
             }).addDisposableTo(disposeBag)
         }
     }
-    func checkMaxCount(buttonArrModel:JDButtonArrModel) {
-        let maxSelectButtonCount = buttonArrModel.maxSelectButtonCount
-
-        if maxSelectButtonCount > 0 && buttonArrModel.selectedButtonIndexs.count > maxSelectButtonCount {
-            let buttonIndex = buttonArrModel.selectedButtonIndexs.removeFirst()
-            let button = buttonArr[buttonIndex]
+    private func checkMaxCount(model:JDButtonArrModel) {
+        let maxSelectButtonCount = model.maxSelectButtonCount
+        
+        if maxSelectButtonCount > 0 && model.selectedButtons.count > maxSelectButtonCount {
+            let button = model.selectedButtons.removeFirst()
             button.isSelected = false
-            buttonArrModel.buttonsSelectedAppearance(button,buttonIndex,button.isSelected)
+            model.buttonsSelectedAppearance(button)
         }
     }
 }
-extension JDButtonArrCell {
-    func buttonTag(_ index:Int) -> Int {
-        return index + 100
+extension JDButtonArrCell:GridViewProtocol {
+    typealias GridViewItemType = Button
+    typealias GridViewItemDataType = (String?,UIImage?)
+    func createGridView() -> GridView<GridViewItemType> {
+        let itemsView = GridView<Button>()
+        itemsView.columns = 4
+        itemsView.gridEdges = UIEdgeInsetsMake(10, 0, 10, 0)
+        itemsView.verticalSpace = 10
+        itemsView.backgroundColor = Color.white
+        return itemsView
     }
-    func buttonIndex(_ tag:Int) -> Int {
-        return tag - 100
+    func getButtonArray(dataArray:[GridViewItemDataType]) -> [GridViewItemType] {
+        var array = [GridViewItemType]()
+        
+        for (title,image) in dataArray {
+            let button = Button(title:title,image:image)
+            button.textLabel.font = Font.h5
+            button.titleAndImgLocation = .bottomToTop
+            array.append(button)
+        }
+        return array
     }
 }

@@ -8,10 +8,10 @@
 
 import UIKit
 
-typealias CellAppearanceClosure = (JDTableViewCell) -> ()
+typealias CellAppearanceClosure = (JDTableCell) -> ()
 
 typealias ButtonAppearanceClosure = (Button) -> ()
-typealias ButtonsSelectedAppearanceClosure = (Button,Int,Bool) -> ()
+typealias ButtonsSelectedAppearanceClosure = (Button) -> ()
 typealias TextFieldAppearanceClosure = (ComposeTextField) -> ()
 typealias TextViewAppearanceClosure = (PlaceholderTextView) -> ()
 typealias PickerViewAppearanceClosure = (UIPickerView) -> ()

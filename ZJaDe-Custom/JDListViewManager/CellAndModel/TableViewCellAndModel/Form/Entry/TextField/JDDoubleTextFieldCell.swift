@@ -19,7 +19,7 @@ class JDDoubleTextFieldCell: JDTextFieldCell {
     }
 }
 extension JDDoubleTextFieldCell {
-    override func configCell(_ model: JDTableViewModel) {
+    override func configCell(_ model: JDTableModel) {
         guard let textFieldModel = model as? JDDoubleTextFieldModel else {
             return
         }
@@ -29,7 +29,7 @@ extension JDDoubleTextFieldCell {
         super.configCell(model)
         textFieldModel.configDoubleTextFieldCellLayout(stackView,textField,intervalLabel,secondTextField)
     }
-    override func bindingModel(_ model: JDTableViewModel) {
+    override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
         guard let model = model as? JDDoubleTextFieldModel else {
             return

@@ -9,6 +9,7 @@
 import UIKit
 
 class BaseCollectionView:JDCollectionView {
+   
     
 }
 class BaseCollectionViewController: JDCollectionViewController {

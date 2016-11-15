@@ -16,7 +16,7 @@ class JDPickerViewCell: JDTextFieldCell {
     }
 }
 extension JDPickerViewCell {
-    override func bindingModel(_ model: JDTableViewModel) {
+    override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
         guard let pickerViewModel = model as? JDPickerViewModel else {
             return

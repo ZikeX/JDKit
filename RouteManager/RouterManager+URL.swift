@@ -102,7 +102,7 @@ extension RouterManager {
             let viewCon = JDCouponsDetailViewController()
             return viewCon
         case .route_优惠券_添加:
-            let viewCon = JDAddCouponsListViewController()
+            let viewCon = JDAddCouponsViewController()
             return viewCon
         case .route_满减活动_列表:
             let viewCon = JDFullReductionViewController()

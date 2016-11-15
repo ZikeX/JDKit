@@ -15,6 +15,15 @@ class JDCollectionViewController: UICollectionViewController {
     var jdCollectionView:JDCollectionView {
         return self.collectionView as! JDCollectionView
     }
+    var viewModel:JDCollectionViewModel! {
+        get {
+            return self.jdCollectionView.viewModel
+        }
+        set {
+            newValue.listVC = self
+            self.jdCollectionView.viewModel = newValue
+        }
+    }
     
     override init(collectionViewLayout layout: UICollectionViewLayout = UICollectionViewFlowLayout()) {
         super.init(collectionViewLayout: layout)
@@ -34,9 +43,7 @@ class JDCollectionViewController: UICollectionViewController {
     // MARK: - 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.loadLocalSectionModels()
-    }
-    func getLocalSectionModels() -> [(JDCollectionViewSection, [JDCollectionViewModel])]? {
-        return nil
+        self.viewModel.configCollectionView(collectionView: self.jdCollectionView)
+        self.viewModel.loadLocalSectionModels()
     }
 }

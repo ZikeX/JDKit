@@ -1,5 +1,5 @@
 //
-//  JDTableViewModel-CellHeight.swift
+//  JDTableModel-CellHeight.swift
 //  ZiWoYou
 //
 //  Created by Z_JaDe on 16/9/7.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension JDTableViewModel {
+extension JDTableModel {
     /// ZJaDe: 创建cell
     func createCellWithTableView(_ tableView:UITableView,indexPath:IndexPath? = nil) -> UITableViewCell? {
         var cell:UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier)
@@ -24,7 +24,7 @@ extension JDTableViewModel {
     }
     /// ZJaDe: 计算高度
     func calculateCellHeight(_ tableView:UITableView) -> CGFloat {
-        if autoAdjustHeight && !cellHeightIsCanUse {
+        if needCalculateCellHeight && !cellHeightIsCanUse {
             let tableViewWidth = tableView.frame.width
             if tableViewWidth <= 0 {
                 return 44
@@ -45,15 +45,15 @@ extension JDTableViewModel {
                 makeCellHeightCanUse()
                 logDebug("\(Thread.current)->AutoLayout计算出cell->高度：\(cellHeight)")
             }
-            theEndLayoutClosure?(self.jdContentViewHeight)
+            tempCell.cellDidDisappear(self)
         }
         return cellHeight
     }
 }
 
-extension JDTableViewModel {
+extension JDTableModel {
     /*************** 计算JDContentView高度 ***************/
-    fileprivate func frameLayoutJDContentViewHeight(_ tableView:UITableView,tempCell:JDTableViewCell,contentWidth:CGFloat) -> CGFloat? {
+    fileprivate func frameLayoutJDContentViewHeight(_ tableView:UITableView,tempCell:JDTableCell,contentWidth:CGFloat) -> CGFloat? {
         let jdContentViewWidth = contentWidth - spaceEdges.left - spaceEdges.right
         let jdContentViewHeight = tempCell.calculateJDContentViewHeight(jdContentViewWidth,elementModel: self)
         if jdContentViewHeight > 0 {
@@ -62,7 +62,7 @@ extension JDTableViewModel {
             return nil
         }
     }
-    fileprivate func autoLayoutCellHeight(_ tableView:UITableView,tempCell:JDTableViewCell,contentWidth:CGFloat) -> CGFloat {
+    fileprivate func autoLayoutCellHeight(_ tableView:UITableView,tempCell:JDTableCell,contentWidth:CGFloat) -> CGFloat {
         tempCell.contentView.snp.makeConstraints { (maker) in
             maker.width.equalTo(contentWidth)
         }
@@ -73,7 +73,7 @@ extension JDTableViewModel {
         return cellHeight
     }
 }
-extension JDTableViewModel {
+extension JDTableModel {
     var cellHeight:CGFloat {
         get {
             return (cellContentHeight ?? 44) + separatorFillHeight
@@ -97,7 +97,7 @@ extension JDTableViewModel {
         return separatorInset.top + separatorInset.bottom + lineHeight
     }
     
-    fileprivate func getContentViewWidth(_ tableView:UITableView,cell:JDTableViewCell) -> CGFloat {
+    fileprivate func getContentViewWidth(_ tableView:UITableView,cell:JDTableCell) -> CGFloat {
         var contentViewWidth = tableView.frame.width
         if cell.accessoryView != nil {
             contentViewWidth -= 16 + cell.accessoryView!.frame.width
@@ -118,19 +118,19 @@ extension JDTableViewModel {
         return contentViewWidth
     }
 }
-private var tempCells = [String:JDTableViewCell]()
-extension JDTableViewModel { //tempCell
-    fileprivate func getTempCell(_ tableView:UITableView) -> JDTableViewCell  {
+private var tempCells = [String:JDTableCell]()
+extension JDTableModel { //tempCell
+    fileprivate func getTempCell(_ tableView:UITableView) -> JDTableCell  {
         if let tempCell = tempCells[reuseIdentifier] {
             return tempCell
         }else {
-            let tempCell = createCellWithTableView(tableView) as! JDTableViewCell
+            let tempCell = createCellWithTableView(tableView) as! JDTableCell
             tempCell.isTempCell = true
             tempCells[reuseIdentifier] = tempCell
             return tempCell
         }
     }
-    fileprivate func bindingDataAndConstraint(_ tempCell:JDTableViewCell) {
+    fileprivate func bindingDataAndConstraint(_ tempCell:JDTableCell) {
         tempCell.cellDidLoad(self)
         tempCell.configCellWithElement(self)
         tempCell.cellUpdateConstraints(self)

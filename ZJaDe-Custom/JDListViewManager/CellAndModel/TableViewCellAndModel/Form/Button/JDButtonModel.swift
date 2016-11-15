@@ -13,9 +13,11 @@ class JDButtonModel: JDFormModel {
     
     override func configModelInit() {
         super.configModelInit()
+        needCalculateCellHeight = false
+        cellHeight = 64
+        
         spaceEdges = UIEdgeInsetsMake(8, 20, 8, 20)
         
-        cellHeight = 64
         cellAppearanceClosure = { (cell) in
             cell.backgroundColor = Color.clear
         }

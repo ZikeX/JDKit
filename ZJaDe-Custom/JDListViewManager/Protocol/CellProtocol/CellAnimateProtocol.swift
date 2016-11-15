@@ -49,7 +49,8 @@ extension CellAnimateProtocol where Self:UIView {
     }
     
 }
-extension JDTableViewCell:CellAnimateProtocol {
+
+extension JDTableCell:CellAnimateProtocol {
     override func setSelected(_ selected: Bool, animated: Bool) {
         if self.selectedAnimated {
             super.setSelected(selected, animated: animated)

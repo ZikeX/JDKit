@@ -8,10 +8,10 @@
 
 import UIKit
 
-//class BaseTableView: JDTableView {
-//    
-//    
-//}
+class BaseTableView: JDTableView {
+    
+    
+}
 class BaseTableViewController: JDTableViewController,ScrollProperty {
     
     var scrollView: UIScrollView {

@@ -9,12 +9,13 @@
 import UIKit
 import RxSwift
 class JDCollectionView: UICollectionView {
-    let disposeBag = DisposeBag()
-    
-    var sectionModelsChanged = PublishSubject<[AnimatableSectionModel<JDCollectionViewSection,JDCollectionViewModel>]>()
-    let rxDataSource = RxCollectionViewSectionedAnimatedDataSource<AnimatableSectionModel<JDCollectionViewSection,JDCollectionViewModel>>()
-    var dataArray = [(JDCollectionViewSection,[JDCollectionViewModel])]()
-    
+    var viewModel:JDCollectionViewModel! {
+        didSet {
+            viewModel.collectionView = self
+            viewModel.configDataSource()
+            viewModel.configDelegate()
+        }
+    }
     // MARK: - init
     convenience init() {
         self.init(collectionViewLayout: UICollectionViewFlowLayout())
@@ -29,29 +30,6 @@ class JDCollectionView: UICollectionView {
     }
     func configInit() {
         self.backgroundColor = Color.white
-        configDataSource()
-        configDelegate()
     }
-    func getLocalSectionModels() -> [(JDCollectionViewSection, [JDCollectionViewModel])]? {
-        return nil
-    }
-}
-extension JDCollectionView:UICollectionViewDelegate {
-    func configDelegate() {
-//        self.rx.setDelegate(self).addDisposableTo(disposeBag)
-    }
-    // MARK: - display
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let cell = cell as? JDCollectionViewCell {
-            let model = rxDataSource[indexPath]
-            cell.cellDidLoad(model)
-            cell.cellWillAppear(model)
-        }
-    }
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if let cell = cell as? JDCollectionViewCell {
-            let model = rxDataSource[indexPath]
-            cell.cellDidDisappear(model)
-        }
-    }
+
 }
