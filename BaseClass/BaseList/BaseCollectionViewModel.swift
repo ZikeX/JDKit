@@ -11,9 +11,8 @@ import UIKit
 class BaseCollectionViewModel: JDCollectionViewModel {
     
     func createBaseCollectionView() -> BaseCollectionView {
-        let collectionView = BaseCollectionView()
-        collectionView.viewModel = self
-        self.configCollectionView(collectionView: collectionView)
+        let collectionView = BaseCollectionView(viewModel: self)
+        self.configCollectionView(collectionView)
         self.loadLocalSectionModels()
         return collectionView
     }

@@ -9,19 +9,16 @@
 import UIKit
 import RxSwift
 class JDCollectionViewModel: JDListViewModel {
+    var layout:UICollectionViewLayout = UICollectionViewFlowLayout()
+    
     weak var collectionView:JDCollectionView!
     weak var listVC:JDCollectionViewController?
-    
-    convenience init(collectionView:JDCollectionView) {
-        self.init()
-        self.collectionView = collectionView
-    }
     
     var sectionModelsChanged = PublishSubject<[AnimatableSectionModel<JDCollectionSection,JDCollectionModel>]>()
     let rxDataSource = RxCollectionViewSectionedAnimatedDataSource<AnimatableSectionModel<JDCollectionSection,JDCollectionModel>>()
     var dataArray = [(JDCollectionSection,[JDCollectionModel])]()
     
-    func configCollectionView(collectionView:JDCollectionView) {
+    func configCollectionView(_ collectionView:JDCollectionView) {
         
     }
     func getLocalSectionModels() -> [(JDCollectionSection, [JDCollectionModel])]? {

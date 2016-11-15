@@ -33,7 +33,7 @@ extension JDTableCell : CellProtocol {
         })
         self.updateLayout.constraintArr += self.separatorLineView.snp.prepareConstraints({ (maker) in
             maker.height.equalTo(element.lineHeight)
-            maker.bottom.equalToSuperview().offset(-element.separatorInset.bottom)
+            maker.bottom.equalToSuperview().offset(-element.separatorInset.bottom).priority(999)
             if element.separatorInset.left > 0 {
                 maker.left.equalToSuperview().offset(element.separatorInset.left)
             }else {

@@ -9,22 +9,20 @@
 import UIKit
 
 class BaseTableViewModel: JDTableViewModel {
-    var listStyle:UITableViewStyle = .plain
+    
     var listTitle:String? {
         didSet {
             self.listVC?.title = self.listTitle
         }
     }
     func createBaseTableView() -> BaseTableView {
-        let tableView = BaseTableView()
-        tableView.viewModel = self
-        self.configTableView()
+        let tableView = BaseTableView(viewModel: self)
+        self.configTableView(tableView)
         self.loadLocalSectionModels()
         return tableView
     }
     func createBaseListVC() -> BaseTableViewController {
-        let listVC = BaseTableViewController(style: self.listStyle)
-        listVC.viewModel = self
+        let listVC = BaseTableViewController(viewModel: self)
         listVC.title = self.listTitle
         return listVC
     }

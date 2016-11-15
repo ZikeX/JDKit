@@ -10,14 +10,10 @@ import Foundation
 
 import RxSwift
 class JDTableViewModel: JDListViewModel {
+    var listStyle:UITableViewStyle = .plain
     
     weak var tableView:JDTableView!
     weak var listVC:JDTableViewController?
-    
-    convenience init(tableView:JDTableView) {
-        self.init()
-        self.tableView = tableView
-    }
     
     
     var sectionModelsChanged = PublishSubject<[AnimatableSectionModel<JDTableSection,JDTableModel>]>()
@@ -29,7 +25,7 @@ class JDTableViewModel: JDListViewModel {
     var autoDeselectRow = true
     
     // MARK: -
-    func configTableView() {
+    func configTableView(_ tableView:JDTableView) {
         
     }
     func getLocalSectionModels() -> [(JDTableSection, [JDTableModel])]? {

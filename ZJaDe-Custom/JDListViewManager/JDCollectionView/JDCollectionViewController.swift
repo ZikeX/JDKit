@@ -15,27 +15,20 @@ class JDCollectionViewController: UICollectionViewController {
     var jdCollectionView:JDCollectionView {
         return self.collectionView as! JDCollectionView
     }
-    var viewModel:JDCollectionViewModel! {
-        get {
-            return self.jdCollectionView.viewModel
-        }
-        set {
-            newValue.listVC = self
-            self.jdCollectionView.viewModel = newValue
-        }
-    }
     
-    override init(collectionViewLayout layout: UICollectionViewLayout = UICollectionViewFlowLayout()) {
-        super.init(collectionViewLayout: layout)
+    let viewModel:JDCollectionViewModel
+    init(viewModel:JDCollectionViewModel) {
+        self.viewModel = viewModel
+        super.init(collectionViewLayout: self.viewModel.layout)
+        viewModel.listVC = self
         configInit()
     }
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        configInit()
+        fatalError("暂不支持xib")
     }
     
     override func loadView() {
-        self.collectionView = JDCollectionView(collectionViewLayout: self.collectionViewLayout)
+        self.collectionView = JDCollectionView(viewModel:self.viewModel)
     }
     func configInit() {
         
@@ -43,7 +36,7 @@ class JDCollectionViewController: UICollectionViewController {
     // MARK: - 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.viewModel.configCollectionView(collectionView: self.jdCollectionView)
+        self.viewModel.configCollectionView(self.jdCollectionView)
         self.viewModel.loadLocalSectionModels()
     }
 }

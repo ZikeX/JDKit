@@ -15,26 +15,19 @@ class JDTableViewController: UITableViewController {
     var jdTableView:JDTableView {
         return self.tableView as! JDTableView
     }
-    var viewModel:JDTableViewModel! {
-        didSet {
-            viewModel.listVC = self
-        }
-    }
-    
-    private(set) var style:UITableViewStyle = .plain
+    let viewModel:JDTableViewModel
     
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        configInit()
+        fatalError("暂时不支持xib")
     }
-    override init(style: UITableViewStyle = .plain) {
-        self.style = style
-        super.init(style: style)
+    init(viewModel:JDTableViewModel) {
+        self.viewModel = viewModel
+        super.init(style: viewModel.listStyle)
+        viewModel.listVC = self
         configInit()
     }
     override func loadView() {
-        self.tableView = JDTableView(style: style)
-        self.jdTableView.viewModel = self.viewModel
+        self.tableView = JDTableView(viewModel: self.viewModel)
     }
     func configInit() {
         
@@ -42,7 +35,7 @@ class JDTableViewController: UITableViewController {
     // MARK: -
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.viewModel.configTableView()
+        self.viewModel.configTableView(self.jdTableView)
         self.viewModel.loadLocalSectionModels()
     }
 }

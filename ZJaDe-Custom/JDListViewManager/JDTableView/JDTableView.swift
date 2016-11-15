@@ -10,22 +10,19 @@ import UIKit
 import RxSwift
 
 class JDTableView: UITableView {
-    var viewModel:JDTableViewModel! {
-        didSet {
-            viewModel.tableView = self
-            viewModel.configDataSource()
-            viewModel.configDelegate()
-        }
-    }
+    let viewModel:JDTableViewModel
     
     // MARK: -
-    override init(frame: CGRect = CGRect(), style: UITableViewStyle = .plain) {
-        super.init(frame: frame, style: style)
+    init(viewModel:JDTableViewModel) {
+        self.viewModel = viewModel
+        super.init(frame: CGRect(), style: viewModel.listStyle)
+        viewModel.tableView = self
+        viewModel.configDataSource()
+        viewModel.configDelegate()
         self.configInit()
     }
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        self.configInit()
+        fatalError("暂时不支持xib")
     }
     func configInit() {
         self.separatorStyle = .none

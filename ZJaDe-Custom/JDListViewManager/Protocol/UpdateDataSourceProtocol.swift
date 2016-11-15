@@ -132,7 +132,6 @@ extension JDCollectionViewModel:UpdateDataSourceProtocol {
     func configDataSource() {
         rxDataSource.configureCell = {(dataSource,colectionView,indexPath,model) in
             let cell = colectionView.dequeueReusableCell(withReuseIdentifier: model.reuseIdentifier, for: indexPath) as! JDCollectionCell
-            cell.cellDidLoad(model)
             return cell
         }
         self.sectionModelsChanged.asObservable().bindTo(self.collectionView.rx.items(dataSource: rxDataSource)).addDisposableTo(disposeBag)

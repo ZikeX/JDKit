@@ -9,24 +9,17 @@
 import UIKit
 import RxSwift
 class JDCollectionView: UICollectionView {
-    var viewModel:JDCollectionViewModel! {
-        didSet {
-            viewModel.collectionView = self
-            viewModel.configDataSource()
-            viewModel.configDelegate()
-        }
-    }
-    // MARK: - init
-    convenience init() {
-        self.init(collectionViewLayout: UICollectionViewFlowLayout())
-    }
-    override init(frame: CGRect = CGRect(), collectionViewLayout layout: UICollectionViewLayout) {
-        super.init(frame: frame, collectionViewLayout: layout)
+    let viewModel:JDCollectionViewModel
+    init(viewModel:JDCollectionViewModel) {
+        self.viewModel = viewModel
+        super.init(frame: CGRect(), collectionViewLayout: self.viewModel.layout)
+        viewModel.collectionView = self
+        viewModel.configDataSource()
+        viewModel.configDelegate()
         configInit()
     }
     required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        configInit()
+        fatalError("暂不支持xib")
     }
     func configInit() {
         self.backgroundColor = Color.white
