@@ -16,15 +16,20 @@ class JDTextFieldCell: JDEntryCell {
         super.configCellInit()
         self.jdFocusView = textField
         jdContentView.addSubview(textField)
+        
+        stackView.snp.makeConstraints { (maker) in
+            maker.top.centerY.equalToSuperview()
+        }
+        textField.snp.makeConstraints({ (maker) in
+            maker.centerY.top.right.equalToSuperview()
+            maker.leftSpace(stackView).offset(8)
+        })
     }
 }
 extension JDTextFieldCell {
     override func configCell(_ model: JDTableModel) {
         super.configCell(model)
-        guard let model = model as? JDTextFieldModel else {
-            return
-        }
-        model.configLayout(stackView,textField)
+        
     }
     override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
@@ -32,8 +37,7 @@ extension JDTextFieldCell {
             return
         }
         textField.entryType = model.entryType
-        model.textFieldAppearanceClosure(textField)
-        
+        self.configTextField(textField)
         model.text.asObservable()
             .bindTo(textField.rx.text)
             .addDisposableTo(disposeBag);
@@ -44,6 +48,11 @@ extension JDTextFieldCell {
         }.addDisposableTo(disposeBag)
         
         controlEvents(textField: textField, editingState: model.textFieldEditingState)
+    }
+    func configTextField(_ textField:ComposeTextField) {
+        textField.backgroundColor = Color.white
+        textField.textColor = Color.black
+        textField.font = Font.h3
     }
 }
 extension JDTextFieldCell {

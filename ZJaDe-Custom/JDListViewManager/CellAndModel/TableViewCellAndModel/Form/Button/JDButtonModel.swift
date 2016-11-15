@@ -17,17 +17,6 @@ class JDButtonModel: JDFormModel {
         cellHeight = 64
         
         spaceEdges = UIEdgeInsetsMake(8, 20, 8, 20)
-        
-        cellAppearanceClosure = { (cell) in
-            cell.backgroundColor = Color.clear
-        }
-    }
-    var buttonAppearanceClosure:ButtonAppearanceClosure = { (button) in
-        button.backgroundColor = Color.tintColor
-        button.cornerRadius = 5
-        button.tintColor = Color.white
-        button.textLabel.font = Font.h2
-        button.addHeightedShadowAnimate()
     }
     var buttonClick = PublishSubject<Void>()
 }

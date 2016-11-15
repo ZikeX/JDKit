@@ -22,7 +22,6 @@ extension JDDatePickerCell {
         guard let datePickerModel = model as? JDDatePickerModel else {
             return
         }
-        datePickerModel.datePickerAppearanceClosure?(datePicker)
         if datePickerModel.dateFormat == nil {
             datePickerModel.dateFormat = {
                 switch datePicker.datePickerMode {
@@ -45,6 +44,12 @@ extension JDDatePickerCell {
         datePicker.rx.date.subscribe { (event) in
             self.setTextFieldText(datePickerModel)
         }.addDisposableTo(disposeBag)
+    }
+    override func configTextField(_ textField: ComposeTextField) {
+        super.configTextField(textField)
+        textField.clearButtonMode = .never
+        textField.leftViewMode = .never
+        textField.rightViewMode = .never
     }
 }
 extension JDDatePickerCell {

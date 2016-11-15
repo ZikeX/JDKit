@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 class JDSwitchModel: JDLabelModel {
     var isOn = Variable(false)
-    var switchAppearanceClosure:SwitchAppearanceClosure?
+    
     override func configModelInit() {
         super.configModelInit()
         separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8)

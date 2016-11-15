@@ -17,6 +17,7 @@ class JDButtonArrModel: JDFormModel {
     var maxSelectButtonCount:Int = 0
     var selectedButtons = [Button]()
     var dataArray:Variable<[(String?,UIImage?)]> = Variable([(String?,UIImage?)]())
+    typealias ButtonsSelectedAppearanceClosure = (Button) -> ()
     var buttonsSelectedAppearance:ButtonsSelectedAppearanceClosure = { (button) in
         if button.isSelected {
             button.tintColor = Color.tintColor

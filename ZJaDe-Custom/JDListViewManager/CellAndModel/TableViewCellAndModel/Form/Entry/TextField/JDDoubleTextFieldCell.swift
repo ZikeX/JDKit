@@ -16,18 +16,29 @@ class JDDoubleTextFieldCell: JDTextFieldCell {
         super.configCellInit()
         jdContentView.addSubview(intervalLabel)
         jdContentView.addSubview(secondTextField)
+        
+        [textField,intervalLabel,secondTextField].forEach { (view) in
+            view.snp.remakeConstraints { (maker) in
+                maker.top.centerY.equalToSuperview()
+            }
+        }
+        textField.snp.makeConstraints({ (maker) in
+            maker.leftSpace(stackView).offset(8)
+        })
+        intervalLabel.snp.makeConstraints({ (maker) in
+            maker.leftSpace(textField).offset(8)
+        })
+        intervalLabel.contentHuggingHorizontalPriority = UILayoutPriorityRequired
+        secondTextField.snp.makeConstraints({ (maker) in
+            maker.right.equalToSuperview()
+            maker.width.equalTo(textField)
+            maker.leftSpace(intervalLabel).offset(8)
+        })
     }
 }
 extension JDDoubleTextFieldCell {
     override func configCell(_ model: JDTableModel) {
-        guard let textFieldModel = model as? JDDoubleTextFieldModel else {
-            return
-        }
-        textFieldModel.configLayout = { (textField) in
-            
-        }
         super.configCell(model)
-        textFieldModel.configDoubleTextFieldCellLayout(stackView,textField,intervalLabel,secondTextField)
     }
     override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
@@ -39,7 +50,7 @@ extension JDDoubleTextFieldCell {
         intervalLabel.text = model.intervalText
         
         secondTextField.entryType = model.entryType
-        model.textFieldAppearanceClosure(secondTextField)
+        configTextField(secondTextField)
         
         model.secondText.asObservable()
             .bindTo(secondTextField.rx.text)
@@ -51,5 +62,11 @@ extension JDDoubleTextFieldCell {
             }.addDisposableTo(disposeBag)
         
         controlEvents(textField: secondTextField, editingState: model.secondTextFieldEditingState)
+    }
+}
+extension JDDoubleTextFieldCell {
+    override func configTextField(_ textField:ComposeTextField) {
+        super.configTextField(textField)
+        textField.textAlignment = .center
     }
 }

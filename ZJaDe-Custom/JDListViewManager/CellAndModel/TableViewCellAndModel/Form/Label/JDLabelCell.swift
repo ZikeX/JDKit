@@ -16,15 +16,19 @@ class JDLabelCell: JDFormCell {
         highlightAnimatedStyle = .shadow
         jdContentView.addSubview(detailTitleLabel)
         
+        stackView.snp.makeConstraints { (maker) in
+            maker.top.centerY.equalToSuperview()
+        }
+        detailTitleLabel.snp.makeConstraints({ (maker) in
+            maker.centerY.top.right.equalToSuperview()
+            maker.leftSpace(stackView).offset(8)
+        })
+        detailTitleLabel.contentHuggingHorizontalPriority = 249
     }
 }
 extension JDLabelCell {
     override func configCell(_ model: JDTableModel) {
         super.configCell(model)
-        guard let labelModel = model as? JDLabelModel else {
-            return
-        }
-        labelModel.configLayout(stackView,detailTitleLabel)
     }
     override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
@@ -32,6 +36,14 @@ extension JDLabelCell {
             return
         }
         labelModel.detailTitle.asObservable().bindTo(detailTitleLabel.rx.text).addDisposableTo(disposeBag)
-        labelModel.detailTitleLabelAppearanceClosure(detailTitleLabel)
+        self.configDetailLabel(detailTitleLabel)
+    }
+}
+extension JDLabelCell {
+    func configDetailLabel(_ detailTitleLabel:UILabel) {
+        detailTitleLabel.textColor = Color.gray
+        detailTitleLabel.font = Font.h4
+        detailTitleLabel.numberOfLines = 0
+        detailTitleLabel.textAlignment = .right
     }
 }

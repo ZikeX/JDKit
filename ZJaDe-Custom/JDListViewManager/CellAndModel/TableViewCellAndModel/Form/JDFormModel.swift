@@ -15,19 +15,12 @@ class JDFormModel: JDTableModel {
         self.title.value = title
         self.image.value = image
     }
-    
+    var accessoryType = Variable(UITableViewCellAccessoryType.none)
     var title:Variable<String?> = Variable(nil)
     var image:Variable<UIImage?> = Variable(nil)
     
-    var titleLabelAppearanceClosure:LabelAppearanceClosure = { (titleLabel) in
-        titleLabel.textColor = Color.black
-        titleLabel.font = Font.h3
-        titleLabel.numberOfLines = 1
-    }
-    var imageViewAppearanceClosure:ImgViewAppearanceClosure = { (imgView) in
-        
-    }
-
+    var layoutCellClosure:JDCellCompatibleType?
+    var bindingCellClosure:JDCellCompatibleType?
 }
 extension JDFormModel {
     var titleIsEmpty:Bool {

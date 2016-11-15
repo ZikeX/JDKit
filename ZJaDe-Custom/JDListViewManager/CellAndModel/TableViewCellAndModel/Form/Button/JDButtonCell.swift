@@ -27,9 +27,22 @@ extension JDButtonCell {
         guard let buttonModel = model as? JDButtonModel else {
             return
         }
+        self.configButton(button)
         buttonModel.title.asObservable().bindTo(button.textLabel.rx.text).addDisposableTo(disposeBag)
         buttonModel.image.asObservable().bindTo(button.imgView.rx.image).addDisposableTo(disposeBag)
-        buttonModel.buttonAppearanceClosure(button)
         button.rx.tap.bindTo(buttonModel.buttonClick).addDisposableTo(disposeBag)
+    }
+}
+extension JDButtonCell {
+    func configButton(_ button:Button) {
+        button.backgroundColor = Color.tintColor
+        button.cornerRadius = 5
+        button.tintColor = Color.white
+        button.textLabel.font = Font.h2
+        button.addHeightedShadowAnimate()
+    }
+    override func configCellAppear() {
+        super.configCellAppear()
+        self.backgroundColor = Color.clear
     }
 }

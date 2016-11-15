@@ -16,21 +16,5 @@ class JDTextViewModel: JDEntryModel {
         self.needCalculateCellHeight = false
         self.cellHeight = 110
     }
-    var textViewAppearanceClosure:TextViewAppearanceClosure = { (textView) in
-        textView.backgroundColor = Color.viewBackground
-        textView.cornerRadius = 5
-        textView.font = Font.h3
-        textView.textColor = Color.black
-    }
     var contentSizeChanged = PublishSubject<(PlaceholderTextView,CGSize)>()
-    
-    var configLayout:TextViewCellLayoutClosure = { (stackView,textView) in
-        stackView.snp.makeConstraints { (maker) in
-            maker.top.equalToSuperview()
-        }
-        textView.snp.makeConstraints({ (maker) in
-            maker.top.right.bottom.equalToSuperview()
-            maker.leftSpace(stackView).offset(8)
-        })
-    }
 }

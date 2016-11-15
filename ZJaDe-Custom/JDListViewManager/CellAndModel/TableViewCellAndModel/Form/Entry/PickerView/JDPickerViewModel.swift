@@ -33,19 +33,7 @@ class JDPickerViewModel: JDTextFieldModel {
     }
     var dataSource = JDPickerViewModelDataSource()
     
-    var pickerViewAppearanceClosure:PickerViewAppearanceClosure?
     var selectComponentsAndRows = [Int:Int]()
-    
-    override func configModelInit() {
-        super.configModelInit()
-        let oldClosure = textFieldAppearanceClosure
-        textFieldAppearanceClosure = { (textField) in
-            oldClosure(textField)
-            textField.clearButtonMode = .never
-            textField.leftViewMode = .never
-            textField.rightViewMode = .never
-        }
-    }
 }
 class JDPickerViewModelDataSource:NSObject,UIPickerViewDelegate,UIPickerViewDataSource {
     weak var pickViewModel:JDPickerViewModel!

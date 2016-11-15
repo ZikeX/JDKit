@@ -16,15 +16,18 @@ class JDTextViewCell: JDEntryCell {
         self.jdFocusView = textView
         jdContentView.addSubview(textView)
         
+        stackView.snp.makeConstraints { (maker) in
+            maker.top.equalToSuperview()
+        }
+        textView.snp.makeConstraints({ (maker) in
+            maker.top.right.bottom.equalToSuperview()
+            maker.leftSpace(stackView).offset(8)
+        })
     }
 }
 extension JDTextViewCell {
     override func configCell(_ model: JDTableModel) {
         super.configCell(model)
-        guard let model = model as? JDTextViewModel else {
-            return
-        }
-        model.configLayout(stackView,textView)
     }
     
     override func bindingModel(_ model: JDTableModel) {
@@ -32,7 +35,7 @@ extension JDTextViewCell {
         guard let model = model as? JDTextViewModel else {
             return
         }
-        model.textViewAppearanceClosure(textView)
+        self.configTextView(textView)
         model.contentSizeChanged.bindTo(textView.contentSizeChanged).addDisposableTo(disposeBag)
         
         model.text.asObservable().bindTo(textView.rx.text).addDisposableTo(disposeBag)
@@ -41,5 +44,11 @@ extension JDTextViewCell {
         model.placeholder.asObservable().subscribe { (event) in
             self.textView.placeholder = event.element ?? ""
         }.addDisposableTo(disposeBag)
+    }
+    func configTextView(_ textView:PlaceholderTextView) {
+        textView.backgroundColor = Color.viewBackground
+        textView.cornerRadius = 5
+        textView.font = Font.h3
+        textView.textColor = Color.black
     }
 }

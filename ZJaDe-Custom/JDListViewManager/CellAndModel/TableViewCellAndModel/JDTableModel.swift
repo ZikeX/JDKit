@@ -35,9 +35,5 @@ class JDTableModel:JDListModel {
     // MARK: -
     var cellSelectedBackgroundView = UIView()
     var cellSelectedBackgroundColor:UIColor? = Color.selectedCell
-    
-    var cellAppearanceClosure:CellAppearanceClosure = { (cell) in
-        
-    }
     // MARK: -
 }

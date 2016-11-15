@@ -24,29 +24,5 @@ class JDDoubleTextFieldModel: JDTextFieldModel {
         self.secondPlaceholder.value = secondPlaceholder
         self.intervalText = intervalText
         
-        self.textFieldAppearanceClosure = { (textField) in
-            textField.backgroundColor = Color.viewBackground
-            textField.textAlignment = .center
-        }
-    }
-    
-    var configDoubleTextFieldCellLayout:DoubleTextFieldCellLayoutClosure = { (stackView,textField,intervalLabel,secondTextField) in
-        [stackView,textField,intervalLabel,secondTextField].forEach { (view) in
-            view.snp.makeConstraints { (maker) in
-                maker.top.centerY.equalToSuperview()
-            }
-        }
-        textField.snp.makeConstraints({ (maker) in
-            maker.leftSpace(stackView).offset(8)
-        })
-        intervalLabel.snp.makeConstraints({ (maker) in
-            maker.leftSpace(textField).offset(8)
-        })
-        intervalLabel.contentHuggingHorizontalPriority = UILayoutPriorityRequired
-        secondTextField.snp.makeConstraints({ (maker) in
-            maker.right.equalToSuperview()
-            maker.width.equalTo(textField)
-            maker.leftSpace(intervalLabel).offset(8)
-        })
     }
 }

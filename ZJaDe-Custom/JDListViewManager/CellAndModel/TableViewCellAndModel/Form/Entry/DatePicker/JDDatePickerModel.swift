@@ -12,16 +12,4 @@ class JDDatePickerModel: JDTextFieldModel {
     
     var dateFormat: String?
     
-    var datePickerAppearanceClosure:DatePickerAppearanceClosure?
-    
-    override func configModelInit() {
-        super.configModelInit()
-        let oldClosure = textFieldAppearanceClosure
-        textFieldAppearanceClosure = { (textField) in
-            oldClosure(textField)
-            textField.clearButtonMode = .never
-            textField.leftViewMode = .never
-            textField.rightViewMode = .never
-        }
-    }
 }

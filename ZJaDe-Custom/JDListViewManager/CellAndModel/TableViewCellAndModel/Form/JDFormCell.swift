@@ -50,13 +50,18 @@ extension JDFormCell {
         guard let formModel = model as? JDFormModel else {
             return
         }
+        formModel.accessoryType.asObservable().subscribe { (event) in
+            if let accessoryType = event.element {
+                self.accessoryType = accessoryType
+            }
+        }.addDisposableTo(disposeBag)
+        self.configCellAppear()
         if !formModel.imageIsEmpty {
             formModel.image.asObservable().bindTo(imgView.rx.image).addDisposableTo(disposeBag)
-            formModel.imageViewAppearanceClosure(imgView)
         }
         if !formModel.titleIsEmpty {
             formModel.title.asObservable().bindTo(titleLabel.rx.text).addDisposableTo(disposeBag)
-            formModel.titleLabelAppearanceClosure(titleLabel)
+            configTitleLabel(titleLabel: titleLabel)
         }
     }
     override func didBindingModel(_ model: JDTableModel) {
@@ -68,6 +73,17 @@ extension JDFormCell {
                 maker.height.equalTo(titleLabel.intrinsicContentSize.height)
             })
         }
+    }
+}
+extension JDFormCell {
+    func configTitleLabel(titleLabel:UILabel) {
+        titleLabel.textAlignment = .center
+        titleLabel.textColor = Color.black
+        titleLabel.font = Font.h3
+        titleLabel.numberOfLines = 1
+    }
+    func configCellAppear() {
+        
     }
 }
 extension JDFormCell {//cell第一响应者 焦点View

@@ -26,7 +26,6 @@ extension JDPickerViewCell {
             pickerView.delegate = pickerViewModel.dataSource
             pickerView.dataSource = pickerViewModel.dataSource
         }
-        pickerViewModel.pickerViewAppearanceClosure?(pickerView)
         textField.rx.controlEvent(.editingDidBegin).subscribe { (event) in
             pickerViewModel.selectComponentsAndRows.forEach { (component, row) in
                 self.pickerView.selectRow(row, inComponent: component, animated: false)
@@ -36,6 +35,12 @@ extension JDPickerViewCell {
         self.pickerView.rx.itemSelected.subscribe { (event) in
             self.setTextFieldText(pickerViewModel)
         }.addDisposableTo(disposeBag)
+    }
+    override func configTextField(_ textField: ComposeTextField) {
+        super.configTextField(textField)
+        textField.clearButtonMode = .never
+        textField.leftViewMode = .never
+        textField.rightViewMode = .never
     }
 }
 
