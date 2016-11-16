@@ -8,11 +8,13 @@
 
 import UIKit
 @IBDesignable
-class CustomIBControl: UIControl {
+class CustomIBControl: UIControl,CustomIBProtocol {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configInit()
+        self.configInit()
+        self.viewDidLoad()
+        self.configNeedUpdate()
     }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -20,9 +22,13 @@ class CustomIBControl: UIControl {
     }
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.viewDidLoad()
+        self.configNeedUpdate()
     }
     func configInit() {
         
     }
-
+    func viewDidLoad() {
+        
+    }
 }

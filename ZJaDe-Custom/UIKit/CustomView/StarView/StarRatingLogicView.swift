@@ -41,8 +41,11 @@ class StarRatingLogicView: CustomIBView {
     
     override func configInit() {
         super.configInit()
-        updateImageViewArray()
         self.isUserInteractionEnabled = isEnabled
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        updateImageViewArray()
     }
     
     override func layoutSubviews() {

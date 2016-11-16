@@ -8,12 +8,13 @@
 
 import UIKit
 @IBDesignable
-class CustomIBView: UIView {
+class CustomIBView: UIView,CustomIBProtocol {
 
     override init(frame:CGRect = CGRect()) {
         super.init(frame:frame)
         self.configInit()
         self.viewDidLoad()
+        self.configNeedUpdate()
     }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -22,14 +23,12 @@ class CustomIBView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         self.viewDidLoad()
+        self.configNeedUpdate()
     }
     func configInit() {
-        self.isOpaque = false
-        self.setNeedsUpdateConstraints()
-        self.setNeedsLayout()
+        
     }
     func viewDidLoad() {
         
     }
-
 }

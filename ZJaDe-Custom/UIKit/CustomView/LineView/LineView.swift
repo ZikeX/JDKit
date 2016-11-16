@@ -67,6 +67,7 @@ class LineView: CustomIBView {
     }
     
     override func configInit() {
+        super.configInit()
         self.layer.masksToBounds = true
         self.layer.addSublayer(self.shapeLayer)
     }

@@ -11,10 +11,10 @@ import RxCocoa
 import RxSwift
 
 enum TitleAndImgLocation:Int {
-    case leftToRight = 0
-    case rightToLeft = 1
-    case topToBottom = 2
-    case bottomToTop = 3
+    case leftToRight
+    case rightToLeft
+    case topToBottom
+    case bottomToTop
 }
 
 class Button: CustomIBControl {
@@ -28,9 +28,9 @@ class Button: CustomIBControl {
             }
         }
     }
-    lazy private(set) var stackView = UIStackView()
-    let textLabel = UILabel()
-    let imgView = ImageView()
+    var stackView = UIStackView()
+    var textLabel = UILabel()
+    var imgView = ImageView()
     
     var contentEdgeInsets = UIEdgeInsets()
     var titleAndImgLocation:TitleAndImgLocation {
@@ -105,7 +105,6 @@ class Button: CustomIBControl {
             self.layer.borderColor = tintColor.cgColor
         }
     }
-    @IBInspectable var IBSize:CGSize = CGSize()
 
     // MARK: -
     //如果 title或者image为空，代表没有对应的Label或者imgView
@@ -121,6 +120,9 @@ class Button: CustomIBControl {
     override func configInit() {
         super.configInit()
         configStackView()
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
         observeConfig()
     }
 }
@@ -140,10 +142,11 @@ extension Button {
         return firstIsEqual && secondIsEqual
     }
 }
+import SnapKit
+
 extension Button {
     func configSubViews(element:(UIImage?,String?)?) {
         self.removeAllSubviews()
-        self.stackView.removeAllSubviews()
         switch element {
         case (nil,nil)?,nil:
             break
@@ -158,27 +161,25 @@ extension Button {
         self.contentView = self.subviews.first
     }
     func layoutContentView() {
-        self.contentView?.snp.makeConstraints({ (maker) in
+        self.contentView?.snp.remakeConstraints({ (maker) in
             switch self.contentHorizontalAlignment {
             case .center:
                 maker.centerX.equalToSuperview()
-                maker.left.greaterThanOrEqualTo(self)
-                maker.right.lessThanOrEqualTo(self)
+                maker.left.greaterThanOrEqualToSuperview()
             case .fill:
                 maker.left.equalToSuperview()
                 maker.right.equalToSuperview()
             case .left:
                 maker.left.equalToSuperview()
-                maker.right.lessThanOrEqualTo(self)
+                maker.right.lessThanOrEqualToSuperview()
             case .right:
-                maker.left.greaterThanOrEqualTo(self)
+                maker.left.greaterThanOrEqualToSuperview()
                 maker.right.equalToSuperview()
             }
             switch self.contentVerticalAlignment {
             case .center:
                 maker.centerY.equalToSuperview()
-                maker.top.greaterThanOrEqualTo(self)
-                maker.bottom.lessThanOrEqualTo(self)
+                maker.top.greaterThanOrEqualToSuperview()
             case .fill:
                 maker.top.equalToSuperview()
                 maker.bottom.equalToSuperview()
@@ -191,45 +192,39 @@ extension Button {
             }
         })
     }
-    
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         return self.intrinsicContentSize
     }
     override var intrinsicContentSize:CGSize {
-        #if TARGET_INTERFACE_BUILDER
-            if self.IBSize != CGSize() {
-                return self.IBSize
-            }else {
-                return CGSize(width: 70, height: 30)
-            }
-        #endif
-        var width:CGFloat = contentEdgeInsets.left + contentEdgeInsets.right
-        var height:CGFloat = contentEdgeInsets.top + contentEdgeInsets.bottom
+//        #if TARGET_INTERFACE_BUILDER
+//            return CGSize(width: 70, height: 30)
+//        #endif
         
-        switch (self.img,self.textStr) {
+        var jdwidth:CGFloat = contentEdgeInsets.left + contentEdgeInsets.right
+        var jdheight:CGFloat = contentEdgeInsets.top + contentEdgeInsets.bottom
+        
+        let titleSize = textLabel.intrinsicContentSize
+        let imageSize = imgView.intrinsicContentSize
+        switch (self.imgView.image,self.textLabel.text) {
         case (nil,nil):
             return CGSize(width: 60, height: 30)
         case (nil,_):
-            let titleSize = textLabel.intrinsicContentSize
-            width = width + titleSize.width
-            height = height + titleSize.height
+            jdwidth += titleSize.width
+            jdheight += titleSize.height
         case (_,nil):
-            let imageSize = imgView.intrinsicContentSize
-            width += imageSize.width
-            height += imageSize.height
-        case (_,_):
-            let imageSize = imgView.intrinsicContentSize
-            let titleSize = textLabel.intrinsicContentSize
+            jdwidth += imageSize.width
+            jdheight += imageSize.height
+        default:
             switch self.stackView.axis {
             case .horizontal:
-                width = imageSize.width + titleSize.width + stackView.spacing
-                height = max(imageSize.height,titleSize.height)
+                jdwidth += imageSize.width + titleSize.width + stackView.spacing
+                jdheight += max(imageSize.height,titleSize.height)
             case .vertical:
-                height = imageSize.height + titleSize.height + stackView.spacing
-                width = max(imageSize.width,titleSize.width)
+                jdwidth += max(imageSize.width,titleSize.width)
+                jdheight += imageSize.height + titleSize.height + stackView.spacing
             }
         }
-        return CGSize(width: width, height: height)
+        return CGSize(width: jdwidth, height: jdheight)
     }
 }
 extension Button {
@@ -247,10 +242,15 @@ extension Button {
         .bottomToTop:(false,.vertical)]
     }
     func addAndSortStackSubViews() {
-        let titleIndex = titleInLeading ? 0 : 1
-        let imageIndex = titleInLeading ? 1 : 0
-        self.stackView.insertArrangedSubview(self.textLabel, at: titleIndex)
-        self.stackView.insertArrangedSubview(self.imgView, at: imageIndex)
+        self.stackView.removeAllSubviews()
+        if titleInLeading {
+            self.stackView.addArrangedSubview(self.textLabel)
+            self.stackView.addArrangedSubview(self.imgView)
+        }else {
+            self.stackView.addArrangedSubview(self.imgView)
+            self.stackView.addArrangedSubview(self.textLabel)
+            
+        }
     }
 }
 extension Reactive where Base: Button {
