@@ -52,11 +52,11 @@ extension UIViewController {
     }
 }
 
-private var jd_navBarIsHiddenKey = 0
-private var jd_navBarTintColorKey = 0
-private var jd_navTintColorKey = 0
-private var jd_navBarAlphaKey = 0
-private var jd_navBarShadowColorKey = 0
+private var jd_navBarIsHiddenKey: UInt8 = 0
+private var jd_navBarTintColorKey: UInt8 = 0
+private var jd_navTintColorKey: UInt8 = 0
+private var jd_navBarAlphaKey: UInt8 = 0
+private var jd_navBarShadowColorKey: UInt8 = 0
 
 extension UIViewController:NavigationItemProtocol {
     

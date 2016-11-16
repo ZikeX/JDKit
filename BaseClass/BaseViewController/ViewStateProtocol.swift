@@ -32,7 +32,7 @@ protocol ViewStateProtocol {
     var viewState:RootViewState {get set}
     func configInitAboutViewState()
 }
-private var jd_viewStateKey = 0
+private var jd_viewStateKey: UInt8 = 0
 extension UIViewController:ViewStateProtocol {
     var viewState: RootViewState {
         get {

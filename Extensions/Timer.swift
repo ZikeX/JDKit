@@ -11,6 +11,7 @@ import Foundation
 typealias TimerExecuteClosure = (Timer?)->()
 
 extension Timer {
+    @discardableResult
     class func timer(_ timeInterval:TimeInterval,repeats:Bool = true,_ closure:@escaping TimerExecuteClosure) -> Timer {
         let seconds:CFAbsoluteTime = max(timeInterval,0.0001)
         let interval:CFAbsoluteTime = repeats ? seconds : 0
@@ -18,6 +19,7 @@ extension Timer {
         let timer = CFRunLoopTimerCreateWithHandler(nil, fireDate, interval, 0, 0,  closure)
         return timer!
     }
+    @discardableResult
     class func scheduleTimer(_ timeInterval:TimeInterval,repeats:Bool = true,_ closure:@escaping TimerExecuteClosure) -> Timer {
         let timer = Timer.timer(timeInterval, repeats: repeats, closure)
         RunLoop.current.add(timer, forMode: .defaultRunLoopMode)

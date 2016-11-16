@@ -1,7 +1,7 @@
 
 import UIKit
-private var jd_panKey = 0
-private var jd_tapKey = 0
+private var jd_panKey: UInt8 = 0
+private var jd_tapKey: UInt8 = 0
 extension UIView {
     func getPan() -> UIPanGestureRecognizer {
         if let pan = objc_getAssociatedObject(self, &jd_panKey) as? UIPanGestureRecognizer {

@@ -19,6 +19,7 @@ extension ThenProtocol where Self:Any {
     }
 }
 extension ThenProtocol where Self:AnyObject {
+    @discardableResult
     func then(_ closure: (Self) -> ()) -> Self {
         closure(self)
         return self
