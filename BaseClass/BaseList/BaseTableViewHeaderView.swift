@@ -15,6 +15,12 @@ class BaseTableViewHeaderView: UIView {
         let stackView = UIStackView(axis: .vertical, alignment: .center, spacing: 10)
         return stackView
     }()
+    // MARK: - 子控件
+    lazy var segmentedControl:SegmentedControl = {
+        let segmentedControl = SegmentedControl(style:.wavyLine)
+        return segmentedControl
+    }()
+    // MARK: -
     init() {
         super.init(frame: CGRect())
         configInit()
@@ -38,13 +44,13 @@ class BaseTableViewHeaderView: UIView {
         stackView.edgesToView()
     }
     
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        if let result = super.hitTest(point, with: event),
-            result != self {
-            return result
-        }else {
-            return nil
-        }
-    }
+//    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+//        if let result = super.hitTest(point, with: event),
+//            result != self {
+//            return result
+//        }else {
+//            return nil
+//        }
+//    }
 
 }

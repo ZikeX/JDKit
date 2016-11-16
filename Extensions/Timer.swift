@@ -6,18 +6,21 @@
 //  Copyright © 2016年 Z_JaDe. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-public typealias TimerExcuteClosure = @convention(block) ()->()
+typealias TimerExecuteClosure = (Timer?)->()
 
-extension Timer{
-    
-    public class func jd_scheduledTimerWithTimeInterval(ti:TimeInterval, closure:TimerExcuteClosure, repeats yesOrNo: Bool) -> Timer{
-        return self.scheduledTimer(timeInterval: ti, target: self, selector: #selector(excuteTimerClosure(timer:)), userInfo: unsafeBitCast(closure, to: AnyObject.self), repeats: true)
+extension Timer {
+    class func timer(_ timeInterval:TimeInterval,repeats:Bool = true,_ closure:@escaping TimerExecuteClosure) -> Timer {
+        let seconds:CFAbsoluteTime = max(timeInterval,0.0001)
+        let interval:CFAbsoluteTime = repeats ? seconds : 0
+        let fireDate:CFAbsoluteTime = CFAbsoluteTimeGetCurrent() + seconds
+        let timer = CFRunLoopTimerCreateWithHandler(nil, fireDate, interval, 0, 0,  closure)
+        return timer!
     }
-    
-    class func excuteTimerClosure(timer: Timer) {
-        let closure = unsafeBitCast(timer.userInfo, to: TimerExcuteClosure.self)
-        closure()
+    class func scheduleTimer(_ timeInterval:TimeInterval,repeats:Bool = true,_ closure:@escaping TimerExecuteClosure) -> Timer {
+        let timer = Timer.timer(timeInterval, repeats: repeats, closure)
+        RunLoop.current.add(timer, forMode: .defaultRunLoopMode)
+        return timer
     }
 }

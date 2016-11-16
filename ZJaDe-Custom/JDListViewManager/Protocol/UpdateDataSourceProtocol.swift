@@ -69,17 +69,17 @@ extension UpdateDataSourceProtocol {
         
     }
 }
-private var JDTableViewRunloopObserverKey: UInt8 = 0
+private var JDTableViewRunloopTimerKey: UInt8 = 0
 extension JDTableViewModel:UpdateDataSourceProtocol {
     var listView: SectionedViewType? {
         return self.tableView
     }
-    var runloopObserver:CFRunLoopObserver? {
+    var timer:Timer? {
         get {
-            return objc_getAssociatedObject(self, &JDTableViewRunloopObserverKey) as! CFRunLoopObserver?
+            return objc_getAssociatedObject(self, &JDTableViewRunloopTimerKey) as! Timer?
         }
         set {
-            objc_setAssociatedObject(self, &JDTableViewRunloopObserverKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &JDTableViewRunloopTimerKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     
@@ -96,27 +96,18 @@ extension JDTableViewModel:UpdateDataSourceProtocol {
         self.sectionModelsChanged.asObservable().bindTo(self.tableView.rx.items(dataSource: rxDataSource)).addDisposableTo(disposeBag)
     }
     func calculateItemHeight() {
-        var indexPaths = [IndexPath]()
-        for (i,(_,models)) in self.dataArray.enumerated() {
-            for (j,_) in models.enumerated() {
-                    indexPaths.append(IndexPath(item: j, section: i))
-            }
+        
+        var models = self.dataArray.flatMap { (section,models) -> [JDTableModel] in
+            return models
         }
-        jd.removeRunLoopObserver(observer: self.runloopObserver)
-        self.runloopObserver = jd.runWhenBeforeWaiting { () -> (Bool) in
-            let indexPath = indexPaths.first
-            if indexPath != nil {
-                indexPaths.removeFirst()
-                self.perform(#selector(self.calculateCellHeight), on: Thread.main, with: indexPath!, waitUntilDone: false,modes:[RunLoopMode.defaultRunLoopMode.rawValue])
-                return false
+        self.timer?.invalidate()
+        self.timer = Timer.scheduleTimer(0.01) { (timer) in
+            if models.count > 0 {
+                let model = models.removeFirst()
+                _ = model.calculateCellHeight(self.tableView)
             }else {
-                return true
+                timer?.invalidate()
             }
-        }
-    }
-    func calculateCellHeight(indexPath:IndexPath) {
-        if let model = (try? self.rxDataSource.model(at: indexPath)) as? JDTableModel {
-            _ = model.calculateCellHeight(self.tableView)
         }
     }
     func configDelegate() {
