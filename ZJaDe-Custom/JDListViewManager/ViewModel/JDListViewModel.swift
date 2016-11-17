@@ -11,4 +11,12 @@ import RxSwift
 
 class JDListViewModel: NSObject {
     let disposeBag = DisposeBag()
+    
+    override init() {
+        super.init()
+        self.configInit()
+    }
+    func configInit() {
+        
+    }
 }

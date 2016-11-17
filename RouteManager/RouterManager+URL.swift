@@ -25,6 +25,8 @@ enum RouteUrl {
     case route_我的店铺_tabbarVC(index:Int)
     case route_我的店铺_店铺活动
     
+    case route_钱包
+    
     case route_优惠券_查看
     case route_优惠券_编辑
     case route_优惠券_详情
@@ -93,6 +95,10 @@ extension RouterManager {
             return viewCon
         case .route_我的店铺_店铺活动:
             let viewCon = JDShopActivityViewController()
+            return viewCon
+            
+        case .route_钱包:
+            let viewCon = JDMoneyViewController()
             return viewCon
             
         case .route_优惠券_查看:

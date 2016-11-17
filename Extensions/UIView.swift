@@ -257,6 +257,18 @@ extension UIView {
             self.layer.borderWidth = newValue
         }
     }
+    @IBInspectable var hasShadow:Bool {
+        get {
+            return self.layer.shadowOpacity > 0
+        }
+        set {
+            if newValue {
+                self.addShadowInWhiteView()
+            }else {
+                self.layer.shadowOpacity = 0
+            }
+        }
+    }
     var backgroundColorAlpha:CGFloat {
         get {
             var a: CGFloat = 0

@@ -28,8 +28,12 @@ class RouterManager {
     // MARK: -
     /// ZJaDe: completion只有在present时有用
     private static func show(_ routeType:RouteType, _ routeUrl:RouteUrl, _ completion:(()->Void)?) {
-        let viewController = createVC(routeUrl: routeUrl)
         let currentNavc = jd.currentNavC
+        
+//        guard checkCanJump(currentNavc) else {
+//            return
+//        }
+        let viewController = createVC(routeUrl: routeUrl)
         switch routeType {
         case .popAndPush(let count):
             currentNavc.popAndPush(count: count, pushVC: viewController, animated: true)
@@ -44,5 +48,18 @@ class RouterManager {
             }
             currentNavc.present(viewCon, animated: true, completion: completion)
         }
+    }
+    static func checkCanJump(_ navC:UINavigationController) -> Bool {
+        let currentVC:UIViewController?
+        let topVC = navC.topViewController
+        if let topVC = topVC as? UITabBarController {
+            currentVC = topVC.selectedViewController
+        }else {
+            currentVC = topVC
+        }
+        if currentVC is BasePreviewViewController {
+            return false
+        }
+        return true
     }
 }

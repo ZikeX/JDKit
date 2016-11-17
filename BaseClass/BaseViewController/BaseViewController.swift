@@ -52,6 +52,8 @@ class BaseViewController: UIViewController {
     func cacelVC() {
         self.navigationController?.dismissVC()
     }
+    // MARK: - 
+    lazy var transitionVC:TransitionViewController = TransitionViewController()
     // MARK: -
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
@@ -65,5 +67,13 @@ class BaseViewController: UIViewController {
         self.baseVCConfigInit()
     }
 }
-
+extension BaseViewController {
+    func addTransitionVC(edgesToFill:Bool = false) {
+        self.transitionVC.edgesToVC(self, edgesToFill: edgesToFill)
+        self.configTransitionVC(edgesToFill: edgesToFill)
+    }
+    func configTransitionVC(edgesToFill: Bool) {
+            
+    }
+}
 

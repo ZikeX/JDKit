@@ -39,8 +39,6 @@ extension JDFormCell {
         }
         if !formModel.imageIsEmpty {
             stackView.addArrangedSubview(imgView)
-            let imageSize = formModel.image.value!.size
-            imgView.width_height(scale: imageSize.width / imageSize.height)
         }
         if !formModel.titleIsEmpty {
             stackView.addArrangedSubview(titleLabel)
@@ -69,8 +67,10 @@ extension JDFormCell {
             return
         }
         if !formModel.titleIsEmpty && !formModel.imageIsEmpty {
-            imgView.snp.makeConstraints({ (maker) in
+            imgView.snp.remakeConstraints({ (maker) in
+                let imageSize = formModel.image.value!.size
                 maker.height.equalTo(titleLabel.intrinsicContentSize.height)
+                maker.width_height(scale: imageSize.width / imageSize.height)
             })
         }
     }
