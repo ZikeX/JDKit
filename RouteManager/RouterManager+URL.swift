@@ -26,6 +26,8 @@ enum RouteUrl {
     case route_我的店铺_店铺活动
     
     case route_钱包
+    case route_收入记录
+    case route_支出记录
     
     case route_优惠券_查看
     case route_优惠券_编辑
@@ -100,6 +102,12 @@ extension RouterManager {
         case .route_钱包:
             let viewCon = JDMoneyViewController()
             return viewCon
+        case .route_收入记录:
+            let viewCon = JDMoneyRecordViewController(.show)
+            return viewCon
+        case .route_支出记录:
+            let viewCon = JDMoneyRecordViewController(.zhi)
+            return viewCon
             
         case .route_优惠券_查看:
             let viewCon = JDShowCouponsViewController()
@@ -111,7 +119,7 @@ extension RouterManager {
             let viewCon = JDCouponsDetailViewController()
             return viewCon
         case .route_优惠券_添加:
-            let viewCon = JDAddCouponsViewController(viewModel: JDAddCouponsListViewModel())
+            let viewCon = JDAddCouponsViewController()
             return viewCon
         case .route_满减活动_列表:
             let viewCon = JDFullReductionViewController()

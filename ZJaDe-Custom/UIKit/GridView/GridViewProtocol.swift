@@ -3,7 +3,7 @@
 //  ZiWoYou
 //
 //  Created by ZJaDe on 16/11/1.
-//  Copyright © 2016年 Z_JaDe. All rights reserved.
+//  Copyright © 2016 Z_JaDe. All rights reserved.
 //
 
 import UIKit
