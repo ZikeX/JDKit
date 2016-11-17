@@ -9,6 +9,6 @@
 import UIKit
 
 protocol PriceCellProtocol {
-    func setPriceLabelText(price:CGFloat)
+    func setPriceLabelText(price:Price)
 }
 

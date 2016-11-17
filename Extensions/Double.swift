@@ -3,9 +3,6 @@
 import Foundation
 
 extension Double {
-    var toString: String { return String(self) }
-    var toInt: Int { return Int(self) }
-
     /// ZJaDe: 返回一个四舍五入保留places位的小数
     func getRoundedByPlaces(_ places: Int) -> Double {
         let divisor = pow(10.0, Double(places)) as Double

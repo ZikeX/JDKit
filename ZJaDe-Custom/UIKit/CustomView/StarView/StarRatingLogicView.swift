@@ -14,7 +14,7 @@ class StarRatingLogicView: CustomIBView {
     let starImageSelected:UIImage = R.image.ic_star_selected()!
     let starImageUnSelected:UIImage = R.image.ic_star_unSelected()!
     
-    @IBInspectable var score:CGFloat = 0.0 {
+    @IBInspectable var score:Score = 0.0 {
         didSet {
             self.setNeedsLayout()
         }
@@ -50,15 +50,16 @@ class StarRatingLogicView: CustomIBView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        let selectScore = Int(self.score)
-        let percentScore = self.score - CGFloat(selectScore)
+        let scoreValue = self.score.value
+        let selectScore = scoreValue.floor().toInt
+        let percentScore = scoreValue.truncatingRemainder(dividingBy: 1.0)
         for (index,imageView) in imageViewArray.enumerated() {
             if index < selectScore {
                 imageView.image = self.starImageSelected
             }else {
                 imageView.image = self.starImageUnSelected
                 if index == selectScore {
-                    self.setImagePercent(percentScore: percentScore, imageView: imageView)
+                    self.setImagePercent(percentScore: percentScore.toCGFloat, imageView: imageView)
                 }
             }
         }
@@ -101,7 +102,7 @@ extension StarRatingLogicView {
         func gestureRecognizerHandle(gestureRecognizer:UIGestureRecognizer) {
             if isEnabled {
                 let positionX = gestureRecognizer.location(in: self).x
-                self.score = positionX / self.width * 5
+                self.score.value = (positionX / self.width * 5).toDouble
             }
         }
         let panObservable = self.getPan().rx.event

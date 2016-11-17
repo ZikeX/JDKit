@@ -87,44 +87,7 @@ extension String {
         return false
     }
 }
-extension String {
-    var toNSString: NSString {
-        return self as NSString
-    }
-    
-    func toInt() -> Int? {
-        if let num = NumberFormatter().number(from: self) {
-            return num.intValue
-        } else {
-            return nil
-        }
-    }
-    func toDouble() -> Double? {
-        if let num = NumberFormatter().number(from: self) {
-            return num.doubleValue
-        } else {
-            return nil
-        }
-    }
-    func toFloat() -> Float? {
-        if let num = NumberFormatter().number(from: self) {
-            return num.floatValue
-        } else {
-            return nil
-        }
-    }
-    func toBool() -> Bool? {
-        let trimmed = self.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines).lowercased()
-        switch trimmed {
-        case "true","1","yes":
-            return true
-        case "false","0","no":
-            return false
-        default:
-            return nil
-        }
-    }
-}
+
 extension String {
     /// ZJaDe: 提取所有URl
     var extractURLs: [URL] {

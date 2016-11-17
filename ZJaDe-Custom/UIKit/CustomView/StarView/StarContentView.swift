@@ -19,7 +19,7 @@ class StarContentView: CustomIBView {
             self.prefixLabel.text = prefix
         }
     }
-    @IBInspectable var score:CGFloat = 0 {
+    @IBInspectable var score:Score = 0 {
         didSet {
             self.suffixLabel.text = "\(score)分"
             self.starView.score = score

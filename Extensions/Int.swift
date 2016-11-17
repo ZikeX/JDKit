@@ -14,21 +14,6 @@ extension Int {
     /// ZJaDe: Checks if the integer is negative.
     var isNegative: Bool { return (self < 0) }
 
-    /// ZJaDe: Converts integer value to Double.
-    var toDouble: Double { return Double(self) }
-
-    /// ZJaDe: Converts integer value to Float.
-    var toFloat: Float { return Float(self) }
-
-    /// ZJaDe: Converts integer value to CGFloat.
-    var toCGFloat: CGFloat { return CGFloat(self) }
-
-    /// ZJaDe: Converts integer value to String.
-    var toString: String { return String(self) }
-
-    /// ZJaDe: Converts integer value to UInt.
-    var toUInt: UInt { return UInt(self) }
-
     /// ZJaDe: Converts integer value to a 0..<Int range. Useful in for loops.
     var range: CountableRange<Int> { return 0..<self }
 
@@ -43,9 +28,4 @@ extension Int {
         }
     }
 
-}
-
-extension UInt {
-    /// ZJaDe: Convert UInt to Int
-    var toInt: Int { return Int(self) }
 }
