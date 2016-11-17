@@ -30,7 +30,7 @@ class Button: CustomIBControl {
     }
     var stackView = UIStackView()
     var textLabel = UILabel()
-    var imgView = ImageView()
+    @IBInspectable var imgView = ImageView()
     
     var contentEdgeInsets = UIEdgeInsets()
     var titleAndImgLocation:TitleAndImgLocation {
@@ -51,23 +51,18 @@ class Button: CustomIBControl {
     }
     // MARK: - @IBInspectable
     @IBInspectable var textStr:String? {
-        get {
-            return self.textLabel.text
-        }
-        set {
-            self.textLabel.text = newValue
+        didSet {
+            self.updateText()
         }
     }
     @IBInspectable var img:UIImage? {
-        get {
-            return self.imgView.image
+        didSet {
+            self.updateImg()
         }
-        set {
-            if isTemplate {
-                self.imgView.image = newValue?.templateImage
-            }else {
-                self.imgView.image = newValue
-            }
+    }
+    @IBInspectable var isTemplate: Bool? {
+        didSet {
+            self.updateImg()
         }
     }
     @IBInspectable var labelFont:Int = 0 {
@@ -83,7 +78,6 @@ class Button: CustomIBControl {
             self.stackView.spacing = newValue
         }
     }
-    @IBInspectable var isTemplate: Bool = false
     
     @IBInspectable var titleInLeading: Bool = true {
         didSet {
@@ -98,24 +92,14 @@ class Button: CustomIBControl {
             self.stackView.axis = newValue ? .horizontal : .vertical
         }
     }
-    @IBInspectable override var tintColor: UIColor! {
-        didSet {
-            self.textLabel.textColor = tintColor
-            self.imgView.tintColor = tintColor
-            self.layer.borderColor = tintColor.cgColor
-        }
-    }
 
     // MARK: -
     //如果 title或者image为空，代表没有对应的Label或者imgView
-    convenience init(title:String? = nil,image:UIImage? = nil) {
+    convenience init(title:String? = nil,image:UIImage? = nil,isTemplate:Bool = false) {
         self.init(frame:CGRect())
-        self.textLabel.text = title
-        if isTemplate {
-            self.imgView.image = image?.templateImage
-        }else {
-            self.imgView.image = image
-        }
+        self.textStr = title
+        self.img = image
+        self.isTemplate = isTemplate
     }
     override func configInit() {
         super.configInit()
@@ -123,7 +107,28 @@ class Button: CustomIBControl {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.updateImg()
+        self.updateText()
         observeConfig()
+    }
+}
+extension Button {
+    func updateText() {
+        self.textLabel.text = self.textStr
+    }
+    func updateImg() {
+        if isTemplate == true {
+            self.imgView.image = self.img?.templateImage
+        }else {
+            self.imgView.image = self.img?.originalImage
+        }
+    }
+    @IBInspectable override var tintColor: UIColor! {
+        didSet {
+            self.textLabel.textColor = tintColor
+            self.imgView.tintColor = tintColor
+            self.layer.borderColor = tintColor.cgColor
+        }
     }
 }
 extension Button {
@@ -142,7 +147,6 @@ extension Button {
         return firstIsEqual && secondIsEqual
     }
 }
-import SnapKit
 
 extension Button {
     func configSubViews(element:(UIImage?,String?)?) {
@@ -205,7 +209,7 @@ extension Button {
         
         let titleSize = textLabel.intrinsicContentSize
         let imageSize = imgView.intrinsicContentSize
-        switch (self.imgView.image,self.textLabel.text) {
+        switch (self.img,self.textStr) {
         case (nil,nil):
             return CGSize(width: 60, height: 30)
         case (nil,_):

@@ -30,3 +30,10 @@ class SwiftTimer {
         }
     }
 }
+extension SwiftTimer {
+    /// ZJaDe: 延时调用
+    static func asyncAfter(seconds: Double, queue: DispatchQueue = .main, after: @escaping ()->()) {
+        let time = DispatchTime.now() + Double(Int64(seconds * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+        queue.asyncAfter(deadline: time, execute: after)
+    }
+}

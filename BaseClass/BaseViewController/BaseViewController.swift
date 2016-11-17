@@ -14,7 +14,7 @@ class BaseViewController: UIViewController {
     let disposeBag = DisposeBag()
     // MARK: - Button
     lazy var messageButton:Button = {
-        let button = Button(image:R.image.ic_home_消息()?.templateImage)
+        let button = Button(image:R.image.ic_home_消息(),isTemplate:true)
         button.tintColor = Color.black
         button.sizeToFit()
         _ = button.rx.tap.subscribe({ (event) in
@@ -23,7 +23,7 @@ class BaseViewController: UIViewController {
         return button
     }()
     lazy var shareButton:Button = {
-        let button = Button(image: R.image.ic_share_navItem()?.templateImage)
+        let button = Button(image: R.image.ic_share_navItem(),isTemplate:true)
         button.tintColor = Color.black
         button.sizeToFit()
         _ = button.rx.tap.subscribe({ (event) in
@@ -32,7 +32,7 @@ class BaseViewController: UIViewController {
         return button
     }()
     lazy var menuButton:Button = {
-        let button = Button(image: R.image.ic_menu()?.templateImage)
+        let button = Button(image: R.image.ic_menu(),isTemplate:true)
         button.tintColor = Color.black
         button.sizeToFit()
         _ = button.rx.tap.subscribe({ (event) in
@@ -41,7 +41,7 @@ class BaseViewController: UIViewController {
         return button
     }()
     lazy var cacelButton:Button = {
-        let button = Button(image: R.image.ic_cancel()?.templateImage)
+        let button = Button(image: R.image.ic_cancel(),isTemplate:true)
         button.tintColor = Color.black
         button.sizeToFit()
         _ = button.rx.tap.subscribe({ (event) in

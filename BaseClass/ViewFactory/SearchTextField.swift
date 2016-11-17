@@ -62,7 +62,7 @@ class SearchTextField: UITextField {
         return icon
     }()
     lazy var cityButton:Button = {
-        let button = Button(title: "杭州", image: R.image.ic_location()?.templateImage)
+        let button = Button(title: "杭州", image: R.image.ic_location(),isTemplate:true)
         button.bounds = CGRect(x: 0, y: 0, width: defaultHeight*2.3, height: defaultHeight)
         button.textLabel.font = Font.h3
         button.tintColor = Color.tintColor

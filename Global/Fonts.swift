@@ -9,6 +9,8 @@
 import UIKit
 
 class Font {
+    static var big1 = UIFont(name:"PingFang SC", size: 22.5)!
+    
     static var h1 = UIFont(name:"PingFang SC", size: 18)!
     static var h2 = UIFont(name:"PingFang SC", size: 16)!
     static var h3 = UIFont(name:"PingFang SC", size: 14.5)!

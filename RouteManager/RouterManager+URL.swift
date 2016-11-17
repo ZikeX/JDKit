@@ -137,7 +137,7 @@ extension RouterManager {
             item.textFont = Font.h5
         }
         let preview:BaseViewController = {
-            let viewCon = BaseViewController()
+            let viewCon = JDPreviewShopDetailViewController()
             let item = JDTabBarItem(title: "预览", image: R.image.ic_shop_tabbar_预览(), tag: 1)
             item.animation = JDFlipTopTransitionItemAnimations()
             configTabbar(viewCon:viewCon,item: item)
