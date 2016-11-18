@@ -50,7 +50,7 @@ extension JDTableCell {//updateCell
         if let tableView = self.tableView {
             UIView.spring(duration: 0.75, animations: {
                 model.invalidateCellHeight()
-                _ = model.calculateCellHeight(tableView)
+                model.calculateCellHeight(tableView,wait: true)
                 tableView.beginUpdates()
                 closure?()
                 tableView.endUpdates()

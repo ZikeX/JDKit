@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 class JDCollectionView: UICollectionView {
+    
     let viewModel:JDCollectionViewModel
     init(viewModel:JDCollectionViewModel) {
         self.viewModel = viewModel
@@ -24,5 +25,4 @@ class JDCollectionView: UICollectionView {
     func configInit() {
         self.backgroundColor = Color.white
     }
-
 }

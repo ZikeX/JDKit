@@ -31,11 +31,10 @@ public extension UIImageView {
     }
     
     private func setImageAndFocusOnFaces(image: UIImage?) {
-        DispatchQueue.global(qos: .default).async {
-            guard let image = image else {
-                return
-            }
-            
+        guard let image = image else {
+            return
+        }
+        Async.userInitiated { () -> Bool in
             let cImage = image.ciImage ?? CIImage(cgImage: image.cgImage!)
             
             let detector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: [CIDetectorAccuracy:CIDetectorAccuracyLow])
@@ -45,14 +44,15 @@ public extension UIImageView {
                 print("found \(features.count) faces")
                 let imgSize = CGSize(width: Double(image.cgImage!.width), height: (Double(image.cgImage!.height)))
                 self.applyFaceDetection(for: features, size: imgSize, cgImage: image.cgImage!)
+                return true
             } else {
-                print("No faces found")
-                DispatchQueue.main.async {
-                    self.imageLayer().removeFromSuperlayer()
-                }
+                return false
             }
-            DispatchQueue.main.sync {
-                self.image = image
+        }.main { (sueccess) -> () in
+            self.image = image
+            if !sueccess {
+                print("No faces found")
+                self.imageLayer().removeFromSuperlayer()
             }
         }
     }
@@ -107,8 +107,7 @@ public extension UIImageView {
             }
             offset.y = -offset.y
         }
-        
-        DispatchQueue.main.sync {
+        Async.main {
             let layer = self.imageLayer()
             layer.frame = CGRect(x: offset.x, y: offset.y, width: finalSize.width, height: finalSize.height)
             layer.contents = cgImage

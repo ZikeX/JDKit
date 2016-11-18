@@ -24,6 +24,13 @@ extension ThenProtocol where Self:AnyObject {
         closure(self)
         return self
     }
+    @discardableResult
+    func thenMain(_ closure: @escaping (Self) -> ()) -> Self {
+        Async.main {
+            closure(self)
+        }
+        return self
+    }
 }
 extension NSObject:ThenProtocol {
     

@@ -31,7 +31,7 @@ protocol UpdateDataSourceProtocol:class {
 extension UpdateDataSourceProtocol {
     @discardableResult
     final func updateDataSource(_ closure:@escaping UpdateDataClosureType) {
-        DispatchQueue.global().async {
+        Async.background { () -> [AnimatableSectionModel<SectionType,ModelType>]? in
             if let newData = closure(self.dataArray) {
                 self.dataArray = newData
                 var sectionModels = [AnimatableSectionModel<SectionType,ModelType>]()
@@ -43,15 +43,22 @@ extension UpdateDataSourceProtocol {
                     })
                     sectionModels.append(AnimatableSectionModel(model: section, items: models))
                 }
-                DispatchQueue.main.async {
-                    self.sectionModelsChanged.onNext(sectionModels)
-                    self.calculateItemHeight()
-                    self.updateItemsAnimated(dataArray: newData)
+                return sectionModels
+            }else {
+                return nil
+            }
+        }.main { (sectionModels) -> () in
+            if let sectionModels = sectionModels {
+                if let scrollView = self.listView as? UIScrollView {
+                    scrollView.emptyDataSetView.reloadData()
                 }
+                self.sectionModelsChanged.onNext(sectionModels)
+                self.calculateItemHeight()
+                self.updateItemsAnimated()
             }
         }
     }
-    func updateItemsAnimated(dataArray:[(SectionType,[ModelType])]) {
+    func updateItemsAnimated() {
         var updateItems = [ItemPath]()
         for (i,(_,models)) in dataArray.enumerated() {
             for (j,model) in models.enumerated() {
@@ -88,7 +95,7 @@ extension JDTableViewModel:UpdateDataSourceProtocol {
     func configDataSource() {
         rxDataSource.configureCell = {(dataSource, tableView, indexPath, model) in
             let cell = model.createCellWithTableView(tableView, indexPath: indexPath)!
-            _ = model.calculateCellHeight(tableView)
+            _ = model.calculateCellHeight(tableView,wait: true)
             return cell
         }
         self.tableView.dataSource = nil
@@ -104,7 +111,7 @@ extension JDTableViewModel:UpdateDataSourceProtocol {
         self.timer = Timer.scheduleTimer(0.01) { (timer) in
             if models.count > 0 {
                 let model = models.removeFirst()
-                _ = model.calculateCellHeight(self.tableView)
+                _ = model.calculateCellHeight(self.tableView,wait: false)
             }else {
                 timer?.invalidate()
             }

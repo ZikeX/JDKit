@@ -6,9 +6,9 @@
 //  Copyright © 2016 Z_JaDe. All rights reserved.
 //
 
+import UIKit
 import RxCocoa
 import RxSwift
-import UIKit
 
 extension Reactive where Base: UIControl {
     static func valuePublic<T, ControlType: UIControl>(control: ControlType, getter:@escaping (ControlType) -> T, setter: @escaping (ControlType, T) -> ()) -> ControlProperty<T> {

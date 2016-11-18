@@ -25,6 +25,10 @@ class JDTableViewModel: JDListViewModel {
     var autoDeselectRow = true
     
     // MARK: -
+    func resetInit() {/// ZJaDe: 当self被设置进入tableView之后调用
+        self.configTableView(tableView)
+        self.loadLocalSectionModels()
+    }
     func configTableView(_ tableView:JDTableView) {
         
     }

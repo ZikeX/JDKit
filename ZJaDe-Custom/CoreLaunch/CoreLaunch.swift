@@ -41,16 +41,16 @@ class CoreLaunch {
         imageView.image = image
         
         window.rootViewController?.view.addSubview(imageView)
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: NSEC_PER_SEC/2)) {
+        SwiftTimer.asyncAfter(seconds: 0.5) {
             UIView.animate(withDuration: 1.0, animations: {
                 switch animateType {
                 case .Lite:
                     UIView.setAnimationCurve(.easeOut)
                     imageView.transform = CGAffineTransform(scaleX: 2.0, y: 2.0)
-                    imageView.alpha = 0;                    
+                    imageView.alpha = 0;
                 }
             }, completion: { (finished) in
-                    imageView.removeFromSuperview()
+                imageView.removeFromSuperview()
             })
         }
     }

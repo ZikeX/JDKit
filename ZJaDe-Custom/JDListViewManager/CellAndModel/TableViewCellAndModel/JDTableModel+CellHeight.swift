@@ -23,11 +23,11 @@ extension JDTableModel {
         return cell
     }
     /// ZJaDe: 计算高度
-    func calculateCellHeight(_ tableView:UITableView) -> CGFloat {
+    func calculateCellHeight(_ tableView:UITableView,wait:Bool) {
         if needCalculateCellHeight && !cellHeightIsCanUse {
             let tableViewWidth = tableView.frame.width
             if tableViewWidth <= 0 {
-                return 44
+                return
             }
             /*************** 获取tempCell，并赋值 ***************/
             let tempCell = getTempCell(tableView)
@@ -47,7 +47,6 @@ extension JDTableModel {
             }
             tempCell.cellDidDisappear(self)
         }
-        return cellHeight
     }
 }
 

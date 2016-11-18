@@ -35,7 +35,6 @@ class JDTableViewController: UITableViewController {
     // MARK: -
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.viewModel.configTableView(self.jdTableView)
-        self.viewModel.loadLocalSectionModels()
+        self.viewModel.resetInit()
     }
 }

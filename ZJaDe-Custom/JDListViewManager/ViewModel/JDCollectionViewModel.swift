@@ -18,6 +18,11 @@ class JDCollectionViewModel: JDListViewModel {
     let rxDataSource = RxCollectionViewSectionedAnimatedDataSource<AnimatableSectionModel<JDCollectionSection,JDCollectionModel>>()
     var dataArray = [(JDCollectionSection,[JDCollectionModel])]()
     
+    // MARK: - 
+    func resetInit() {/// ZJaDe: 当self被设置进入collectionView之后调用
+        self.configCollectionView(collectionView)
+        self.loadLocalSectionModels()
+    }
     func configCollectionView(_ collectionView:JDCollectionView) {
         
     }

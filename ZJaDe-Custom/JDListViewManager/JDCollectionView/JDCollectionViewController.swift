@@ -36,7 +36,6 @@ class JDCollectionViewController: UICollectionViewController {
     // MARK: - 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.viewModel.configCollectionView(self.jdCollectionView)
-        self.viewModel.loadLocalSectionModels()
+        self.viewModel.resetInit()
     }
 }

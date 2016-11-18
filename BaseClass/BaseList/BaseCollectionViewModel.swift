@@ -12,8 +12,7 @@ class BaseCollectionViewModel: JDCollectionViewModel {
     
     func createBaseCollectionView() -> BaseCollectionView {
         let collectionView = BaseCollectionView(viewModel: self)
-        self.configCollectionView(collectionView)
-        self.loadLocalSectionModels()
+        self.resetInit()
         return collectionView
     }
 }

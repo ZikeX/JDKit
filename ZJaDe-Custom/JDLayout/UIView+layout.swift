@@ -26,28 +26,48 @@ extension UIViewController {
 }
 extension UIView {
     func edgesToVC(_ viewController:UIViewController) {
-        self.jdLayout.edgesAlignToVC(viewController).activate()
+        if self.superview == nil {
+            viewController.view.addSubview(self)
+        }
+        self.snp.makeConstraints { (maker) in
+            maker.left.equalTo(viewController.view)
+            maker.right.equalTo(viewController.view)
+            maker.topSpaceToVC(viewController)
+            maker.bottomSpaceToVC(viewController)
+        }
     }
     func edgesToView() {
-        self.jdLayout.edgesAlign(inset:UIEdgeInsets()).activate()
+        self.snp.makeConstraints { (maker) in
+            maker.edges.equalToSuperview()
+        }
     }
     /// ZJaDe: 设置宽高
     func widthValue(width:CGFloat) {
-        self.jdLayout.sizeValue(width: width).activate()
+        self.snp.makeConstraints { (maker) in
+            maker.width.equalTo(width)
+        }
     }
     func heightValue(height:CGFloat) {
-        self.jdLayout.sizeValue(height: height).activate()
+        self.snp.makeConstraints { (maker) in
+            maker.height.equalTo(height)
+        }
     }
     func sizeValue(width:CGFloat,height:CGFloat) {
-        self.jdLayout.sizeValue(width: width, height: height).activate()
+        self.snp.makeConstraints { (maker) in
+            maker.size.equalTo(CGSize(width: width, height: height))
+        }
     }
     /// ZJaDe: 宽比高
     func width_height(scale:CGFloat) {
-        self.jdLayout.width_height(scale: scale).activate()
+        self.snp.makeConstraints { (maker) in
+            maker.width_height(scale: scale)
+        }
     }
     /// ZJaDe: 高比宽
     func height_width(scale:CGFloat) {
-        self.jdLayout.height_width(scale: scale).activate()
+        self.snp.makeConstraints { (maker) in
+            maker.height_width(scale: scale)
+        }
     }
 }
 extension UIView {

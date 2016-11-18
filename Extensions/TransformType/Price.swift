@@ -8,49 +8,42 @@
 
 import Foundation
 typealias PriceValue = Double
-extension PriceValue {
-    func priceFormatStr(_ formatter:NumberFormatter) -> String {
-        let number = NSNumber(value: self)
-        let valueStr = formatter.string(from: number) ?? "金额出错"
-        return "\(valueStr)"
-    }
-}
+
 struct Price {
     typealias NativeType = PriceValue
-    fileprivate var _value:NativeType
-    var formatter:NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currencyAccounting
-        return formatter
+    
+    var formatter:PriceFormatter = {
+        return PriceFormatter()
     }()
     
-    var value:NativeType {
-        get {
-            return self._value.roundToNearest(increment: 0.01)
-        }
-        set {
-            self._value = newValue
-        }
-    }
+    var value:NativeType
     var toValueStr:String {
-        return String(format: "%.2f", _value)
+        return String(format: "%.2f", value)
     }
     var currencySymbol:String {
         return formatter.currencySymbol
     }
 }
+extension Price {
+    init(_ double:Double) {
+        self.value = double
+    }
+    init(_ float:Float) {
+        self.value = float.toDouble
+    }
+}
 extension Price:ExpressibleByFloatLiteral {
     init(floatLiteral value: FloatLiteralType) {
-        self._value = value
+        self.value = value
     }
 }
 extension Price:ExpressibleByIntegerLiteral {
     init(integerLiteral value: IntegerLiteralType) {
-        self._value = value.toDouble
+        self.value = value.toDouble
     }
 }
 extension Price:CustomStringConvertible {
     var description: String {
-        return "\(_value.priceFormatStr(formatter))"
+        return "\(formatter.string(from: self))"
     }
 }

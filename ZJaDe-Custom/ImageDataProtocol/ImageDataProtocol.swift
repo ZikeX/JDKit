@@ -20,12 +20,12 @@ extension UIImageView {
         if self.activityIndicator == nil {
             self.activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: style)
             
-            DispatchQueue.main.async {
+            Async.main {
                 self.addSubview(self.activityIndicator!)
                 self.activityIndicator!.edgesToView()
             }
         }
-        DispatchQueue.main.async {
+        Async.main {
             self.activityIndicator?.startAnimating()
         }
     }

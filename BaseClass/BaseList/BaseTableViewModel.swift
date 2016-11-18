@@ -17,8 +17,7 @@ class BaseTableViewModel: JDTableViewModel {
     }
     func createBaseTableView() -> BaseTableView {
         let tableView = BaseTableView(viewModel: self)
-        self.configTableView(tableView)
-        self.loadLocalSectionModels()
+        self.resetInit()
         return tableView
     }
     func createBaseListVC() -> BaseTableViewController {
