@@ -100,6 +100,8 @@ class Button: CustomIBControl {
         self.textStr = title
         self.img = image
         self.isTemplate = isTemplate
+        self.updateImg()
+        self.updateText()
     }
     override func configInit() {
         super.configInit()
@@ -107,8 +109,6 @@ class Button: CustomIBControl {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.updateImg()
-        self.updateText()
         observeConfig()
     }
 }
