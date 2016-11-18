@@ -20,3 +20,16 @@ class JDListViewModel: NSObject {
         
     }
 }
+
+extension JDListViewModel {/// ZJaDe: EmptyDataSet
+    // MARK: - 设置EmptyDataSet内容
+    func configEmptyDataSetNoData(_ contentView:UIStackView) {
+        
+    }
+    func configEmptyDataSetLoadFailed(_ contentView:UIStackView) {
+        
+    }
+    func configEmptyDataSetLoading(_ contentView:UIStackView) {
+        
+    }
+}

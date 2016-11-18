@@ -28,6 +28,16 @@ class JDTableViewModel: JDListViewModel {
     func resetInit() {/// ZJaDe: 当self被设置进入tableView之后调用
         self.configTableView(tableView)
         self.loadLocalSectionModels()
+        tableView.emptyDataSetView.configEmptyDataSetData { (state, contentView) in
+            switch state {
+            case .loading:
+                self.configEmptyDataSetLoading(contentView)
+            case .loadFailed:
+                self.configEmptyDataSetLoadFailed(contentView)
+            case .noData:
+                self.configEmptyDataSetNoData(contentView)
+            }
+        }
     }
     func configTableView(_ tableView:JDTableView) {
         
@@ -36,6 +46,7 @@ class JDTableViewModel: JDListViewModel {
         return nil
     }
 }
+
 extension JDTableViewModel:UITableViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.tableView.endEditing(true)

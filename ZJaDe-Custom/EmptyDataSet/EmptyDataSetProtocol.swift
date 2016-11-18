@@ -10,7 +10,7 @@ import UIKit
 protocol EmptyDataSetProtocol {
     var emptyDataSetView:EmptyDataSetView {get}
     var itemsCount:Int {get}
-    func reloadEmptyDataSet()
+    func reloadEmptyDataSet(_ state:EmptyViewState)
 }
 private var emptyDataSetViewKey:UInt8 = 0
 extension EmptyDataSetProtocol where Self:UIScrollView {
@@ -24,12 +24,12 @@ extension EmptyDataSetProtocol where Self:UIScrollView {
         }
         return view
     }
-    func reloadEmptyDataSet() {
+    func reloadEmptyDataSet(_ state:EmptyViewState) {
         let emptyView = self.emptyDataSetView
         if emptyView.superview == nil {
             self.insertSubview(emptyView, at: 0)
         }
-        self.emptyDataSetView.reloadData()
+        self.emptyDataSetView.reloadData(state)
     }
 }
 extension UIScrollView:EmptyDataSetProtocol {

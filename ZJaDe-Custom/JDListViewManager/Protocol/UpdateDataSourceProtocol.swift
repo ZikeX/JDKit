@@ -48,10 +48,10 @@ extension UpdateDataSourceProtocol {
                 return nil
             }
         }.main { (sectionModels) -> () in
+            if let scrollView = self.listView as? UIScrollView {
+                scrollView.reloadEmptyDataSet(.noData)
+            }
             if let sectionModels = sectionModels {
-                if let scrollView = self.listView as? UIScrollView {
-                    scrollView.emptyDataSetView.reloadData()
-                }
                 self.sectionModelsChanged.onNext(sectionModels)
                 self.calculateItemHeight()
                 self.updateItemsAnimated()

@@ -13,21 +13,27 @@ enum EmptyShowState {
     case show
     case hide
 }
+enum EmptyViewState {
+    case loading
+    case noData
+    case loadFailed
+}
 
 class EmptyDataSetView: UIView {
     typealias ContentViewType = UIStackView
+    typealias EmptyDataSetClosureType = (EmptyViewState,UIStackView) -> ()
     var contentView:ContentViewType = {
         let stackView = UIStackView(axis: .vertical, alignment: .center, distribution: .equalCentering, spacing: 0)
         return stackView
     }()
-    var contentViewClosure:((ContentViewType) -> ())?
-    func configEmptyDataSetData(_ closure:@escaping (ContentViewType) -> ()) {
+    var contentViewClosure:EmptyDataSetClosureType?
+    func configEmptyDataSetData(_ closure:@escaping EmptyDataSetClosureType) {
         self.contentViewClosure = closure
     }
     // MARK: -
     var showState:EmptyShowState = .automatic
     
-    func reloadData() {
+    func reloadData(_ state:EmptyViewState) {
         self.prepareForReuse()
         if checkCanShow() {
             self.addSubview(self.contentView)
@@ -35,11 +41,9 @@ class EmptyDataSetView: UIView {
                 maker.center.equalToSuperview()
                 maker.left.top.greaterThanOrEqualToSuperview()
             }
-            contentViewClosure?(contentView)
-            UIView.performWithoutAnimation {
-                self.setNeedsLayout()
-                self.layoutIfNeeded()
-            }
+            contentViewClosure?(state,contentView)
+            self.contentView.setNeedsLayout()
+            self.contentView.layoutIfNeeded()
             self.contentView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
             UIView.spring(duration: 0.25, animations: { 
                 self.contentView.alpha = 1
@@ -72,6 +76,6 @@ extension EmptyDataSetView {
         self.contentView.alpha = 0
     }
     override func didMoveToSuperview() {
-        self.edgesToView()
+        self.frame = self.superview!.bounds
     }
 }
