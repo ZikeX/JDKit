@@ -3,7 +3,7 @@
 //  ZiWoYou
 //
 //  Created by 茶古电子商务 on 16/11/17.
-//  Copyright © 2016年 Z_JaDe. All rights reserved.
+//  Copyright © 2016 Z_JaDe. All rights reserved.
 //
 
 import Foundation
@@ -31,6 +31,9 @@ struct Price {
         set {
             self._value = newValue
         }
+    }
+    var toValueStr:String {
+        return String(format: "%.2f", _value)
     }
     var currencySymbol:String {
         return formatter.currencySymbol

@@ -60,7 +60,7 @@ class Button: CustomIBControl {
             self.updateImg()
         }
     }
-    @IBInspectable var isTemplate: Bool? {
+    @IBInspectable var isTemplate: Bool = false {
         didSet {
             self.updateImg()
         }

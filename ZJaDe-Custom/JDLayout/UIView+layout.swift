@@ -10,11 +10,18 @@ import UIKit
 import SnapKit
 
 extension UIViewController {
-    func edgesToVC(_ viewController:UIViewController) {
+    func edgesToVC(_ viewController:UIViewController,edgesToFill:Bool = false) {
         if self.parent == nil {
             viewController.addChildViewController(self)
         }
-        self.view.jdLayout.edgesAlignToVC(viewController).activate()
+        if edgesToFill {
+            if self.view.superview == nil {
+                viewController.view.addSubview(self.view)
+            }
+            self.view.edgesToView()
+        }else {
+            self.view.edgesToVC(viewController)
+        }
     }
 }
 extension UIView {

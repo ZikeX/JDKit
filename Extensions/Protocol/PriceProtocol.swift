@@ -1,5 +1,5 @@
 //
-//  PriceCellProtocol.swift
+//  PriceProtocol.swift
 //  ZiWoYou
 //
 //  Created by ZJaDe on 16/10/25.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol PriceCellProtocol {
+protocol PriceProtocol {
     func setPriceLabelText(price:Price)
 }
 
