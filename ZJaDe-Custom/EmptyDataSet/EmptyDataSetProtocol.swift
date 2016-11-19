@@ -24,13 +24,6 @@ extension EmptyDataSetProtocol where Self:UIScrollView {
         }
         return view
     }
-    func reloadEmptyDataSet(_ state:EmptyViewState) {
-        let emptyView = self.emptyDataSetView
-        if emptyView.superview == nil {
-            self.insertSubview(emptyView, at: 0)
-        }
-        self.emptyDataSetView.reloadData(state)
-    }
 }
 extension UIScrollView:EmptyDataSetProtocol {
     var itemsCount: Int {
@@ -40,8 +33,11 @@ extension UIScrollView:EmptyDataSetProtocol {
 extension UITableView {
     override var itemsCount: Int {
         var items = 0
-        for sectionIndex in 0..<self.numberOfSections {
-            items += self.numberOfRows(inSection: sectionIndex)
+        guard let dataSource = self.dataSource else {
+            return items
+        }
+        for sectionIndex in 0..<(dataSource.numberOfSections?(in: self) ?? 0) {
+            items += dataSource.tableView(self, numberOfRowsInSection: sectionIndex)
         }
         return items
     }
@@ -49,8 +45,11 @@ extension UITableView {
 extension UICollectionView {
     override var itemsCount: Int {
         var items = 0
-        for sectionIndex in 0..<self.numberOfSections {
-            items += self.numberOfItems(inSection: sectionIndex)
+        guard let dataSource = self.dataSource else {
+            return items
+        }
+        for sectionIndex in 0..<(dataSource.numberOfSections?(in: self) ?? 0) {
+            items += dataSource.collectionView(self, numberOfItemsInSection: sectionIndex)
         }
         return items
     }

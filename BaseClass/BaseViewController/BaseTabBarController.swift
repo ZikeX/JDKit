@@ -8,14 +8,17 @@
 
 import UIKit
 import JDAnimatedTabBarController
-
+import RxSwift
 class BaseTabBarController: JDAnimatedTabBarController {
     
     override func configInit() {
         super.configInit()
         self.baseVCConfigInit()
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        logInfo("RxSwiftVersionNumber->\(RxSwiftVersionNumber)")
+    }
     override var childViewControllerForStatusBarStyle: UIViewController? {
         return self.selectedViewController
     }

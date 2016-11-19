@@ -7,20 +7,27 @@
 //
 
 import UIKit
+import RxSwift
 
 extension UIControl {
-    func addHeightedShadowAnimate() {
-        self.removeTarget(self, action: #selector(whenTouchDown), for: .touchDown)
-        self.removeTarget(self, action: #selector(whenTouchUp), for: .touchUpInside)
-        self.removeTarget(self, action: #selector(whenTouchUp), for: .touchUpOutside)
-        self.addTarget(self, action: #selector(whenTouchDown), for: .touchDown)
-        self.addTarget(self, action: #selector(whenTouchUp), for: .touchUpInside)
-        self.addTarget(self, action: #selector(whenTouchUp), for: .touchUpOutside)
-    }
-    @objc private func whenTouchDown() {
-        self.shadow(isHighlighted: true, animated: true)
-    }
-    @objc private func whenTouchUp() {
-        self.shadow(isHighlighted: false, animated: true)
+    func addHighlightedShadowAnimate(_ heightedColor:UIColor? = nil) {
+        logInfo("RxSwiftVersionNumber->\(RxSwiftVersionNumber)")
+        _ = self.rx.observe(Bool.self, "highlighted", retainSelf: false).debug().takeUntil(rx.deallocated).distinctUntilChanged{$0==$1&&$1==nil}.subscribe { (event) in
+            if let element = event.element,let isHighlighted = element {
+                self.shadow(isHighlighted: isHighlighted, animated: true)
+            }
+        }
+        
+        _ = Observable.just(self)
+            .flatMap {
+                $0.rx.observe(Bool.self, "highlighted")
+        }.takeUntil(rx.deallocated).subscribe { (bool) in
+            
+        }
+        _ = rx.deallocated.subscribe { (_) in
+            logDebug("UIControl - deallocated")
+        }
+        
+        logInfo("RxSwiftVersionNumber->\(RxSwiftVersionNumber)")
     }
 }

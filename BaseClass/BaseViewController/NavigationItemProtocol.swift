@@ -25,7 +25,7 @@ extension NavigationItemProtocol where Self:UIViewController {
             //限制navigationController必须为JDNavigationController
             return
         }
-        guard self.parent is BaseNavigationController || self.parent is BaseTabBarController else {
+        guard !(self is BaseTabBarController) && (self.parent is BaseNavigationController || self.parent is BaseTabBarController) else {
             return
         }
         guard let navBar = navBar else {
@@ -44,11 +44,7 @@ extension NavigationItemProtocol where Self:UIViewController {
 }
 extension UIViewController {
     func configInitAboutNavBar() {
-        let subject1 = self.rx.sentMessage(#selector(viewWillAppear))
-        let subject2 = self.rx.sentMessage(#selector(viewDidAppear))
-        _ = Observable.of(subject1,subject2).merge().subscribe { (event) in
-            self.configNavBar(self.navigationController?.navigationBar, animated: true)
-        }
+        self.configNavBar(self.navigationController?.navigationBar, animated: true)
     }
 }
 

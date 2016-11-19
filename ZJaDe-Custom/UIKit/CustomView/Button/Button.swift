@@ -111,6 +111,9 @@ class Button: CustomIBControl {
         super.viewDidLoad()
         observeConfig()
     }
+    deinit {
+        logDebug(disposeBag)
+    }
 }
 extension Button {
     func updateText() {

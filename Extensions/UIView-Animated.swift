@@ -7,10 +7,11 @@ private let UIViewAnimationSpringVelocity: CGFloat = 10
 
 // MARK: Animation Extensions
 extension UIView {
+    ///加这个方法只是为了不用completion时，不报错误
     static func spring(duration:TimeInterval, animations: @escaping (() -> Void)) {
         self.spring(duration: duration, animations: animations, completion: nil)
     }
-    static func spring(duration:TimeInterval, animations: @escaping (() -> Void), completion: ((Bool) -> Void)?) {
+    static func spring(duration:TimeInterval, animations: @escaping (() -> Void), completion: ((Bool) -> Void)? = nil) {
         UIView.animate(
             withDuration: duration,
             delay: 0,

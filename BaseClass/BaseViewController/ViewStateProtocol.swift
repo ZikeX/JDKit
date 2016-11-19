@@ -30,7 +30,6 @@ enum RootViewState {
 
 protocol ViewStateProtocol {
     var viewState:RootViewState {get set}
-    func configInitAboutViewState()
 }
 private var jd_viewStateKey: UInt8 = 0
 extension UIViewController:ViewStateProtocol {
@@ -41,25 +40,6 @@ extension UIViewController:ViewStateProtocol {
         }
         set {
             objc_setAssociatedObject(self, &jd_viewStateKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
-        }
-    }
-}
-extension UIViewController {
-    func configInitAboutViewState() {
-        _ = self.rx.sentMessage(#selector(viewDidLoad)).subscribe { (event) in
-            self.viewState = .viewDidLoad
-        }
-        _ = self.rx.sentMessage(#selector(viewWillAppear)).subscribe { (event) in
-            self.viewState = .viewWillAppear
-        }
-        _ = self.rx.sentMessage(#selector(viewDidAppear)).subscribe { (event) in
-            self.viewState = .viewDidAppear
-        }
-        _ = self.rx.sentMessage(#selector(viewWillDisappear)).subscribe { (event) in
-            self.viewState = .viewWillDisappear
-        }
-        _ = self.rx.sentMessage(#selector(viewDidDisappear)).subscribe { (event) in
-            self.viewState = .viewDidDisappear
         }
     }
 }

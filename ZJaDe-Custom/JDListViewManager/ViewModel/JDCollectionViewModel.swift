@@ -28,7 +28,7 @@ class JDCollectionViewModel: JDListViewModel {
                 self.configEmptyDataSetLoading(contentView)
             case .loadFailed:
                 self.configEmptyDataSetLoadFailed(contentView)
-            case .noData:
+            case .loaded:
                 self.configEmptyDataSetNoData(contentView)
             }
         }

@@ -15,17 +15,15 @@ enum EmptyShowState {
 }
 enum EmptyViewState {
     case loading
-    case noData
+    case loaded
     case loadFailed
 }
 
 class EmptyDataSetView: UIView {
     typealias ContentViewType = UIStackView
     typealias EmptyDataSetClosureType = (EmptyViewState,UIStackView) -> ()
-    var contentView:ContentViewType = {
-        let stackView = UIStackView(axis: .vertical, alignment: .center, distribution: .equalCentering, spacing: 0)
-        return stackView
-    }()
+    var contentView:ContentViewType = UIStackView()
+    
     var contentViewClosure:EmptyDataSetClosureType?
     func configEmptyDataSetData(_ closure:@escaping EmptyDataSetClosureType) {
         self.contentViewClosure = closure
@@ -33,7 +31,7 @@ class EmptyDataSetView: UIView {
     // MARK: -
     var showState:EmptyShowState = .automatic
     
-    func reloadData(_ state:EmptyViewState) {
+    fileprivate func reloadData(_ state:EmptyViewState) {
         self.prepareForReuse()
         if checkCanShow() {
             self.addSubview(self.contentView)
@@ -44,18 +42,11 @@ class EmptyDataSetView: UIView {
             contentViewClosure?(state,contentView)
             self.contentView.setNeedsLayout()
             self.contentView.layoutIfNeeded()
-            self.contentView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-            UIView.spring(duration: 0.25, animations: { 
-                self.contentView.alpha = 1
-                self.contentView.transform = CGAffineTransform.identity
-            })
+            self.contentViewAnimate(show: true)
         }else {
-            UIView.spring(duration: 0.25, animations: {
-                self.contentView.alpha = 0
-            }, completion: { (finish) in
-                self.contentView.removeAllSubviews()
-                self.removeAllSubviews()                
-            })
+            self.contentViewAnimate(show: false) {(finish) in
+                self.removeFromSuperview()
+            }
         }
     }
     func checkCanShow() -> Bool {
@@ -71,11 +62,43 @@ class EmptyDataSetView: UIView {
         
     }
 }
+extension UIScrollView {
+    func reloadEmptyDataSet(_ state:EmptyViewState) {
+        let emptyView = self.emptyDataSetView
+        if emptyView.superview == nil {
+            self.insertSubview(emptyView, at: 0)
+        }
+        self.emptyDataSetView.reloadData(state)
+    }
+}
 extension EmptyDataSetView {
     func prepareForReuse() {
-        self.contentView.alpha = 0
+        self.contentView.removeAllSubviews()
+        self.contentView.removeFromSuperview()
+        self.contentView.then { (contentView) in
+            contentView.axis = .vertical
+            contentView.alignment = .center
+            contentView.distribution = .equalCentering
+            contentView.spacing = 0
+        }
+    }
+    func contentViewAnimate(show:Bool,completion: ((Bool) -> Void)? = nil) {
+        if show {
+            self.contentView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            self.contentView.alpha = 0
+            UIView.spring(duration: 0.25, animations: {
+                self.contentView.alpha = 1
+                self.contentView.transform = CGAffineTransform.identity
+            }, completion: completion)
+        }else {
+            UIView.spring(duration: 0.25, animations: { 
+                self.contentView.alpha = 0
+            }, completion: completion)
+        }
     }
     override func didMoveToSuperview() {
-        self.frame = self.superview!.bounds
+        if self.superview != nil {
+            self.frame = self.superview!.bounds
+        }
     }
 }
