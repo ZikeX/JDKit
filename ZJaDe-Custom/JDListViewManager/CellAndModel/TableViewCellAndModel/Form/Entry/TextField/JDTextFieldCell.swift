@@ -43,9 +43,9 @@ extension JDTextFieldCell {
             .addDisposableTo(disposeBag);
         textField.rx.text.bindTo(model.text).addDisposableTo(disposeBag)
         
-        model.placeholder.asObservable().subscribe { (event) in
-            self.textField.placeholder = event.element
-        }.addDisposableTo(disposeBag)
+        model.placeholder.asObservable().subscribe(onNext: {[unowned self] (placeholder) in
+            self.textField.placeholder = placeholder
+        }).addDisposableTo(disposeBag)
         
         controlEvents(textField: textField, editingState: model.textFieldEditingState)
     }
@@ -57,18 +57,18 @@ extension JDTextFieldCell {
 }
 extension JDTextFieldCell {
     func controlEvents(textField:ComposeTextField,editingState:PublishSubject<UIControlEvents>) {
-        textField.rx.controlEvent(.editingDidBegin).subscribe { (event) in
+        textField.rx.controlEvent(.editingDidBegin).subscribe(onNext: { (event) in
             editingState.onNext(.editingDidBegin)
-            }.addDisposableTo(disposeBag)
-        textField.rx.controlEvent(.editingChanged).subscribe { (event) in
+            }).addDisposableTo(disposeBag)
+        textField.rx.controlEvent(.editingChanged).subscribe(onNext: { (event) in
             editingState.onNext(.editingChanged)
-            }.addDisposableTo(disposeBag)
-        textField.rx.controlEvent(.editingDidEnd).subscribe { (event) in
+            }).addDisposableTo(disposeBag)
+        textField.rx.controlEvent(.editingDidEnd).subscribe(onNext: { (event) in
             editingState.onNext(.editingDidEnd)
-            }.addDisposableTo(disposeBag)
-        textField.rx.controlEvent(.editingDidEndOnExit).subscribe { (event) in
+            }).addDisposableTo(disposeBag)
+        textField.rx.controlEvent(.editingDidEndOnExit).subscribe(onNext: { (event) in
             editingState.onNext(.editingDidEndOnExit)
-            }.addDisposableTo(disposeBag)
+            }).addDisposableTo(disposeBag)
     }
 }
 

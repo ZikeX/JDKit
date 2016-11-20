@@ -17,7 +17,12 @@ class BaseTabBarController: JDAnimatedTabBarController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        logInfo("RxSwiftVersionNumber->\(RxSwiftVersionNumber)")
+        #if TRACE_RESOURCES
+            _ = Observable<Int>.interval(1, scheduler: MainScheduler.instance)
+                .subscribe(onNext: {_ in
+                    print("Resource count \(Resources.total)")
+                })
+        #endif
     }
     override var childViewControllerForStatusBarStyle: UIViewController? {
         return self.selectedViewController

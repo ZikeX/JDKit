@@ -29,15 +29,13 @@ extension JDButtonArrCell {
         guard let model = model as? JDButtonArrModel else {
             return
         }
-        model.dataArray.asObservable().subscribe { (event) in
-            if let array = event.element {
-                self.gridViewItemsData = array
-            }
-        }.addDisposableTo(disposeBag)
+        model.dataArray.asObservable().subscribe(onNext: {[unowned self] (array) in
+            self.gridViewItemsData = array
+        }).addDisposableTo(disposeBag)
         self.gridView.itemArray.forEach { (button) in
             button.isSelected = model.selectedButtons.contains(button)
             model.buttonsSelectedAppearance(button)
-            button.rx.tap.subscribe({ (_) in
+            button.rx.tap.subscribe(onNext: {[unowned self,button] (_) in
                 button.isSelected = !button.isSelected
                 model.buttonsSelectedAppearance(button)
                 self.checkMaxCount(model: model)

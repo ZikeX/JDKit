@@ -18,7 +18,7 @@ class TransitionMainView: UIView {
     
 }
 class TransitionViewController: UIViewController {
-    let disposeBag = DisposeBag()
+    
     
     var headerView:UIView? {
         willSet {
@@ -170,7 +170,7 @@ extension TransitionViewController {
     func changeContentOffsetY(scrollView:UIScrollView,y:CGFloat) {
         var bag = DisposeBag()
         if scrollView.size == CGSize() {
-            scrollView.rx.observe(CGRect.self, "bounds").subscribe({ (event) in
+            scrollView.rx.observe(CGRect.self, "bounds").subscribe(onNext: {[unowned scrollView] (event) in
                 if scrollView.size != CGSize() {
                     scrollView.contentOffset.y = y
                     logDebug("scrollView--contentOffsetY--】】\(scrollView.contentOffset.y)")
@@ -184,7 +184,7 @@ extension TransitionViewController {
     }
     func configHeaderView() {
         //headerView高度变化时
-        headerView?.rx.observe(CGRect.self, "bounds").subscribe({ (event) in
+        headerView?.rx.observe(CGRect.self, "bounds").subscribe(onNext: {[unowned self] (event) in
             if self.headerViewHeight != self.headerView!.height {
                 self.headerViewHeight = self.headerView!.height
             }

@@ -10,7 +10,6 @@ import UIKit
 import RxSwift
 
 class JDCollectionViewController: UICollectionViewController {
-    let disposeBag = DisposeBag()
     
     var jdCollectionView:JDCollectionView {
         return self.collectionView as! JDCollectionView

@@ -22,7 +22,7 @@ class JDCollectionViewModel: JDListViewModel {
     func resetInit() {/// ZJaDe: 当self被设置进入collectionView之后调用
         self.configCollectionView(collectionView)
         self.loadLocalSectionModels()
-        collectionView.emptyDataSetView.configEmptyDataSetData { (state, contentView) in
+        collectionView.emptyDataSetView.configEmptyDataSetData {[unowned self] (state, contentView) in
             switch state {
             case .loading:
                 self.configEmptyDataSetLoading(contentView)

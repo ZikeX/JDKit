@@ -43,7 +43,7 @@ open class RxCollectionViewSectionedAnimatedDataSource<S: AnimatableSectionModel
             // Collection view has issues digesting fast updates, this should
             // help to alleviate the issues with them.
             .throttle(0.5, scheduler: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] event in
+            .subscribe(onNext: {[weak self] event in
                 self?.collectionView(event.0, throttledObservedEvent: event.1)
             })
             .addDisposableTo(disposeBag)

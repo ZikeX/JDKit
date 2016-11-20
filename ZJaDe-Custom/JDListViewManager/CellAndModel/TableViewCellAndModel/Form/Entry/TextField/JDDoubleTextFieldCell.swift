@@ -57,9 +57,9 @@ extension JDDoubleTextFieldCell {
             .addDisposableTo(disposeBag);
         secondTextField.rx.text.bindTo(model.secondText).addDisposableTo(disposeBag)
         
-        model.secondPlaceholder.asObservable().subscribe { (event) in
-            self.secondTextField.placeholder = event.element
-            }.addDisposableTo(disposeBag)
+        model.secondPlaceholder.asObservable().subscribe(onNext: {[unowned self] (placeholder) in
+            self.secondTextField.placeholder = placeholder
+            }).addDisposableTo(disposeBag)
         
         controlEvents(textField: secondTextField, editingState: model.secondTextFieldEditingState)
     }

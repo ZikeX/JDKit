@@ -18,7 +18,6 @@ enum TitleAndImgLocation:Int {
 }
 
 class Button: CustomIBControl {
-    let disposeBag = DisposeBag()
     
     /// ZJaDe: contentView 根据情况不同，等于下面三个View中的一个
     fileprivate var contentView:UIView? {
@@ -111,9 +110,6 @@ class Button: CustomIBControl {
         super.viewDidLoad()
         observeConfig()
     }
-    deinit {
-        logDebug(disposeBag)
-    }
 }
 extension Button {
     func updateText() {
@@ -140,9 +136,9 @@ extension Button {
         let textLabelTextObserve = self.textLabel.rx.observe(String.self, "text")
         Observable.combineLatest(imgViewImgObserve, textLabelTextObserve) {($0, $1)}.distinctUntilChanged{ [unowned self] in
             return self.checkEmptyEqual($0,$1)
-        }.subscribe({ (event) in
-            self.configSubViews(element: event.element)
-        }).addDisposableTo(disposeBag)
+            }.subscribe(onNext: {[unowned self] (event) in
+                self.updateSubViews()
+            }).addDisposableTo(disposeBag)
     }
     func checkEmptyEqual<I:Equatable,T:Equatable>(_ element1:(I?,T?),_ element2:(I?,T?)) -> Bool {
         let firstIsEqual = (element1.0 == nil && element2.0 == nil) || (element1.0 != nil && element2.0 != nil)
@@ -152,16 +148,16 @@ extension Button {
 }
 
 extension Button {
-    func configSubViews(element:(UIImage?,String?)?) {
+    func updateSubViews() {
         self.removeAllSubviews()
-        switch element {
-        case (nil,nil)?,nil:
+        switch (self.imgView.image,self.textLabel.text) {
+        case (nil,nil):
             break
-        case (nil,_)?:
+        case (nil,_):
             self.addSubview(self.textLabel)
-        case (_,nil)?:
+        case (_,nil):
             self.addSubview(self.imgView)
-        case (_,_)?:
+        case (_,_):
             self.addSubview(self.stackView)
             self.addAndSortStackSubViews()
         }
@@ -212,7 +208,7 @@ extension Button {
         
         let titleSize = textLabel.intrinsicContentSize
         let imageSize = imgView.intrinsicContentSize
-        switch (self.img,self.textStr) {
+        switch (self.imgView.image,self.textLabel.text) {
         case (nil,nil):
             return CGSize(width: 60, height: 30)
         case (nil,_):

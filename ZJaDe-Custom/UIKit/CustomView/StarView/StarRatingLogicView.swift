@@ -108,11 +108,11 @@ extension StarRatingLogicView {
         let panObservable = self.getPan().rx.event
         let tapObservable = self.getTap().rx.event
         
-        _ = panObservable.subscribe { (event) in
-            gestureRecognizerHandle(gestureRecognizer: event.element!)
-        }
-        _ = tapObservable.subscribe { (event) in
-            gestureRecognizerHandle(gestureRecognizer: event.element!)
-        }
+        _ = panObservable.subscribe(onNext: { (pan) in
+            gestureRecognizerHandle(gestureRecognizer: pan)
+        })
+        _ = tapObservable.subscribe(onNext: { (tap) in
+            gestureRecognizerHandle(gestureRecognizer: tap)
+        })
     }
 }

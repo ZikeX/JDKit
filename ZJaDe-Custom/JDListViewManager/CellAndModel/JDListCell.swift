@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 protocol JDListCell:CellProtocol {
-    var disposeBag:DisposeBag {get set}
+    
 }
 extension JDTableCell:JDListCell {
     

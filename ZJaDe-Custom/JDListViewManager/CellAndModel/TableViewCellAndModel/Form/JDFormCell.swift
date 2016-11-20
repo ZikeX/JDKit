@@ -48,11 +48,9 @@ extension JDFormCell {
         guard let formModel = model as? JDFormModel else {
             return
         }
-        formModel.accessoryType.asObservable().subscribe { (event) in
-            if let accessoryType = event.element {
-                self.accessoryType = accessoryType
-            }
-        }.addDisposableTo(disposeBag)
+        formModel.accessoryType.asObservable().subscribe (onNext: {[unowned self] (accessoryType) in
+            self.accessoryType = accessoryType
+        }).addDisposableTo(disposeBag)
         self.configCellAppear()
         if !formModel.imageIsEmpty {
             formModel.image.asObservable().bindTo(imgView.rx.image).addDisposableTo(disposeBag)

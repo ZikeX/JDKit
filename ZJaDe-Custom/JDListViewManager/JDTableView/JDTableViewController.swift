@@ -10,7 +10,6 @@ import UIKit
 import RxSwift
 
 class JDTableViewController: UITableViewController {
-    let disposeBag = DisposeBag()
     
     var jdTableView:JDTableView {
         return self.tableView as! JDTableView

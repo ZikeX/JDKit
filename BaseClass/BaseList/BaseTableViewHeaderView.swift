@@ -9,7 +9,6 @@
 import UIKit
 import RxSwift
 class BaseTableViewHeaderView: UIView {
-    lazy var disposeBag = DisposeBag()
     
     lazy var stackView:UIStackView = {
         let stackView = UIStackView(axis: .vertical, alignment: .center, spacing: 10)

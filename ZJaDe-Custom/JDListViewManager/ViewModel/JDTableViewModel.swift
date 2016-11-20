@@ -28,7 +28,7 @@ class JDTableViewModel: JDListViewModel {
     func resetInit() {/// ZJaDe: 当self被设置进入tableView之后调用
         self.configTableView(tableView)
         self.loadLocalSectionModels()
-        tableView.emptyDataSetView.configEmptyDataSetData { (state, contentView) in
+        tableView.emptyDataSetView.configEmptyDataSetData {[unowned self] (state, contentView) in
             switch state {
             case .loading:
                 self.configEmptyDataSetLoading(contentView)
@@ -44,6 +44,9 @@ class JDTableViewModel: JDListViewModel {
     }
     func getLocalSectionModels() -> [(JDTableSection, [JDTableModel])]? {
         return nil
+    }
+    deinit {
+        logDebug("viewModel")
     }
 }
 

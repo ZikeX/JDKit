@@ -37,13 +37,13 @@ extension JDDatePickerCell {
             }()
         }
         
-        textField.rx.controlEvent(.editingDidBegin).subscribe { (event) in
+        textField.rx.controlEvent(.editingDidBegin).subscribe(onNext: {[unowned self] (event) in
             self.setTextFieldText(datePickerModel)
-        }.addDisposableTo(disposeBag)
+        }).addDisposableTo(disposeBag)
         
-        datePicker.rx.date.subscribe { (event) in
+        datePicker.rx.date.subscribe(onNext: {[unowned self] (event) in
             self.setTextFieldText(datePickerModel)
-        }.addDisposableTo(disposeBag)
+        }).addDisposableTo(disposeBag)
     }
     override func configTextField(_ textField: ComposeTextField) {
         super.configTextField(textField)

@@ -26,15 +26,15 @@ extension JDPickerViewCell {
             pickerView.delegate = pickerViewModel.dataSource
             pickerView.dataSource = pickerViewModel.dataSource
         }
-        textField.rx.controlEvent(.editingDidBegin).subscribe { (event) in
+        textField.rx.controlEvent(.editingDidBegin).subscribe(onNext: {[unowned self] (event) in
             pickerViewModel.selectComponentsAndRows.forEach { (component, row) in
                 self.pickerView.selectRow(row, inComponent: component, animated: false)
             }
             self.setTextFieldText(pickerViewModel)
-        }.addDisposableTo(disposeBag)
-        self.pickerView.rx.itemSelected.subscribe { (event) in
+        }).addDisposableTo(disposeBag)
+        self.pickerView.rx.itemSelected.subscribe(onNext: {[unowned self] (event) in
             self.setTextFieldText(pickerViewModel)
-        }.addDisposableTo(disposeBag)
+        }).addDisposableTo(disposeBag)
     }
     override func configTextField(_ textField: ComposeTextField) {
         super.configTextField(textField)

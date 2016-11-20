@@ -41,9 +41,9 @@ extension JDTextViewCell {
         model.text.asObservable().bindTo(textView.rx.text).addDisposableTo(disposeBag)
         textView.rx.text.bindTo(model.text).addDisposableTo(disposeBag)
         
-        model.placeholder.asObservable().subscribe { (event) in
-            self.textView.placeholder = event.element ?? ""
-        }.addDisposableTo(disposeBag)
+        model.placeholder.asObservable().subscribe(onNext: {[unowned self] (placeholder) in
+            self.textView.placeholder = placeholder
+        }).addDisposableTo(disposeBag)
     }
     func configTextView(_ textView:PlaceholderTextView) {
         textView.backgroundColor = Color.viewBackground

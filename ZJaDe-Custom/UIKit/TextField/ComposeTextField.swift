@@ -69,10 +69,8 @@ extension ComposeTextField:UITextFieldDelegate {
         }
         let datePicker = DatePicker()
         datePicker.datePicker.datePickerMode = mode
-        _ = datePicker.dateObservable.subscribe({ (event) in
-            if let date = event.element {
-                self.text = date.toString(format: format)
-            }
+        _ = datePicker.dateObservable.subscribe(onNext: {[unowned self] (date) in
+            self.text = date.toString(format: format)
         });
         datePicker.show(title: placeholder ?? "日期")
     }

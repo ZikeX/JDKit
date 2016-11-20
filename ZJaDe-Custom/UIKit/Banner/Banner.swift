@@ -9,7 +9,6 @@
 import UIKit
 import RxSwift
 class Banner: UIView {
-    fileprivate let disposeBag = DisposeBag()
     
     fileprivate let scrollView = PageScrollView()
     let pageControl = SnakePageControl()
@@ -43,7 +42,7 @@ class Banner: UIView {
         })
         updateLayout.activate()
         
-        self.scrollView.rx.contentOffset.subscribe { (event) in
+        self.scrollView.rx.contentOffset.subscribe(onNext: {[unowned self] (event) in
             guard self.scrollView.width > 0 else {
                 return
             }
@@ -51,8 +50,11 @@ class Banner: UIView {
             let progressInPage = self.scrollView.contentOffset.x - (page * self.scrollView.width)
             let progress = CGFloat(page) + progressInPage
             self.pageControl.progress = progress
-        }.addDisposableTo(disposeBag)
+        }).addDisposableTo(disposeBag)
         
         self.dataArray = [R.image.ic_defalut_image()!,R.image.ic_defalut_image()!]
+    }
+    deinit {
+        logDebug("banner")
     }
 }

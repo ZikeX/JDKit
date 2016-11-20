@@ -10,7 +10,6 @@ import UIKit
 import RxSwift
 
 class JDTableCell: UITableViewCell {
-    var disposeBag = DisposeBag()
     
     var isTempCell = false
     // MARK: - CellAnimateProtocol

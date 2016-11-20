@@ -24,6 +24,7 @@ extension EmptyDataSetProtocol where Self:UIScrollView {
         }
         return view
     }
+
 }
 extension UIScrollView:EmptyDataSetProtocol {
     var itemsCount: Int {

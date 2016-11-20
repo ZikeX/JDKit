@@ -15,11 +15,11 @@ protocol TransitionProtocol {
 }
 extension TransitionProtocol where Self:BaseViewController {
     func configTransition(segmentedControl:SegmentedControl?,closure:((Int)->BaseTableViewModel)? = nil) {
-        _ = segmentedControl?.rx.value.asObservable().subscribe { (event) in
-            if let index = event.element,index < self.transitionVC.listArray.count {
+        _ = segmentedControl?.rx.value.asObservable().subscribe(onNext: {[unowned self] (index) in
+            if index < self.transitionVC.listArray.count {
                 self.transitionVC.selectedIndex = index
             }
-        }
+        })
         if closure != nil {
             updateTransition(segmentedControl: segmentedControl, closure: closure!)
         }
