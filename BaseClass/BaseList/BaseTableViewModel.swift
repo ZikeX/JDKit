@@ -9,6 +9,7 @@
 import UIKit
 
 class BaseTableViewModel: JDTableViewModel {
+    var index:Int!
     
     var listTitle:String? {
         didSet {
@@ -23,6 +24,7 @@ class BaseTableViewModel: JDTableViewModel {
     func createBaseListVC() -> BaseTableViewController {
         let listVC = BaseTableViewController(viewModel: self)
         listVC.title = self.listTitle
+        listVC.index = index
         return listVC
     }
 }

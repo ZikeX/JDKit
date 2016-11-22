@@ -35,7 +35,8 @@ extension JDButtonArrCell {
         self.gridView.itemArray.forEach { (button) in
             button.isSelected = model.selectedButtons.contains(button)
             model.buttonsSelectedAppearance(button)
-            button.rx.tap.subscribe(onNext: {[unowned self,button] (_) in
+            
+            button.rx.touchUpInside({[unowned self] (button) in
                 button.isSelected = !button.isSelected
                 model.buttonsSelectedAppearance(button)
                 self.checkMaxCount(model: model)

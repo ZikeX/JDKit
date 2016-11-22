@@ -7,9 +7,25 @@
 //
 
 import UIKit
-import RxCocoa
 import RxSwift
+import RxCocoa
 
+extension Reactive where Base:UIControl {
+    @discardableResult
+    func controlEvent(_ controlEvents: UIControlEvents,_ closure:((Base)->())?) -> Disposable {
+        return self.controlEvent(controlEvents).subscribe(onNext:{[unowned base] () in
+            closure?(base)
+        })
+    }
+    @discardableResult
+    func touchUpInside(_ closure:((Base)->())?) -> Disposable {
+        return self.controlEvent(.touchUpInside, closure)
+    }
+    @discardableResult
+    func valueChanged(_ closure:((Base)->())?) -> Disposable {
+        return self.controlEvent(.valueChanged, closure)
+    }
+}
 extension Reactive where Base: UIControl {
     static func valuePublic<T, ControlType: UIControl>(control: ControlType, getter:@escaping (ControlType) -> T, setter: @escaping (ControlType, T) -> ()) -> ControlProperty<T> {
         let values: Observable<T> = Observable.deferred { [weak control] in

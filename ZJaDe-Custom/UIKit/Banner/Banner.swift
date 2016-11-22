@@ -54,7 +54,4 @@ class Banner: UIView {
         
         self.dataArray = [R.image.ic_defalut_image()!,R.image.ic_defalut_image()!]
     }
-    deinit {
-        logDebug("banner")
-    }
 }

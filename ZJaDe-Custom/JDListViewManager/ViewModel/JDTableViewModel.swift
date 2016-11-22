@@ -45,9 +45,6 @@ class JDTableViewModel: JDListViewModel {
     func getLocalSectionModels() -> [(JDTableSection, [JDTableModel])]? {
         return nil
     }
-    deinit {
-        logDebug("viewModel")
-    }
 }
 
 extension JDTableViewModel:UITableViewDelegate {

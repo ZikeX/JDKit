@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import RxSwift
 
 extension UIControl {
     func addHighlightedShadowAnimate(_ heightedColor:UIColor? = nil) {

@@ -21,7 +21,7 @@ class DatePicker: CustomIBControl {
         let button = Button(title: "取消")
         button.textLabel.font = Font.h1
         button.addBorderRight(padding:5)
-        _ = button.rx.tap.subscribe(onNext: {[unowned self] (event) in
+        button.rx.touchUpInside({[unowned self] (button) in
             self.hide()
         })
         return button
@@ -29,7 +29,7 @@ class DatePicker: CustomIBControl {
     lazy var makeSureLabel:Button = {
         let button = Button(title: "确定")
         button.textLabel.font = Font.h1
-        _ = button.rx.tap.subscribe(onNext: {[unowned self] (event) in
+        button.rx.touchUpInside({[unowned self] (button) in
             self.dateObservable.onNext(self.datePicker.date)
             self.hide()
         })

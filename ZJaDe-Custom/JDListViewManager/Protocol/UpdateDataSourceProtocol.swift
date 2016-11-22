@@ -103,15 +103,17 @@ extension JDTableViewModel:UpdateDataSourceProtocol {
         self.sectionModelsChanged.asObservable().bindTo(self.tableView.rx.items(dataSource: rxDataSource)).addDisposableTo(disposeBag)
     }
     func calculateItemHeight() {
-        
-        var models = self.dataArray.flatMap { (section,models) -> [JDTableModel] in
-            return models
+        let modelTable = NSHashTable<JDTableModel>.weakObjects()
+        self.dataArray.forEach { (section,models) in
+            models.forEach({ (model) in
+                modelTable.add(model)
+            })
         }
         self.timer?.invalidate()
-        self.timer = Timer.scheduleTimer(0.01) { (timer) in
-            if models.count > 0 {
-                let model = models.removeFirst()
-                _ = model.calculateCellHeight(self.tableView,wait: false)
+        self.timer = Timer.scheduleTimer(0.01) {[weak self] (timer) in
+            if let model = modelTable.anyObject,self != nil {
+                modelTable.remove(model)
+                _ = model.calculateCellHeight(self!.tableView,wait: false)
             }else {
                 timer?.invalidate()
             }

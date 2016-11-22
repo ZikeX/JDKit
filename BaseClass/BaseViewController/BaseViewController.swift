@@ -16,7 +16,7 @@ class BaseViewController: UIViewController {
         let button = Button(image:R.image.ic_home_消息(),isTemplate:true)
         button.tintColor = Color.black
         button.sizeToFit()
-        _ = button.rx.tap.subscribe(onNext: {[unowned self] (event) in
+        button.rx.touchUpInside({[unowned self] (button) in
             // TODO: 点击消息按钮时
         })
         return button
@@ -25,7 +25,7 @@ class BaseViewController: UIViewController {
         let button = Button(image: R.image.ic_share_navItem(),isTemplate:true)
         button.tintColor = Color.black
         button.sizeToFit()
-        _ = button.rx.tap.subscribe(onNext: {[unowned self] (event) in
+        button.rx.touchUpInside({[unowned self] (button) in
             // TODO: 点击分享按钮时
         })
         return button
@@ -34,7 +34,7 @@ class BaseViewController: UIViewController {
         let button = Button(image: R.image.ic_menu(),isTemplate:true)
         button.tintColor = Color.black
         button.sizeToFit()
-        _ = button.rx.tap.subscribe(onNext: {[unowned self] (event) in
+        button.rx.touchUpInside({[unowned self] (button) in
             // TODO: 点击目录按钮时
         })
         return button
@@ -43,7 +43,7 @@ class BaseViewController: UIViewController {
         let button = Button(image: R.image.ic_cancel(),isTemplate:true)
         button.tintColor = Color.black
         button.sizeToFit()
-        _ = button.rx.tap.subscribe(onNext: {[unowned self] (event) in
+        button.rx.touchUpInside({[unowned self] (button) in
             self.cacelVC()
         })
         return button
@@ -64,15 +64,6 @@ class BaseViewController: UIViewController {
     }
     func configInit() {
         self.baseVCConfigInit()
-    }
-}
-extension BaseViewController {
-    func addTransitionVC(edgesToFill:Bool = false) {
-        self.transitionVC.edgesToVC(self, edgesToFill: edgesToFill)
-        self.configTransitionVC(edgesToFill: edgesToFill)
-    }
-    func configTransitionVC(edgesToFill: Bool) {
-            
     }
 }
 

@@ -13,7 +13,7 @@ class BaseTableView: JDTableView {
     
 }
 class BaseTableViewController: JDTableViewController,ScrollProperty {
-    
+    var index:Int!
     var scrollView: UIScrollView {
         return self.tableView
     }
