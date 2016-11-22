@@ -14,25 +14,21 @@ class JDDoubleTextFieldCell: JDTextFieldCell {
     
     override func configCellInit() {
         super.configCellInit()
-        jdContentView.addSubview(intervalLabel)
-        jdContentView.addSubview(secondTextField)
-        
-        [textField,intervalLabel,secondTextField].forEach { (view) in
-            view.snp.remakeConstraints { (maker) in
-                maker.top.centerY.equalToSuperview()
-            }
+        let mainStackView = UIStackView(alignment: .fill, spacing: 8)
+        jdContentView.addSubview(mainStackView)
+        mainStackView.snp.makeConstraints { (maker) in
+            maker.leftSpace(self.stackView).offset(8)
+            
+            maker.top.bottom.right.equalToSuperview()
         }
-        textField.snp.makeConstraints({ (maker) in
-            maker.leftSpace(stackView).offset(8)
-        })
-        intervalLabel.snp.makeConstraints({ (maker) in
-            maker.leftSpace(textField).offset(8)
-        })
+        textField.removeFromSuperview()
+        mainStackView.addArrangedSubview(textField)
+        mainStackView.addArrangedSubview(intervalLabel)
+        mainStackView.addArrangedSubview(secondTextField)
+        
         intervalLabel.contentHuggingHorizontalPriority = UILayoutPriorityRequired
         secondTextField.snp.makeConstraints({ (maker) in
-            maker.right.equalToSuperview()
             maker.width.equalTo(textField)
-            maker.leftSpace(intervalLabel).offset(8)
         })
     }
 }
@@ -49,7 +45,7 @@ extension JDDoubleTextFieldCell {
         intervalLabel.font = titleLabel.font
         intervalLabel.text = model.intervalText
         
-        secondTextField.entryType = model.entryType
+        secondTextField.entryType = model.secondEntryType ?? model.entryType
         configTextField(secondTextField)
         
         model.secondText.asObservable()

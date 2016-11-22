@@ -8,6 +8,8 @@
 
 import Foundation
 protocol NeedUpdateProtocol:class {
+    
+    var isHidden:Bool {get set}
     // MARK: - 设置刷新
     var needUpdate:Bool {get set}
     func setNeedUpdate()

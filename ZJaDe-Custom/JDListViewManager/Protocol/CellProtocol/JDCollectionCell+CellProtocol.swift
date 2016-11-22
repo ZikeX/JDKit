@@ -38,7 +38,7 @@ extension JDCollectionCell : CellProtocol {
         self.didBindingModel(element)
     }
     // MARK: - cell已经消失,element解绑cell
-    final func cellDidDisappear(_ element: JDCollectionModel) {
+    final func cellDidDisappear(_ element: JDCollectionModel?) {
         disposeBag = DisposeBag()
         
         self.unbindingModel(element)

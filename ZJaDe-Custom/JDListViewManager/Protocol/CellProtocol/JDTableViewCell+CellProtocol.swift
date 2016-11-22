@@ -76,7 +76,7 @@ extension JDTableCell : CellProtocol {
         self.setNeedsUpdateConstraints()
     }
     // MARK: - cell已经消失,element解绑cell
-    final func cellDidDisappear(_ element: JDTableModel) {
+    final func cellDidDisappear(_ element: JDTableModel?) {
         disposeBag = DisposeBag()
         
         self.unbindingModel(element)

@@ -33,7 +33,7 @@ extension TransitionProtocol where Self:BaseViewController {
     }
     func updateTransitionChildVC(segmentedControl:SegmentedControl?, _ closure:((ChildListViewModelType,Int)->())? = nil) {
         self.transitionVC.listArray = {
-            var array = [ScrollProperty]()
+            var array = [ScrollVCProtocol]()
             /// ZJaDe: 根据segmentedControl的item个数来创建子控制器，如果segmentedControl为空则只创建1次
             for index in 0..<(segmentedControl?.modelArray.count ?? 1) {
                 let (viewModel,listVC) = self.addChildListVC(edgesToFill: nil, index: index)

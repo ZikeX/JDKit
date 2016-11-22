@@ -23,7 +23,7 @@ protocol CellProtocol {
     // MARK: cell设置数据后,如果需要在这里更新约束
     func cellUpdateConstraints(_ element: ModelType)
     // MARK: - cell已经消失,element解绑cell
-    func cellDidDisappear(_ element: ModelType)
+    func cellDidDisappear(_ element: ModelType?)
 }
 
 

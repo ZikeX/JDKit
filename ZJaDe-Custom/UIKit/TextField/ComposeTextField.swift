@@ -49,6 +49,7 @@ extension ComposeTextField:UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         switch self.entryType ?? .default {
         case .date(mode: let mode):
+            jd.keyWindow.endEditing(true)
             showDatePicker(mode: mode)
             return false
         default:
@@ -61,11 +62,11 @@ extension ComposeTextField:UITextFieldDelegate {
         case .date:
             format = "yyyy.MM.dd"
         case .time:
-            format = "HH:mm:ss"
+            format = "HH:mm"
         case .dateAndTime:
             format = "yyyy.MM.dd HH:mm"
         case .countDownTimer:
-            format = "HH:mm"
+            format = "HH:mm:ss"
         }
         let datePicker = DatePicker()
         datePicker.datePicker.datePickerMode = mode

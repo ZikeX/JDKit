@@ -7,7 +7,9 @@
 //
 
 import UIKit
-
+protocol ListModelProtocol {
+    var key:String? {get set}
+}
 class JDListModel:NSObject {
     lazy var cellClassName:String = {
         return jd.namespace + "." + self.cellName
@@ -34,7 +36,13 @@ class JDListModel:NSObject {
     var identity: Int {
         return self.hashValue
     }
+    // MARK: - 
+    var isHidden:Bool = false
+    var key:String?
 }
 extension JDListModel:IdentifiableType {
+    
+}
+extension JDListModel:ListModelProtocol {
     
 }

@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 import SnapKit
 
-protocol ScrollProperty {
+protocol ScrollVCProtocol {
     var scrollView:UIScrollView {get}
 }
 class TransitionMainView: UIView {
@@ -59,7 +59,7 @@ class TransitionViewController: UIViewController {
             bottomViewChanged()
         }
     }
-    var listArray = [ScrollProperty]()  {
+    var listArray = [ScrollVCProtocol]()  {
         didSet {
             transition()
         }

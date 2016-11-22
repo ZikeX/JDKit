@@ -61,7 +61,13 @@ extension JDTableViewModel:UITableViewDelegate {
     }
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? JDTableCell {
-            let model = rxDataSource[indexPath]
+            var model:JDTableModel? = nil
+            if rxDataSource.sectionModels.count > indexPath.section {
+                let models = rxDataSource.sectionModels[indexPath.section].items
+                if models.count > indexPath.row {
+                    model = models[indexPath.row]
+                }
+            }
             cell.cellDidDisappear(model)
         }
     }

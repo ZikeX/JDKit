@@ -12,7 +12,7 @@ import RxCocoa
 
 protocol UpdateDataSourceProtocol:class {
     associatedtype SectionType:IdentifiableType
-    associatedtype ModelType:IdentifiableType,Equatable,NeedUpdateProtocol
+    associatedtype ModelType:ListModelProtocol,IdentifiableType,Equatable,NeedUpdateProtocol
     typealias DataArrayType = [(SectionType,[ModelType])]
     typealias SectionModelType = AnimatableSectionModel<SectionType,ModelType>
     
@@ -36,12 +36,10 @@ extension UpdateDataSourceProtocol {
                 self.dataArray = newData
                 var sectionModels = [AnimatableSectionModel<SectionType,ModelType>]()
                 for (section,models) in newData {
-                    models.forEach({ (model) in
-                        if let model = model as? JDTableModel {
-                            model.invalidateCellHeight()
-                        }
+                    let showModels = models.filter({ (model) -> Bool in
+                        return !model.isHidden
                     })
-                    sectionModels.append(AnimatableSectionModel(model: section, items: models))
+                    sectionModels.append(AnimatableSectionModel(model: section, items: showModels))
                 }
                 return sectionModels
             }else {
@@ -68,8 +66,10 @@ extension UpdateDataSourceProtocol {
                 }
             }
         }
-        let result = Changeset<SectionModelType>(updatedItems: updateItems)
-        self.listView?.performBatchUpdates(result, animationConfiguration: AnimationConfiguration(reloadAnimation:.automatic))
+        if updateItems.count > 0 {            
+            let result = Changeset<SectionModelType>(updatedItems: updateItems)
+            self.listView?.performBatchUpdates(result, animationConfiguration: AnimationConfiguration(reloadAnimation:.automatic))
+        }
     }
     
     func calculateItemHeight() {

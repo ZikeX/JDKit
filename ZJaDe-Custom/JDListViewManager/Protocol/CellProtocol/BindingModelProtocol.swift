@@ -12,7 +12,7 @@ protocol BindingModelProtocol {
     func configCell(_ model: ModelType)
     func bindingModel(_ model: ModelType)
     func didBindingModel(_ model: ModelType)
-    func unbindingModel(_ model: ModelType)
+    func unbindingModel(_ model: ModelType?)
 }
 extension JDTableCell:BindingModelProtocol {
     
@@ -25,7 +25,7 @@ extension JDTableCell:BindingModelProtocol {
     func didBindingModel(_ model: JDTableModel) {
         
     }
-    func unbindingModel(_ model: JDTableModel) {
+    func unbindingModel(_ model: JDTableModel?) {
         
     }
 }
@@ -40,7 +40,7 @@ extension JDCollectionCell:BindingModelProtocol {
     func didBindingModel(_ model: JDCollectionModel) {
         
     }
-    func unbindingModel(_ model: JDCollectionModel) {
+    func unbindingModel(_ model: JDCollectionModel?) {
         
     }
 }
@@ -50,7 +50,7 @@ struct BindingModelProtocolThunk<T:JDListModel>:BindingModelProtocol {
     private let _configCell : (T) -> Void
     private let _bindingModel : (T) -> Void
     private let _didBindingModel : (T) -> Void
-    private let _unbindingModel : (T) -> Void
+    private let _unbindingModel : (T?) -> Void
     
     init<P : BindingModelProtocol>(_ dep : P) where P.ModelType == T {
         _configCell = dep.configCell
@@ -68,7 +68,7 @@ struct BindingModelProtocolThunk<T:JDListModel>:BindingModelProtocol {
     func bindingModel(_ model: T) {
         _bindingModel(model)
     }
-    func unbindingModel(_ model: T) {
+    func unbindingModel(_ model: T?) {
         _unbindingModel(model)
     }
 }

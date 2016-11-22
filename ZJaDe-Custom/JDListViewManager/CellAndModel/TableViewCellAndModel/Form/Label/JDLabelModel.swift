@@ -18,6 +18,7 @@ class JDLabelModel: JDFormModel {
     }
     override func configModelInit() {
         super.configModelInit()
+        needCalculateCellHeight = false
     }
 }
 extension JDLabelModel {    
