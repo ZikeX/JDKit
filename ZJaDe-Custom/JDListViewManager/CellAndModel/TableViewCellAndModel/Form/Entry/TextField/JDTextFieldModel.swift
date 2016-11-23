@@ -14,7 +14,6 @@ class JDTextFieldModel: JDEntryModel {
     
     override func configModelInit() {
         super.configModelInit()
-        needCalculateCellHeight = false
         self.cellHeight = 45
     }
     var textFieldEditingState = PublishSubject<UIControlEvents>()

@@ -53,7 +53,7 @@ extension UIView {
             border = LineView.solidLine(lineAxis: lineAxis)
             border.isUserInteractionEnabled = false
             border.tag = tag
-            self.addSubview(border)
+            self.insertSubview(border, at: 0)
         }
         border.lineColor = color
         border.translatesAutoresizingMaskIntoConstraints = !autoLayout

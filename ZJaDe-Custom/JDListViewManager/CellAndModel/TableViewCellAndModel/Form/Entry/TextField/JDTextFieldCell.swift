@@ -50,7 +50,7 @@ extension JDTextFieldCell {
         controlEvents(textField: textField, editingState: model.textFieldEditingState)
     }
     func configTextField(_ textField:ComposeTextField) {
-        textField.backgroundColor = Color.white
+        textField.backgroundColor = Color.clear
         textField.textColor = Color.black
         textField.font = Font.h3
     }

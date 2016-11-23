@@ -20,17 +20,12 @@ class JDTableModel:JDListModel {
     // MARK: - cell高度
     /// ZJaDe: cellContentHeight 不包含分割线的高度,但是包括edges的高度
     var cellContentHeight:CGFloat?
-    var needCalculateCellHeight = true
     
-    private var cellContentHeightIsInvalidated = false
     func invalidateCellHeight() {
-        cellContentHeightIsInvalidated = true
-    }
-    func makeCellHeightCanUse() {
-        cellContentHeightIsInvalidated = false
+        self.cellContentHeight = nil
     }
     var cellHeightIsCanUse: Bool {
-        return cellContentHeightIsInvalidated == false && cellContentHeight != nil
+        return cellContentHeight != nil
     }
     var isNibCell = false
     // MARK: -

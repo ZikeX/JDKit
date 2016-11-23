@@ -13,7 +13,6 @@ class JDTextViewModel: JDEntryModel {
     
     override func configModelInit() {
         super.configModelInit()
-        self.needCalculateCellHeight = false
         self.cellHeight = 110
     }
     var contentSizeChanged = PublishSubject<(PlaceholderTextView,CGSize)>()

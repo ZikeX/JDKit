@@ -24,7 +24,7 @@ extension JDTableModel {
     }
     /// ZJaDe: 计算高度
     func calculateCellHeight(_ tableView:UITableView,wait:Bool) {
-        if needCalculateCellHeight && !cellHeightIsCanUse {
+        if !cellHeightIsCanUse {
             let tableViewWidth = tableView.frame.width
             if tableViewWidth <= 0 {
                 return
@@ -37,12 +37,12 @@ extension JDTableModel {
             let contentWidth = getContentViewWidth(tableView, cell: tempCell)
             if let jdContentViewHeight = frameLayoutJDContentViewHeight(tableView,tempCell: tempCell,contentWidth: contentWidth) {
                 self.jdContentViewHeight = jdContentViewHeight
-                makeCellHeightCanUse()
+                
                 logDebug("\(Thread.current)->Frame计算出cell->高度：\(cellHeight)")
             }else {
                 /*************** AutoLayout计算Cell的高度 ***************/
                 cellHeight = autoLayoutCellHeight(tableView, tempCell: tempCell, contentWidth: contentWidth)
-                makeCellHeightCanUse()
+                
                 logDebug("\(Thread.current)->AutoLayout计算出cell->高度：\(cellHeight)")
             }
             tempCell.cellDidDisappear(self)

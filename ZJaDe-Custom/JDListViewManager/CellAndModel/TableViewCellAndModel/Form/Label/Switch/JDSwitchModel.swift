@@ -9,10 +9,14 @@
 import UIKit
 import RxSwift
 class JDSwitchModel: JDLabelModel {
-    var isOn = Variable(false)
+    private(set) var isOn = false
+    var valueChanged = PublishSubject<Bool>()
     
     override func configModelInit() {
         super.configModelInit()
         separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8)
+        _ = valueChanged.distinctUntilChanged().subscribe(onNext:{[unowned self] (isOn) in
+            self.isOn = isOn
+        })
     }
 }

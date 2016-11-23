@@ -24,8 +24,8 @@ extension JDSwitchCell {
         guard let switchModel = model as? JDSwitchModel else {
             return
         }
-        switchModel.isOn.asObservable().bindTo(switchView.rx.value).addDisposableTo(disposeBag)
-        switchView.rx.value.bindTo(switchModel.isOn).addDisposableTo(disposeBag)
+        switchModel.valueChanged.distinctUntilChanged().bindTo(switchView.rx.value).addDisposableTo(disposeBag)
+        switchView.rx.value.distinctUntilChanged().bindTo(switchModel.valueChanged).addDisposableTo(disposeBag)
     }
 }
 extension JDSwitchCell {
