@@ -164,3 +164,26 @@ extension UIView {
         return centerStackView
     }
 }
+extension UIView {
+    typealias LayoutViewClosureType = (UIView,ConstraintMaker) -> ()
+    @discardableResult
+    func remakeLayoutView(_ closure:@escaping LayoutViewClosureType) -> UIView {
+        self.snp.remakeConstraints { (maker) in
+            closure(self,maker)
+        }
+        return self
+    }
+    @discardableResult
+    func makeLayoutView(_ closure:@escaping LayoutViewClosureType) -> UIView {
+        self.snp.makeConstraints { (maker) in
+            closure(self,maker)
+        }
+        return self
+    }
+    func updateLayoutView(_ closure:@escaping LayoutViewClosureType) -> UIView {
+        self.snp.updateConstraints { (maker) in
+            closure(self,maker)
+        }
+        return self
+    }
+}

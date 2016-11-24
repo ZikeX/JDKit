@@ -18,7 +18,7 @@ class JDTableModel:JDListModel {
     var separatorInsetLayoutToContentView = true
     var separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)
     // MARK: - cell高度
-    /// ZJaDe: cellContentHeight 不包含分割线的高度,但是包括edges的高度
+    /// ZJaDe: ContentView的高度 不包含分割线的高度
     var cellContentHeight:CGFloat?
     
     func invalidateCellHeight() {

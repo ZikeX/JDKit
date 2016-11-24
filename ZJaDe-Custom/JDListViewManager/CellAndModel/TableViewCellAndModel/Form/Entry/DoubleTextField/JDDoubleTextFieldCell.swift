@@ -9,12 +9,13 @@
 import UIKit
 
 class JDDoubleTextFieldCell: JDTextFieldCell {
+    let mainStackView = UIStackView(alignment: .fill, spacing: 8)
     var intervalLabel = UILabel()
+    lazy var button:Button = Button()
     var secondTextField = ComposeTextField()
     
     override func configCellInit() {
         super.configCellInit()
-        let mainStackView = UIStackView(alignment: .fill, spacing: 8)
         jdContentView.addSubview(mainStackView)
         mainStackView.snp.makeConstraints { (maker) in
             maker.leftSpace(self.stackView).offset(8)
@@ -58,6 +59,8 @@ extension JDDoubleTextFieldCell {
             }).addDisposableTo(disposeBag)
         
         controlEvents(textField: secondTextField, editingState: model.secondTextFieldEditingState)
+        
+        button.rx.tap.bindTo(model.buttonClick).addDisposableTo(disposeBag)
     }
 }
 extension JDDoubleTextFieldCell {

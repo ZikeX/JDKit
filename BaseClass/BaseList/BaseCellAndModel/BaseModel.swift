@@ -9,8 +9,15 @@
 import UIKit
 import HandyJSON
 
-class BaseModel: JDCustomModel,HandyJSON {
+class BaseModel: JDTableModel,HandyJSON {
     var id:Int? = nil
+    
+    override func configModelInit() {
+        super.configModelInit()
+        isNibCell = true
+        self.spaceEdges = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        self.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    }
     
     func mapping(mapper: HelpingMapper) {
         

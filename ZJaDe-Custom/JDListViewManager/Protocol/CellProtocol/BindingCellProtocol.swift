@@ -23,6 +23,6 @@ extension BindingCellProtocol {
         self.bindingCellClosure = closure
     }
 }
-extension JDFormModel:BindingCellProtocol {
-    typealias JDCellCompatibleType = (JDFormCell) -> ()
+extension JDStaticModel:BindingCellProtocol {
+    typealias JDCellCompatibleType = (JDStaticCell,JDStaticModel) -> ()
 }

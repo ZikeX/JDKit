@@ -35,8 +35,8 @@ extension JDTableModel {
             bindingDataAndConstraint(tempCell)
             /*************** Frame计算jdContentView的高度 ***************/
             let contentWidth = getContentViewWidth(tableView, cell: tempCell)
-            if let jdContentViewHeight = frameLayoutJDContentViewHeight(tableView,tempCell: tempCell,contentWidth: contentWidth) {
-                self.jdContentViewHeight = jdContentViewHeight
+            if let cellContentHeight = frameLayoutJDContentViewHeight(tableView,tempCell: tempCell,contentWidth: contentWidth) {
+                self.cellContentHeight = cellContentHeight
                 
                 logDebug("\(Thread.current)->Frame计算出cell->高度：\(cellHeight)")
             }else {
@@ -75,18 +75,13 @@ extension JDTableModel {
 extension JDTableModel {
     var cellHeight:CGFloat {
         get {
-            return (cellContentHeight ?? 44) + separatorFillHeight
+            if self.cellContentHeight == nil {
+                return 45.6
+            }
+            return cellContentHeight! + separatorFillHeight + contentViewVerticalEdge
         }
         set {
-            cellContentHeight = newValue - separatorFillHeight
-        }
-    }
-    fileprivate var jdContentViewHeight:CGFloat {
-        get {
-            return (cellContentHeight ?? 44) - contentViewVerticalEdge
-        }
-        set {
-            cellContentHeight = newValue + contentViewVerticalEdge
+            cellContentHeight = newValue - separatorFillHeight - contentViewVerticalEdge
         }
     }
     fileprivate var contentViewVerticalEdge:CGFloat {

@@ -45,9 +45,9 @@ extension JDTableCell : CellProtocol {
         self.updateLayout.activate()
         
         self.configCell(element)
-        if let model = element as? JDFormModel,
-            let cell = self as? JDFormCell {
-            model.layoutCellClosure?(cell)
+        if let model = element as? JDStaticModel,
+            let cell = self as? JDStaticCell {
+            model.layoutCellClosure?(cell,model)
         }
     }
     // MARK: - cell将要显示，做动画，element绑定cell
@@ -65,9 +65,9 @@ extension JDTableCell : CellProtocol {
         separatorLineView.backgroundColor = element.lineColor
         
         self.bindingModel(element)
-        if let model = element as? JDFormModel,
-            let cell = self as? JDFormCell {
-            model.bindingCellClosure?(cell)
+        if let model = element as? JDStaticModel,
+            let cell = self as? JDStaticCell {
+            model.bindingCellClosure?(cell,model)
         }
     }
     // MARK: cell设置数据后,如果需要在这里更新约束

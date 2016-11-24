@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 
-class JDFormModel: JDTableModel {
+class JDFormModel: JDStaticModel {
     convenience init(image:UIImage? = nil,title:String? = nil) {
         self.init()
         self.title.value = title
@@ -18,9 +18,6 @@ class JDFormModel: JDTableModel {
     var accessoryType = Variable(UITableViewCellAccessoryType.none)
     var title:Variable<String?> = Variable(nil)
     var image:Variable<UIImage?> = Variable(nil)
-    
-    var layoutCellClosure:JDCellCompatibleType?
-    var bindingCellClosure:JDCellCompatibleType?
 }
 extension JDFormModel {
     var titleIsEmpty:Bool {

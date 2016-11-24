@@ -8,11 +8,6 @@
 
 import UIKit
 
-class JDCustomModel: JDTableModel {
-    override func configModelInit() {
-        super.configModelInit()
-        isNibCell = true
-        self.spaceEdges = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        self.separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    }
+class JDCustomModel: JDStaticModel {
+    
 }

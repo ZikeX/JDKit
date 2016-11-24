@@ -10,6 +10,8 @@ import UIKit
 import RxSwift
 
 class JDDoubleTextFieldModel: JDTextFieldModel {
+    var buttonClick = PublishSubject<Void>()
+    
     var secondEntryType:EntryType?
     
     var secondText:Variable<String?> = Variable("")

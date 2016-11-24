@@ -10,19 +10,14 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-class JDFormCell: JDTableCell {
+class JDFormCell: JDStaticCell {
     
     let stackView = UIStackView(alignment: .center ,spacing:8)
     var titleLabel = UILabel()
     var imgView = ImageView()
-    var jdFocusView:UIView?
     
     override func configCellInit() {
         super.configCellInit()
-        appearAnimatedStyle = .fromInsideOut
-        highlightAnimatedStyle = .none
-        selectedAnimated = false
-        
         jdContentView.addSubview(stackView)
         stackView.snp.makeConstraints { (maker) in
             maker.left.equalToSuperview()
@@ -34,6 +29,7 @@ class JDFormCell: JDTableCell {
 }
 extension JDFormCell {
     override func configCell(_ model: JDTableModel) {
+        super.configCell(model)
         guard let formModel = model as? JDFormModel else {
             return
         }
@@ -45,13 +41,13 @@ extension JDFormCell {
         }
     }
     override func bindingModel(_ model: JDTableModel) {
+        super.bindingModel(model)
         guard let formModel = model as? JDFormModel else {
             return
         }
         formModel.accessoryType.asObservable().subscribe (onNext: {[unowned self] (accessoryType) in
             self.accessoryType = accessoryType
         }).addDisposableTo(disposeBag)
-        self.configCellAppear()
         if !formModel.imageIsEmpty {
             formModel.image.asObservable().bindTo(imgView.rx.image).addDisposableTo(disposeBag)
         }
@@ -61,6 +57,7 @@ extension JDFormCell {
         }
     }
     override func didBindingModel(_ model: JDTableModel) {
+        super.didBindingModel(model)
         guard let formModel = model as? JDFormModel else {
             return
         }
@@ -79,16 +76,5 @@ extension JDFormCell {
         titleLabel.textColor = Color.black
         titleLabel.font = Font.h3
         titleLabel.numberOfLines = 1
-    }
-    func configCellAppear() {
-        
-    }
-}
-extension JDFormCell {//cell第一响应者 焦点View
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        if selected {
-            self.jdFocusView?.becomeFirstResponder()
-        }
     }
 }

@@ -13,6 +13,7 @@ class JDButtonCell: JDFormCell {
     
     override func configCellInit() {
         super.configCellInit()
+        self.jdFocusView = button
         jdContentView.addSubview(button)
     }
 }
@@ -28,8 +29,14 @@ extension JDButtonCell {
             return
         }
         self.configButton(button)
-        buttonModel.title.asObservable().bindTo(button.textLabel.rx.text).addDisposableTo(disposeBag)
-        buttonModel.image.asObservable().bindTo(button.imgView.rx.image).addDisposableTo(disposeBag)
+        buttonModel.title.asObservable().subscribe(onNext:{[unowned self] (title) in
+            self.button.textStr = title
+        }).addDisposableTo(disposeBag)
+        
+        buttonModel.image.asObservable().subscribe(onNext:{[unowned self] (image) in
+            self.button.img = image
+        }).addDisposableTo(disposeBag)
+        
         button.rx.tap.bindTo(buttonModel.buttonClick).addDisposableTo(disposeBag)
     }
 }
