@@ -24,5 +24,5 @@ extension BindingCellProtocol {
     }
 }
 extension JDStaticModel:BindingCellProtocol {
-    typealias JDCellCompatibleType = (JDStaticCell,JDStaticModel) -> ()
+    typealias JDCellCompatibleType = (JDStaticCell) -> ()
 }

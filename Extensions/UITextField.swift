@@ -2,7 +2,7 @@
 import UIKit
 
 extension UITextField {
-    convenience init(text:String? = nil,placeholder:String?,color:UIColor,font:UIFont) {
+    convenience init(text:String? = nil,placeholder:String? = nil,color:UIColor,font:UIFont) {
         self.init()
         self.text = text
         self.placeholder = placeholder

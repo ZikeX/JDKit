@@ -18,6 +18,7 @@ extension SubViewProtocol where Self:UIView {
             return view
         }else {
             let view = closure(self)
+            view.tag = tag
             if view.superview == nil {
                 if let stackView = self as? UIStackView {
                     stackView.addArrangedSubview(view)
@@ -25,7 +26,6 @@ extension SubViewProtocol where Self:UIView {
                     self.addSubview(view)
                 }
             }
-            view.tag = tag
             return view
         }
     }

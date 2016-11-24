@@ -13,12 +13,35 @@ import RxSwift
 
 class JDEntryModel: JDFormModel {
     
-    var text:Variable<String?> = Variable("")
-    var placeholder = Variable("")
-    
-    convenience init(image:UIImage? = nil,title:String? = nil,text:String = "",placeholder:String = "") {
+    convenience init(image:UIImage? = nil,title:String? = nil,entrys:[(String?,String?)] = [(nil,nil)],texts:[String?] = [nil]) {
         self.init(image: image, title: title)
-        self.text.value = text
-        self.placeholder.value = placeholder
+        self.entrys = entrys.map({ (element) -> (Variable<String?>,Variable<String?>) in
+            return (Variable(element.0),Variable(element.1))
+        })
+        var texts = texts
+        while texts.count != self.entrys.count {
+            if texts.count < self.entrys.count {
+                texts.append(nil)
+            }else {
+                texts.removeLast()
+            }
+        }
+        self.texts = texts.map({ (element) -> Variable<String?> in
+            return Variable(element)
+        })
+        self.texts.forEach { (vari) in
+             _ = vari.asObservable().subscribe(onNext:{(str) in
+                logDebug("str->\(str),vari->\(vari)")
+            })
+        }
+    }
+    
+    var entrys:[(Variable<String?>,Variable<String?>)] = [(Variable(nil),Variable(nil))]
+    var texts:[Variable<String?>] = [Variable(nil)]
+    
+    convenience init(image:UIImage? = nil,title:String? = nil,text:String? = "",placeholder:String? = "") {
+        self.init(image: image, title: title)
+        self.entrys = [(Variable(nil),Variable(placeholder))]
+        self.texts = [Variable(text)]
     }
 }

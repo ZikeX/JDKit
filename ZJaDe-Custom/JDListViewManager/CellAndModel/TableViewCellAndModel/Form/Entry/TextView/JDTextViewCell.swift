@@ -38,11 +38,12 @@ extension JDTextViewCell {
         self.configTextView(textView)
         model.contentSizeChanged.bindTo(textView.contentSizeChanged).addDisposableTo(disposeBag)
         
-        model.text.asObservable().bindTo(textView.rx.text).addDisposableTo(disposeBag)
-        textView.rx.text.bindTo(model.text).addDisposableTo(disposeBag)
         
-        model.placeholder.asObservable().subscribe(onNext: {[unowned self] (placeholder) in
-            self.textView.placeholder = placeholder
+        model.texts.first!.asObservable().bindTo(textView.rx.text).addDisposableTo(disposeBag)
+        textView.rx.text.bindTo(model.texts.first!).addDisposableTo(disposeBag)
+        
+        model.entrys.first?.1.asObservable().subscribe(onNext: {[unowned self] (placeholder) in
+            self.textView.placeholder = placeholder ?? ""
         }).addDisposableTo(disposeBag)
     }
     func configTextView(_ textView:PlaceholderTextView) {

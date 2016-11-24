@@ -38,14 +38,8 @@ extension JDTextFieldCell {
         }
         textField.entryType = model.entryType
         self.configTextField(textField)
-        model.text.asObservable()
-            .bindTo(textField.rx.text)
-            .addDisposableTo(disposeBag);
-        textField.rx.text.bindTo(model.text).addDisposableTo(disposeBag)
         
-        model.placeholder.asObservable().subscribe(onNext: {[unowned self] (placeholder) in
-            self.textField.placeholder = placeholder
-        }).addDisposableTo(disposeBag)
+        self.binding(textField: textField, model: model, index: 0)
         
         controlEvents(textField: textField, editingState: model.textFieldEditingState)
     }

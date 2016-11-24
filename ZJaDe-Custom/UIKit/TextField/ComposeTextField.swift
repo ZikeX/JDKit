@@ -37,8 +37,8 @@ class ComposeTextField: UITextField {
         }
     }
     
-    init() {
-        super.init(frame: CGRect())
+    override init(frame:CGRect) {
+        super.init(frame: frame)
         self.delegate = self
     }
     required init?(coder aDecoder: NSCoder) {
@@ -72,6 +72,7 @@ extension ComposeTextField:UITextFieldDelegate {
         datePicker.datePicker.datePickerMode = mode
         _ = datePicker.dateObservable.subscribe(onNext: {[unowned self] (date) in
             self.text = date.toString(format: format)
+            self.sendActions(for: .valueChanged)
         });
         datePicker.show(title: placeholder ?? "日期")
     }

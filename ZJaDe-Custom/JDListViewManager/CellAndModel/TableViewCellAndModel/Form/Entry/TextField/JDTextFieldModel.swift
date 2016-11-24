@@ -17,6 +17,5 @@ class JDTextFieldModel: JDEntryModel {
         self.cellHeight = 45
     }
     var textFieldEditingState = PublishSubject<UIControlEvents>()
-    
 }
 

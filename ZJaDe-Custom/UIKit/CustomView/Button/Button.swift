@@ -18,20 +18,10 @@ enum TitleAndImgLocation:Int {
 }
 
 class Button: CustomIBControl {
-    
-    /// ZJaDe: contentView 根据情况不同，等于下面三个View中的一个
-    fileprivate var contentView:UIView? {
-        didSet {
-            if oldValue != contentView {
-                layoutContentView()
-            }
-        }
-    }
     var stackView = UIStackView()
     var textLabel = UILabel()
     @IBInspectable var imgView = ImageView()
     
-    var contentEdgeInsets = UIEdgeInsets()
     var titleAndImgLocation:TitleAndImgLocation {
         get {
             for (key,value) in locationDict {
@@ -104,6 +94,7 @@ class Button: CustomIBControl {
     }
     override func configInit() {
         super.configInit()
+        mainView.isUserInteractionEnabled = false
         configStackView()
     }
     override func viewDidLoad() {
@@ -137,7 +128,7 @@ extension Button {
         Observable.combineLatest(imgViewImgObserve, textLabelTextObserve) {($0, $1)}.distinctUntilChanged{ [unowned self] in
             return self.checkEmptyEqual($0,$1)
             }.subscribe(onNext: {[unowned self] (event) in
-                self.updateSubViews()
+                self.setNeedUpdateContentView()
             }).addDisposableTo(disposeBag)
     }
     func checkEmptyEqual<I:Equatable,T:Equatable>(_ element1:(I?,T?),_ element2:(I?,T?)) -> Bool {
@@ -148,55 +139,20 @@ extension Button {
 }
 
 extension Button {
-    func updateSubViews() {
-        self.removeAllSubviews()
+    override func updateContentView() -> UIView? {
+        var _contentView:UIView?
         switch (self.imgView.image,self.textLabel.text) {
         case (nil,nil):
             break
         case (nil,_):
-            self.addSubview(self.textLabel)
+            _contentView = self.textLabel
         case (_,nil):
-            self.addSubview(self.imgView)
+            _contentView = self.imgView
         case (_,_):
-            self.addSubview(self.stackView)
+            _contentView = self.stackView
             self.addAndSortStackSubViews()
         }
-        self.contentView = self.subviews.first
-    }
-    func layoutContentView() {
-        self.contentView?.snp.remakeConstraints({ (maker) in
-            switch self.contentHorizontalAlignment {
-            case .center:
-                maker.centerX.equalToSuperview()
-                maker.left.greaterThanOrEqualToSuperview()
-            case .fill:
-                maker.left.equalToSuperview()
-                maker.right.equalToSuperview()
-            case .left:
-                maker.left.equalToSuperview()
-                maker.right.lessThanOrEqualToSuperview()
-            case .right:
-                maker.left.greaterThanOrEqualToSuperview()
-                maker.right.equalToSuperview()
-            }
-            switch self.contentVerticalAlignment {
-            case .center:
-                maker.centerY.equalToSuperview()
-                maker.top.greaterThanOrEqualToSuperview()
-            case .fill:
-                maker.top.equalToSuperview()
-                maker.bottom.equalToSuperview()
-            case .top:
-                maker.top.equalToSuperview()
-                maker.bottom.lessThanOrEqualTo(self)
-            case .bottom:
-                maker.top.greaterThanOrEqualTo(self)
-                maker.bottom.equalToSuperview()
-            }
-        })
-    }
-    override func sizeThatFits(_ size: CGSize) -> CGSize {
-        return self.intrinsicContentSize
+        return _contentView
     }
     override var intrinsicContentSize:CGSize {
 //        #if TARGET_INTERFACE_BUILDER

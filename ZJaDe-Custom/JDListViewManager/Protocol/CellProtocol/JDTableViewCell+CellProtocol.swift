@@ -47,7 +47,7 @@ extension JDTableCell : CellProtocol {
         self.configCell(element)
         if let model = element as? JDStaticModel,
             let cell = self as? JDStaticCell {
-            model.layoutCellClosure?(cell,model)
+            model.layoutCellClosure?(cell)
         }
     }
     // MARK: - cell将要显示，做动画，element绑定cell
@@ -67,7 +67,7 @@ extension JDTableCell : CellProtocol {
         self.bindingModel(element)
         if let model = element as? JDStaticModel,
             let cell = self as? JDStaticCell {
-            model.bindingCellClosure?(cell,model)
+            model.bindingCellClosure?(cell)
         }
     }
     // MARK: cell设置数据后,如果需要在这里更新约束
