@@ -14,16 +14,18 @@ class JDFormCell: JDStaticCell {
     
     let stackView = UIStackView(alignment: .center ,spacing:8)
     var titleLabel = UILabel()
+    
     var imgView = ImageView()
     
     override func configCellInit() {
         super.configCellInit()
         jdContentView.addSubview(stackView)
         stackView.snp.makeConstraints { (maker) in
-            maker.left.equalToSuperview()
+            maker.left.top.equalToSuperview()
             maker.height.greaterThanOrEqualTo(28)
             maker.bottom.lessThanOrEqualTo(jdContentView)
         }
+        titleLabel.contentPriority(UILayoutPriorityRequired)
         stackView.contentPriority(UILayoutPriorityRequired)
     }
 }
@@ -72,7 +74,6 @@ extension JDFormCell {
 }
 extension JDFormCell {
     func configTitleLabel(titleLabel:UILabel) {
-        titleLabel.textAlignment = .center
         titleLabel.textColor = Color.black
         titleLabel.font = Font.h3
         titleLabel.numberOfLines = 1

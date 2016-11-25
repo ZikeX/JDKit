@@ -9,25 +9,24 @@
 import UIKit
 
 class JDTextViewCell: JDEntryCell {
-    var textView = PlaceholderTextView()
+    lazy var textViewItem:RemainTextViewItem = RemainTextViewItem()
     
     override func configCellInit() {
         super.configCellInit()
-        self.jdFocusView = textView
-        jdContentView.addSubview(textView)
-        
-        stackView.snp.makeConstraints { (maker) in
-            maker.top.equalToSuperview()
-        }
-        textView.snp.makeConstraints({ (maker) in
-            maker.top.right.bottom.equalToSuperview()
-            maker.leftSpace(stackView).offset(8)
-        })
+        self.jdFocusView = textViewItem
+        jdContentView.addSubview(textViewItem)
     }
 }
 extension JDTextViewCell {
     override func configCell(_ model: JDTableModel) {
         super.configCell(model)
+        guard let model = model as? JDTextViewModel else {
+            return
+        }
+        textViewItem.snp.remakeConstraints({ (maker) in
+            maker.top.right.bottom.equalToSuperview()
+            maker.leftSpace(stackView).offset(model.titleRightSpace)
+        })
     }
     
     override func bindingModel(_ model: JDTableModel) {
@@ -35,21 +34,20 @@ extension JDTextViewCell {
         guard let model = model as? JDTextViewModel else {
             return
         }
-        self.configTextView(textView)
-        model.contentSizeChanged.bindTo(textView.contentSizeChanged).addDisposableTo(disposeBag)
+        textViewItem.maxLength = model.maxLength
+        self.configTextView(textViewItem.textView)
+        model.contentSizeChanged.bindTo(textViewItem.textView.contentSizeChanged).addDisposableTo(disposeBag)
         
-        
-        model.texts.first!.asObservable().bindTo(textView.rx.text).addDisposableTo(disposeBag)
-        textView.rx.text.bindTo(model.texts.first!).addDisposableTo(disposeBag)
-        
-        model.entrys.first?.1.asObservable().subscribe(onNext: {[unowned self] (placeholder) in
-            self.textView.placeholder = placeholder ?? ""
-        }).addDisposableTo(disposeBag)
+        self.binding(remainTextView: textViewItem, model: model, index: 0)
     }
     func configTextView(_ textView:PlaceholderTextView) {
         textView.backgroundColor = Color.viewBackground
         textView.cornerRadius = 5
         textView.font = Font.h3
         textView.textColor = Color.black
+    }
+    override func updateEnabledState(_ model: JDTableModel, enabled: Bool) {
+        super.updateEnabledState(model, enabled: enabled)
+        self.textViewItem.textView.isEditable = enabled
     }
 }

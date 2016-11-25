@@ -23,7 +23,6 @@ enum CellHighlightAnimatedStyle {
 protocol CellAnimateProtocol {
     var appearAnimatedStyle:CellAppearAnimatedStyle {get set}
     var highlightAnimatedStyle:CellHighlightAnimatedStyle {get set}
-    var selectedAnimated:Bool {get set}
     var animatedDuration:TimeInterval {get set}
     // MARK: - cellAppearAnimate
     func cellAppearAnimate()
@@ -51,11 +50,6 @@ extension CellAnimateProtocol where Self:UIView {
 }
 
 extension JDTableCell:CellAnimateProtocol {
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        if self.selectedAnimated {
-            super.setSelected(selected, animated: animated)
-        }
-    }
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         switch highlightAnimatedStyle {
         case .touchZoomOut:

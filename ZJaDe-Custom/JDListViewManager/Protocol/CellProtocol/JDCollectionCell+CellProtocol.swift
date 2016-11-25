@@ -32,6 +32,12 @@ extension JDCollectionCell : CellProtocol {
     // MARK: cell根据element绑定数据
     final func configCellWithElement(_ element: JDCollectionModel) {
         self.bindingModel(element)
+        // MARK: - 更新enabled状态
+        element.enabledVariable.asObservable().subscribe(onNext:{[unowned self,unowned element] (enabled) in
+            let enabled = element.canEnabled()
+            self.enabled = enabled
+            self.updateEnabledState(element, enabled: enabled)
+        }).addDisposableTo(disposeBag)
     }
     // MARK: cell设置数据后,如果需要在这里更新约束
     final func cellUpdateConstraints(_ element: JDCollectionModel) {

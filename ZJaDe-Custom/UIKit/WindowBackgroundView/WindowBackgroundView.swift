@@ -24,7 +24,7 @@ class WindowBackgroundView: UIView {
         backView.backgroundColor = Color.darkBlack.withAlphaComponent(0.4)
         backView.frame = self.bounds
         
-        _ = backView.getTap().rx.event.subscribe(onNext: {[unowned self] (event) in
+        _ = backView.rx.whenTouch({[unowned self] (view) in
             self.hide()
         })
         return backView

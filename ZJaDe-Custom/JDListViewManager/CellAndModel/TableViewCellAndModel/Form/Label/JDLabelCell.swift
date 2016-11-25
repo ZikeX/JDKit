@@ -19,23 +19,26 @@ class JDLabelCell: JDFormCell {
         stackView.snp.makeConstraints { (maker) in
             maker.top.centerY.equalToSuperview()
         }
-        detailTitleLabel.snp.makeConstraints({ (maker) in
-            maker.centerY.top.right.equalToSuperview()
-            maker.leftSpace(stackView).offset(8)
-        })
         detailTitleLabel.contentHuggingHorizontalPriority = 249
     }
 }
 extension JDLabelCell {
     override func configCell(_ model: JDTableModel) {
         super.configCell(model)
+        guard let model = model as? JDLabelModel else {
+            return
+        }
+        detailTitleLabel.snp.remakeConstraints({ (maker) in
+            maker.centerY.top.right.equalToSuperview()
+            maker.leftSpace(stackView).offset(model.titleRightSpace)
+        })
     }
     override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
-        guard let labelModel = model as? JDLabelModel else {
+        guard let model = model as? JDLabelModel else {
             return
         }
-        labelModel.detailTitle.asObservable().bindTo(detailTitleLabel.rx.text).addDisposableTo(disposeBag)
+        model.detailTitle.asObservable().bindTo(detailTitleLabel.rx.text).addDisposableTo(disposeBag)
         self.configDetailLabel(detailTitleLabel)
     }
 }

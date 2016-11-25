@@ -45,8 +45,11 @@ extension JDTableCell : CellProtocol {
         self.updateLayout.activate()
         
         self.configCell(element)
-        if let model = element as? JDStaticModel,
-            let cell = self as? JDStaticCell {
+        if let model = element as? JDCustomModel,
+            let cell = self as? JDCustomCell {
+            model.layoutCellClosure?(cell)
+        }else if let model = element as? JDFormModel,
+            let cell = self as? JDFormCell {
             model.layoutCellClosure?(cell)
         }
     }
@@ -63,12 +66,28 @@ extension JDTableCell : CellProtocol {
             self.selectedBackgroundView?.backgroundColor = color
         }
         separatorLineView.backgroundColor = element.lineColor
-        
+        // MARK: - 绑定数据
         self.bindingModel(element)
-        if let model = element as? JDStaticModel,
-            let cell = self as? JDStaticCell {
+        if let model = element as? JDCustomModel,
+            let cell = self as? JDCustomCell {
+            model.bindingCellClosure?(cell)
+        }else if let model = element as? JDFormModel,
+            let cell = self as? JDFormCell {
             model.bindingCellClosure?(cell)
         }
+        // MARK: - 更新enabled状态
+        element.enabledVariable.asObservable().subscribe(onNext:{[unowned self,unowned element] (enabled) in
+            let enabled = element.canEnabled()
+            self.enabled = enabled
+            self.updateEnabledState(element, enabled: enabled)
+            if let model = element as? JDCustomModel,
+                let cell = self as? JDCustomCell {
+                model.updateEnabledStateClosure?(cell,enabled)
+            }else if let model = element as? JDFormModel,
+                let cell = self as? JDFormCell {
+                model.updateEnabledStateClosure?(cell,enabled)
+            }
+        }).addDisposableTo(disposeBag)
     }
     // MARK: cell设置数据后,如果需要在这里更新约束
     final func cellUpdateConstraints(_ element: JDTableModel) {

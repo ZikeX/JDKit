@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxSwift
 protocol ListModelProtocol {
     var key:String? {get set}
 }
@@ -31,13 +32,25 @@ class JDListModel:NSObject {
         
     }
     // MARK: - UpdateModelProtocol
+    var isHidden:Bool = false
     var needUpdate:Bool = false
     // MARK: - IdentifiableType
     var identity: Int {
         return self.hashValue
     }
-    // MARK: - 
-    var isHidden:Bool = false
+    // MARK: - ListModelProtocol
+    private(set) var enabledVariable:Variable<Bool?> = Variable(nil)
+    var enabled:Bool? {
+        get {
+            return enabledVariable.value
+        }
+        set {
+            enabledVariable.value = newValue
+        }
+    }
+    func canEnabled() -> Bool {
+        return self.enabled ?? true
+    }
     var key:String?
 }
 extension JDListModel:IdentifiableType {

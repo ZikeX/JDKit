@@ -29,11 +29,6 @@ class JDEntryModel: JDFormModel {
         self.texts = texts.map({ (element) -> Variable<String?> in
             return Variable(element)
         })
-        self.texts.forEach { (vari) in
-             _ = vari.asObservable().subscribe(onNext:{(str) in
-                logDebug("str->\(str),vari->\(vari)")
-            })
-        }
     }
     
     var entrys:[(Variable<String?>,Variable<String?>)] = [(Variable(nil),Variable(nil))]

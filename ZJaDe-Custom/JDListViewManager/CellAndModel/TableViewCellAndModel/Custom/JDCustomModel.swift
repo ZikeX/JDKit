@@ -10,4 +10,7 @@ import UIKit
 
 class JDCustomModel: JDStaticModel {
     
+    var layoutCellClosure:JDCellCompatibleType?
+    var bindingCellClosure:JDCellCompatibleType?
+    var updateEnabledStateClosure:JDUpdateEnabledStateType?
 }

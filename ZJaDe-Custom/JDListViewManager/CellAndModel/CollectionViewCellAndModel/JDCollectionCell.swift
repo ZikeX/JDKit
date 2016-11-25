@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 class JDCollectionCell: UICollectionViewCell {
-    
+    var enabled:Bool = true
     override init(frame: CGRect) {
         super.init(frame: frame)
         configCellInit()

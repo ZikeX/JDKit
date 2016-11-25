@@ -39,6 +39,10 @@ extension JDButtonCell {
         
         button.rx.tap.bindTo(buttonModel.buttonClick).addDisposableTo(disposeBag)
     }
+    override func updateEnabledState(_ model: JDTableModel, enabled: Bool) {
+        super.updateEnabledState(model, enabled: enabled)
+        self.button.isEnabled = enabled
+    }
 }
 extension JDButtonCell {
     func configButton(_ button:Button) {

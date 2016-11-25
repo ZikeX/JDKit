@@ -18,18 +18,20 @@ class JDTextFieldCell: JDEntryCell {
         jdContentView.addSubview(textField)
         
         stackView.snp.makeConstraints { (maker) in
-            maker.top.centerY.equalToSuperview()
+            maker.centerY.equalToSuperview()
         }
-        textField.snp.makeConstraints({ (maker) in
-            maker.centerY.top.right.equalToSuperview()
-            maker.leftSpace(stackView).offset(8)
-        })
     }
 }
 extension JDTextFieldCell {
     override func configCell(_ model: JDTableModel) {
         super.configCell(model)
-        
+        guard let model = model as? JDTextFieldModel else {
+            return
+        }
+        textField.snp.remakeConstraints({ (maker) in
+            maker.centerY.top.right.equalToSuperview()
+            maker.leftSpace(stackView).offset(model.titleRightSpace)
+        })
     }
     override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
@@ -47,6 +49,10 @@ extension JDTextFieldCell {
         textField.backgroundColor = Color.clear
         textField.textColor = Color.black
         textField.font = Font.h3
+    }
+    override func updateEnabledState(_ model: JDTableModel, enabled: Bool) {
+        super.updateEnabledState(model, enabled: enabled)
+        self.textField.isEnabled = enabled
     }
 }
 extension JDTextFieldCell {

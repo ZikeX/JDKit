@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 
 class JDTextViewModel: JDEntryModel {
+    var maxLength:Int?
     
     override func configModelInit() {
         super.configModelInit()

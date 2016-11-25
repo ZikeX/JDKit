@@ -15,7 +15,6 @@ class JDStaticCell: JDTableCell {
         super.configCellInit()
         appearAnimatedStyle = .fromInsideOut
         highlightAnimatedStyle = .none
-        selectedAnimated = false
     }
     
     override func bindingModel(_ model: JDTableModel) {
@@ -30,9 +29,11 @@ extension JDStaticCell {
 }
 extension JDStaticCell {//cell第一响应者 焦点View
     override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        if selected {
-            self.jdFocusView?.becomeFirstResponder()
+        if enabled {
+            super.setSelected(selected, animated: animated)
+            if selected {
+                self.jdFocusView?.becomeFirstResponder()
+            }
         }
     }
 }

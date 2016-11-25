@@ -15,7 +15,6 @@ class JDSwitchCell: JDLabelCell {
         super.configCellInit()
         self.jdFocusView = switchView
         self.accessoryView = switchView
-        selectedAnimated = true
     }
 }
 extension JDSwitchCell {
@@ -27,12 +26,17 @@ extension JDSwitchCell {
         switchModel.valueChanged.distinctUntilChanged().bindTo(switchView.rx.value).addDisposableTo(disposeBag)
         switchView.rx.value.distinctUntilChanged().bindTo(switchModel.valueChanged).addDisposableTo(disposeBag)
     }
+    override func updateEnabledState(_ model: JDTableModel, enabled: Bool) {
+        super.updateEnabledState(model, enabled: enabled)
+        self.switchView.isEnabled = enabled
+    }
 }
 extension JDSwitchCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         if selected {
             switchView.setOn(!switchView.isOn, animated: true)
+            switchView.sendActions(for: .valueChanged)
         }
     }
 }

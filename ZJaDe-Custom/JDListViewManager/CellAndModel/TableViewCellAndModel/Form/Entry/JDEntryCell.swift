@@ -34,3 +34,21 @@ extension JDEntryCell {
         }
     }
 }
+extension JDEntryCell {
+    func binding(textView:PlaceholderTextView,model:JDEntryModel,index:Int) {
+        if index < model.texts.count {
+            model.texts[index].asObservable()
+                .bindTo(textView.rx.text)
+                .addDisposableTo(disposeBag)
+            textView.rx.text.bindTo(model.texts[index]).addDisposableTo(disposeBag)
+        }
+        if index < model.entrys.count {
+            model.entrys[index].1.asObservable().subscribe(onNext: {[unowned textView] (placeholder) in
+                textView.placeholder = placeholder ?? ""
+            }).addDisposableTo(disposeBag)
+        }
+    }
+    func binding(remainTextView:RemainTextViewItem,model:JDEntryModel,index:Int) {
+        binding(textView: remainTextView.textView, model: model, index: index)
+    }
+}

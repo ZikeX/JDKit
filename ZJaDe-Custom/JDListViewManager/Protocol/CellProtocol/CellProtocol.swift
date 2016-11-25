@@ -9,6 +9,7 @@
 import UIKit
 
 protocol CellProtocol {
+    var enabled:Bool {get set}
     associatedtype ModelType
     // MARK: - cell初始化
     func configCellInit()

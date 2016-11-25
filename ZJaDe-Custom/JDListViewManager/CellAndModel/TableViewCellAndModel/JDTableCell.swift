@@ -10,12 +10,14 @@ import UIKit
 import RxSwift
 
 class JDTableCell: UITableViewCell {
-    
+    // MARK: - touchCell
+    var enabled:Bool = true
+    var touchCell:(()->())?
+    // MARK: -
     var isTempCell = false
     // MARK: - CellAnimateProtocol
     var appearAnimatedStyle = CellAppearAnimatedStyle.outwardFromCenter
     var highlightAnimatedStyle = CellHighlightAnimatedStyle.touchZoomOut
-    var selectedAnimated = true
     var animatedDuration:TimeInterval = 0.25
     // MARK: -
     @IBOutlet var jdContentView:MyContentView!
@@ -74,6 +76,16 @@ extension JDTableCell {//updateCell
         return self.tableView?.indexPath(for: self)
     }
     
+}
+extension JDTableCell {
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        if enabled {
+            super.setSelected(selected, animated: animated)
+            if selected {
+                touchCell?()
+            }
+        }
+    }
 }
 // MARK: -
 class MyContentView:UIView {

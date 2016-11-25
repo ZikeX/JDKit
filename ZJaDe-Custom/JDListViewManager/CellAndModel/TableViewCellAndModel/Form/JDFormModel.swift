@@ -10,6 +10,12 @@ import UIKit
 import RxSwift
 
 class JDFormModel: JDStaticModel {
+    var layoutCellClosure:JDCellCompatibleType?
+    var bindingCellClosure:JDCellCompatibleType?
+    var updateEnabledStateClosure:JDUpdateEnabledStateType?
+    
+    
+    var titleRightSpace:CGFloat = 8
     
     convenience init(image:UIImage? = nil,title:String? = nil) {
         self.init()

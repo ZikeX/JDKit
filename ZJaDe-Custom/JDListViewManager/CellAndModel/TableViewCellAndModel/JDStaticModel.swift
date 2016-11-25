@@ -9,11 +9,10 @@
 import UIKit
 
 class JDStaticModel: JDTableModel {
-    var layoutCellClosure:JDCellCompatibleType?
-    var bindingCellClosure:JDCellCompatibleType?
 }
 extension JDEntryModel {//DateTextField
     func createDateTextFieldCell() {
+        self.reuseIdentifier = "DateTextFieldCell"
         let oldLayoutClosure = self.layoutCellClosure
         self.configLayoutCell {[unowned self] (cell) in
             oldLayoutClosure?(cell)
@@ -21,7 +20,7 @@ extension JDEntryModel {//DateTextField
                 return
             }
             cell.stackView.snp.makeConstraints { (maker) in
-                maker.top.centerY.equalToSuperview()
+                maker.centerY.equalToSuperview()
             }
             let stackView = cell.jdContentView.createIfNotExisting(tag: 100, { (contentView) -> UIView in
                 return UIStackView(alignment: .fill, spacing: 8)
@@ -54,6 +53,7 @@ extension JDEntryModel {//DateTextField
     }
     // MARK: -
     func createFullReductionCell(buttonClickClosure:@escaping ((Button)->())) {
+        self.reuseIdentifier = "FullReductionItemCell"
         self.configLayoutCell {[unowned self] (cell) in
             guard let cell = cell as? JDEntryCell else {
                 return
@@ -107,6 +107,7 @@ extension JDEntryModel {//DateTextField
         }
     }
     func createDateTimeCell() {
+        self.reuseIdentifier = "DateTimeCell"
         let oldLayoutClosure = self.layoutCellClosure
         self.configLayoutCell {[unowned self] (cell) in
             oldLayoutClosure?(cell)
@@ -114,7 +115,7 @@ extension JDEntryModel {//DateTextField
                 return
             }
             cell.stackView.snp.makeConstraints { (maker) in
-                maker.top.centerY.equalToSuperview()
+                maker.centerY.equalToSuperview()
             }
             let stackView = cell.jdContentView.createIfNotExisting(tag: 100, { (contentView) -> UIView in
                 return UIStackView(alignment: .fill, spacing: 8)

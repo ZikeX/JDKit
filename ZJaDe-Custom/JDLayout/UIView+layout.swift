@@ -115,7 +115,7 @@ extension UIView {
             return self.contentCompressionResistancePriority(for: .horizontal)
         }
         set {
-            self.setContentHuggingPriority(newValue, for: .horizontal)
+            self.setContentCompressionResistancePriority(newValue, for: .horizontal)
         }
     }
     
