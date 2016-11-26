@@ -32,4 +32,5 @@ class JDTableModel:JDListModel {
     var cellSelectedBackgroundView = UIView()
     var cellSelectedBackgroundColor:UIColor? = Color.selectedCell
     // MARK: -
+    var isSelected = false
 }

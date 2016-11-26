@@ -66,6 +66,12 @@ extension JDTableCell : CellProtocol {
             self.selectedBackgroundView?.backgroundColor = color
         }
         separatorLineView.backgroundColor = element.lineColor
+        // MARK: - isSelected
+        if element.isSelected {
+            self.accessoryView = ImageView(image: R.image.ic_cell_checkmark())
+        }else {
+            self.accessoryView = nil
+        }
         // MARK: - 绑定数据
         self.bindingModel(element)
         if let model = element as? JDCustomModel,
@@ -89,7 +95,7 @@ extension JDTableCell : CellProtocol {
             }
         }).addDisposableTo(disposeBag)
     }
-    // MARK: cell设置数据后,如果需要在这里更新约束
+    // MARK: - cell设置数据后,如果需要在这里更新约束
     final func cellUpdateConstraints(_ element: JDTableModel) {
         self.didBindingModel(element)
         self.setNeedsUpdateConstraints()

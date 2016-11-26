@@ -90,6 +90,9 @@ extension jd {
     static var rootWindow:UIWindow {
         return UIApplication.shared.delegate!.window!!
     }
+    static func endEditing() {
+        self.keyWindow.endEditing(true)
+    }
     /// ZJaDe: 返回最顶端的控制器
     static func visibleVC(_ base: UIViewController? = rootWindow.rootViewController) -> UIViewController? {
         if let nav = base as? UINavigationController {

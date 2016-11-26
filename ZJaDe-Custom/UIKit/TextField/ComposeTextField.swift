@@ -39,17 +39,22 @@ class ComposeTextField: UITextField {
     
     override init(frame:CGRect) {
         super.init(frame: frame)
-        self.delegate = self
+        configInit()
     }
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+        configInit()
+    }
+    func configInit() {
+        self.delegate = self
+        
     }
 }
 extension ComposeTextField:UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         switch self.entryType ?? .default {
         case .date(mode: let mode):
-            jd.keyWindow.endEditing(true)
+            jd.endEditing()
             showDatePicker(mode: mode)
             return false
         default:

@@ -40,13 +40,48 @@ class JDTableViewModel: JDListViewModel {
         }
     }
     func configTableView(_ tableView:JDTableView) {
-        
+        tableView.rx.modelSelected(JDTableModel.self).subscribe(onNext:{[unowned self] (model) in
+            self.whenModelSelected(model)
+        }).addDisposableTo(disposeBag)
     }
     func getLocalSectionModels() -> [(JDTableSection, [JDTableModel])]? {
         return nil
     }
+    // MARK: - selected
+    var selectedModels = [JDTableModel]()
+    var selectedIndexPaths = [IndexPath]()
+    var maxSelectedCount:Int?
 }
-
+extension JDTableViewModel {
+    func whenCellSelected(_ indexPath:IndexPath) {
+        guard let maxSelectedCount = maxSelectedCount,maxSelectedCount > 0 else {
+            return
+        }
+        if !self.selectedIndexPaths.contains(indexPath) {
+            self.selectedIndexPaths.append(indexPath)
+        }
+        let cell = tableView.cellForRow(at: indexPath)
+        cell?.accessoryView = ImageView(image: R.image.ic_cell_checkmark())
+        while self.selectedIndexPaths.count > maxSelectedCount {
+            let firstIndexPath = self.selectedIndexPaths.removeFirst()
+            let cell = tableView.cellForRow(at: firstIndexPath)
+            cell?.accessoryView = nil
+        }
+    }
+    func whenModelSelected(_ model:JDTableModel) {
+        guard let maxSelectedCount = maxSelectedCount,maxSelectedCount > 0 else {
+            return
+        }
+        if !self.selectedModels.contains(model) {
+            self.selectedModels.append(model)
+        }
+        model.isSelected = true
+        while self.selectedModels.count > maxSelectedCount {
+            let firstModel = self.selectedModels.removeFirst()
+            firstModel.isSelected = false
+        }
+    }
+}
 extension JDTableViewModel:UITableViewDelegate {
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.tableView.endEditing(true)
@@ -76,6 +111,7 @@ extension JDTableViewModel:UITableViewDelegate {
         if self.autoDeselectRow {
             self.tableView.deselectRow(at: indexPath, animated: true)
         }
+        whenCellSelected(indexPath)
     }
     // MARK: - cellHeight
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

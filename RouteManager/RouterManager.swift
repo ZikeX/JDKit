@@ -33,6 +33,7 @@ class RouterManager {
 //        guard checkCanJump(currentNavc) else {
 //            return
 //        }
+        jd.endEditing()
         let viewController = createVC(routeUrl: routeUrl)
         switch routeType {
         case .popAndPush(let count):

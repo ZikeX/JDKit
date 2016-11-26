@@ -26,7 +26,7 @@ protocol UpdateDataSourceProtocol:class {
     func configDataSource()
     func configDelegate()
     /// ZJaDe: 计算tableView的cell高度
-    func calculateItemHeight()
+    func dataArrayDidSet()
 }
 extension UpdateDataSourceProtocol {
     @discardableResult
@@ -34,6 +34,7 @@ extension UpdateDataSourceProtocol {
         Async.background { () -> [AnimatableSectionModel<SectionType,ModelType>]? in
             if let newData = closure(self.dataArray) {
                 self.dataArray = newData
+                self.dataArrayDidSet()
                 var sectionModels = [AnimatableSectionModel<SectionType,ModelType>]()
                 for (section,models) in newData {
                     let showModels = models.filter({ (model) -> Bool in
@@ -48,7 +49,6 @@ extension UpdateDataSourceProtocol {
         }.main { (sectionModels) -> () in
             if let sectionModels = sectionModels {
                 self.sectionModelsChanged.onNext(sectionModels)
-                self.calculateItemHeight()
                 self.updateItemsAnimated()
             }
             if let scrollView = self.listView as? UIScrollView {
@@ -66,13 +66,13 @@ extension UpdateDataSourceProtocol {
                 }
             }
         }
-        if updateItems.count > 0 {            
-            let result = Changeset<SectionModelType>(updatedItems: updateItems)
-            self.listView?.performBatchUpdates(result, animationConfiguration: AnimationConfiguration(reloadAnimation:.automatic))
+        let result = Changeset<SectionModelType>(updatedItems: updateItems)
+        self.listView?.performBatchUpdates(result, animationConfiguration: AnimationConfiguration(reloadAnimation:.automatic))
+        if updateItems.count > 0 {
         }
     }
-    
-    func calculateItemHeight() {
+    // MARK: -
+    func dataArrayDidSet() {
         
     }
 }
@@ -102,7 +102,17 @@ extension JDTableViewModel:UpdateDataSourceProtocol {
         self.tableView.delegate = nil
         self.sectionModelsChanged.asObservable().bindTo(self.tableView.rx.items(dataSource: rxDataSource)).addDisposableTo(disposeBag)
     }
-    func calculateItemHeight() {
+    func configDelegate() {
+        self.tableView.rx.setDelegate(self).addDisposableTo(disposeBag)
+    }
+    // MARK: - 
+    func dataArrayDidSet() {
+        Async.main {
+            self.calculateItemsHeight()
+        }
+        self.updateSelectModels()
+    }
+    func calculateItemsHeight() {
         let modelTable = NSHashTable<JDTableModel>.weakObjects()
         self.dataArray.forEach { (section,models) in
             models.forEach({ (model) in
@@ -119,8 +129,15 @@ extension JDTableViewModel:UpdateDataSourceProtocol {
             }
         }
     }
-    func configDelegate() {
-        self.tableView.rx.setDelegate(self).addDisposableTo(disposeBag)
+    func updateSelectModels() {
+        for (i,(_,models)) in dataArray.enumerated() {
+            for (j,model) in models.enumerated() {
+                if model.isSelected {
+                    self.selectedModels.append(model)
+                    self.selectedIndexPaths.append(IndexPath(item: j, section: i))
+                }
+            }
+        }
     }
 }
 extension JDCollectionViewModel:UpdateDataSourceProtocol {
