@@ -63,8 +63,8 @@ extension DatePicker {
 extension DatePicker {
     func show(title:String) {
         self.titleLabel.text = title
-        let contentView = WindowBackgroundView()
-        contentView.addSubview(self)
+        let contentView = WindowBgView()
+        contentView.view.addSubview(self)
         
         contentView.showClosure = {[unowned self] in
             self.snp.makeConstraints({ (maker) in
@@ -79,7 +79,6 @@ extension DatePicker {
         contentView.show()
     }
     func hide() {
-        let contentView = self.superview as? WindowBackgroundView
-        contentView?.hide()
+        jd.keyWindow.hideFirstBgView()
     }
 }
