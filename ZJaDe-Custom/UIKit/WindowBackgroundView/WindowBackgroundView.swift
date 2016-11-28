@@ -42,13 +42,13 @@ class WindowBackgroundView: UIView {
 }
 extension WindowBackgroundView {
     func show() {
-        UIView.spring(duration: 0.5) {
+        UIView.spring(duration: 0.35) {
             self.alpha = 1
             self.showClosure?()
         }
     }
     func hide() {
-        UIView.animate(withDuration: 0.5, animations: {
+        UIView.animate(withDuration: 0.35, animations: {
             self.alpha = 0
             self.hideClosure?()
         }) { (finish) in

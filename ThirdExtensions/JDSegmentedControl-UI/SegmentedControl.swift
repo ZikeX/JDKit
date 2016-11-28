@@ -14,6 +14,7 @@ import RxCocoa
 enum JDSegmentedControlStyle {
     case wavyLine
     case canScroll
+    case canScrollNoIndicator
 }
 class SegmentedControlModel:JDSegmentedControlModel {
     
@@ -55,6 +56,8 @@ class SegmentedControl: JDSegmentedControl {
         case .canScroll:
             self.scrollEnabled = true
             self.addBorderBottom(boderWidth:0.5,color:Color.tintColor)
+        case .canScrollNoIndicator:
+            self.scrollEnabled = true
         }
         
     }
@@ -87,7 +90,7 @@ extension SegmentedControl:JDSegmentedControlDelegate {
             switch self.style {
             case .wavyLine:
                 item.titleLabel.textColor = Color.gray
-            case .canScroll:
+            case .canScroll, .canScrollNoIndicator:
                 item.titleLabel.textColor = Color.black
             }
         }
@@ -112,7 +115,7 @@ extension SegmentedControl:JDSegmentedControlDelegate {
         switch segmentedControl.style {
         case .wavyLine:
             break
-        case .canScroll:
+        case .canScroll, .canScrollNoIndicator:
             item.snp.makeConstraints { (maker) in
                 maker.width.equalTo(72)
             }
@@ -140,6 +143,12 @@ extension SegmentedControl:JDSegmentedControlDelegate {
                 maker.left.bottom.centerX.equalToSuperview()
                 maker.height.equalTo(2)
             })
+        case .canScrollNoIndicator:
+            imageView.backgroundColor = Color.clear
+            imageView.snp.makeConstraints({ (maker) in
+                maker.left.bottom.centerX.equalToSuperview()
+                maker.height.equalTo(0)
+            })
         }
     }
     public func didSelectedItem(segmentedControl: JDSegmentedControl, index: Int) {
@@ -158,7 +167,7 @@ extension SegmentedControl:JDSegmentedControlDelegate {
                         let width = CGFloat(item.titleLabel.text!.length + 1) * R.image.ic_wavyLine()!.size.width
                         maker.width.equalTo(width)
                     }
-                case .canScroll:
+                default:
                     break
                 }
             }

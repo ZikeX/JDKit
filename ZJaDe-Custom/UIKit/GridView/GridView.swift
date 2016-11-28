@@ -12,20 +12,25 @@ class GridView<ItemType:UIView>: UIView {
     /// ZJaDe:columns 总列数
     var columns:Int = 0 {
         didSet {
-            if itemArray.count > 0 {
+            if visiableItemArray.count > 0 {
                 configItemsArray()
             }
         }
     }
     /// ZJaDe: 总行数
     var lineTotalNum:Int {
-        return (itemArray.count-1) / columns + 1
+        return (visiableItemArray.count-1) / columns + 1
     }
     /// ZJaDe: item数组
     var itemArray = [ItemType]() {
         didSet {
             configItemsArray()
         }
+    }
+    var visiableItemArray:[ItemType] {
+        return self.itemArray.filter({ (item) -> Bool in
+            return !item.isHidden
+        })
     }
     var gridEdges = UIEdgeInsets() {
         didSet {
@@ -76,14 +81,17 @@ extension GridView {
             maker.edges.equalToSuperview().inset(gridEdges)
         }
     }
+    func setNeedUpdateItems() {
+        self.configItemsArray()
+    }
     /// ZJaDe: 核心布局方法
     func configItemsArray() {
         guard columns > 0 else {
             logError("总列数必须大于0")
             return
         }
-        guard itemArray.count > 0 else {
-            logError("itemArray数量不能小于0")
+        guard visiableItemArray.count > 0 else {
+            logError("visiableItemArray数量不能小于0")
             return
         }
         itemsStackViews.forEach{$0.removeAllSubviews()}
@@ -99,7 +107,7 @@ extension GridView {
                 stackView.spacing = self.horizontalSpace
             })
         }
-        itemArray.enumerated().forEach { (offset: Int, element: ItemType) in
+        visiableItemArray.enumerated().forEach { (offset: Int, element: ItemType) in
             /// ZJaDe: 在每一行的位置
             let lineNo = offset / columns
             let itemStackView = itemsStackViews[lineNo]

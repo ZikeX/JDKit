@@ -28,4 +28,8 @@ extension Int {
         }
     }
 
+    /// ZJaDe: 返回随机数
+    static func random(min: Int = 0, max: Int = 50) -> Int {
+        return Double.random(min: min.toDouble, max: max.toDouble).toInt
+    }
 }
