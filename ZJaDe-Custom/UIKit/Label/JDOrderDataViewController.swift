@@ -15,7 +15,7 @@ class JDOrderDataViewController: BaseViewController {
         super.viewDidLoad()
         self.configNavBarItem { (navItem) in
             navItem.title = "订单数据"
-            navItem.rightBarButtonItem = UIBarButtonItem.image(R.image.ic_menu()!, { (item) in
+            navItem.rightBarButtonItem = UIBarButtonItem.image(R.image.ic_今日订单()!, { (item) in
                 self.selectView.show()
             })
         }
