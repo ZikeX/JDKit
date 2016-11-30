@@ -10,12 +10,14 @@ import UIKit
 
 protocol TransitionProtocol:AddChildListProtocol {
     var transitionVC:TransitionViewController {get set}
-    
+    // MARK: - 调用下面方法可以添加transitionVC到本控制器
     func addTransitionVC(edgesToFill:Bool)
+    // MARK: - 创建transitionVC之后的一些设置
     func configTransitionVC(edgesToFill: Bool)
-    
-    func configSegmentedControlToVC(segmentedControl:SegmentedControl, _ closure:((ChildListViewModelType,Int)->())?)
-    func updateTransitionChildVC(segmentedControl:SegmentedControl?, _ closure:((ChildListViewModelType,Int)->())?)
+    // MARK: - 如果有segmentedControl,则绑定segmentedControl和transitionVC，并根据segmentedControl的item数量来创建子控制器
+    func configSegmentedControlToVC(segmentedControl:SegmentedControl, _ closure:((ChildListViewModelType?,Int)->())?)
+    // MARK: - 如果有segmentedControl,则根据segmentedControl的item数量来创建子控制器，否则只创建一个子控制器
+    func updateTransitionChildVC(segmentedControl:SegmentedControl?, _ closure:((ChildListViewModelType?,Int)->())?)
 }
 extension TransitionProtocol where Self:BaseViewController {
     func addTransitionVC(edgesToFill:Bool = false) {
@@ -23,7 +25,7 @@ extension TransitionProtocol where Self:BaseViewController {
         self.configTransitionVC(edgesToFill: edgesToFill)
     }
     // MARK: -
-    func configSegmentedControlToVC(segmentedControl:SegmentedControl, _ closure:((ChildListViewModelType,Int)->())? = nil) {
+    func configSegmentedControlToVC(segmentedControl:SegmentedControl, _ closure:((ChildListViewModelType?,Int)->())? = nil) {
         _ = segmentedControl.rx.value.asObservable().subscribe(onNext: {[unowned self] (index) in
             if index < self.transitionVC.listArray.count {
                 self.transitionVC.selectedIndex = index
@@ -31,7 +33,7 @@ extension TransitionProtocol where Self:BaseViewController {
         })
         updateTransitionChildVC(segmentedControl: segmentedControl,closure)
     }
-    func updateTransitionChildVC(segmentedControl:SegmentedControl?, _ closure:((ChildListViewModelType,Int)->())? = nil) {
+    func updateTransitionChildVC(segmentedControl:SegmentedControl?, _ closure:((ChildListViewModelType?,Int)->())? = nil) {
         self.transitionVC.listArray = {
             var array = [ScrollVCProtocol]()
             /// ZJaDe: 根据segmentedControl的item个数来创建子控制器，如果segmentedControl为空则只创建1次

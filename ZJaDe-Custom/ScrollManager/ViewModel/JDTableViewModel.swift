@@ -14,7 +14,11 @@ class JDTableViewModel: JDListViewModel {
     
     weak var tableView:JDTableView!
     weak var listVC:JDTableViewController?
-    
+    override var listTitle:String? {
+        didSet {
+            self.listVC?.title = self.listTitle
+        }
+    }
     
     var sectionModelsChanged = PublishSubject<[AnimatableSectionModel<JDTableSection,JDTableModel>]>()
     let rxDataSource = RxTableViewSectionedAnimatedDataSource<AnimatableSectionModel<JDTableSection,JDTableModel>>()
@@ -106,6 +110,12 @@ extension JDTableViewModel:UITableViewDelegate {
             cell.cellDidDisappear(model)
         }
     }
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        guard let cell = tableView.cellForRow(at: indexPath) as? JDTableCell else {
+            return true
+        }
+        return cell.enabled
+    }
     // MARK: - didSelectRow
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.autoDeselectRow {
@@ -118,7 +128,7 @@ extension JDTableViewModel:UITableViewDelegate {
         let model = rxDataSource[indexPath]
         return model.cellHeight
     }
-    // MARK: - headerView And footerView
+    // MARK: - headerView
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if rxDataSource.sectionModels.count > section {
             let sectionModel = rxDataSource[section].model
@@ -127,13 +137,9 @@ extension JDTableViewModel:UITableViewDelegate {
             return nil
         }
     }
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if rxDataSource.sectionModels.count > section {
-            let sectionModel = rxDataSource[section].model
-            return sectionModel.footerView
-        }else {
-            return nil
-        }
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.setNeedsLayout()
+        view.setNeedsDisplay()
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if rxDataSource.sectionModels.count > section {
@@ -142,6 +148,19 @@ extension JDTableViewModel:UITableViewDelegate {
         }else {
             return 0
         }
+    }
+    // MARK: - footerView
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if rxDataSource.sectionModels.count > section {
+            let sectionModel = rxDataSource[section].model
+            return sectionModel.footerView
+        }else {
+            return nil
+        }
+    }
+    func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        view.setNeedsLayout()
+        view.setNeedsDisplay()
     }
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if rxDataSource.sectionModels.count > section {

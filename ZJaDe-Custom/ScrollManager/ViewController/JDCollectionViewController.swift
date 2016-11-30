@@ -9,16 +9,13 @@
 import UIKit
 import RxSwift
 
-class JDCollectionViewController: UICollectionViewController {
-    
-    var jdCollectionView:JDCollectionView {
-        return self.collectionView as! JDCollectionView
-    }
+class JDCollectionViewController: JDListViewController {
+    lazy private(set) var collectionView:JDCollectionView = JDCollectionView(viewModel:self.viewModel)
     
     let viewModel:JDCollectionViewModel
     init(viewModel:JDCollectionViewModel) {
         self.viewModel = viewModel
-        super.init(collectionViewLayout: self.viewModel.layout)
+        super.init()
         viewModel.listVC = self
         configInit()
     }
@@ -27,11 +24,9 @@ class JDCollectionViewController: UICollectionViewController {
     }
     
     override func loadView() {
-        self.collectionView = JDCollectionView(viewModel:self.viewModel)
+        self.view = self.collectionView
     }
-    func configInit() {
-        
-    }
+
     // MARK: - 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -9,22 +9,9 @@
 import UIKit
 
 class BaseTableViewModel: JDTableViewModel {
-    var index:Int!
-    
-    var listTitle:String? {
-        didSet {
-            self.listVC?.title = self.listTitle
-        }
-    }
     func createBaseTableView() -> BaseTableView {
         let tableView = BaseTableView(viewModel: self)
         self.resetInit()
         return tableView
-    }
-    func createBaseListVC() -> BaseTableViewController {
-        let listVC = BaseTableViewController(viewModel: self)
-        listVC.title = self.listTitle
-        listVC.index = index
-        return listVC
     }
 }

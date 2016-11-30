@@ -9,27 +9,20 @@
 import UIKit
 import RxSwift
 
-class JDTableViewController: UITableViewController {
+class JDTableViewController: JDListViewController {
+    lazy private(set) var tableView:JDTableView = JDTableView(viewModel: self.viewModel)
     
-    var jdTableView:JDTableView {
-        return self.tableView as! JDTableView
-    }
     let viewModel:JDTableViewModel
-    
+    init(viewModel:JDTableViewModel) {
+        self.viewModel = viewModel
+        super.init()
+        viewModel.listVC = self
+    }
     required init?(coder aDecoder: NSCoder) {
         fatalError("暂时不支持xib")
     }
-    init(viewModel:JDTableViewModel) {
-        self.viewModel = viewModel
-        super.init(style: viewModel.listStyle)
-        viewModel.listVC = self
-        configInit()
-    }
     override func loadView() {
-        self.tableView = JDTableView(viewModel: self.viewModel)
-    }
-    func configInit() {
-        
+        self.view = self.tableView
     }
     // MARK: -
     override func viewDidLoad() {

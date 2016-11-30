@@ -9,7 +9,7 @@
 import UIKit
 
 class BaseCollectionViewModel: JDCollectionViewModel {
-    
+
     func createBaseCollectionView() -> BaseCollectionView {
         let collectionView = BaseCollectionView(viewModel: self)
         self.resetInit()

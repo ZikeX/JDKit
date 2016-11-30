@@ -16,9 +16,12 @@ class JDLabelCell: JDFormCell {
         highlightAnimatedStyle = .shadow
         jdContentView.addSubview(detailTitleLabel)
         
-        stackView.snp.makeConstraints { (maker) in
+        stackView.updateLayout.deactivate()
+        stackView.updateLayout.constraintArr += stackView.snp.prepareConstraints { (maker) in
             maker.top.centerY.equalToSuperview()
         }
+        stackView.updateLayout.activate()
+        
         detailTitleLabel.contentHuggingHorizontalPriority = 249
     }
 }

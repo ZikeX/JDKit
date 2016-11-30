@@ -12,11 +12,8 @@ class BaseTableView: JDTableView {
     
     
 }
-class BaseTableViewController: JDTableViewController,ScrollVCProtocol {
-    var index:Int!
-    var scrollView: UIScrollView {
-        return self.tableView
-    }
+class BaseTableViewController: JDTableViewController {
+    
     override func configInit() {
         super.configInit()
         self.baseVCConfigInit()

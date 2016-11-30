@@ -13,9 +13,7 @@ class BaseCollectionView:JDCollectionView {
     
 }
 class BaseCollectionViewController: JDCollectionViewController {
-    var scrollView: UIScrollView {
-        return self.jdCollectionView
-    }
+    
     override func configInit() {
         super.configInit()
         self.baseVCConfigInit()

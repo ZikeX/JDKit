@@ -13,6 +13,11 @@ class JDCollectionViewModel: JDListViewModel {
     
     weak var collectionView:JDCollectionView!
     weak var listVC:JDCollectionViewController?
+    override var listTitle:String? {
+        didSet {
+            self.listVC?.title = self.listTitle
+        }
+    }
     
     var sectionModelsChanged = PublishSubject<[AnimatableSectionModel<JDCollectionSection,JDCollectionModel>]>()
     let rxDataSource = RxCollectionViewSectionedAnimatedDataSource<AnimatableSectionModel<JDCollectionSection,JDCollectionModel>>()

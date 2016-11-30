@@ -231,6 +231,20 @@ extension UIView {
 @IBDesignable class IBImageView: UIImageView {
     
 }
+extension UIButton {
+    @IBInspectable override var hasShadow:Bool {
+        get {
+            return self.layer.shadowOpacity > 0
+        }
+        set {
+            if newValue {
+                self.addButtonShadow()
+            }else {
+                self.layer.shadowOpacity = 0
+            }
+        }
+    }
+}
 extension UIView {
     @IBInspectable var cornerRadius:CGFloat {
         get {
