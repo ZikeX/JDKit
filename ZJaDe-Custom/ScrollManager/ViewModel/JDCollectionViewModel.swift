@@ -45,6 +45,12 @@ class JDCollectionViewModel: JDListViewModel {
         return nil
     }
 }
+extension JDCollectionViewModel {
+    // MARK: - 自定义代理
+    func didSelectItemAt(indexPath:IndexPath,model:JDCollectionModel) {
+        
+    }
+}
 extension JDCollectionViewModel:UICollectionViewDelegate {
     // MARK: - display
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -59,5 +65,14 @@ extension JDCollectionViewModel:UICollectionViewDelegate {
             let model = rxDataSource[indexPath]
             cell.cellDidDisappear(model)
         }
+    }
+    // MARK: - didSelectItemAt
+    func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        let model = rxDataSource[indexPath]
+        return model.enabled ?? true
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let model = rxDataSource[indexPath]
+        self.didSelectItemAt(indexPath: indexPath, model: model)
     }
 }

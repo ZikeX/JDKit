@@ -44,9 +44,7 @@ class JDTableViewModel: JDListViewModel {
         }
     }
     func configTableView(_ tableView:JDTableView) {
-        tableView.rx.modelSelected(JDTableModel.self).subscribe(onNext:{[unowned self] (model) in
-            self.whenModelSelected(model)
-        }).addDisposableTo(disposeBag)
+
     }
     func getLocalSectionModels() -> [(JDTableSection, [JDTableModel])]? {
         return nil
@@ -57,10 +55,11 @@ class JDTableViewModel: JDListViewModel {
     var maxSelectedCount:Int?
 }
 extension JDTableViewModel {
-    func whenCellSelected(_ indexPath:IndexPath) {
+    func whenCellSelected(_ indexPath:IndexPath,model:JDTableModel) {
         guard let maxSelectedCount = maxSelectedCount,maxSelectedCount > 0 else {
             return
         }
+        // MARK: - cell
         if !self.selectedIndexPaths.contains(indexPath) {
             self.selectedIndexPaths.append(indexPath)
         }
@@ -71,11 +70,7 @@ extension JDTableViewModel {
             let cell = tableView.cellForRow(at: firstIndexPath)
             cell?.accessoryView = nil
         }
-    }
-    func whenModelSelected(_ model:JDTableModel) {
-        guard let maxSelectedCount = maxSelectedCount,maxSelectedCount > 0 else {
-            return
-        }
+        // MARK: - model
         if !self.selectedModels.contains(model) {
             self.selectedModels.append(model)
         }
@@ -84,6 +79,12 @@ extension JDTableViewModel {
             let firstModel = self.selectedModels.removeFirst()
             firstModel.isSelected = false
         }
+    }
+}
+extension JDTableViewModel {
+    // MARK: - 自定义代理
+    func didSelectRowAt(indexPath:IndexPath,model:JDTableModel) {
+        
     }
 }
 extension JDTableViewModel:UITableViewDelegate {
@@ -110,18 +111,20 @@ extension JDTableViewModel:UITableViewDelegate {
             cell.cellDidDisappear(model)
         }
     }
-    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        guard let cell = tableView.cellForRow(at: indexPath) as? JDTableCell else {
-            return true
-        }
-        return cell.enabled
-    }
     // MARK: - didSelectRow
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        let model = rxDataSource[indexPath]
+        return model.enabled ?? true
+    }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.autoDeselectRow {
             self.tableView.deselectRow(at: indexPath, animated: true)
         }
-        whenCellSelected(indexPath)
+        let model = rxDataSource[indexPath]
+        
+        whenCellSelected(indexPath,model:model)
+        
+        self.didSelectRowAt(indexPath: indexPath, model: model)
     }
     // MARK: - cellHeight
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -138,6 +141,7 @@ extension JDTableViewModel:UITableViewDelegate {
         }
     }
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        /// ZJaDe: 该方法暂时无用
         view.setNeedsLayout()
         view.setNeedsDisplay()
     }
@@ -159,6 +163,7 @@ extension JDTableViewModel:UITableViewDelegate {
         }
     }
     func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        /// ZJaDe: 该方法暂时无用
         view.setNeedsLayout()
         view.setNeedsDisplay()
     }
