@@ -8,8 +8,11 @@
 
 import UIKit
 import RxSwift
-protocol ListModelProtocol {
+protocol ListModelStateProtocol {
     var key:String? {get set}
+    var enabled:Bool? {get set}
+    func canEnabled() -> Bool
+    var isSelected:Bool {get set}
 }
 class JDListModel:NSObject {
     lazy var cellClassName:String = {
@@ -52,10 +55,11 @@ class JDListModel:NSObject {
         return self.enabled ?? true
     }
     var key:String?
+    var isSelected:Bool = false
 }
 extension JDListModel:IdentifiableType {
     
 }
-extension JDListModel:ListModelProtocol {
+extension JDListModel:ListModelStateProtocol {
     
 }

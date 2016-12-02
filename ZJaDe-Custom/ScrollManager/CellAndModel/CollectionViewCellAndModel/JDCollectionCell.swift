@@ -24,3 +24,8 @@ class JDCollectionCell: UICollectionViewCell {
         cellDidInit()
     }
 }
+extension JDCollectionCell {
+    func updateSelectedState(_ selected:Bool,index:Int?) {
+        
+    }
+}

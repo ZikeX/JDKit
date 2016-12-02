@@ -79,12 +79,13 @@ extension JDTableCell {//updateCell
 }
 extension JDTableCell {
     override func setSelected(_ selected: Bool, animated: Bool) {
-        if enabled {
-            super.setSelected(selected, animated: animated)
-            if selected {
-                touchCell?()
-            }
+        super.setSelected(selected, animated: animated)
+        if selected {
+            touchCell?()
         }
+    }
+    func updateSelectedState(_ selected:Bool) {
+        self.accessoryView = selected ? ImageView(image: R.image.ic_cell_checkmark()) : nil
     }
 }
 // MARK: -

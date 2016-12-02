@@ -46,33 +46,95 @@ class JDCollectionViewModel: JDListViewModel {
     }
 }
 extension JDCollectionViewModel {
+    override func whenCellSelected(_ indexPath:IndexPath) {
+        guard let maxSelectedCount = maxSelectedCount,maxSelectedCount > 0 else {
+            return
+        }
+        super.whenCellSelected(indexPath)
+        
+        let cell = collectionView.cellForItem(at: indexPath) as? JDCollectionCell
+        cell?.updateSelectedState(true,index: self.selectedIndexPaths.count-1)
+        self.rxDataSource[indexPath].isSelected = true
+        while self.selectedIndexPaths.count > maxSelectedCount {
+            let firstIndexPath = self.selectedIndexPaths.removeFirst()
+            let firstCell = collectionView.cellForItem(at: firstIndexPath) as? JDCollectionCell
+            firstCell?.updateSelectedState(false,index: nil)
+            self.rxDataSource[firstIndexPath].isSelected = false
+        }
+        self.selectedIndexPaths.enumerated().forEach({ (index,indexPath) in
+            let eachCell = collectionView.cellForItem(at: indexPath) as? JDCollectionCell
+            eachCell?.updateSelectedState(true, index: index)
+        })
+    }
+}
+extension JDCollectionViewModel {
     // MARK: - 自定义代理
     func didSelectItemAt(indexPath:IndexPath,model:JDCollectionModel) {
         
     }
 }
-extension JDCollectionViewModel:UICollectionViewDelegate {
-    // MARK: - display
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+// MARK: - supplementary Views
+extension JDCollectionViewModel {
+    func supplementaryHeaderView(collectionView:JDCollectionView, indexPath:IndexPath) -> UICollectionReusableView {
+        fatalError("既然headerView的size不是(0,0),子类就要实现这个方法了")
+    }
+    func supplementaryFooterView(collectionView:JDCollectionView, indexPath:IndexPath) -> UICollectionReusableView {
+        fatalError("既然footerView的size不是(0,0),子类就要实现这个方法了")
+    }
+    func supplementaryHeaderViewWillDisplay(collectionView:JDCollectionView, indexPath:IndexPath) {
+        
+    }
+    func supplementaryFooterViewWillDisplay(collectionView:JDCollectionView, indexPath:IndexPath) {
+
+    }
+    func supplementaryHeaderViewDidEndDisplaying(collectionView:JDCollectionView, indexPath:IndexPath) {
+        
+    }
+    func supplementaryFooterViewDidEndDisplaying(collectionView:JDCollectionView, indexPath:IndexPath) {
+        
+    }
+}
+extension JDCollectionViewModel:UICollectionViewDelegateFlowLayout {
+    // MARK: cell display
+    final func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let cell = cell as? JDCollectionCell {
             let model = rxDataSource[indexPath]
             cell.cellDidLoad(model)
             cell.cellWillAppear(model)
         }
     }
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    final func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let cell = cell as? JDCollectionCell {
-            let model = rxDataSource[indexPath]
+            let model:JDCollectionModel? = try? collectionView.rx.model(at: indexPath)
             cell.cellDidDisappear(model)
         }
     }
-    // MARK: - didSelectItemAt
-    func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+    // MARK: didSelectItemAt
+    final func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
         let model = rxDataSource[indexPath]
         return model.enabled ?? true
     }
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    final func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let model = rxDataSource[indexPath]
         self.didSelectItemAt(indexPath: indexPath, model: model)
+    }
+    // MARK: supplementaryView display
+    final func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+        if elementKind == UICollectionElementKindSectionHeader {
+            self.supplementaryHeaderViewWillDisplay(collectionView: collectionView as! JDCollectionView, indexPath: indexPath)
+        }else if elementKind == UICollectionElementKindSectionFooter {
+            self.supplementaryFooterViewWillDisplay(collectionView: collectionView as! JDCollectionView, indexPath: indexPath)
+        }else {
+            fatalError("kind错误-->\(elementKind)")
+        }
+    }
+    final func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
+        if elementKind == UICollectionElementKindSectionHeader {
+            self.supplementaryHeaderViewDidEndDisplaying(collectionView: collectionView as! JDCollectionView, indexPath: indexPath)
+        }else if elementKind == UICollectionElementKindSectionFooter {
+            self.supplementaryFooterViewDidEndDisplaying(collectionView: collectionView as! JDCollectionView, indexPath: indexPath)
+        }else {
+            fatalError("kind错误-->\(elementKind)")
+        }
     }
 }

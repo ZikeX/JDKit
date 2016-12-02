@@ -12,7 +12,7 @@ import RxCocoa
 
 protocol UpdateDataSourceProtocol:class {
     associatedtype SectionType:IdentifiableType
-    associatedtype ModelType:ListModelProtocol,IdentifiableType,Equatable,NeedUpdateProtocol
+    associatedtype ModelType:ListModelStateProtocol,IdentifiableType,Equatable,NeedUpdateProtocol
     typealias DataArrayType = [(SectionType,[ModelType])]
     typealias SectionModelType = AnimatableSectionModel<SectionType,ModelType>
     
@@ -28,13 +28,14 @@ protocol UpdateDataSourceProtocol:class {
     /// ZJaDe: 计算tableView的cell高度
     func dataArrayDidSet()
 }
-extension UpdateDataSourceProtocol {
+extension UpdateDataSourceProtocol where Self:JDListViewModel {
     @discardableResult
     final func updateDataSource(_ closure:@escaping UpdateDataClosureType) {
         Async.background { () -> [AnimatableSectionModel<SectionType,ModelType>]? in
             if let newData = closure(self.dataArray) {
                 self.dataArray = newData
                 self.dataArrayDidSet()
+                self.updateSelectIndexPath()
                 var sectionModels = [AnimatableSectionModel<SectionType,ModelType>]()
                 for (section,models) in newData {
                     let showModels = models.filter({ (model) -> Bool in
@@ -46,14 +47,14 @@ extension UpdateDataSourceProtocol {
             }else {
                 return nil
             }
-        }.main { (sectionModels) -> () in
-            if let sectionModels = sectionModels {
-                self.sectionModelsChanged.onNext(sectionModels)
-                self.updateItemsAnimated()
-            }
-            if let scrollView = self.listView as? UIScrollView {
-                scrollView.reloadEmptyDataSet(.loaded)
-            }
+            }.main { (sectionModels) -> () in
+                if let sectionModels = sectionModels {
+                    self.sectionModelsChanged.onNext(sectionModels)
+                    self.updateItemsAnimated()
+                }
+                if let scrollView = self.listView as? UIScrollView {
+                    scrollView.reloadEmptyDataSet(.loaded)
+                }
         }
     }
     func updateItemsAnimated() {
@@ -74,6 +75,18 @@ extension UpdateDataSourceProtocol {
     // MARK: -
     func dataArrayDidSet() {
         
+    }
+    func updateSelectIndexPath() {
+        for (i,(_,models)) in dataArray.enumerated() {
+            for (j,model) in models.enumerated() {
+                let indexPath = IndexPath(item: j, section: i)
+                if model.isSelected {
+                    self.selectedIndexPaths.append(indexPath)
+                }else if let index = self.selectedIndexPaths.index(of: indexPath){
+                    self.selectedIndexPaths.remove(at: index)
+                }
+            }
+        }
     }
 }
 private var JDTableViewRunloopTimerKey: UInt8 = 0
@@ -110,7 +123,6 @@ extension JDTableViewModel:UpdateDataSourceProtocol {
         Async.main {
             self.calculateItemsHeight()
         }
-        self.updateSelectModels()
     }
     func calculateItemsHeight() {
         let modelTable = NSHashTable<JDTableModel>.weakObjects()
@@ -129,16 +141,6 @@ extension JDTableViewModel:UpdateDataSourceProtocol {
             }
         }
     }
-    func updateSelectModels() {
-        for (i,(_,models)) in dataArray.enumerated() {
-            for (j,model) in models.enumerated() {
-                if model.isSelected {
-                    self.selectedModels.append(model)
-                    self.selectedIndexPaths.append(IndexPath(item: j, section: i))
-                }
-            }
-        }
-    }
 }
 extension JDCollectionViewModel:UpdateDataSourceProtocol {
     var listView: SectionedViewType? {
@@ -147,10 +149,21 @@ extension JDCollectionViewModel:UpdateDataSourceProtocol {
     typealias SectionType = JDCollectionSection
     typealias ModelType = JDCollectionModel
     func configDataSource() {
-        rxDataSource.configureCell = {(dataSource,colectionView,indexPath,model) in
-            let cell = colectionView.dequeueReusableCell(withReuseIdentifier: model.reuseIdentifier, for: indexPath) as! JDCollectionCell
+        rxDataSource.configureCell = {(dataSource,collectionView,indexPath,model) in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: model.reuseIdentifier, for: indexPath) as! JDCollectionCell
             return cell
         }
+        rxDataSource.supplementaryViewFactory = {[unowned self] (dataSource,collectionView,kind,indexPath) in
+            if kind == UICollectionElementKindSectionHeader {
+                return self.supplementaryHeaderView(collectionView: collectionView as! JDCollectionView, indexPath: indexPath)
+            }else if kind == UICollectionElementKindSectionFooter {
+                return self.supplementaryFooterView(collectionView: collectionView as! JDCollectionView, indexPath: indexPath)
+            }else {
+                fatalError("kind错误-->\(kind)")
+            }
+        }
+        self.collectionView.delegate = nil
+        self.collectionView.dataSource = nil
         self.sectionModelsChanged.asObservable().bindTo(self.collectionView.rx.items(dataSource: rxDataSource)).addDisposableTo(disposeBag)
     }
     func configDelegate() {

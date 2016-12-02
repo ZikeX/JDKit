@@ -29,6 +29,20 @@ class JDListViewModel: NSObject {
     func configInit() {
         
     }
+    // MARK: - selected
+    var selectedIndexPaths = [IndexPath]()
+    var maxSelectedCount:Int?
+}
+extension JDListViewModel {
+    func whenCellSelected(_ indexPath:IndexPath) {
+        guard let maxSelectedCount = maxSelectedCount,maxSelectedCount > 0 else {
+            return
+        }
+        // MARK: - cell
+        if !self.selectedIndexPaths.contains(indexPath) {
+            self.selectedIndexPaths.append(indexPath)
+        }
+    }
 }
 extension JDListViewModel:CreateListProtocol {
 
