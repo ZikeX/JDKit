@@ -11,8 +11,8 @@ import UIKit
 class JDLabelCell: JDFormCell {
     var detailTitleLabel = UILabel()
     
-    override func configCellInit() {
-        super.configCellInit()
+    override func configItemInit() {
+        super.configItemInit()
         highlightAnimatedStyle = .shadow
         jdContentView.addSubview(detailTitleLabel)
         
@@ -26,8 +26,8 @@ class JDLabelCell: JDFormCell {
     }
 }
 extension JDLabelCell {
-    override func configCell(_ model: JDTableModel) {
-        super.configCell(model)
+    override func configItem(_ model: JDTableModel) {
+        super.configItem(model)
         guard let model = model as? JDLabelModel else {
             return
         }

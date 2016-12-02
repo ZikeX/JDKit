@@ -8,20 +8,21 @@
 
 import UIKit
 import RxSwift
+
 class JDCollectionCell: UICollectionViewCell {
     var enabled:Bool = true
     override init(frame: CGRect) {
         super.init(frame: frame)
-        configCellInit()
-        cellDidInit()
+        configItemInit()
+        itemDidInit()
     }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        configCellInit()
+        configItemInit()
     }
     override func awakeFromNib() {
         super.awakeFromNib()
-        cellDidInit()
+        itemDidInit()
     }
 }
 extension JDCollectionCell {

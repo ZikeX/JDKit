@@ -45,7 +45,7 @@ extension JDTableModel {
                 
                 logDebug("\(Thread.current)->AutoLayout计算出cell->高度：\(cellHeight)")
             }
-            tempCell.cellDidDisappear(self)
+            tempCell.itemDidDisappear(self)
         }
     }
 }
@@ -125,8 +125,8 @@ extension JDTableModel { //tempCell
         }
     }
     fileprivate func bindingDataAndConstraint(_ tempCell:JDTableCell) {
-        tempCell.cellDidLoad(self)
-        tempCell.configCellWithElement(self)
-        tempCell.cellUpdateConstraints(self)
+        tempCell.itemDidLoad(self)
+        tempCell.configItemWithElement(self)
+        tempCell.itemUpdateConstraints(self)
     }
 }

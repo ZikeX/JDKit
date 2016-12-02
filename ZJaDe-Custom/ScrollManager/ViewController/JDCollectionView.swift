@@ -13,7 +13,7 @@ class JDCollectionView: UICollectionView {
     let viewModel:JDCollectionViewModel
     init(viewModel:JDCollectionViewModel) {
         self.viewModel = viewModel
-        super.init(frame: CGRect(), collectionViewLayout: self.viewModel.layout)
+        super.init(frame: jd.screenBounds, collectionViewLayout: self.viewModel.layout)
         viewModel.collectionView = self
         viewModel.configDataSource()
         viewModel.configDelegate()

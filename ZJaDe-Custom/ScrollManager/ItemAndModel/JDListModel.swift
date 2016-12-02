@@ -18,10 +18,13 @@ class JDListModel:NSObject {
     lazy var cellClassName:String = {
         return jd.namespace + "." + self.cellName
     }()
+    var viewNameSuffix:String {
+        return "Cell"
+    }
     lazy var cellName:String = {
         var cellName = self.classStr
         let range = Range(cellName.characters.index(cellName.endIndex, offsetBy: -5) ..<  cellName.endIndex)
-        cellName.replaceSubrange(range, with: "Cell")
+        cellName.replaceSubrange(range, with: self.viewNameSuffix)
         return cellName
     }()
     lazy var reuseIdentifier:String = self.cellName

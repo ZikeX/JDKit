@@ -13,7 +13,7 @@ protocol LocalDataArrayProtocol:UpdateDataSourceProtocol {
 }
 extension LocalDataArrayProtocol {
     final func loadLocalSectionModels() {
-        self.updateDataSource({ (oldDataArray) -> DataArrayType? in
+        self.updateDataSource({[unowned self] (oldDataArray) -> DataArrayType? in
             return self.getLocalSectionModels()
         })
     }

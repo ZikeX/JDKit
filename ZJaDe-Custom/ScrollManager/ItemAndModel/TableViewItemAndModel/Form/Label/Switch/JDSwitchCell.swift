@@ -11,8 +11,8 @@ import UIKit
 class JDSwitchCell: JDLabelCell {
     var switchView = UISwitch()
     
-    override func configCellInit() {
-        super.configCellInit()
+    override func configItemInit() {
+        super.configItemInit()
         self.jdFocusView = switchView
         self.accessoryView = switchView
     }

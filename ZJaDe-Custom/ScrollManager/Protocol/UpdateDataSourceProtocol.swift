@@ -69,8 +69,8 @@ extension UpdateDataSourceProtocol where Self:JDListViewModel {
         }
         let result = Changeset<SectionModelType>(updatedItems: updateItems)
         self.listView?.performBatchUpdates(result, animationConfiguration: AnimationConfiguration(reloadAnimation:.automatic))
-        if updateItems.count > 0 {
-        }
+//        if updateItems.count > 0 {
+//        }
     }
     // MARK: -
     func dataArrayDidSet() {
@@ -154,13 +154,9 @@ extension JDCollectionViewModel:UpdateDataSourceProtocol {
             return cell
         }
         rxDataSource.supplementaryViewFactory = {[unowned self] (dataSource,collectionView,kind,indexPath) in
-            if kind == UICollectionElementKindSectionHeader {
-                return self.supplementaryHeaderView(collectionView: collectionView as! JDCollectionView, indexPath: indexPath)
-            }else if kind == UICollectionElementKindSectionFooter {
-                return self.supplementaryFooterView(collectionView: collectionView as! JDCollectionView, indexPath: indexPath)
-            }else {
-                fatalError("kind错误-->\(kind)")
-            }
+            let model = self.getReusableModel(indexPath, kind: kind)!
+            let reusableView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.reuseIdentifier, for: indexPath)
+            return reusableView
         }
         self.collectionView.delegate = nil
         self.collectionView.dataSource = nil

@@ -78,23 +78,27 @@ extension JDTableViewModel:UITableViewDelegate {
     final func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         self.tableView.endEditing(true)
     }
+    func getModel(_ indexPath:IndexPath) -> JDTableModel? {
+        return try? tableView.rx.model(at: indexPath)
+    }
+
     // MARK: - display
     final func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? JDTableCell {
-            let model = rxDataSource[indexPath]
-            cell.cellDidLoad(model)
-            cell.cellWillAppear(model)
+            let model = getModel(indexPath)!
+            cell.itemDidLoad(model)
+            cell.itemWillAppear(model)
         }
     }
     final func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? JDTableCell {
-            let model:JDTableModel? = try? tableView.rx.model(at: indexPath)
-            cell.cellDidDisappear(model)
+            let model = getModel(indexPath)
+            cell.itemDidDisappear(model)
         }
     }
     // MARK: - didSelectRow
     final func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
-        let model = rxDataSource[indexPath]
+        let model = getModel(indexPath)!
         return model.enabled ?? true
     }
     final func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -103,12 +107,12 @@ extension JDTableViewModel:UITableViewDelegate {
         }
         whenCellSelected(indexPath)
         
-        let model = rxDataSource[indexPath]
+        let model = getModel(indexPath)!
         self.didSelectRowAt(indexPath: indexPath, model: model)
     }
     // MARK: - cellHeight
     final func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let model = rxDataSource[indexPath]
+        let model = getModel(indexPath)!
         return model.cellHeight
     }
     // MARK: - headerView

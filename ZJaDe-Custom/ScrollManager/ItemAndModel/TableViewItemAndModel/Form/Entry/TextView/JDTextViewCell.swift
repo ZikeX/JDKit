@@ -11,15 +11,15 @@ import UIKit
 class JDTextViewCell: JDEntryCell {
     lazy var textViewItem:RemainTextViewItem = RemainTextViewItem()
     
-    override func configCellInit() {
-        super.configCellInit()
+    override func configItemInit() {
+        super.configItemInit()
         self.jdFocusView = textViewItem
         jdContentView.addSubview(textViewItem)
     }
 }
 extension JDTextViewCell {
-    override func configCell(_ model: JDTableModel) {
-        super.configCell(model)
+    override func configItem(_ model: JDTableModel) {
+        super.configItem(model)
         guard let model = model as? JDTextViewModel else {
             return
         }

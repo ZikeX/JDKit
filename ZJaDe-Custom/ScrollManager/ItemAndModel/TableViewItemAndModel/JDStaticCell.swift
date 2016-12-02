@@ -11,19 +11,19 @@ import UIKit
 class JDStaticCell: JDTableCell {
     var jdFocusView:UIView?
     
-    override func configCellInit() {
-        super.configCellInit()
+    override func configItemInit() {
+        super.configItemInit()
         appearAnimatedStyle = .fromInsideOut
         highlightAnimatedStyle = .none
     }
     
     override func bindingModel(_ model: JDTableModel) {
-        self.configCellAppear()
+        self.configItemAppear()
     }
     
 }
 extension JDStaticCell {
-    func configCellAppear() {
+    func configItemAppear() {
         
     }
 }

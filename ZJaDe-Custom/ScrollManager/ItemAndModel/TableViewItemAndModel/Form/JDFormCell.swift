@@ -17,8 +17,8 @@ class JDFormCell: JDStaticCell {
     
     var imgView = ImageView()
     
-    override func configCellInit() {
-        super.configCellInit()
+    override func configItemInit() {
+        super.configItemInit()
         jdContentView.addSubview(stackView)
         stackView.snp.makeConstraints { (maker) in
             maker.left.top.equalToSuperview()
@@ -30,8 +30,8 @@ class JDFormCell: JDStaticCell {
     }
 }
 extension JDFormCell {
-    override func configCell(_ model: JDTableModel) {
-        super.configCell(model)
+    override func configItem(_ model: JDTableModel) {
+        super.configItem(model)
         guard let formModel = model as? JDFormModel else {
             return
         }

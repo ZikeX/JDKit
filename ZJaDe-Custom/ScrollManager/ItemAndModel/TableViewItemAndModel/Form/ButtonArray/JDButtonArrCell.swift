@@ -17,8 +17,8 @@ class JDButtonArrCell: JDFormCell {
             self.gridView.itemArray = getButtonArray(dataArray: gridViewItemsData)
         }
     }
-    override func configCellInit() {
-        super.configCellInit()
+    override func configItemInit() {
+        super.configItemInit()
         jdContentView.addSubview(self.gridView)
         self.gridView.edgesToView()
     }

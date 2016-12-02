@@ -12,8 +12,8 @@ import RxSwift
 class JDTextFieldCell: JDEntryCell {
     var textField = ComposeTextField()
     
-    override func configCellInit() {
-        super.configCellInit()
+    override func configItemInit() {
+        super.configItemInit()
         self.jdFocusView = textField
         jdContentView.addSubview(textField)
         
@@ -23,8 +23,8 @@ class JDTextFieldCell: JDEntryCell {
     }
 }
 extension JDTextFieldCell {
-    override func configCell(_ model: JDTableModel) {
-        super.configCell(model)
+    override func configItem(_ model: JDTableModel) {
+        super.configItem(model)
         guard let model = model as? JDTextFieldModel else {
             return
         }

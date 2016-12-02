@@ -16,6 +16,5 @@ class BaseCollectionViewController: JDCollectionViewController {
     
     override func configInit() {
         super.configInit()
-        self.baseVCConfigInit()
     }
 }

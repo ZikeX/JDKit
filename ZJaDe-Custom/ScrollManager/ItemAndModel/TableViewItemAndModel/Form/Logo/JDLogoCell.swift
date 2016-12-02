@@ -11,16 +11,16 @@ import UIKit
 class JDLogoCell: JDFormCell {
     var logo = ImageView()
     
-    override func configCellInit() {
-        super.configCellInit()
+    override func configItemInit() {
+        super.configItemInit()
         self.jdFocusView = logo
         jdContentView.addSubview(logo)
         logo.cornerRadius = 35
     }
 }
 extension JDLogoCell {
-    override func configCell(_ model: JDTableModel) {
-        super.configCell(model)
+    override func configItem(_ model: JDTableModel) {
+        super.configItem(model)
         stackView.makeLayoutView { (view, maker) in
             maker.top.centerY.equalToSuperview()
         }
@@ -57,7 +57,7 @@ extension JDLogoCell {
 extension JDLogoCell {
     func configLogo(_ logo:ImageView) {
     }
-    override func configCellAppear() {
-        super.configCellAppear()
+    override func configItemAppear() {
+        super.configItemAppear()
     }
 }

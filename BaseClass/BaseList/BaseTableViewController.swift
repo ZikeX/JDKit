@@ -16,6 +16,5 @@ class BaseTableViewController: JDTableViewController {
     
     override func configInit() {
         super.configInit()
-        self.baseVCConfigInit()
     }
 }

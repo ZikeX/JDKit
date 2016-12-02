@@ -13,24 +13,24 @@ extension JDCollectionCell : CellProtocol {
     typealias ModelType = JDCollectionModel
     
     // MARK: - cell初始化
-    func configCellInit() {
+    func configItemInit() {
         
     }
     // MARK: - 做一些数据初始化
-    func cellDidInit() {
+    func itemDidInit() {
         
     }
     // MARK: - cell加载完毕，初始化数据及约束
-    final func cellDidLoad(_ element: JDCollectionModel) {
-        self.configCell(element)
+    final func itemDidLoad(_ element: JDCollectionModel) {
+        self.configItem(element)
     }
     // MARK: - cell将要显示，做动画，element绑定cell
-    final func cellWillAppear(_ element: JDCollectionModel) {
-        configCellWithElement(element)
-        cellUpdateConstraints(element)
+    final func itemWillAppear(_ element: JDCollectionModel) {
+        configItemWithElement(element)
+        itemUpdateConstraints(element)
     }
     // MARK: cell根据element绑定数据
-    final func configCellWithElement(_ element: JDCollectionModel) {
+    final func configItemWithElement(_ element: JDCollectionModel) {
         self.bindingModel(element)
         // MARK: - 更新enabled状态
         element.enabledVariable.asObservable().subscribe(onNext:{[unowned self,unowned element] (enabled) in
@@ -40,11 +40,11 @@ extension JDCollectionCell : CellProtocol {
         }).addDisposableTo(disposeBag)
     }
     // MARK: cell设置数据后,如果需要在这里更新约束
-    final func cellUpdateConstraints(_ element: JDCollectionModel) {
+    final func itemUpdateConstraints(_ element: JDCollectionModel) {
         self.didBindingModel(element)
     }
     // MARK: - cell已经消失,element解绑cell
-    final func cellDidDisappear(_ element: JDCollectionModel?) {
+    final func itemDidDisappear(_ element: JDCollectionModel?) {
         disposeBag = DisposeBag()
         
         self.unbindingModel(element)

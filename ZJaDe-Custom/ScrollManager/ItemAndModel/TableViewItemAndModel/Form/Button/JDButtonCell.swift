@@ -11,15 +11,15 @@ import UIKit
 class JDButtonCell: JDFormCell {
     var button = Button()
     
-    override func configCellInit() {
-        super.configCellInit()
+    override func configItemInit() {
+        super.configItemInit()
         self.jdFocusView = button
         jdContentView.addSubview(button)
     }
 }
 extension JDButtonCell {
-    override func configCell(_ model: JDTableModel) {
-        super.configCell(model)
+    override func configItem(_ model: JDTableModel) {
+        super.configItem(model)
         stackView.removeFromSuperview()
         button.edgesToView()
     }
@@ -52,8 +52,8 @@ extension JDButtonCell {
         button.textLabel.font = Font.h2
         button.addHighlightedShadowAnimate()
     }
-    override func configCellAppear() {
-        super.configCellAppear()
+    override func configItemAppear() {
+        super.configItemAppear()
         self.backgroundColor = Color.clear
     }
 }

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol AddChildListProtocol:class {
-    associatedtype ChildListViewModelType:JDListViewModel,CreateListProtocol
+    associatedtype ChildListViewModelType:JDListViewModel
     typealias ChildScrollVCType = JDScorllViewController
     // MARK: - 实现下面两个方法中的一个，来创建控制器
     func createScrollVC(index:Int) -> ChildScrollVCType?

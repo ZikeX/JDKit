@@ -157,6 +157,12 @@ extension jd {
     static var screenScale:CGFloat {
         return UIScreen.main.scale
     }
+    static var screenBounds:CGRect {
+        return UIScreen.main.bounds
+    }
+    static var screenSize:CGSize {
+        return UIScreen.main.bounds.size
+    }
     /// ZJaDe: 根据设备品种和方向，返回屏幕宽度
     static var screenWidth: CGFloat {
         

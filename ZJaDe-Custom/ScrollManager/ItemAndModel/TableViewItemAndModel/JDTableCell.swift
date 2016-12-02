@@ -26,19 +26,19 @@ class JDTableCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         loadContentView()
-        configCellInit()
-        cellDidInit()
+        configItemInit()
+        itemDidInit()
     }
     func loadContentView() {
         self.jdContentView = MyContentView()
     }
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        configCellInit()
+        configItemInit()
     }
     override func awakeFromNib() {
         super.awakeFromNib()
-        cellDidInit()
+        itemDidInit()
     }
     
     // MARK: - 如果返回大于零，可以不用使用自动计算高度
