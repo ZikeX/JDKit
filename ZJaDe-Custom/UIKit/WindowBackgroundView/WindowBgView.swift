@@ -14,7 +14,7 @@ enum AlertAnimationStyle {
 }
 
 class WindowBgView: UIViewController {
-    var isShowing:Bool = false
+    fileprivate var isShowing:Bool = false
     init() {
         super.init(nibName:nil, bundle:nil)
         configInit()
@@ -22,7 +22,10 @@ class WindowBgView: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    // MARK: - closure
+    fileprivate var showAnimateClosure:(()->())?
+    fileprivate var hideAnimateClosure:((Bool)->())?
+    // MARK: -
     func configInit() {
         self.view.frame = CGRect(x: 0, y: 0, width: jd.screenWidth, height: jd.screenHeight)
     }
@@ -34,9 +37,23 @@ class WindowBgView: UIViewController {
         })
         self.view.alpha = 0
     }
-    
-    var showClosure:(()->())?
-    var hideClosure:(()->())?
+}
+extension WindowBgView {
+    @discardableResult
+    func configShowAnimate(_ closure:@escaping ()->()) -> WindowBgView {
+        self.showAnimateClosure = closure
+        return self
+    }
+    @discardableResult
+    func configHideAnimate(_ closure:@escaping (Bool)->()) -> WindowBgView {
+        self.hideAnimateClosure = closure
+        return self
+    }
+    @discardableResult
+    func performHideAnimate(_ animated:Bool = false) -> WindowBgView {
+        self.hideAnimateClosure?(animated)
+        return self
+    }
 }
 extension WindowBgView {
     func show() {
@@ -44,12 +61,15 @@ extension WindowBgView {
         window.bgViews.append(self)
         window.showFirstBgView()
     }
-    func hide() {
+    func mustHide() {
         let window = jd.keyWindow
         self.view.removeFromSuperview()
         if let index = window.bgViews.index(of: self) {
             window.bgViews.remove(at: index)
         }
+    }
+    static func hide() {
+        jd.keyWindow.hideFirstBgView()
     }
 }
 private var WindowBgViewKey:UInt8 = 0
@@ -76,15 +96,15 @@ extension UIWindow {
             bgView.isShowing = true
             UIView.spring(duration: 0.35) {
                 bgView.view.alpha = 1
-                bgView.showClosure?()
             }
+            bgView.showAnimateClosure?()
         }
     }
     func hideFirstBgView() {
         if let bgView = self.bgViews.first {
+            bgView.hideAnimateClosure?(true)
             UIView.animate(withDuration: 0.35, animations: {
                 bgView.view.alpha = 0
-                bgView.hideClosure?()
             }) { (finish) in
                 bgView.view.removeFromSuperview()
                 self.bgViews.removeFirst()

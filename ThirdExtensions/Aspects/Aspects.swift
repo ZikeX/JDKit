@@ -12,13 +12,13 @@ import Aspects
 extension NSObject {
     typealias AOPClosure = @convention(block) (AspectInfo) -> ()
     @discardableResult
-    static func aop_hook(_ selector: Selector!, options: AspectOptions = [], closure: AOPClosure) -> AspectToken {
+    static func aop_hook(_ selector: Selector!, options: AspectOptions = [.positionBefore], closure: AOPClosure) -> AspectToken {
         let warppedObject:AnyObject = unsafeBitCast(closure, to: AnyObject.self)
         let aspectToken = try! self.aspect_hook(selector, with: options, usingBlock: warppedObject)
         return aspectToken
     }
     @discardableResult
-    func aop_hook(_ selector: Selector!, options: AspectOptions = [], closure: AOPClosure) -> AspectToken {
+    func aop_hook(_ selector: Selector!, options: AspectOptions = [.positionBefore], closure: AOPClosure) -> AspectToken {
         let warppedObject:AnyObject = unsafeBitCast(closure, to: AnyObject.self)
         let aspectToken = try! self.aspect_hook(selector, with: options, usingBlock: warppedObject)
         return aspectToken
