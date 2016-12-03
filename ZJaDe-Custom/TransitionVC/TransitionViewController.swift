@@ -175,9 +175,9 @@ extension TransitionViewController {
         if scrollView.size == CGSize() {
             scrollView.rx.observe(CGRect.self, "bounds").subscribe(onNext: {[unowned scrollView] (event) in
                 if scrollView.size != CGSize() {
+                    bag = DisposeBag()
                     scrollView.contentOffset.y = y
                     logDebug("scrollView--contentOffsetY--】】\(scrollView.contentOffset.y)")
-                    bag = DisposeBag()
                 }
             }).addDisposableTo(bag)
         }else {
