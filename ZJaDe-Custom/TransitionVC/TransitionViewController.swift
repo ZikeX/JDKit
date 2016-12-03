@@ -15,7 +15,7 @@ protocol ScrollVCProtocol {
     var scrollView:UIScrollView {get}
 }
 class TransitionMainView: UIView {
-    
+
 }
 class TransitionViewController: UIViewController {
     
@@ -49,12 +49,12 @@ class TransitionViewController: UIViewController {
     }
     
     var mainView = TransitionMainView()
-    var titleView:UIView? {
+    weak var titleView:UIView? {
         didSet {
             titleViewChanged()
         }
     }
-    var bottomView:UIView? {
+    weak var bottomView:UIView? {
         didSet {
             bottomViewChanged()
         }
@@ -91,6 +91,9 @@ class TransitionViewController: UIViewController {
         self.automaticallyAdjustsScrollViewInsets = false
         updateMainView()
         configHeaderView()
+    }
+    deinit {
+        logDebug("\(type(of:self))->\(self)注销")
     }
 }
 extension TransitionViewController {

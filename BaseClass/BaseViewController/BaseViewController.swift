@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import SnapKit
+import FBRetainCycleDetector
 
 class BaseViewController: UIViewController {
     // MARK: - Button
@@ -64,6 +65,9 @@ class BaseViewController: UIViewController {
     }
     func configInit() {
         self.baseVCConfigInit()
+    }
+    deinit {
+        logDebug("\(type(of:self))->\(self)注销")
     }
 }
 

@@ -79,7 +79,14 @@ extension JDTableViewModel:UITableViewDelegate {
         self.tableView.endEditing(true)
     }
     func getModel(_ indexPath:IndexPath) -> JDTableModel? {
-        return try? tableView.rx.model(at: indexPath)
+        guard indexPath.section < rxDataSource.sectionModels.count else {
+            return nil
+        }
+        let sectionModel = rxDataSource[indexPath.section]
+        guard indexPath.row < sectionModel.items.count else {
+            return nil
+        }
+        return sectionModel.items[indexPath.row]
     }
 
     // MARK: - display

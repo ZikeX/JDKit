@@ -80,7 +80,14 @@ extension JDCollectionViewModel {
 }
 extension JDCollectionViewModel:UICollectionViewDelegateFlowLayout {
     func getModel(_ indexPath:IndexPath) -> JDCollectionModel? {
-        return try? collectionView.rx.model(at: indexPath)
+        guard indexPath.section < rxDataSource.sectionModels.count else {
+            return nil
+        }
+        let sectionModel = rxDataSource[indexPath.section]
+        guard indexPath.row < sectionModel.items.count else {
+            return nil
+        }
+        return sectionModel.items[indexPath.row]
     }
     // MARK: cell display
     final func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

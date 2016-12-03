@@ -37,6 +37,8 @@ class BaseUserMainView: UIView {
     func configInit(){
         self.addSubview(backgroundImageView)
         backgroundImageView.edgesToView()
-        
+    }
+    deinit {
+        logDebug("\(type(of:self))->\(self)注销")
     }
 }

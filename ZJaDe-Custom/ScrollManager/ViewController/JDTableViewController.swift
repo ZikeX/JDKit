@@ -29,4 +29,5 @@ class JDTableViewController: JDListViewController {
         super.viewDidLoad()
         self.viewModel.resetInit()
     }
+
 }

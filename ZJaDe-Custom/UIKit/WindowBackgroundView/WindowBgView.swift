@@ -24,74 +24,66 @@ class WindowBgView: UIViewController {
     }
     // MARK: - closure
     fileprivate var showAnimateClosure:(()->())?
-    fileprivate var hideAnimateClosure:((Bool)->())?
+    fileprivate var hideAnimateClosure:(()->())?
     // MARK: -
+    fileprivate var bgView = BackgroundView()
     func configInit() {
         self.view.frame = CGRect(x: 0, y: 0, width: jd.screenWidth, height: jd.screenHeight)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = Color.darkBlack.withAlphaComponent(0.4)
-        _ = self.view.rx.whenTouch({ (view) in
-            jd.keyWindow.hideFirstBgView()
+        self.view.addSubview(self.bgView)
+        self.bgView.edgesToView()
+        _ = self.bgView.rx.whenTouch({ (view) in
+            WindowBgView.hide()
         })
         self.view.alpha = 0
     }
 }
 extension WindowBgView {
     @discardableResult
-    func configShowAnimate(_ closure:@escaping ()->()) -> WindowBgView {
-        self.showAnimateClosure = closure
+    func configShowAnimate(animated:Bool = true,_ closure:@escaping ()->()) -> WindowBgView {
+        self.showAnimateClosure = {
+            UIView.spring(duration:animated ? 0.35 : 0) {
+                closure()
+            }
+        }
         return self
     }
     @discardableResult
-    func configHideAnimate(_ closure:@escaping (Bool)->()) -> WindowBgView {
+    func configHideAnimate(_ closure:@escaping ()->()) -> WindowBgView {
         self.hideAnimateClosure = closure
         return self
     }
     @discardableResult
-    func performHideAnimate(_ animated:Bool = false) -> WindowBgView {
-        self.hideAnimateClosure?(animated)
+    func toHideState() -> WindowBgView {
+        self.hideAnimateClosure?()
         return self
     }
 }
+private var windowBgViews = [WindowBgView]()
 extension WindowBgView {
-    func show() {
-        let window = jd.keyWindow
-        window.bgViews.append(self)
-        window.showFirstBgView()
+    func show(tohide:Bool = true) {
+        if tohide {
+            toHideState()
+        }
+        windowBgViews.append(self)
+        jd.keyWindow.showFirstBgView()
     }
     func mustHide() {
-        let window = jd.keyWindow
         self.view.removeFromSuperview()
-        if let index = window.bgViews.index(of: self) {
-            window.bgViews.remove(at: index)
+        if let index = windowBgViews.index(of: self) {
+            windowBgViews.remove(at: index)
         }
     }
     static func hide() {
         jd.keyWindow.hideFirstBgView()
     }
 }
-private var WindowBgViewKey:UInt8 = 0
 extension UIWindow {
-    var bgViews:[WindowBgView] {
-        get {
-            let bgViews:[WindowBgView]
-            if let existing = objc_getAssociatedObject(self, &WindowBgViewKey) as? [WindowBgView] {
-                bgViews = existing
-            }else {
-                bgViews = [WindowBgView]()
-                self.bgViews = bgViews
-            }
-            return bgViews
-        }
-        set {
-            objc_setAssociatedObject(self, &WindowBgViewKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
     // MARK: -
     fileprivate func showFirstBgView() {
-        if let bgView = self.bgViews.first,!bgView.isShowing {
+        if let bgView = windowBgViews.first,!bgView.isShowing {
             self.addSubview(bgView.view)
             bgView.isShowing = true
             UIView.spring(duration: 0.35) {
@@ -101,13 +93,13 @@ extension UIWindow {
         }
     }
     func hideFirstBgView() {
-        if let bgView = self.bgViews.first {
-            bgView.hideAnimateClosure?(true)
+        if let bgView = windowBgViews.first {
             UIView.animate(withDuration: 0.35, animations: {
+                bgView.hideAnimateClosure?()
                 bgView.view.alpha = 0
             }) { (finish) in
                 bgView.view.removeFromSuperview()
-                self.bgViews.removeFirst()
+                windowBgViews.removeFirst()
                 self.showFirstBgView()
             }
         }

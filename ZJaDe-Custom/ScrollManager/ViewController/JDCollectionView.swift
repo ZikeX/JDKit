@@ -25,4 +25,7 @@ class JDCollectionView: UICollectionView {
     func configInit() {
         self.backgroundColor = Color.white
     }
+    deinit {
+        logDebug("\(type(of:self))->\(self)注销")
+    }
 }

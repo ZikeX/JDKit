@@ -12,6 +12,9 @@ class JDListSection: NSObject {
     var identity: Int {
         return self.hashValue
     }
+    deinit {
+        logDebug("\(type(of:self))->\(self)注销")
+    }
 }
 extension JDListSection: IdentifiableType {
     

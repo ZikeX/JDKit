@@ -32,6 +32,10 @@ class JDListViewModel: NSObject {
     // MARK: - selected
     var selectedIndexPaths = [IndexPath]()
     var maxSelectedCount:Int?
+    
+    deinit {
+        logDebug("\(type(of:self))->\(self)注销")
+    }
 }
 extension JDListViewModel {
     func whenCellSelected(_ indexPath:IndexPath) {

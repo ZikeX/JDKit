@@ -34,7 +34,7 @@ public extension UIImageView {
         guard let image = image else {
             return
         }
-        Async.userInitiated { () -> Bool in
+        Async.userInitiated {[unowned self] () -> Bool in
             let cImage = image.ciImage ?? CIImage(cgImage: image.cgImage!)
             
             let detector = CIDetector(ofType: CIDetectorTypeFace, context: nil, options: [CIDetectorAccuracy:CIDetectorAccuracyLow])

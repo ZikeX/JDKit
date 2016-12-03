@@ -19,4 +19,5 @@ class JDListViewController: JDScorllViewController {
     func configInit() {
         
     }
+    
 }

@@ -42,10 +42,15 @@ class Alert: WindowBgView {
         self.baseView.cornerRadius = 5
         self.baseView.backgroundColor = Color.white
         self.configLayout()
+        self.configShowAnimate(animated: false) {[unowned self] in
+            self.view.addSubview(self.baseView)
+            self.showAnimation()
+        }
     }
 }
 extension Alert {
     func configLayout() {
+        self.baseView.translatesAutoresizingMaskIntoConstraints = false
         let bottomStackView = UIStackView(arrangedSubviews: [self.cancelLabel])
         bottomStackView.distribution = .fillEqually
         bottomStackView.heightValue(height: 64)
@@ -76,7 +81,6 @@ extension Alert {
     @discardableResult
     func configShowLayout(_ closure:(Alert,UIView)->()) -> Alert {
         closure(self,self.contentView)
-        self.show()
         return self
     }
     @discardableResult
@@ -86,43 +90,43 @@ extension Alert {
     }
 }
 extension Alert {
-    fileprivate func showAnimation(_ animationStyle: AlertAnimationStyle = .topToBottom, animationStartOffset: CGFloat = -400.0, boundingAnimationOffset: CGFloat = 15.0, animationDuration: TimeInterval = 0.2) {
+    fileprivate func showAnimation(_ animationStyle: AlertAnimationStyle = .topToBottom, animationStartOffset: CGFloat = -400.0, boundingAnimationOffset: CGFloat = 15.0, animationDuration: TimeInterval = 0.75) {
         
-        let rv = UIApplication.shared.keyWindow! as UIWindow
-        var animationStartOrigin = self.baseView.frame.origin
+        let rv = jd.keyWindow
+        var animationStartOrigin = self.baseView.origin
         var animationCenter : CGPoint = rv.center
         
         switch animationStyle {
             
         case .noAnimation:
-            self.view.alpha = 1.0
             return;
             
         case .topToBottom:
-            animationStartOrigin = CGPoint(x: animationStartOrigin.x, y: self.baseView.frame.origin.y + animationStartOffset)
-            animationCenter = CGPoint(x: animationCenter.x, y: animationCenter.y + boundingAnimationOffset)
+            animationStartOrigin.y += animationStartOffset
+            animationCenter.y += boundingAnimationOffset
             
         case .bottomToTop:
-            animationStartOrigin = CGPoint(x: animationStartOrigin.x, y: self.baseView.frame.origin.y - animationStartOffset)
-            animationCenter = CGPoint(x: animationCenter.x, y: animationCenter.y - boundingAnimationOffset)
+            animationStartOrigin.y -= animationStartOffset
+            animationCenter.y -= boundingAnimationOffset
             
         case .leftToRight:
-            animationStartOrigin = CGPoint(x: self.baseView.frame.origin.x + animationStartOffset, y: animationStartOrigin.y)
-            animationCenter = CGPoint(x: animationCenter.x + boundingAnimationOffset, y: animationCenter.y)
+            animationStartOrigin.x += animationStartOffset
+            animationCenter.x += boundingAnimationOffset
             
         case .rightToLeft:
-            animationStartOrigin = CGPoint(x: self.baseView.frame.origin.x - animationStartOffset, y: animationStartOrigin.y)
-            animationCenter = CGPoint(x: animationCenter.x - boundingAnimationOffset, y: animationCenter.y)
+            animationStartOrigin.x -= animationStartOffset
+            animationCenter.x -= boundingAnimationOffset
         }
         
-        self.baseView.frame.origin = animationStartOrigin
+        self.baseView.origin = animationStartOrigin
+        self.baseView.transform = CGAffineTransform(scaleX: 0.3, y: 0.3)
         UIView.animate(withDuration: animationDuration, animations: {
-            self.view.alpha = 1.0
             self.baseView.center = animationCenter
+            self.baseView.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
         }, completion: { finished in
-            UIView.animate(withDuration: animationDuration, animations: {
-                self.view.alpha = 1.0
+            UIView.spring(duration: animationDuration, animations: {
                 self.baseView.center = rv.center
+                self.baseView.transform = CGAffineTransform.identity
             })
         })
     }

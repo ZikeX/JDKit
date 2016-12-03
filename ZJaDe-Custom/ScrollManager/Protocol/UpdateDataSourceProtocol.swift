@@ -31,7 +31,7 @@ protocol UpdateDataSourceProtocol:class {
 extension UpdateDataSourceProtocol where Self:JDListViewModel {
     @discardableResult
     final func updateDataSource(_ closure:@escaping UpdateDataClosureType) {
-        Async.background { () -> [AnimatableSectionModel<SectionType,ModelType>]? in
+        Async.background {[unowned self] () -> [AnimatableSectionModel<SectionType,ModelType>]? in
             if let newData = closure(self.dataArray) {
                 self.dataArray = newData
                 self.dataArrayDidSet()

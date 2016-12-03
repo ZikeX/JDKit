@@ -73,8 +73,8 @@ extension ComposeTextField:UITextFieldDelegate {
         case .countDownTimer:
             format = "HH:mm:ss"
         }
-        let datePicker = DatePicker()
-        datePicker.datePicker.datePickerMode = mode
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = mode
         _ = datePicker.dateObservable.subscribe(onNext: {[unowned self] (date) in
             self.text = date.toString(format: format)
             self.sendActions(for: .valueChanged)
