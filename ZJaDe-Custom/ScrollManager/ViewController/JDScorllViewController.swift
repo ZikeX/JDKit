@@ -16,7 +16,4 @@ class JDScorllViewController: UIViewController,ScrollVCProtocol {
     override func loadView() {
         self.view = UIScrollView()
     }
-    deinit {
-        logDebug("\(type(of:self))->\(self)注销")
-    }
 }

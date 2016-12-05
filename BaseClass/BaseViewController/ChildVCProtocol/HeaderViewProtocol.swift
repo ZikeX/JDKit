@@ -21,7 +21,7 @@ extension HeaderViewProtocol where Self:BaseViewController {
         self.addTransitionVC(edgesToFill: edgesToFill)
         self.transitionVC.headerView = self.headerView
         if hasSegmentControl {
-            self.configSegmentedControlToVC(segmentedControl: self.headerView.segmentedControl) { (viewModel,index) in
+            self.configSegmentedControlToVC(segmentedControl: self.headerView.segmentedControl) {[unowned self] (viewModel,index) in
                 if let viewModel = viewModel {
                     let model = self.headerView.segmentedControl.modelArray[index]
                     viewModel.listTitle = model.title                    

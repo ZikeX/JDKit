@@ -68,7 +68,14 @@ extension UIScrollView {
         if emptyView.superview == nil {
             self.insertSubview(emptyView, at: 0)
             self.rx.observe(UIEdgeInsets.self, "contentInset", retainSelf: false).subscribe(onNext:{ [unowned self] (edge) in
-                self.emptyDataSetView.frame = CGRect(x: 0, y: 0, width: self.width, height: self.contentSize.height - self.contentInset.top)
+                var height = self.height - self.contentInset.top
+                if height <= 0 {
+                    height = 200
+                }
+                self.emptyDataSetView.frame = CGRect(x: 0, y: 0, width: self.width, height: height)
+                if self.contentSize.height <= 0 {
+                    self.contentSize.height = self.emptyDataSetView.bottom
+                }
             }).addDisposableTo(disposeBag)
         }
         self.emptyDataSetView.reloadData(state)

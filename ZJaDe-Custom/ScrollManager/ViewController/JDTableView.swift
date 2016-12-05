@@ -26,8 +26,6 @@ class JDTableView: UITableView {
     }
     func configInit() {
         self.separatorStyle = .none
-    }
-    deinit {
-        logDebug("\(type(of:self))->\(self)注销")
+        self.backgroundColor = Color.clear
     }
 }

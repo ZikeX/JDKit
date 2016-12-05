@@ -69,7 +69,8 @@ extension JDListViewModel {/// ZJaDe: EmptyDataSet
     // MARK: - 设置EmptyDataSet内容
     func configEmptyDataSetNoData(_ contentView:UIStackView) {
         let label = UILabel(text: "无数据", color: Color.gray, font: Font.h1)
-        contentView.addArrangedSubview(label)
+        contentView.addSubview(label)
+        label.edgesToView()
     }
     func configEmptyDataSetLoadFailed(_ contentView:UIStackView) {
         

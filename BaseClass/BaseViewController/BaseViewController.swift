@@ -66,8 +66,5 @@ class BaseViewController: UIViewController {
     func configInit() {
         self.baseVCConfigInit()
     }
-    deinit {
-        logDebug("\(type(of:self))->\(self)注销")
-    }
 }
 

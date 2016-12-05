@@ -36,7 +36,9 @@ extension UIView {
         self.addBorder(boderWidth: boderWidth, direction: .right, color: color, padding: padding, edgeType: edgeType,autoLayout:autoLayout)
     }
     //MARK: -
+    /// ZJaDe: padding 为负时，表示固定宽度
     private func addBorder(boderWidth:CGFloat,direction:BoderDirection,color:UIColor,padding:CGFloat,edgeType:ExcludePoint,autoLayout:Bool) {
+        let fixedLength:CGFloat? = padding < 0 ? -padding : nil
         let tag = direction.rawValue
         let lineAxis:LineAxis
         var boderLength:CGFloat
@@ -49,28 +51,40 @@ extension UIView {
             boderLength = self.width
         }
         var border:LineView! = self.viewWithTag(tag) as? LineView
+        guard boderWidth > 0 else {
+            border?.removeFromSuperview()
+            return
+        }
         if border == nil {
             border = LineView.solidLine(lineAxis: lineAxis)
             border.isUserInteractionEnabled = false
             border.tag = tag
-            self.insertSubview(border, at: 0)
+        }else {
+            border.removeFromSuperview()
         }
+        self.insertSubview(border, at: 0)
         border.lineColor = color
         border.translatesAutoresizingMaskIntoConstraints = !autoLayout
         /*************** layout ***************/
         var startPadding:CGFloat = 0
         var endPadding:CGFloat = 0
-        switch edgeType {
-        case .startPoint,.allPoint:
-            startPadding += padding
-            if edgeType == .allPoint {
-                fallthrough
+        if fixedLength == nil {
+            switch edgeType {
+            case .startPoint,.allPoint:
+                startPadding += padding
+                if edgeType == .allPoint {
+                    fallthrough
+                }
+            case .endPoint:
+                endPadding += padding
             }
-        case .endPoint:
-            endPadding += padding
         }
         if border.translatesAutoresizingMaskIntoConstraints {
-            boderLength -= startPadding + endPadding
+            if fixedLength == nil {
+                boderLength -= startPadding + endPadding
+            }else {
+                boderLength = fixedLength!
+            }
             switch direction {
             case .top:
                 border.frame = CGRect(x: startPadding, y: 0, width: boderLength, height: boderWidth)
@@ -82,24 +96,37 @@ extension UIView {
                 border.frame = CGRect(x: self.width - boderWidth, y: startPadding, width: boderWidth, height: boderLength)
             }
         }else {
+            func addBoderConstraint(attr attr1:NSLayoutAttribute, toItem:UIView?, attr attr2:NSLayoutAttribute, constant:CGFloat) {
+                self.addConstraint(NSLayoutConstraint(item: border, attribute: attr1, relatedBy: .equal, toItem: toItem, attribute: attr2, multiplier: 1, constant: constant))
+            }
             switch direction {
             case .top, .bottom:
-                self.addConstraint(NSLayoutConstraint(item: border, attribute: .left, relatedBy: .equal, toItem: self, attribute: .left, multiplier: 1, constant: startPadding))
-                self.addConstraint(NSLayoutConstraint(item: border, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1, constant: -endPadding))
-                self.addConstraint(NSLayoutConstraint(item: border, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: boderWidth))
-                if direction == .top {
-                    self.addConstraint(NSLayoutConstraint(item: border, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: 0))
+                if fixedLength == nil {
+                    addBoderConstraint(attr: .left, toItem: self, attr: .left, constant: startPadding)
+                    addBoderConstraint(attr: .right, toItem: self, attr: .right, constant: -endPadding)
                 }else {
-                    self.addConstraint(NSLayoutConstraint(item: border, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1, constant: 0))
+                    addBoderConstraint(attr: .width, toItem: nil, attr: .notAnAttribute, constant: fixedLength!)
+                    addBoderConstraint(attr: .centerX, toItem: self, attr: .centerX, constant: 0)
+                }
+                addBoderConstraint(attr: .height, toItem: nil, attr: .notAnAttribute, constant: boderWidth)
+                if direction == .top {
+                    addBoderConstraint(attr: .top, toItem: self, attr: .top, constant: 0)
+                }else {
+                    addBoderConstraint(attr: .bottom, toItem: self, attr: .bottom, constant: 0)
                 }
             case .left, .right:
-                self.addConstraint(NSLayoutConstraint(item: border, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: startPadding))
-                self.addConstraint(NSLayoutConstraint(item: border, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1, constant: -endPadding))
-                self.addConstraint(NSLayoutConstraint(item: border, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: boderWidth))
-                if direction == .left {
-                    self.addConstraint(NSLayoutConstraint(item: border, attribute: .left, relatedBy: .equal, toItem: self, attribute: .left, multiplier: 1, constant: 0))
+                if fixedLength == nil {
+                    addBoderConstraint(attr: .top, toItem: self, attr: .top, constant: startPadding)
+                    addBoderConstraint(attr: .bottom, toItem: self, attr: .bottom, constant: -endPadding)
                 }else {
-                    self.addConstraint(NSLayoutConstraint(item: border, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1, constant: 0))
+                    addBoderConstraint(attr: .height, toItem: nil, attr: .notAnAttribute, constant: fixedLength!)
+                    addBoderConstraint(attr: .centerY, toItem: self, attr: .centerY, constant: 0)
+                }
+                addBoderConstraint(attr: .width, toItem: nil, attr: .notAnAttribute, constant: boderWidth)
+                if direction == .left {
+                    addBoderConstraint(attr: .left, toItem: self, attr: .left, constant: 0)
+                }else {
+                    addBoderConstraint(attr: .right, toItem: self, attr: .right, constant: 0)
                 }
             }
         }

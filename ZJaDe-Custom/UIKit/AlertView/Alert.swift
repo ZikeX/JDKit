@@ -9,34 +9,55 @@
 import UIKit
 
 class Alert: WindowBgView {
-    var itemTitleArray:[String]
-    init(itemTitleArray:[String] = ["确定"]) {
-        self.itemTitleArray = itemTitleArray
+    fileprivate let itemTitleArray:[String]
+    init(itemTitleArray:[String]? = ["确定"],cancelTitle:String = "取消") {
+        self.itemTitleArray = itemTitleArray ?? []
         super.init()
+        self.cancelButton.textStr = cancelTitle
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     // MARK: -
-    var baseView = UIView()
-    var contentView = UIView()
-    lazy var titleLabel:UILabel = {
-        let label = UILabel(color: Color.black, font: Font.h1)
-        label.textAlignment = .center
-        return label
+    let baseView = UIView()
+    let contentView = UIView()
+    lazy var bottomStackView:UIStackView = {
+        let stackView = UIStackView(alignment: .fill, distribution: .fillEqually)
+        stackView.addArrangedSubview(self.cancelButton)
+        self.itemTitleArray.enumerated().forEach { (index,title) in
+            stackView.addArrangedSubview(self.createButton(index: index,title: title))
+        }
+        stackView.arrangedSubviews.dropLast().forEach({ (view) in
+            view.addBorderRight(padding:5)
+        })
+        return stackView
     }()
-    lazy var cancelLabel:Button = {
-        let button = Button(title: "取消")
+    lazy var titleButton:Button = {
+        let button = Button()
+        button.tintColor = Color.black
         button.textLabel.font = Font.h1
-        button.addBorderRight(padding:5)
+        return button
+    }()
+    lazy var cancelButton:Button = {
+        let button = Button()
+        button.textLabel.font = Font.h1
         button.rx.touchUpInside({[unowned self] (button) in
+            self.cancelClosure?()
             Alert.hide()
         })
         return button
     }()
     // MARK: - closure
     fileprivate var clickClosure:((Int)->())?
+    fileprivate var cancelClosure:(()->())?
     // MARK: -
+    var tinColor:UIColor? {
+        didSet {
+            self.bottomStackView.subviews.forEach { (view) in
+                view.tintColor = tinColor
+            }
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.baseView.cornerRadius = 5
@@ -46,26 +67,25 @@ class Alert: WindowBgView {
             self.view.addSubview(self.baseView)
             self.showAnimation()
         }
+        self.tinColor = Color.black
     }
 }
 extension Alert {
-    func configLayout() {
+    fileprivate func configLayout() {
         self.baseView.translatesAutoresizingMaskIntoConstraints = false
-        let bottomStackView = UIStackView(arrangedSubviews: [self.cancelLabel])
-        bottomStackView.distribution = .fillEqually
-        bottomStackView.heightValue(height: 64)
-        itemTitleArray.enumerated().forEach { (index,title) in
-            bottomStackView.addArrangedSubview(createButton(index: index,title: title))
+        self.bottomStackView.snp.makeConstraints { (maker) in
+            maker.height.equalTo(64).priority(999)
+        }
+        self.titleButton.snp.makeConstraints { (maker) in
+            maker.height.equalTo(64).priority(999)
         }
         
-        titleLabel.heightValue(height: 64)
-        
-        let stackView = UIStackView(arrangedSubviews: [self.titleLabel,self.contentView,bottomStackView])
+        let stackView = UIStackView(arrangedSubviews: [self.titleButton,self.contentView,bottomStackView])
         stackView.axis = .vertical
         self.baseView.addSubview(stackView)
         stackView.edgesToView()
     }
-    func createButton(index:Int,title:String) -> Button {
+    fileprivate func createButton(index:Int,title:String) -> Button {
         let button = Button(title: title)
         button.textLabel.font = Font.h1
         if index < itemTitleArray.count - 1 {
@@ -86,6 +106,11 @@ extension Alert {
     @discardableResult
     func configClick(_ closure:@escaping (Int)->()) -> Alert {
         self.clickClosure = closure
+        return self
+    }
+    @discardableResult
+    func configCancel(_ closure:@escaping ()->()) -> Alert {
+        self.cancelClosure = closure
         return self
     }
 }

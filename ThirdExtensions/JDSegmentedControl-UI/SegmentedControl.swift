@@ -155,21 +155,25 @@ extension SegmentedControl:JDSegmentedControlDelegate {
         guard let segmentedControl = segmentedControl as? SegmentedControl else {
             return
         }
-        segmentedControl.indicatorViewAnimate {
-            if let item = segmentedControl.modelArray[index].item {
-                let indicatorView = segmentedControl.indicatorView
-                indicatorView.frame = item.frame
-                /// ZJaDe:
-                let imageView = segmentedControl.indicatorImageView()
-                switch segmentedControl.style {
-                case .wavyLine:
-                    imageView.snp.updateConstraints { (maker) in
-                        let width = CGFloat(item.titleLabel.text!.length + 1) * R.image.ic_wavyLine()!.size.width
-                        maker.width.equalTo(width)
-                    }
-                default:
-                    break
-                }
+        guard let item = segmentedControl.modelArray[index].item else {
+            return
+        }
+        func updateIndicatorViewFrame() {
+            let indicatorView = segmentedControl.indicatorView
+            indicatorView.frame = item.frame
+        }
+        /// ZJaDe:
+        switch segmentedControl.style {
+        case .wavyLine:
+            updateIndicatorViewFrame()
+            let imageView = segmentedControl.indicatorImageView()
+            imageView.snp.updateConstraints { (maker) in
+                let width = CGFloat(item.titleLabel.text!.length + 1) * R.image.ic_wavyLine()!.size.width
+                maker.width.equalTo(width)
+            }
+        default:
+            segmentedControl.indicatorViewAnimate {
+                updateIndicatorViewFrame()
             }
         }
     }

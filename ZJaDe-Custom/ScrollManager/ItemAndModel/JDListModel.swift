@@ -59,6 +59,10 @@ class JDListModel:NSObject {
     }
     var key:String?
     var isSelected:Bool = false
+    
+    deinit {
+        logDebug("\(type(of:self))->\(self)注销")
+    }
 }
 extension JDListModel:IdentifiableType {
     

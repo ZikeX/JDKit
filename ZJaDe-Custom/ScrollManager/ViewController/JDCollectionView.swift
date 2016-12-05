@@ -23,9 +23,6 @@ class JDCollectionView: UICollectionView {
         fatalError("暂不支持xib")
     }
     func configInit() {
-        self.backgroundColor = Color.white
-    }
-    deinit {
-        logDebug("\(type(of:self))->\(self)注销")
+        self.backgroundColor = Color.clear
     }
 }

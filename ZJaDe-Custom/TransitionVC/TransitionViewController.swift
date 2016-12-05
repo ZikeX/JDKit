@@ -19,32 +19,10 @@ class TransitionMainView: UIView {
 }
 class TransitionViewController: UIViewController {
     
-    
     var headerView:UIView? {
-        willSet {
-            listenIndexOrHeaderViewWillChanged()
-        }
         didSet {
-            listenIndexOrHeaderViewDidChanged(indexChanged: false)
-            configHeaderView()
-        }
-    }
-    fileprivate var headerViewHeight:CGFloat? = nil {
-        willSet {
-            if let scrollView = self.currentScrollView,
-                let headerViewHeight = headerViewHeight {
-                self.offsetY = scrollView.contentOffset.y + headerViewHeight
-                scrollView.contentInset.top -= headerViewHeight
-                logDebug("headerViewHeight-contentInsetTop--】】\(scrollView.contentInset.top)")
-            }
-        }
-        didSet {
-            if let scrollView = self.currentScrollView,
-                let headerViewHeight = headerViewHeight {
-                scrollView.contentInset.top += headerViewHeight
-                logDebug("headerViewHeight+contentInsetTop++】】\(scrollView.contentInset.top)")
-                changeContentOffsetY(scrollView: scrollView, y: self.offsetY - headerViewHeight)
-            }
+            addHeaderViewToScrollView()
+            bindingHeaderViewHeight()
         }
     }
     
@@ -59,11 +37,8 @@ class TransitionViewController: UIViewController {
             bottomViewChanged()
         }
     }
-    var listArray = [ScrollVCProtocol]()  {
-        didSet {
-            transition()
-        }
-    }
+    var scrollVCCount:Int = 0
+    var createScrollVCClosure:((Int)->(ScrollVCProtocol))!
 
     var selectedIndex:Int {
         get {
@@ -75,25 +50,29 @@ class TransitionViewController: UIViewController {
             self.didChangeValue(forKey: "selectedIndex")
         }
     }
-    /// ZJaDe: 内部存储下标
+    /// ZJaDe: 内部存储
+    fileprivate lazy var allScrollVC = [Int:ScrollVCProtocol]()
     fileprivate var currentIndex:Int? = nil
-    
-    var currentScrollView:UIScrollView? {
-        if currentIndex != nil && currentIndex! < self.listArray.count {
-            return self.listArray[currentIndex!].scrollView
+    fileprivate var currentScrollVC:UIViewController?
+    fileprivate(set) var currentScrollView:UIScrollView?
+    fileprivate var headerViewHeight:CGFloat? = nil {
+        willSet {
+            logDebug("headerViewHeight-->willSet")
+            willUpdateContentOffsetAndInset()
         }
-        return nil
+        didSet {
+            logDebug("headerViewHeight-->didSet")
+            updateContentOffsetAndInset()
+        }
     }
+    
     fileprivate var offsetY:CGFloat = 0
     //MARK: ----
     override func viewDidLoad() {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
         updateMainView()
-        configHeaderView()
-    }
-    deinit {
-        logDebug("\(type(of:self))->\(self)注销")
+        bindingHeaderViewHeight()
     }
 }
 extension TransitionViewController {
@@ -139,17 +118,7 @@ extension TransitionViewController {
     }
 }
 extension TransitionViewController {
-    /// ZJaDe: 当headerView将要设置的时候，或者currentIndex将要变化的时候调用
-    func listenIndexOrHeaderViewWillChanged() {
-        if let scrollView = self.currentScrollView,
-            let headerView = self.headerView {
-            self.offsetY = scrollView.contentOffset.y + headerView.height
-            scrollView.contentInset.top -= headerView.height
-            logDebug("HeaderViewWillChanged-contentInsetTop--】】\(scrollView.contentInset.top)")
-        }
-    }
-    /// ZJaDe: 当headerView已经设置的时候，或者currentIndex已经变化的时候调用
-    func listenIndexOrHeaderViewDidChanged(indexChanged:Bool) {
+    func addHeaderViewToScrollView() {
         if let scrollView = self.currentScrollView,
             let headerView = self.headerView {
             if headerView.superview != scrollView {
@@ -159,93 +128,101 @@ extension TransitionViewController {
                     maker.bottomSpace(scrollView)
                 }
             }
-            
-            scrollView.contentInset.top += headerView.height
-            logDebug("HeaderViewDidChanged-contentInsetTop--】】\(scrollView.contentInset.top)")
-            if indexChanged {
-                changeContentOffsetY(scrollView: scrollView, y: self.offsetY - headerView.height)
-            }else {
-                scrollView.contentOffset.y = -scrollView.contentInset.top
-                logDebug("HeaderViewDidChanged-contentOffsetY--】】\(scrollView.contentOffset.y)")
-            }
+        }
+    }
+    /// ZJaDe: 当headerView将要改变或高度将要变化的时候，或者currentScroll将要变化的时候调用
+    func willUpdateContentOffsetAndInset() {
+        if let headerViewHeight = headerViewHeight,
+            let scrollView = self.currentScrollView {
+            self.offsetY = scrollView.contentOffset.y + headerViewHeight
+            scrollView.contentInset.top -= headerViewHeight
+            logDebug("-----contentInsetTop--】】\(scrollView.contentInset.top)")
+        }
+    }
+    /// ZJaDe: 当headerView已经改变或高度已经变化的时候，或者currentScroll已经变化的时候调用
+    func updateContentOffsetAndInset() {
+        if let headerViewHeight = headerViewHeight,
+            let scrollView = self.currentScrollView {
+            scrollView.contentInset.top += headerViewHeight
+            logDebug("-----contentInsetTop++】】\(scrollView.contentInset.top)")
+            changeContentOffsetY(scrollView: scrollView, y: self.offsetY - headerViewHeight)
         }
     }
     func changeContentOffsetY(scrollView:UIScrollView,y:CGFloat) {
-        var bag = DisposeBag()
-        if scrollView.size == CGSize() {
-            scrollView.rx.observe(CGRect.self, "bounds").subscribe(onNext: {[unowned scrollView] (event) in
-                if scrollView.size != CGSize() {
-                    bag = DisposeBag()
-                    scrollView.contentOffset.y = y
-                    logDebug("scrollView--contentOffsetY--】】\(scrollView.contentOffset.y)")
-                }
-            }).addDisposableTo(bag)
-        }else {
-            scrollView.contentOffset.y = y
-            logDebug("scrollView-contentOffsetY--】】\(scrollView.contentOffset.y)")
-        }
+        scrollView.contentOffset.y = y
+        logDebug("scrollView-contentOffsetY】】\(scrollView.contentOffset.y)")
     }
-    func configHeaderView() {
-        //headerView高度变化时
-        headerView?.rx.observe(CGRect.self, "bounds").subscribe(onNext: {[unowned self] (event) in
+    func bindingHeaderViewHeight() {
+        //headerViewHeight改变时
+        headerView?.rx.observe(CGRect.self, "bounds", retainSelf:false).subscribe(onNext: {[unowned self] (event) in
             if self.headerViewHeight != self.headerView!.height {
                 self.headerViewHeight = self.headerView!.height
             }
-        }).addDisposableTo(disposeBag)
+        }).addDisposableTo(headerView!.disposeBag)
     }
 }
 extension TransitionViewController {
     /// ZJaDe: 切换控制器
     func transition(toIndex:Int? = nil) {
-        guard self.listArray.count > 0 else {
+        guard self.scrollVCCount > 0 else {
             return
         }
         let toIndex = toIndex ?? self.currentIndex ?? 0
-        guard toIndex<self.listArray.count else {
+        guard toIndex < self.scrollVCCount else {
             logError("下标越界")
             return
         }
-        /// ZJaDe: 下标没变，已经有子控制器加载时
-        if self.currentIndex == toIndex && hasChildVC {
+        let toVC = self.getScrollVC(index: toIndex) as! UIViewController
+        self.currentIndex = toIndex
+        /// ZJaDe: scroll没变，已经有子控制器加载时
+        if self.currentScrollVC == toVC {
             return
         }
-        // MARK: - oldCurrentIndex
-        let oldCurrentIndex = self.currentIndex
-        listenIndexOrHeaderViewWillChanged()
-        
-        self.currentIndex = toIndex
-        
-        /// ZJaDe: 没有子控制器加载或者第一次加载时
-        if !hasChildVC || oldCurrentIndex == nil {
+        logDebug("currentScrollView-->willSet")
+        willUpdateContentOffsetAndInset()
+        if self.currentScrollVC == nil {
+            /// ZJaDe: 没有子控制器加载或者第一次加载时
             self.addSubListViewWithIndex(index: toIndex)
         }else {
+//            let fromVC = self.currentScrollVC!
             /// ZJaDe: 下标变化，已经有子控制器加载时
-            if let fromVC = self.listArray[oldCurrentIndex!] as? UIViewController,
-                let toVC = self.listArray[toIndex] as? UIViewController {
-                
-                self.addChildViewController(fromVC)
-                self.addChildViewController(toVC)
-                
-                self.transition(from: fromVC, to: toVC, duration: 0, options: .transitionCrossDissolve, animations: {
-                    self.addSubListViewWithIndex(index: toIndex)
-                }, completion: { (finish) in
-                })
-            }
+            self.addSubListViewWithIndex(index: toIndex)
         }
-        listenIndexOrHeaderViewDidChanged(indexChanged: true)
-    }
-    var hasChildVC:Bool {
-        return self.mainView.subviews.count > 0
+        logDebug("currentScrollView-->didSet")
+        addHeaderViewToScrollView()
+        updateContentOffsetAndInset()
     }
     func addSubListViewWithIndex(index:Int) {
-        if let listVC = self.listArray[index] as? UIViewController {
-            if listVC.parent == nil {
-                self.addChildViewController(listVC)
-                listVC.didMove(toParentViewController: self)
+        if let scrollVC = self.getScrollVC(index: index) as? UIViewController {
+            if scrollVC.parent == nil {
+                self.addChildViewController(scrollVC)
+                scrollVC.didMove(toParentViewController: self)
             }
             self.mainView.removeAllSubviews()
-            self.mainView.addSubview(listVC.view)
-            listVC.view.edgesToView()
+            self.mainView.addSubview(scrollVC.view)
+            scrollVC.view.edgesToView()
+            self.currentScrollVC = scrollVC
+            self.currentScrollView = scrollVC.view as! UIScrollView?
         }
+    }
+    // MARK: - getList
+    func getScrollVC(index:Int) -> ScrollVCProtocol {
+        let scrollVC:ScrollVCProtocol
+        if let existing = self.allScrollVC[index] {
+            scrollVC = existing
+        }else {
+            scrollVC = self.createScrollVCClosure(index)
+            self.allScrollVC[index] = scrollVC
+        }
+        return scrollVC
+    }
+    func getList(index:Int) -> UIScrollView {
+        return self.getScrollVC(index: index).scrollView
+    }
+    func clearAllChildVC() {
+        self.allScrollVC.forEach { (key: Int, value: ScrollVCProtocol) in
+            (value as! UIViewController).removeFromParentViewController()
+        }
+        self.allScrollVC.removeAll()
     }
 }

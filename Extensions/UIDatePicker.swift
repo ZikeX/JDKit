@@ -33,7 +33,7 @@ extension UIDatePicker {
         }.configShowLayout { (alert, contentView) in
             self.backgroundColor = Color.lightViewBackground
             self.tintColor = Color.tintColor
-            alert.titleLabel.text = title
+            alert.titleButton.textStr = title
             contentView.addSubview(self)
             self.edgesToView()
         }.show()

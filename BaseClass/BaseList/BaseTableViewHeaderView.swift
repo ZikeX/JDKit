@@ -42,16 +42,5 @@ class BaseTableViewHeaderView: UIView {
         self.addSubview(stackView)
         stackView.edgesToView()
     }
-    deinit {
-        logDebug("\(type(of:self))->\(self)注销")
-    }
-//    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-//        if let result = super.hitTest(point, with: event),
-//            result != self {
-//            return result
-//        }else {
-//            return nil
-//        }
-//    }
 
 }
