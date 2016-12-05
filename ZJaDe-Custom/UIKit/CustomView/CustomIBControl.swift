@@ -9,6 +9,16 @@
 import UIKit
 @IBDesignable
 class CustomIBControl: UIControl,CustomIBProtocol {
+    override var contentHorizontalAlignment: UIControlContentHorizontalAlignment {
+        didSet {
+            self.layoutContentView(contentView!)
+        }
+    }
+    override var contentVerticalAlignment: UIControlContentVerticalAlignment {
+        didSet {
+            self.layoutContentView(contentView!)
+        }
+    }
     fileprivate var contentView:UIView? {
         didSet {
             if oldValue != contentView {
