@@ -26,6 +26,15 @@ extension Timer {
         return timer
     }
 }
+extension Timer {
+    /// ZJaDe: 延时调用
+    static func performAfter(_ timeInterval:TimeInterval, after: @escaping ()->()) {
+        Timer.scheduleTimer(timeInterval, repeats: false) { (timer) in
+            after()
+            timer?.invalidate()
+        }
+    }
+}
 extension CFRunLoopObserver {
     /// RunLoop beforeWaiting时调用
     ///

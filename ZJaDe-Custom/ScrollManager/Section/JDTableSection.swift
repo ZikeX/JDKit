@@ -12,6 +12,9 @@ class JDTableSection:JDListSection {
     var headerViewHeight:CGFloat = 0.1
     var footerViewHeight:CGFloat = 0.1
     
+    var headerViewColor:UIColor?
+    var footerViewColor:UIColor?
+    
     var headerView:UIView? = UITableViewHeaderFooterView()
     var footerView:UIView? = UITableViewHeaderFooterView()
     

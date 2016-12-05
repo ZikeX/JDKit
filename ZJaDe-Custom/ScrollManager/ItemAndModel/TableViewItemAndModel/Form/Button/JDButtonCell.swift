@@ -52,8 +52,8 @@ extension JDButtonCell {
         button.textLabel.font = Font.h2
         button.addHighlightedShadowAnimate()
     }
-    override func configItemAppear() {
-        super.configItemAppear()
+    override func configCell() {
+        super.configCell()
         self.backgroundColor = Color.clear
     }
 }

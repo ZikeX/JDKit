@@ -40,6 +40,15 @@ class BaseViewController: UIViewController {
         })
         return button
     }()
+    lazy var doneButton:Button = {
+        let button = Button(title: "完成")
+        button.tintColor = Color.tintColor
+        button.sizeToFit()
+        button.rx.touchUpInside({[unowned self] (button) in
+            
+        })
+        return button
+    }()
     lazy var cacelButton:Button = {
         let button = Button(image: R.image.ic_cancel(),isTemplate:true)
         button.tintColor = Color.black

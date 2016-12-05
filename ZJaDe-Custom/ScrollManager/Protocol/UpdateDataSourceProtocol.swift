@@ -67,10 +67,12 @@ extension UpdateDataSourceProtocol where Self:JDListViewModel {
                 }
             }
         }
-        let result = Changeset<SectionModelType>(updatedItems: updateItems)
-        self.listView?.performBatchUpdates(result, animationConfiguration: AnimationConfiguration(reloadAnimation:.automatic))
-//        if updateItems.count > 0 {
-//        }
+        Timer.performAfter(0.01) {
+            if updateItems.count > 0 {
+                let result = Changeset<SectionModelType>(updatedItems: updateItems)
+                self.listView?.performBatchUpdates(result, animationConfiguration: AnimationConfiguration(reloadAnimation:.automatic))
+            }
+        }
     }
     // MARK: -
     func dataArrayDidSet() {

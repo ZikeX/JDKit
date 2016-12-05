@@ -18,3 +18,24 @@ class JDTextViewModel: JDEntryModel {
     }
     var contentSizeChanged = PublishSubject<(PlaceholderTextView,CGSize)>()
 }
+extension JDTextViewModel {
+    func configTopTitleBottomTextViewModel() {
+        self.spaceEdges = UIEdgeInsetsMake(10, 10, 10, 10)
+        self.titleRightSpace = 15
+        self.lineHeight = 0
+        self.invalidateCellHeight()
+        self.maxLength = 500
+        let oldLayoutClosure = self.layoutCellClosure
+        self.configLayoutCell { (cell) in
+            oldLayoutClosure?(cell)
+            guard let cell = cell as? JDTextViewCell else {
+                return
+            }
+            cell.textViewItem.remakeLayoutView({ (view, maker) in
+                maker.height_width(scale: 0.77)
+                maker.left.right.bottom.equalToSuperview()
+                maker.topSpace(cell.stackView)
+            })
+        }
+    }
+}

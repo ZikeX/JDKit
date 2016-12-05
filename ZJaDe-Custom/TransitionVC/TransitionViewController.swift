@@ -15,7 +15,6 @@ protocol ScrollVCProtocol {
     var scrollView:UIScrollView {get}
 }
 class TransitionMainView: UIView {
-
 }
 class TransitionViewController: UIViewController {
     

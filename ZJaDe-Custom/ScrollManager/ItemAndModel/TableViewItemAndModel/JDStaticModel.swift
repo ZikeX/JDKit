@@ -129,7 +129,6 @@ extension JDEntryModel {//DateTextField
                 item.titleLabel.textAlignment = .right
                 item.textField.entryType = .date(mode:.date)
                 item.contentEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0)
-                item.addBorderBottom()
                 return item
             }) as! TitleTextFieldItem
             let secondItem = stackView.createIfNotExisting(tag: 102, { (stackView) -> UIView in

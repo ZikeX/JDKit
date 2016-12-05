@@ -10,7 +10,7 @@ import Foundation
 
 import RxSwift
 class JDTableViewModel: JDListViewModel {
-    var listStyle:UITableViewStyle = .plain
+    var listStyle:UITableViewStyle = .grouped
     
     weak var tableView:JDTableView!
     weak var listVC:JDTableViewController?
@@ -126,15 +126,21 @@ extension JDTableViewModel:UITableViewDelegate {
     final func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         if rxDataSource.sectionModels.count > section {
             let sectionModel = rxDataSource[section].model
-            return sectionModel.headerView
+            let headerView = sectionModel.headerView
+            if let headerColor = sectionModel.headerViewColor,
+                let headerView = headerView as? UITableViewHeaderFooterView  {
+                headerView.backgroundView = UIView()
+                headerView.backgroundView?.backgroundColor = headerColor
+                
+            }
+            return headerView
         }else {
             return nil
         }
     }
     final func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         /// ZJaDe: 该方法暂时无用
-        view.setNeedsLayout()
-        view.setNeedsDisplay()
+        
     }
     final func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if rxDataSource.sectionModels.count > section {
@@ -148,15 +154,20 @@ extension JDTableViewModel:UITableViewDelegate {
     final func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if rxDataSource.sectionModels.count > section {
             let sectionModel = rxDataSource[section].model
-            return sectionModel.footerView
+            let footerView = sectionModel.footerView
+            if let footerColor = sectionModel.footerViewColor,
+                let footerView = footerView as? UITableViewHeaderFooterView {
+                footerView.backgroundView = UIView()
+                footerView.backgroundView?.backgroundColor = footerColor
+            }
+            return footerView
         }else {
             return nil
         }
     }
     final func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         /// ZJaDe: 该方法暂时无用
-        view.setNeedsLayout()
-        view.setNeedsDisplay()
+        
     }
     final func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if rxDataSource.sectionModels.count > section {

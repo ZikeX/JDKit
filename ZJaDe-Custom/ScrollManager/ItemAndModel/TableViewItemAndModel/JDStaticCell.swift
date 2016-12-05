@@ -18,22 +18,20 @@ class JDStaticCell: JDTableCell {
     }
     
     override func bindingModel(_ model: JDTableModel) {
-        self.configItemAppear()
+        self.configCell()
     }
     
 }
 extension JDStaticCell {
-    func configItemAppear() {
+    func configCell() {
         
     }
 }
 extension JDStaticCell {//cell第一响应者 焦点View
     override func setSelected(_ selected: Bool, animated: Bool) {
-        if enabled {
-            super.setSelected(selected, animated: animated)
-            if selected {
-                self.jdFocusView?.becomeFirstResponder()
-            }
+        super.setSelected(selected, animated: animated)
+        if selected {
+            self.jdFocusView?.becomeFirstResponder()
         }
     }
 }

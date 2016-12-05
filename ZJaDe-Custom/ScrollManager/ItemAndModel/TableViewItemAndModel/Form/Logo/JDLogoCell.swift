@@ -57,7 +57,7 @@ extension JDLogoCell {
 extension JDLogoCell {
     func configLogo(_ logo:ImageView) {
     }
-    override func configItemAppear() {
-        super.configItemAppear()
+    override func configCell() {
+        super.configCell()
     }
 }
