@@ -70,6 +70,7 @@ class LineView: CustomIBView {
         super.configInit()
         self.layer.masksToBounds = true
         self.layer.addSublayer(self.shapeLayer)
+        self.contentPriority(UILayoutPriorityDefaultLow)
     }
     //MARK: -
     var shapeLayer:CAShapeLayer = {

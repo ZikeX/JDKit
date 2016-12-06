@@ -20,7 +20,7 @@ enum TitleAndImgLocation:Int {
 class Button: CustomIBControl {
     var stackView = UIStackView()
     var textLabel = UILabel()
-    @IBInspectable var imgView = ImageView()
+    var imgView = ImageView()
     
     var titleAndImgLocation:TitleAndImgLocation {
         get {
@@ -70,7 +70,9 @@ class Button: CustomIBControl {
     
     @IBInspectable var titleInLeading: Bool = true {
         didSet {
-            addAndSortStackSubViews()
+            if self.stackView.superview != nil {
+                self.addAndSortStackSubViews()
+            }
         }
     }
     @IBInspectable var isHorizontal: Bool {
@@ -89,6 +91,7 @@ class Button: CustomIBControl {
         self.textStr = title
         self.img = image
         self.isTemplate = isTemplate
+        self.imgView.isTemplate = isTemplate
         self.updateImg()
         self.updateText()
     }
