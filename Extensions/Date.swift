@@ -107,15 +107,13 @@ extension Date {
         return NSCalendar.current.date(byAdding: .year, value: years, to: self)!
     }
     
-    func isAfter(date: Date) -> Bool{
+    func isAfter(date: Date) -> Bool {
         return (self.compare(date) == ComparisonResult.orderedDescending)
     }
     
-    func isBefore(date: Date) -> Bool{
+    func isBefore(date: Date) -> Bool {
         return (self.compare(date) == ComparisonResult.orderedAscending)
     }
-    
-    
 }
 extension Date {    
     var year : Int {

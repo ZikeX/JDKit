@@ -1,5 +1,5 @@
 //
-//  JDScorllViewController.swift
+//  JDScrollViewController.swift
 //  ZiWoYou
 //
 //  Created by 茶古电子商务 on 16/11/30.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class JDScorllViewController: UIViewController,ScrollVCProtocol {
+class JDScrollViewController: UIViewController,ScrollVCProtocol {
     var index:Int!
     var scrollView: UIScrollView {
         return self.view as! UIScrollView

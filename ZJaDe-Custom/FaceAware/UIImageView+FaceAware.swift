@@ -57,13 +57,13 @@ public extension UIImageView {
         }
     }
     
-    private func applyFaceDetection(for features: [AnyObject], size: CGSize, cgImage: CGImage) {
+    private func applyFaceDetection(for features: [CIFeature], size: CGSize, cgImage: CGImage) {
         var rect = CGRect.zero
         var rightBorder = 0.0
         var bottomBorder = 0.0
         
         for feature in features {
-            var oneRect = feature.bounds!
+            var oneRect = feature.bounds
             oneRect.origin.y = size.height - oneRect.origin.y - oneRect.size.height
             rect.origin.x = min(oneRect.origin.x, rect.origin.x)
             rect.origin.y = min(oneRect.origin.y, rect.origin.y)

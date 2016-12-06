@@ -7,6 +7,13 @@
 //
 
 import Foundation
+
+extension Double {
+    var yuan:Price {
+        return Price(self)
+    }
+}
+
 typealias PriceValue = Double
 
 struct Price {

@@ -36,7 +36,7 @@ extension UIImageView {
         }
     }
     func setImage(imageData:ImageDataProtocol?,placeholderImage:UIImage? = nil,style:UIActivityIndicatorViewStyle? = nil) {
-        self.image = placeholderImage ?? R.image.ic_defalut_image()
+        self.image = placeholderImage ?? R.image.ic_default_image()
         imageData?.injectImageToView(imageView:self,style: style)
     }
 }
@@ -58,7 +58,7 @@ extension String:ImageDataProtocol {
 extension URL:ImageDataProtocol {
     func injectImageToView(imageView: UIImageView,style:UIActivityIndicatorViewStyle? = nil) {
         imageView.addActivityIndicator(style: style ?? .white)
-        imageView.image = R.image.ic_defalut_image()
+        imageView.image = R.image.ic_default_image()
         imageView.removeActivityIndicator()
     }
 }

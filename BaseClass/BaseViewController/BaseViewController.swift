@@ -61,6 +61,12 @@ class BaseViewController: UIViewController {
     func cacelVC() {
         self.navigationController?.dismissVC()
     }
+    lazy var backItem:UIBarButtonItem = {
+        let item = UIBarButtonItem.image(R.image.ic_back()!, {[unowned self] (item) in
+            self.popVC()
+        })
+        return item
+    }()
     // MARK: - 
     lazy var transitionVC:TransitionViewController = TransitionViewController()
     // MARK: -

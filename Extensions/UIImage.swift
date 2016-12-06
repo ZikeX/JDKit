@@ -3,6 +3,9 @@ import Foundation
 import UIKit
 
 extension UIImage {
+    var automaticImage:UIImage {
+        return self.withRenderingMode(.automatic)
+    }
     var templateImage:UIImage {
         return self.withRenderingMode(.alwaysTemplate)
     }

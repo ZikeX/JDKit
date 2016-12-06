@@ -51,7 +51,7 @@ class Button: CustomIBControl {
     }
     @IBInspectable var isTemplate: Bool = false {
         didSet {
-            self.updateImg()
+            self.imgView.isTemplate = isTemplate
         }
     }
     @IBInspectable var labelFont:Int = 0 {
@@ -107,11 +107,7 @@ extension Button {
         self.textLabel.text = self.textStr
     }
     func updateImg() {
-        if isTemplate == true {
-            self.imgView.image = self.img?.templateImage
-        }else {
-            self.imgView.image = self.img?.originalImage
-        }
+        self.imgView.image = self.img
     }
     @IBInspectable override var tintColor: UIColor! {
         didSet {

@@ -38,7 +38,7 @@ extension JDLogoCell {
         self.configLogo(logo)
         
         model.logo.asObservable().subscribe(onNext:{[unowned self] (image) in
-            self.logo.image = image ?? R.image.ic_defalut_userImg()
+            self.logo.image = image ?? R.image.ic_default_userImg()
         }).addDisposableTo(disposeBag)
         
         self.logo.rx.whenTouch { (imageView) in

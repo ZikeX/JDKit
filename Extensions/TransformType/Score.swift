@@ -7,6 +7,13 @@
 //
 
 import Foundation
+
+extension Double {
+    var fen:Score {
+        return Score(self)
+    }
+}
+
 typealias ScoreValue = Double
 
 struct Score {

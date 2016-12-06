@@ -9,7 +9,26 @@
 import UIKit
 
 class ImageView: UIImageView {
-
+    override var image: UIImage? {
+        get {
+            return super.image
+        }
+        set {
+            self.willChangeValue(forKey: "image")
+            if isTemplate == true {
+                super.image = newValue?.templateImage
+            }else {
+                super.image = newValue?.originalImage
+            }
+            self.didChangeValue(forKey: "image")
+        }
+    }
+    @IBInspectable var isTemplate: Bool = false {
+        didSet {
+            self.image = self.image?.automaticImage
+        }
+    }
+    
     override init(image: UIImage?) {
         super.init(image: image)
         configInit()
@@ -22,10 +41,12 @@ class ImageView: UIImageView {
         super.init(coder: aDecoder)
         configInit()
     }
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+    }
     
     func configInit() {
         self.clipsToBounds = true
-        self.contentMode = .scaleAspectFill
     }
-
 }

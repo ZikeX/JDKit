@@ -8,7 +8,7 @@
 
 import UIKit
 
-class JDListViewController: JDScorllViewController {
+class JDListViewController: JDScrollViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         configInit()

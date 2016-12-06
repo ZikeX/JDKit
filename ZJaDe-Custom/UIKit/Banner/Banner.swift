@@ -52,6 +52,6 @@ class Banner: UIView {
             self.pageControl.progress = progress
         }).addDisposableTo(disposeBag)
         
-        self.dataArray = [R.image.ic_defalut_image()!,R.image.ic_defalut_image()!]
+        self.dataArray = [R.image.ic_default_image()!,R.image.ic_default_image()!]
     }
 }

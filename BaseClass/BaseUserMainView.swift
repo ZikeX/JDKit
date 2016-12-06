@@ -14,7 +14,7 @@ class BaseUserMainView: UIView {
     lazy var userPhoto:ImageView = {
         let imgView = ImageView()
         imgView.addBorder(color: Color.white)
-        imgView.image = R.image.ic_defalut_userImg()
+        imgView.image = R.image.ic_default_userImg()
         let userPhotoLength = min(imgView.image!.size.width, imgView.image!.size.height)
         imgView.sizeValue(width: userPhotoLength, height: userPhotoLength)
         imgView.cornerRadius = userPhotoLength / 2
