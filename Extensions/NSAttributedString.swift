@@ -17,29 +17,43 @@ func += (left: inout AttrStrContainer, right: AttrStrContainer) {
 
 class AttrStrContainer {
     var attrStr:NSMutableAttributedString
-    
+    lazy var defaultRange:NSRange = {
+        NSMakeRange(0, self.attrStr.length)
+    }()
     init(_ str: String) {
         self.attrStr = NSMutableAttributedString(string: str)
     }
-    init(_ attrStr: NSAttributedString) {
-        self.attrStr = NSMutableAttributedString(attributedString: attrStr)
+    init(_ attrStr: NSAttributedString?) {
+        if attrStr == nil {
+            self.attrStr = NSMutableAttributedString()
+        }else {
+            self.attrStr = NSMutableAttributedString(attributedString: attrStr!)
+        }
     }
     
     func font(_ font:UIFont, range:NSRange? = nil) -> Self {
-        let range = range ?? NSMakeRange(0, self.attrStr.length)
+        let range = range ?? defaultRange
         self.attrStr.addAttribute(NSFontAttributeName, value: font, range: range)
         return self
     }
     
     func color(_ color:UIColor, range:NSRange? = nil) -> Self {
-        let range = range ?? NSMakeRange(0, self.attrStr.length)
+        let range = range ?? defaultRange
         self.attrStr.addAttribute(NSForegroundColorAttributeName, value: color, range: range)
         return self
     }
     func underLine(_ color:UIColor = Color.gray, range:NSRange? = nil) -> Self {
-        let range = range ?? NSMakeRange(0, self.attrStr.length)
+        let range = range ?? defaultRange
         let underLineStyle:NSUnderlineStyle = .styleSingle
         self.attrStr.addAttributes([NSStrikethroughStyleAttributeName:NSNumber(value: underLineStyle.rawValue),NSStrikethroughColorAttributeName:color], range: range)
+        return self
+    }
+    func lineSpacing(_ spacing:CGFloat, range:NSRange? = nil) -> Self {
+        let range = range ?? defaultRange
+        let style = NSMutableParagraphStyle()
+        style.lineBreakMode = .byTruncatingTail
+        style.lineSpacing = spacing
+        self.attrStr.addAttributes([NSParagraphStyleAttributeName:style], range: range)
         return self
     }
 }
