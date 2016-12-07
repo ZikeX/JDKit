@@ -32,7 +32,7 @@ class ScoreFormatter:NumberFormatter {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    init(_ increment:ScoreValue) {
+    init(_ increment:ScoreValue = 0.1) {
         super.init()
         self.numberStyle = .decimal
         self.roundingIncrement = NSNumber(value: increment)

@@ -19,16 +19,12 @@ typealias PriceValue = Double
 struct Price {
     typealias NativeType = PriceValue
     
-    var formatter:PriceFormatter = {
-        return PriceFormatter()
-    }()
-    
     var value:NativeType
     var toValueStr:String {
         return String(format: "%.2f", value)
     }
     var currencySymbol:String {
-        return formatter.currencySymbol
+        return PriceFormatter().currencySymbol
     }
 }
 extension Price {
@@ -51,6 +47,6 @@ extension Price:ExpressibleByIntegerLiteral {
 }
 extension Price:CustomStringConvertible {
     var description: String {
-        return "\(formatter.string(from: self))"
+        return "\(PriceFormatter().string(from: self))"
     }
 }

@@ -18,9 +18,6 @@ typealias ScoreValue = Double
 
 struct Score {
     typealias NativeType = ScoreValue
-    var formatter:ScoreFormatter = {
-        return ScoreFormatter(0.1)
-    }()
     
     var value:NativeType
     
@@ -48,6 +45,6 @@ extension Score:ExpressibleByIntegerLiteral {
 }
 extension Score:CustomStringConvertible {
     var description: String {
-        return "\(formatter.string(from: self))"
+        return "\(ScoreFormatter().string(from: self))"
     }
 }
