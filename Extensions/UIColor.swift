@@ -53,6 +53,9 @@ extension UIColor {
         getRed(nil, green: nil, blue: nil, alpha: &a)
         return a
     }
+    func alpha(_ alpha:CGFloat) -> UIColor {
+        return self.withAlphaComponent(alpha)
+    }
 
     /// ZJaDe: Returns random UIColor with random alpha(default: false)
     static func randomColor(_ randomAlpha: Bool = false) -> UIColor {

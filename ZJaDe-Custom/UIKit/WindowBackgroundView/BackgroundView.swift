@@ -12,7 +12,7 @@ class BackgroundView: CustomIBView {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.backgroundColor = Color.black.withAlphaComponent(0.3)
+        self.backgroundColor = Color.black.alpha(0.3)
     }
 
 }

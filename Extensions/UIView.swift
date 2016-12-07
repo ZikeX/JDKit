@@ -47,101 +47,6 @@ extension UIView {
     }
 }
 
-extension UIView {//Frame
-    var top:CGFloat {
-        get {
-            return self.frame.origin.y
-        }
-        set {
-            self.frame.origin.y = newValue
-        }
-    }
-    var left:CGFloat {
-        get {
-            return self.frame.origin.x
-        }
-        set {
-            self.frame.origin.x = newValue
-        }
-    }
-    var bottom:CGFloat {
-        get {
-            return self.frame.origin.y + self.frame.size.height
-        }
-        set {
-            self.frame.origin.y = newValue - self.frame.size.height
-        }
-    }
-    var right:CGFloat {
-        get {
-            return self.frame.origin.x + self.frame.size.width
-        }
-        set {
-            self.frame.origin.x = newValue - self.frame.size.width
-        }
-    }
-    var centerY:CGFloat {
-        get {
-            return self.center.y
-        }
-        set {
-            self.center.y = newValue
-        }
-    }
-    var centerX:CGFloat {
-        get {
-            return self.center.x
-        }
-        set {
-            self.center.x = newValue
-        }
-    }
-    var width:CGFloat {
-        get {
-            return self.frame.size.width
-        }
-        set {
-            self.frame.size.width = newValue
-        }
-    }
-    var height:CGFloat {
-        get {
-            return self.frame.size.height
-        }
-        set {
-            self.frame.size.height = newValue
-        }
-    }
-
-    var x: CGFloat {
-        get {
-            return self.frame.origin.x
-        } set(value) {
-            self.frame.origin.x = value
-        }
-    }
-    var y: CGFloat {
-        get {
-            return self.frame.origin.y
-        } set(value) {
-            self.frame.origin.y = value
-        }
-    }
-    var origin: CGPoint {
-        get {
-            return self.frame.origin
-        } set(value) {
-            self.frame.origin = value
-        }
-    }
-    var size: CGSize {
-        get {
-            return self.frame.size
-        } set(value) {
-            self.frame.size = value
-        }
-    }
-}
 extension UIView {
     func removeAllSubviews() {
         for subview in subviews {
@@ -222,67 +127,7 @@ extension UIView {
     }
 }
 
-@IBDesignable class IBView: UIView {
-    
-}
-@IBDesignable class IBButton: UIButton {
-    
-}
-@IBDesignable class IBImageView: UIImageView {
-    
-}
-extension UIButton {
-    @IBInspectable override var hasShadow:Bool {
-        get {
-            return self.layer.shadowOpacity > 0
-        }
-        set {
-            if newValue {
-                self.addButtonShadow()
-            }else {
-                self.layer.shadowOpacity = 0
-            }
-        }
-    }
-}
 extension UIView {
-    @IBInspectable var cornerRadius:CGFloat {
-        get {
-            return self.layer.cornerRadius
-        }
-        set {
-            self.layer.cornerRadius = newValue
-            //self.clipsToBounds = newValue > 0
-        }
-    }
-    @IBInspectable var boderColor:UIColor {
-        get {
-            return Color.boderLine
-        }
-        set {
-            self.layer.borderColor = newValue.cgColor
-        }
-    }
-    @IBInspectable var boderWidth:CGFloat {
-        get {
-            return self.layer.borderWidth
-        }
-        set {
-            self.layer.borderWidth = newValue
-        }
-    }
-    @IBInspectable var hasShadow:Bool {
-        get {
-            return self.layer.shadowOpacity > 0
-        }
-        set {
-            if newValue {
-                self.addShadowInWhiteView()
-            }else {
-                self.layer.shadowOpacity = 0
-            }
-        }
-    }
     var backgroundColorAlpha:CGFloat {
         get {
             var a: CGFloat = 0
@@ -290,7 +135,7 @@ extension UIView {
             return a
         }
         set {
-            self.backgroundColor = self.backgroundColor?.withAlphaComponent(newValue)
+            self.backgroundColor = self.backgroundColor?.alpha(newValue)
         }
     }
     

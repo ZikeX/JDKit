@@ -26,7 +26,7 @@ extension Alert {
 extension Alert {
     fileprivate static func content(itemArr:[String]? = ["确定"],title:String,content:String) -> Alert {
         let alert = Alert(itemTitleArray: itemArr)
-        alert.baseView.backgroundColor = Color.white.withAlphaComponent(0.85)
+        alert.baseView.backgroundColor = Color.white.alpha(0.85)
         alert.bottomStackView.addBorderTop()
         alert.bottomStackView.arrangedSubviews.dropLast().forEach { (view) in
             view.addBorderRight(padding:-20)

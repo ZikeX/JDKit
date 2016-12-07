@@ -117,7 +117,7 @@ extension SearchTextField {
 extension SearchTextField {
     func configLightWhiteSearchBarWithCity() {
         self.cornerRadius = 5
-        self.backgroundColor = Color.white.withAlphaComponent(0.8)
+        self.backgroundColor = Color.white.alpha(0.8)
         
         self.leftView = self.cityButton
         self.leftView?.addBorderRight(color:Color.white,padding: 7)
