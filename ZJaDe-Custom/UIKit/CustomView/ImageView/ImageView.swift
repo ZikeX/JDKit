@@ -25,7 +25,8 @@ class ImageView: UIImageView {
     }
     @IBInspectable var isTemplate: Bool = false {
         didSet {
-            self.image = self.image?.automaticImage
+            let image = self.image
+            self.image = image
         }
     }
     

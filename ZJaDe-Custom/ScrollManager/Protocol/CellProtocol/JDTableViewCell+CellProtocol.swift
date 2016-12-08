@@ -38,8 +38,8 @@ extension JDTableCell : CellProtocol {
                 maker.left.equalToSuperview().offset(element.separatorInset.left)
                 maker.right.equalToSuperview().offset(-element.separatorInset.right)
             }else {
-                maker.left.equalTo(self).offset(-element.separatorInset.left)
-                maker.right.equalTo(self).offset(element.separatorInset.right)
+                maker.left.equalTo(self).offset(element.separatorInset.left)
+                maker.right.equalTo(self).offset(-element.separatorInset.right)
             }
         })
         self.updateLayout.activate()

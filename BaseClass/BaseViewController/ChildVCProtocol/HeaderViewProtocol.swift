@@ -28,7 +28,7 @@ extension HeaderViewProtocol where Self:BaseViewController {
                 }
             }
         }else {
-            self.updateTransitionChildVC(segmentedControl: nil)
+            self.updateTransitionChildVC()
         }
     }
     func configTransitionVC(edgesToFill: Bool) {

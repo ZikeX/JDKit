@@ -117,7 +117,7 @@ extension SegmentedControl:JDSegmentedControlDelegate {
             break
         case .canScroll, .canScrollNoIndicator:
             item.snp.makeConstraints { (maker) in
-                maker.width.equalTo(72)
+                maker.width.equalTo(model.title.length * 15 + 32)
             }
         }
     }
@@ -132,20 +132,20 @@ extension SegmentedControl:JDSegmentedControlDelegate {
             imageView.tintColor = Color.tintColor
             imageView.image = R.image.ic_wavyLine()?.resizableImage(withCapInsets: UIEdgeInsets(), resizingMode: .tile)
 //            imageView.contentMode = .left
-            imageView.snp.makeConstraints({ (maker) in
+            imageView.snp.remakeConstraints({ (maker) in
                 maker.centerX.equalToSuperview()
                 maker.bottom.equalToSuperview().offset(-5)
                 maker.width.equalTo(0)
             })
         case .canScroll:
             imageView.backgroundColor = Color.tintColor
-            imageView.snp.makeConstraints({ (maker) in
+            imageView.snp.remakeConstraints({ (maker) in
                 maker.left.bottom.centerX.equalToSuperview()
                 maker.height.equalTo(2)
             })
         case .canScrollNoIndicator:
             imageView.backgroundColor = Color.clear
-            imageView.snp.makeConstraints({ (maker) in
+            imageView.snp.remakeConstraints({ (maker) in
                 maker.left.bottom.centerX.equalToSuperview()
                 maker.height.equalTo(0)
             })

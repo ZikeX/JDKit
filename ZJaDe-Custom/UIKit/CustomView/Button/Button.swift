@@ -154,9 +154,9 @@ extension Button {
         return _contentView
     }
     override var intrinsicContentSize:CGSize {
-//        #if TARGET_INTERFACE_BUILDER
-//            return CGSize(width: 70, height: 30)
-//        #endif
+        #if TARGET_INTERFACE_BUILDER
+            return CGSize(width: 70, height: 30)
+        #endif
         
         var jdwidth:CGFloat = contentEdgeInsets.left + contentEdgeInsets.right
         var jdheight:CGFloat = contentEdgeInsets.top + contentEdgeInsets.bottom
