@@ -12,18 +12,18 @@ class ImageArrView: CustomIBView {
     /// ZJaDe: height / width
     @IBInspectable var imageScale:CGFloat = 1.0 {
         didSet {
-            self.setNeedsUpdateConstraints()
+            self.updateLayout()
         }
     }
     @IBInspectable var imageSpacing:CGFloat = 1.0 {
         didSet {
             self.stackView.spacing = imageSpacing
-            self.setNeedsUpdateConstraints()
+            self.updateLayout()
         }
     }
     @IBInspectable var maxImageCount:Int = 3 {
         didSet {
-            self.setNeedsUpdateConstraints()
+            self.updateLayout()
         }
     }
     // MARK: -
@@ -47,7 +47,7 @@ class ImageArrView: CustomIBView {
     /// ZJaDe: 配置数据
     var imgDataArray:[ImageDataProtocol]? {
         didSet {
-            setNeedsUpdateConstraints()
+            updateLayout()
         }
     }
     override var intrinsicContentSize: CGSize {
@@ -55,8 +55,7 @@ class ImageArrView: CustomIBView {
     }
 }
 extension ImageArrView {
-    override func updateConstraints() {
-        super.updateConstraints()
+    func updateLayout() {
         guard maxImageCount > 0 else {
             fatalError("图片最大数量必须大于0")
         }
