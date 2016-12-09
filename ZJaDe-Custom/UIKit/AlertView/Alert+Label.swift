@@ -29,7 +29,7 @@ extension Alert {
         alert.baseView.backgroundColor = Color.white.alpha(0.85)
         alert.bottomStackView.addBorderTop()
         alert.bottomStackView.arrangedSubviews.dropLast().forEach { (view) in
-            view.addBorderRight(padding:-20)
+            view.addBorderRight(fixedLength:20)
         }
         alert.bottomStackView.heightValue(height: 44)
         alert.titleButton.textStr = title

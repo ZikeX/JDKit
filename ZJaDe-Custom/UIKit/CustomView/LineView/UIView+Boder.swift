@@ -20,25 +20,24 @@ enum ExcludePoint:Int {
 }
 extension UIView {
     /// ZJaDe: 添加top boder
-    func addBorderTop(boderWidth:CGFloat = 1,color:UIColor = Color.boderLine,padding:CGFloat = 0,edgeType:ExcludePoint = .allPoint,autoLayout:Bool = true) {
-        self.addBorder(boderWidth: boderWidth, direction: .top, color: color, padding: padding, edgeType: edgeType,autoLayout:autoLayout)
+    func addBorderTop(boderWidth:CGFloat = 1,color:UIColor = Color.boderLine,padding:CGFloat = 0,fixedLength:CGFloat? = nil,edgeType:ExcludePoint = .allPoint,autoLayout:Bool = true) {
+        self.addBorder(boderWidth: boderWidth, direction: .top, color: color, padding: padding, fixedLength:fixedLength, edgeType: edgeType,autoLayout:autoLayout)
     }
     /// ZJaDe: 添加bottom boder
-    func addBorderBottom(boderWidth:CGFloat = 1,color:UIColor = Color.boderLine,padding:CGFloat = 0,edgeType:ExcludePoint = .allPoint,autoLayout:Bool = true) {
-        self.addBorder(boderWidth: boderWidth, direction: .bottom, color: color, padding: padding, edgeType: edgeType,autoLayout:autoLayout)
+    func addBorderBottom(boderWidth:CGFloat = 1,color:UIColor = Color.boderLine,padding:CGFloat = 0,fixedLength:CGFloat? = nil,edgeType:ExcludePoint = .allPoint,autoLayout:Bool = true) {
+        self.addBorder(boderWidth: boderWidth, direction: .bottom, color: color, padding: padding, fixedLength:fixedLength, edgeType: edgeType,autoLayout:autoLayout)
     }
     /// ZJaDe: 添加left boder
-    func addBorderLeft(boderWidth:CGFloat = 1,color:UIColor = Color.boderLine,padding:CGFloat = 0,edgeType:ExcludePoint = .allPoint,autoLayout:Bool = true) {
-        self.addBorder(boderWidth: boderWidth, direction: .left, color: color, padding: padding, edgeType: edgeType,autoLayout:autoLayout)
+    func addBorderLeft(boderWidth:CGFloat = 1,color:UIColor = Color.boderLine,padding:CGFloat = 0,fixedLength:CGFloat? = nil,edgeType:ExcludePoint = .allPoint,autoLayout:Bool = true) {
+        self.addBorder(boderWidth: boderWidth, direction: .left, color: color, padding: padding, fixedLength:fixedLength, edgeType: edgeType,autoLayout:autoLayout)
     }
     /// ZJaDe: 添加right boder
-    func addBorderRight(boderWidth:CGFloat = 1,color:UIColor = Color.boderLine,padding:CGFloat = 0,edgeType:ExcludePoint = .allPoint,autoLayout:Bool = true) {
-        self.addBorder(boderWidth: boderWidth, direction: .right, color: color, padding: padding, edgeType: edgeType,autoLayout:autoLayout)
+    func addBorderRight(boderWidth:CGFloat = 1,color:UIColor = Color.boderLine,padding:CGFloat = 0,fixedLength:CGFloat? = nil,edgeType:ExcludePoint = .allPoint,autoLayout:Bool = true) {
+        self.addBorder(boderWidth: boderWidth, direction: .right, color: color, padding: padding, fixedLength:fixedLength, edgeType: edgeType,autoLayout:autoLayout)
     }
     //MARK: -
-    /// ZJaDe: padding 为负时，表示固定宽度
-    private func addBorder(boderWidth:CGFloat,direction:BoderDirection,color:UIColor,padding:CGFloat,edgeType:ExcludePoint,autoLayout:Bool) {
-        let fixedLength:CGFloat? = padding < 0 ? -padding : nil
+    /// ZJaDe: fixedLength 不为空时，padding无效
+    private func addBorder(boderWidth:CGFloat,direction:BoderDirection,color:UIColor,padding:CGFloat,fixedLength:CGFloat? = nil,edgeType:ExcludePoint,autoLayout:Bool) {
         let tag = direction.rawValue
         let lineAxis:LineAxis
         var boderLength:CGFloat

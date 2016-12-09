@@ -40,18 +40,27 @@ class Button: CustomIBControl {
     }
     // MARK: - @IBInspectable
     @IBInspectable var textStr:String? {
-        didSet {
-            self.updateText()
+        get {
+            return self.textLabel.text
+        }
+        set {
+            self.textLabel.text = newValue
         }
     }
     @IBInspectable var img:UIImage? {
-        didSet {
-            self.updateImg()
+        get {
+            return self.imgView.image
+        }
+        set {
+            self.imgView.image = newValue
         }
     }
-    @IBInspectable var isTemplate: Bool = false {
-        didSet {
-            self.imgView.isTemplate = isTemplate
+    @IBInspectable var isTemplate: Bool {
+        get {
+            return self.imgView.isTemplate
+        }
+        set {
+            self.imgView.isTemplate = newValue
         }
     }
     @IBInspectable var labelFont:Int = 0 {
@@ -70,8 +79,8 @@ class Button: CustomIBControl {
     
     @IBInspectable var titleInLeading: Bool = true {
         didSet {
-            if self.stackView.superview != nil {
-                self.addAndSortStackSubViews()
+            if self.titleInLeading != oldValue {
+                self.sortStackSubViews()
             }
         }
     }
@@ -91,9 +100,6 @@ class Button: CustomIBControl {
         self.textStr = title
         self.img = image
         self.isTemplate = isTemplate
-        self.imgView.isTemplate = isTemplate
-        self.updateImg()
-        self.updateText()
     }
     override func configInit() {
         super.configInit()
@@ -102,16 +108,11 @@ class Button: CustomIBControl {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.setNeedUpdateContentView()
         observeConfig()
     }
 }
 extension Button {
-    func updateText() {
-        self.textLabel.text = self.textStr
-    }
-    func updateImg() {
-        self.imgView.image = self.img
-    }
     @IBInspectable override var tintColor: UIColor! {
         didSet {
             self.textLabel.textColor = tintColor
@@ -127,7 +128,7 @@ extension Button {
         Observable.combineLatest(imgViewImgObserve, textLabelTextObserve) {($0, $1)}.distinctUntilChanged{ [unowned self] in
             return self.checkEmptyEqual($0,$1)
             }.subscribe(onNext: {[unowned self] (event) in
-                self.setNeedUpdateContentView()
+                self.addStackSubViews()
             }).addDisposableTo(disposeBag)
     }
     func checkEmptyEqual<I:Equatable,T:Equatable>(_ element1:(I?,T?),_ element2:(I?,T?)) -> Bool {
@@ -139,19 +140,7 @@ extension Button {
 
 extension Button {
     override func updateContentView() -> UIView? {
-        var _contentView:UIView?
-        switch (self.imgView.image,self.textLabel.text) {
-        case (nil,nil):
-            break
-        case (nil,_):
-            _contentView = self.textLabel
-        case (_,nil):
-            _contentView = self.imgView
-        case (_,_):
-            _contentView = self.stackView
-            self.addAndSortStackSubViews()
-        }
-        return _contentView
+        return self.stackView
     }
     override var intrinsicContentSize:CGSize {
         #if TARGET_INTERFACE_BUILDER
@@ -199,15 +188,55 @@ extension Button {
         .topToBottom:(true,.vertical),
         .bottomToTop:(false,.vertical)]
     }
-    func addAndSortStackSubViews() {
-        self.stackView.removeAllSubviews()
+
+    func addStackSubViews() {
+        switch (self.img,self.textStr) {
+        case (nil,nil):
+            self.stackView.isHidden = true
+        case (_,nil):
+            self.stackView.isHidden = false
+            self.imgView.isHidden = false
+            self.textLabel.isHidden = true
+            self.addImageView(true)
+        case (nil,_):
+            self.stackView.isHidden = false
+            self.imgView.isHidden = true
+            self.textLabel.isHidden = false
+            self.addTextLabel(true)
+        case (_,_):
+            self.stackView.isHidden = false
+            self.imgView.isHidden = false
+            self.textLabel.isHidden = false
+            if self.stackView.arrangedSubviews.count < 2 {
+                self.sortStackSubViews()
+            }
+        }
+    }
+    func sortStackSubViews() {
         if titleInLeading {
-            self.stackView.addArrangedSubview(self.textLabel)
-            self.stackView.addArrangedSubview(self.imgView)
+            self.addTextLabel(true)
+            self.addImageView(false)
         }else {
-            self.stackView.addArrangedSubview(self.imgView)
-            self.stackView.addArrangedSubview(self.textLabel)
-            
+            self.addImageView(true)
+            self.addTextLabel(false)
+        }
+    }
+    func addImageView(_ isFirstItem:Bool) {
+        if self.img != nil {
+            if isFirstItem {
+                self.stackView.insertArrangedSubview(self.imgView, at: 0)
+            }else {
+                self.stackView.addArrangedSubview(self.imgView)
+            }
+        }
+    }
+    func addTextLabel(_ isFirstItem:Bool) {
+        if self.textStr != nil {
+            if isFirstItem {
+                self.stackView.insertArrangedSubview(self.textLabel, at: 0)
+            }else {
+                self.stackView.addArrangedSubview(self.textLabel)
+            }
         }
     }
 }
