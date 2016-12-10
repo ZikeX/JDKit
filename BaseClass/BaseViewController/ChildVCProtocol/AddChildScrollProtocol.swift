@@ -9,30 +9,18 @@
 import UIKit
 
 protocol AddChildScrollProtocol:class {
-    associatedtype ChildListViewModelType:JDListViewModel
     associatedtype ChildScrollVCType:JDScrollViewController
-    // MARK: - 实现下面两个方法中的一个，来创建控制器
-    func createScrollVC(index:Int) -> ChildScrollVCType?
-    func createListViewModel(index:Int) -> ChildListViewModelType
-    // MARK: - 创建控制器之后的一些设置
-    func configScrollVC(viewModel:ChildListViewModelType?,listVC:ChildScrollVCType,index:Int)
+    // MARK: - 实现下面方法创建控制器
+    func createScrollVC(index:Int) -> ChildScrollVCType
     // MARK: - 获取子控制器
     var firstChildVC:ChildScrollVCType? {get}
     func childVC(index:Int) -> ChildScrollVCType?
     // MARK: - 调用该方法可添加子控制器到本控制器中
-    func addChildScrollVC(edgesToFill:Bool?,index:Int) -> (ChildListViewModelType?,ChildScrollVCType)
+    func addChildScrollVC(edgesToFill:Bool?,index:Int) -> ChildScrollVCType
+    // MARK: - 添加子控制器后的一些设置
+    func configChildScrollVC(scrollVC:ChildScrollVCType,index:Int)
 }
 extension AddChildScrollProtocol where Self:BaseViewController {
-    // MARK: -
-    func createScrollVC(index:Int) -> JDScrollViewController? {
-        return nil
-    }
-    func createListViewModel(index:Int) -> JDListViewModel {
-        fatalError("scrollVC返回nil,这里必须实现这个方法")
-    }
-    func configScrollVC(viewModel:ChildListViewModelType?,listVC:ChildScrollVCType,index:Int) {
-        
-    }
     // MARK: -
     var firstChildVC:ChildScrollVCType? {
         return self.childVC(index: 0)
@@ -47,21 +35,16 @@ extension AddChildScrollProtocol where Self:BaseViewController {
     }
     // MARK: -
     @discardableResult
-    func addChildScrollVC(edgesToFill:Bool? = false,index:Int = 0) -> (ChildListViewModelType?,ChildScrollVCType) {
-        var listVC:ChildScrollVCType
-        var viewModel:ChildListViewModelType?
-        if let existing = createScrollVC(index: index) {
-            existing.index = index
-            listVC = existing
-        }else {
-            viewModel = createListViewModel(index: index)
-            viewModel!.index = index
-            listVC = viewModel!.createBaseListVC() as! Self.ChildScrollVCType
-        }
+    func addChildScrollVC(edgesToFill:Bool? = false,index:Int = 0) -> ChildScrollVCType {
+        let listVC:ChildScrollVCType = createScrollVC(index: index)
+        listVC.index = index
         if edgesToFill != nil {
             listVC.edgesToVC(self, edgesToFill: edgesToFill!)
         }
-        self.configScrollVC(viewModel: viewModel, listVC: listVC, index: index)
-        return (viewModel,listVC)
+        configChildScrollVC(scrollVC: listVC, index: index)
+        return listVC
+    }
+    func configChildScrollVC(scrollVC:ChildScrollVCType,index:Int) {
+        
     }
 }

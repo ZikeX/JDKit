@@ -1,5 +1,5 @@
 //
-//  BaseTableViewHeaderView.swift
+//  BaseScrollHeaderView.swift
 //  ZiWoYou
 //
 //  Created by 茶古电子商务 on 16/10/8.
@@ -8,7 +8,7 @@
 
 import UIKit
 import RxSwift
-class BaseTableViewHeaderView: UIView {
+class BaseScrollHeaderView: UIView {
     
     lazy var stackView:UIStackView = {
         let stackView = UIStackView(axis: .vertical, alignment: .center, spacing: 10)

@@ -12,6 +12,7 @@ import SnapKit
 import FBRetainCycleDetector
 
 class BaseViewController: UIViewController {
+    var hasSegmentedControl:Bool = false
     // MARK: - Button
     lazy var messageButton:Button = {
         let button = Button(image:R.image.ic_home_消息(),isTemplate:true)

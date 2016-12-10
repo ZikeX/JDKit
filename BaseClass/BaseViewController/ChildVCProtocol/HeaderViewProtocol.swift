@@ -2,36 +2,35 @@
 //  HeaderViewProtocol.swift
 //  ZiWoYou
 //
-//  Created by ZJaDe on 16/10/27.
-//  Copyright © 2016 Z_JaDe. All rights reserved.
+//  Created by 茶古电子商务 on 16/12/10.
+//  Copyright © 2016年 Z_JaDe. All rights reserved.
 //
 
 import UIKit
 
 protocol HeaderViewProtocol:TransitionProtocol {
-    associatedtype HeaderViewType:BaseTableViewHeaderView
-    var headerView:HeaderViewType {get set}
-    // MARK: - 调用下面方法可以添加transitionVC到本控制器，并且设置headerView
-    func addTransitionVCWithHeaderView(edgesToFill:Bool, hasSegmentControl:Bool)
+    associatedtype HeaderViewType:BaseScrollHeaderView
+    var headerView:HeaderViewType {get}
 }
 extension HeaderViewProtocol where Self:BaseViewController {
-    
-    // MARK: transitionVC
-    func addTransitionVCWithHeaderView(edgesToFill:Bool = false, hasSegmentControl:Bool = false) {
-        self.addTransitionVC(edgesToFill: edgesToFill)
-        self.transitionVC.headerView = self.headerView
-        if hasSegmentControl {
-            self.configSegmentedControlToVC(segmentedControl: self.headerView.segmentedControl) {[unowned self] (viewModel,index) in
-                if let viewModel = viewModel {
-                    let model = self.headerView.segmentedControl.modelArray[index]
-                    viewModel.listTitle = model.title                    
-                }
-            }
-        }else {
-            self.updateTransitionChildVC()
-        }
+    func whenAddTransitionVC(_ edgesToFill: Bool) {
+        self.installHeaderView(self.headerView)
     }
-    func configTransitionVC(edgesToFill: Bool) {
-        
+}
+protocol HeaderViewWithSegmentProtocol:SegmentedControlProtocol {
+    associatedtype HeaderViewType:BaseScrollHeaderView
+    var headerView:HeaderViewType {get}
+}
+extension HeaderViewWithSegmentProtocol where Self:BaseViewController {
+    func whenAddTransitionVC(_ edgesToFill: Bool) {
+        _ = segmentedControl.rx.value.asObservable().subscribe(onNext: {[unowned self] (index) in
+            if index < self.transitionVC.scrollVCCount {
+                self.transitionVC.selectedIndex = index
+            }
+        })
+        self.installHeaderView(self.headerView)
+    }
+    var segmentedControl: SegmentedControl {
+        return self.headerView.segmentedControl
     }
 }

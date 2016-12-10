@@ -31,7 +31,7 @@ class BaseMapViewController: BaseViewController {
 }
 
 extension BaseMapViewController:AddChildScrollProtocol {
-    func createScrollVC(index: Int) -> BaseMapScrollViewController? {
+    func createScrollVC(index: Int) -> BaseMapScrollViewController {
         return BaseMapScrollViewController()
     }
 }
