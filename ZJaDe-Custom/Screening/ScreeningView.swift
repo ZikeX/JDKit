@@ -114,6 +114,8 @@ extension ScreeningView {
     func clearSelectedItem() {
         if self.selectedItem != nil {
             self.selectedItem = nil
+        }else {
+            self.updateItemsBoderRight(nil)
         }
     }
     override var intrinsicContentSize: CGSize {
