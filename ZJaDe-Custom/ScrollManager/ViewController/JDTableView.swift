@@ -10,7 +10,13 @@ import UIKit
 import RxSwift
 
 class JDTableView: UITableView {
-    let viewModel:JDTableViewModel
+    var viewModel:JDTableViewModel {
+        didSet {
+            viewModel.tableView = self
+            viewModel.configDataSource()
+            viewModel.configDelegate()
+        }
+    }
     
     // MARK: -
     init(viewModel:JDTableViewModel) {

@@ -12,7 +12,13 @@ import RxSwift
 class JDTableViewController: JDListViewController {
     lazy private(set) var tableView:JDTableView = JDTableView(viewModel: self.viewModel)
     
-    let viewModel:JDTableViewModel
+    var viewModel:JDTableViewModel {
+        didSet {
+            viewModel.listVC = self
+            self.tableView.viewModel = viewModel
+            self.viewModel.resetInit()
+        }
+    }
     init(viewModel:JDTableViewModel) {
         self.viewModel = viewModel
         super.init()

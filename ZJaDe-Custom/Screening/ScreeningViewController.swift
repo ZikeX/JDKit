@@ -13,6 +13,7 @@ class ScreeningViewController: BaseViewController {
     lazy var titleView:ScreeningView = ScreeningView()
     lazy var mainView = UIView()
     lazy var bgBlackView:BackgroundView = BackgroundView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addTransitionVC()
@@ -48,12 +49,12 @@ extension ScreeningViewController {
 extension ScreeningViewController {
     func showList(index:Int,item:Button) {
         self.bgBlackView.isHidden = false
-        UIView.spring(duration: 0.25) {
+        UIView.animate(withDuration: 0.5) {
             self.bgBlackView.alpha = 1
         }
     }
     func hideList() {
-        UIView.spring(duration: 0.25, animations: {
+        UIView.animate(withDuration: 0.5, animations: {
             self.bgBlackView.alpha = 0
         }, completion: { (finished) in
             self.bgBlackView.isHidden = true

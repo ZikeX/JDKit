@@ -25,8 +25,3 @@ class JDCollectionCell: UICollectionViewCell {
         itemDidInit()
     }
 }
-extension JDCollectionCell {
-    func updateSelectedState(_ selected:Bool,index:Int?) {
-        
-    }
-}

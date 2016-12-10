@@ -55,18 +55,25 @@ extension JDCollectionViewModel {
         super.whenCellSelected(indexPath)
         
         let cell = collectionView.cellForItem(at: indexPath) as? JDCollectionCell
-        cell?.updateSelectedState(true,index: self.selectedIndexPaths.count-1)
+        self.updateSelectedState(true, cell: cell, index: self.selectedIndexPaths.count-1)
         self.rxDataSource[indexPath].isSelected = true
         while self.selectedIndexPaths.count > maxSelectedCount {
             let firstIndexPath = self.selectedIndexPaths.removeFirst()
             let firstCell = collectionView.cellForItem(at: firstIndexPath) as? JDCollectionCell
-            firstCell?.updateSelectedState(false,index: nil)
+            self.updateSelectedState(false, cell: firstCell, index: nil)
             self.rxDataSource[firstIndexPath].isSelected = false
         }
         self.selectedIndexPaths.enumerated().forEach({ (index,indexPath) in
             let eachCell = collectionView.cellForItem(at: indexPath) as? JDCollectionCell
-            eachCell?.updateSelectedState(true, index: index)
+            self.updateSelectedState(true, cell: eachCell, index: index)
         })
+    }
+    func updateSelectedState(_ selected:Bool,cell:JDCollectionCell?,index:Int?) {
+        guard let cell = cell else {
+            return
+        }
+        logDebug(cell)
+        fatalError("待实现")
     }
 }
 extension JDCollectionViewModel {

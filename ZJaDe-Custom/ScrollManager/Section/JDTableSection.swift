@@ -15,8 +15,8 @@ class JDTableSection:JDListSection {
     var headerViewColor:UIColor?
     var footerViewColor:UIColor?
     
-    var headerView:UIView? = UITableViewHeaderFooterView()
-    var footerView:UIView? = UITableViewHeaderFooterView()
+    var headerView:UITableViewHeaderFooterView = UITableViewHeaderFooterView()
+    var footerView:UITableViewHeaderFooterView = UITableViewHeaderFooterView()
     
 
 }

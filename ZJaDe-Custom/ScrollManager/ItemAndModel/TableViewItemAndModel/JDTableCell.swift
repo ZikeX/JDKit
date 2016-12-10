@@ -84,9 +84,6 @@ extension JDTableCell {
             touchCell?()
         }
     }
-    func updateSelectedState(_ selected:Bool) {
-        self.accessoryView = selected ? ImageView(image: R.image.ic_cell_checkmark()) : nil
-    }
 }
 // MARK: -
 class MyContentView:UIView {

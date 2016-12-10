@@ -10,7 +10,13 @@ import UIKit
 import RxSwift
 class JDCollectionView: UICollectionView {
     
-    let viewModel:JDCollectionViewModel
+    var viewModel:JDCollectionViewModel {
+        didSet {
+            viewModel.collectionView = self
+            viewModel.configDataSource()
+            viewModel.configDelegate()
+        }
+    }
     init(viewModel:JDCollectionViewModel) {
         self.viewModel = viewModel
         super.init(frame: jd.screenBounds, collectionViewLayout: self.viewModel.layout)

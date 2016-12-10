@@ -51,9 +51,9 @@ class ScreeningView: CustomIBView {
         }
     }
 
-    typealias ScreeningSelectItemClosureType = (Int?,Button?)->()
-    fileprivate(set) var selectItemChangedClosure:ScreeningSelectItemClosureType?
-    func configSelectItemChanged(_ closure:ScreeningSelectItemClosureType?) {
+    typealias ScreeningClosureType = (Int?,Button?)->()
+    fileprivate(set) var selectItemChangedClosure:ScreeningClosureType?
+    func configSelectItemChanged(_ closure:ScreeningClosureType?) {
         self.selectItemChangedClosure = closure
     }
     override func configInit() {
@@ -112,7 +112,9 @@ extension ScreeningView {
         }
     }
     func clearSelectedItem() {
-        self.selectedItem = nil
+        if self.selectedItem != nil {
+            self.selectedItem = nil
+        }
     }
     override var intrinsicContentSize: CGSize {
         return CGSize(width: jd.screenWidth, height: 44)

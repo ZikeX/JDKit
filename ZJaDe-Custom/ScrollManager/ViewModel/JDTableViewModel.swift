@@ -58,14 +58,17 @@ extension JDTableViewModel {
         super.whenCellSelected(indexPath)
         
         let cell = tableView.cellForRow(at: indexPath) as? JDTableCell
-        cell?.updateSelectedState(true)
+        self.updateSelectedState(true, cell: cell)
         self.rxDataSource[indexPath].isSelected = true
         while self.selectedIndexPaths.count > maxSelectedCount {
             let firstIndexPath = self.selectedIndexPaths.removeFirst()
             let firstCell = tableView.cellForRow(at: firstIndexPath) as? JDTableCell
-            firstCell?.updateSelectedState(false)
+            self.updateSelectedState(false, cell: firstCell)
             self.rxDataSource[firstIndexPath].isSelected = false
         }
+    }
+    func updateSelectedState(_ selected:Bool,cell:JDTableCell?) {
+        cell?.accessoryView = selected ? ImageView(image: R.image.ic_cell_checkmark()) : nil
     }
 }
 extension JDTableViewModel {
@@ -127,8 +130,7 @@ extension JDTableViewModel:UITableViewDelegate {
         if rxDataSource.sectionModels.count > section {
             let sectionModel = rxDataSource[section].model
             let headerView = sectionModel.headerView
-            if let headerColor = sectionModel.headerViewColor,
-                let headerView = headerView as? UITableViewHeaderFooterView  {
+            if let headerColor = sectionModel.headerViewColor  {
                 headerView.backgroundView = UIView()
                 headerView.backgroundView?.backgroundColor = headerColor
                 
@@ -155,8 +157,7 @@ extension JDTableViewModel:UITableViewDelegate {
         if rxDataSource.sectionModels.count > section {
             let sectionModel = rxDataSource[section].model
             let footerView = sectionModel.footerView
-            if let footerColor = sectionModel.footerViewColor,
-                let footerView = footerView as? UITableViewHeaderFooterView {
+            if let footerColor = sectionModel.footerViewColor {
                 footerView.backgroundView = UIView()
                 footerView.backgroundView?.backgroundColor = footerColor
             }

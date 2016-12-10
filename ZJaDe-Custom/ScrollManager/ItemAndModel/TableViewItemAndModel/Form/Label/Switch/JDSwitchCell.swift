@@ -30,9 +30,6 @@ extension JDSwitchCell {
         super.updateEnabledState(model, enabled: enabled)
         self.switchView.isEnabled = enabled
     }
-    override func updateSelectedState(_ selected: Bool) {
-        self.accessoryView = self.switchView
-    }
 }
 extension JDSwitchCell {
     override func setSelected(_ selected: Bool, animated: Bool) {

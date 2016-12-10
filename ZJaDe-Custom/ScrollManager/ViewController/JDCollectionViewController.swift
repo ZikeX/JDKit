@@ -12,7 +12,13 @@ import RxSwift
 class JDCollectionViewController: JDListViewController {
     lazy private(set) var collectionView:JDCollectionView = JDCollectionView(viewModel:self.viewModel)
     
-    let viewModel:JDCollectionViewModel
+    var viewModel:JDCollectionViewModel {
+        didSet {
+            viewModel.listVC = self
+            self.collectionView.viewModel = viewModel
+            self.viewModel.resetInit()
+        }
+    }
     init(viewModel:JDCollectionViewModel) {
         self.viewModel = viewModel
         super.init()
