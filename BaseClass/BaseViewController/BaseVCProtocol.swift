@@ -9,41 +9,34 @@
 import UIKit
 
 protocol BaseVCProtocol {
-    func baseVCConfigInit()
-    
+    func BConfigInit()
+    func BViewDidLoad()
+    func BViewWillAppear()
+    func BViewDidAppear()
+    func BViewWillDisappear()
+    func BViewDidDisappear()
 }
 extension BaseVCProtocol where Self:UIViewController {
-    func baseVCConfigInit() {
+    func BConfigInit() {
         self.automaticallyAdjustsScrollViewInsets = false
-        self.baseVCViewDidLoad()
     }
-}
-extension UIViewController {
-    func baseVCViewDidLoad() {
-        self.aop_hook(#selector(viewDidLoad)) { (info) in
-            if let viewCon = info.instance() as? UIViewController {
-               viewCon.view.backgroundColor = Color.viewBackground
-                viewCon.viewState = .viewDidLoad
-            }
-        }
-        self.aop_hook(#selector(viewWillAppear)) {(info) in
-            let viewCon = info.instance() as! UIViewController
-            viewCon.viewState = .viewWillAppear
-            viewCon.configInitAboutNavBar()
-        }
-        self.aop_hook(#selector(viewDidAppear)) {(info) in
-            let viewCon = info.instance() as! UIViewController
-            viewCon.viewState = .viewDidAppear
-            viewCon.configInitAboutNavBar()
-        }
-        self.aop_hook(#selector(viewWillDisappear)) {(info) in
-            let viewCon = info.instance() as! UIViewController
-            viewCon.viewState = .viewWillDisappear
-        }
-        self.aop_hook(#selector(viewDidDisappear)) {(info) in
-            let viewCon = info.instance() as! UIViewController
-            viewCon.viewState = .viewDidDisappear
-        }
+    func BViewDidLoad() {
+        view.backgroundColor = Color.viewBackground
+        viewState = .viewDidLoad
+    }
+    func BViewWillAppear() {
+        viewState = .viewWillAppear
+        configInitAboutNavBar()
+    }
+    func BViewDidAppear() {
+        viewState = .viewDidAppear
+//        configInitAboutNavBar()
+    }
+    func BViewWillDisappear() {
+        viewState = .viewWillDisappear
+    }
+    func BViewDidDisappear() {
+        viewState = .viewDidDisappear
     }
 }
 

@@ -15,10 +15,6 @@ class BaseNavigationController: UINavigationController {
 //        self.navigationBar.backIndicatorTransitionMaskImage = R.image.ic_back()
         
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
     
     override var childViewControllerForStatusBarStyle: UIViewController? {
         return self.topViewController

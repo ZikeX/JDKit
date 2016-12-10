@@ -79,7 +79,28 @@ class BaseViewController: UIViewController {
         configInit()
     }
     func configInit() {
-        self.baseVCConfigInit()
+        self.BConfigInit()
     }
 }
-
+extension BaseViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.BViewDidLoad()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.BViewWillAppear()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.BViewDidAppear()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.BViewWillDisappear()
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.BViewDidDisappear()
+    }
+}

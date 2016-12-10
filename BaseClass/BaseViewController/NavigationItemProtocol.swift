@@ -44,7 +44,7 @@ extension NavigationItemProtocol where Self:UIViewController {
 }
 extension UIViewController {
     func configInitAboutNavBar() {
-        self.configNavBar(self.navigationController?.navigationBar, animated: true)
+        self.configNavBar(self.navBar, animated: true)
     }
 }
 

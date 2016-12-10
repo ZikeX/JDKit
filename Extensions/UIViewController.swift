@@ -36,6 +36,14 @@ extension UIViewController {
     }
 }
 extension UIViewController {
+    var navBar:UINavigationBar? {
+        return self.navigationController?.navigationBar
+    }
+    var navC:UINavigationController? {
+        return self.navigationController
+    }
+}
+extension UIViewController {
     func previousVC<T:UIViewController>(_ vcType:T.Type) -> T? {
         guard let navC = self.navigationController else {
             return nil

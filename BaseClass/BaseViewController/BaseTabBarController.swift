@@ -13,10 +13,22 @@ class BaseTabBarController: JDAnimatedTabBarController {
     
     override func configInit() {
         super.configInit()
-        self.baseVCConfigInit()
+        self.BConfigInit()
+    }
+    
+    override var childViewControllerForStatusBarStyle: UIViewController? {
+        return self.selectedViewController
+    }
+    
+}
+extension BaseTabBarController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.BViewDidLoad()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.BViewWillAppear()
         #if TRACE_RESOURCES
             _ = Observable<Int>.interval(1, scheduler: MainScheduler.instance)
                 .subscribe(onNext: {_ in
@@ -24,7 +36,16 @@ class BaseTabBarController: JDAnimatedTabBarController {
                 })
         #endif
     }
-    override var childViewControllerForStatusBarStyle: UIViewController? {
-        return self.selectedViewController
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.BViewDidAppear()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.BViewWillDisappear()
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.BViewDidDisappear()
     }
 }
