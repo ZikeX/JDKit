@@ -17,7 +17,7 @@ extension HeaderViewProtocol where Self:BaseViewController {
         self.installHeaderView(self.headerView)
     }
 }
-protocol HeaderViewWithSegmentProtocol:SegmentedControlProtocol {
+protocol HeaderViewWithSegmentProtocol:SegmentProtocol {
     associatedtype HeaderViewType:BaseScrollHeaderView
     var headerView:HeaderViewType {get}
 }

@@ -8,11 +8,11 @@
 
 import UIKit
 
-protocol SegmentedControlProtocol:TransitionProtocol {
+protocol SegmentProtocol:TransitionProtocol {
     var segmentedControl:SegmentedControl {get}
     // MARK: - 根据segmentedControl的item数量来创建子控制器
 }
-extension SegmentedControlProtocol where Self:BaseViewController {
+extension SegmentProtocol where Self:BaseViewController {
     func whenAddTransitionVC(_ edgesToFill: Bool) {
         _ = segmentedControl.rx.value.asObservable().subscribe(onNext: {[unowned self] (index) in
             if index < self.transitionVC.scrollVCCount {
