@@ -17,7 +17,7 @@ protocol ScrollVCProtocol {
 class TransitionMainView: UIView {
 }
 class TransitionViewController: UIViewController {
-    
+    var defaultHeaderHeight:CGFloat?
     var headerView:UIView? {
         didSet {
             addHeaderViewToScrollView()
@@ -56,12 +56,16 @@ class TransitionViewController: UIViewController {
     fileprivate(set) var currentScrollView:UIScrollView?
     fileprivate var headerViewHeight:CGFloat? = nil {
         willSet {
-            logDebug("headerViewHeight-->willSet")
-            willUpdateContentOffsetAndInset()
+            if self.headerViewHeight != newValue {
+                logDebug("headerViewHeight-->willSet")
+                willUpdateContentOffsetAndInset()
+            }
         }
         didSet {
-            logDebug("headerViewHeight-->didSet")
-            updateContentOffsetAndInset()
+            if self.headerViewHeight != oldValue {
+                logDebug("headerViewHeight-->didSet")
+                updateContentOffsetAndInset()
+            }
         }
     }
     
@@ -75,7 +79,7 @@ class TransitionViewController: UIViewController {
     }
 }
 extension TransitionViewController {
-    func titleViewChanged() {
+    fileprivate func titleViewChanged() {
         if let titleView = titleView {
             if titleView.superview == nil {
                 self.view.addSubview(titleView)
@@ -86,7 +90,7 @@ extension TransitionViewController {
         }
         updateMainView()
     }
-    func bottomViewChanged() {
+    fileprivate func bottomViewChanged() {
         if let bottomView = bottomView {
             if bottomView.superview == nil {
                 self.view.addSubview(bottomView)
@@ -97,7 +101,7 @@ extension TransitionViewController {
         }
         updateMainView()
     }
-    func updateMainView() {
+    fileprivate func updateMainView() {
         self.view.insertSubview(mainView, at: 0)
         mainView.snp.remakeConstraints({ (maker) in
             maker.left.centerX.equalToSuperview()
@@ -117,20 +121,20 @@ extension TransitionViewController {
     }
 }
 extension TransitionViewController {
-    func addHeaderViewToScrollView() {
+    fileprivate func addHeaderViewToScrollView() {
         if let scrollView = self.currentScrollView,
             let headerView = self.headerView {
             if headerView.superview != scrollView {
                 scrollView.addSubview(headerView)
                 headerView.snp.makeConstraints { (maker) in
                     maker.left.centerX.equalTo(self.view)
-                    maker.bottomSpace(scrollView)
+                    maker.bottomSpace(scrollView).priority(900)
                 }
             }
         }
     }
     /// ZJaDe: 当headerView将要改变或高度将要变化的时候，或者currentScroll将要变化的时候调用
-    func willUpdateContentOffsetAndInset() {
+    fileprivate func willUpdateContentOffsetAndInset() {
         if let headerViewHeight = headerViewHeight,
             let scrollView = self.currentScrollView {
             self.offsetY = scrollView.contentOffset.y + headerViewHeight
@@ -139,7 +143,7 @@ extension TransitionViewController {
         }
     }
     /// ZJaDe: 当headerView已经改变或高度已经变化的时候，或者currentScroll已经变化的时候调用
-    func updateContentOffsetAndInset() {
+    fileprivate func updateContentOffsetAndInset() {
         if let headerViewHeight = headerViewHeight,
             let scrollView = self.currentScrollView {
             scrollView.contentInset.top += headerViewHeight
@@ -147,17 +151,22 @@ extension TransitionViewController {
             changeContentOffsetY(scrollView: scrollView, y: self.offsetY - headerViewHeight)
         }
     }
-    func changeContentOffsetY(scrollView:UIScrollView,y:CGFloat) {
+    fileprivate func changeContentOffsetY(scrollView:UIScrollView,y:CGFloat) {
         scrollView.contentOffset.y = y
         logDebug("scrollView-contentOffsetY】】\(scrollView.contentOffset.y)")
     }
-    func bindingHeaderViewHeight() {
-        //headerViewHeight改变时
-        headerView?.rx.observe(CGRect.self, "bounds", retainSelf:false).subscribe(onNext: {[unowned self] (event) in
-            if self.headerViewHeight != self.headerView!.height {
-                self.headerViewHeight = self.headerView!.height
-            }
-        }).addDisposableTo(headerView!.disposeBag)
+    fileprivate func bindingHeaderViewHeight() {
+        if self.defaultHeaderHeight == nil {
+            //headerViewHeight改变时
+            headerView?.rx.observe(CGRect.self, "bounds", retainSelf:false).subscribe(onNext: {[unowned self] (event) in
+                self.headerViewHeight = self.defaultHeaderHeight ?? self.headerView!.height
+            }).addDisposableTo(headerView!.disposeBag)
+        }else {
+            self.updateHeaderViewHeight()
+        }
+    }
+    func updateHeaderViewHeight() {
+        self.headerViewHeight = self.defaultHeaderHeight!
     }
 }
 extension TransitionViewController {

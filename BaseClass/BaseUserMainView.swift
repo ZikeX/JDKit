@@ -36,6 +36,7 @@ class BaseUserMainView: UIView {
     }
     func configInit(){
         self.addSubview(backgroundImageView)
+        backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.edgesToView()
     }
 }
