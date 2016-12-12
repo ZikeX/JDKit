@@ -29,9 +29,8 @@ extension JDEntryModel {//DateTextField
                 maker.leftSpace(cell.stackView)
             }) as! UIStackView
             let firstTextField = stackView.createIfNotExisting(tag: 1001, { (stackView) -> UIView in
-                let firstTextField = ComposeTextField(color: Color.black, font: Font.h3)
+                let firstTextField = self.createTextField()
                 firstTextField.entryType = .date(mode:.date)
-                firstTextField.textAlignment = .center
                 return firstTextField
             }) as! ComposeTextField
             stackView.createIfNotExisting(tag: 1002, { (stackView) -> UIView in
@@ -40,12 +39,56 @@ extension JDEntryModel {//DateTextField
                 return label
             })
             let secondTextField = stackView.createIfNotExisting(tag: 1003, { (stackView) -> UIView in
-                let secondTextField = ComposeTextField(color: Color.black, font: Font.h3)
-                secondTextField.entryType = .date(mode:.date)
-                secondTextField.textAlignment = .center
-                return secondTextField
+                let textField = self.createTextField()
+                textField.entryType = .date(mode:.date)
+                return textField
             }).makeLayoutView({ (view, maker) in
                 maker.width.equalTo(firstTextField)
+            }) as! ComposeTextField
+            cell.binding(textField: firstTextField, model: self, index: 0)
+            cell.binding(textField: secondTextField, model: self, index: 1)
+        }
+    }
+    func createMonthScopeCell() {
+        self.reuseIdentifier = "MonthScopeCell"
+        let oldLayoutClosure = self.layoutCellClosure
+        self.configLayoutCell {[unowned self] (cell) in
+            oldLayoutClosure?(cell)
+            guard let cell = cell as? JDEntryCell else {
+                return
+            }
+            cell.stackView.snp.makeConstraints { (maker) in
+                maker.centerY.equalToSuperview()
+            }
+            let stackView = cell.jdContentView.createIfNotExisting(tag: 100, { (contentView) -> UIView in
+                return UIStackView(alignment: .fill, distribution:.fillEqually, spacing: 8)
+            }).makeLayoutView({ (stackView, maker) in
+                maker.top.bottom.right.equalToSuperview()
+                maker.leftSpace(cell.stackView)
+            }) as! UIStackView
+            
+            func monthLabel() -> UILabel {
+                let monthLabel = UILabel(text: "月", color: Color.black, font: Font.h4)
+                monthLabel.sizeToFit()
+                monthLabel.textAlignment = .center
+                monthLabel.width += 40
+                return monthLabel
+            }
+            
+            let firstTextField = stackView.createIfNotExisting(tag: 1001, { (stackView) -> UIView in
+                let textField = self.createTextField()
+                textField.entryType = .count(min:1,max:12)
+                textField.addBorderRight()
+                textField.rightViewMode = .always
+                textField.rightView = monthLabel()
+                return textField
+            }) as! ComposeTextField
+            let secondTextField = stackView.createIfNotExisting(tag: 1003, { (stackView) -> UIView in
+                let textField = self.createTextField()
+                textField.entryType = .count(min:1,max:12)
+                textField.rightView = monthLabel()
+                textField.rightViewMode = .always
+                return textField
             }) as! ComposeTextField
             cell.binding(textField: firstTextField, model: self, index: 0)
             cell.binding(textField: secondTextField, model: self, index: 1)
@@ -66,22 +109,16 @@ extension JDEntryModel {//DateTextField
                 maker.left.top.bottom.equalToSuperview()
             })
             let firstItem = stackView.createIfNotExisting(tag: 101, { (stackView) -> UIView in
-                let item = TitleTextFieldItem()
-                item.titleLabel.textColor = Color.gray
+                let item = self.createTitleTextFieldItem()
                 item.titleLabel.widthValue(width: 50)
-                item.titleLabel.textAlignment = .right
                 item.textField.entryType = .price
-                item.contentEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 5)
                 item.addBorderBottom()
                 return item
             }) as! TitleTextFieldItem
             let secondItem = stackView.createIfNotExisting(tag: 102, { (stackView) -> UIView in
-                let item = TitleTextFieldItem()
-                item.titleLabel.textColor = Color.gray
+                let item = self.createTitleTextFieldItem()
                 item.titleLabel.widthValue(width: 50)
-                item.titleLabel.textAlignment = .right
                 item.textField.entryType = .price
-                item.contentEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 5)
                 return item
             })as! TitleTextFieldItem
             cell.jdContentView.createIfNotExisting(tag: 11, { (contentView) -> UIView in
@@ -118,31 +155,39 @@ extension JDEntryModel {//DateTextField
                 maker.centerY.equalToSuperview()
             }
             let stackView = cell.jdContentView.createIfNotExisting(tag: 100, { (contentView) -> UIView in
-                return UIStackView(alignment: .fill, spacing: 8)
+                return UIStackView(alignment: .fill, distribution:.fillEqually, spacing: 8)
             }).makeLayoutView({ (stackView, maker) in
                 maker.top.bottom.right.equalToSuperview()
                 maker.leftSpace(cell.stackView)
             }) as! UIStackView
             let firstItem = stackView.createIfNotExisting(tag: 101, { (stackView) -> UIView in
-                let item = TitleTextFieldItem()
-                item.titleLabel.textColor = Color.gray
-                item.titleLabel.textAlignment = .right
-                item.textField.entryType = .date(mode:.date)
-                item.contentEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0)
+                let item = self.createTitleTextFieldItem()
+                item.textField.entryType = .date(mode: .date)
+                item.contentEdgeInsets.left = 15
                 return item
             }) as! TitleTextFieldItem
             let secondItem = stackView.createIfNotExisting(tag: 102, { (stackView) -> UIView in
-                let item = TitleTextFieldItem()
-                item.titleLabel.textColor = Color.gray
-                item.titleLabel.textAlignment = .right
+                let item = self.createTitleTextFieldItem()
                 item.textField.entryType = .date(mode:.time)
-                item.contentEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 5)
+                item.contentEdgeInsets.left = 15
                 return item
-            }).makeLayoutView({ (view, maker) in
-                maker.width.equalTo(firstItem)
             }) as! TitleTextFieldItem
             cell.binding(titleTextField: firstItem, model: self, index: 0)
             cell.binding(titleTextField: secondItem, model: self, index: 1)
         }
+    }
+}
+extension JDStaticModel {
+    func createTextField() -> ComposeTextField {
+        let textField = ComposeTextField(color: Color.black, font: Font.h3)
+        textField.textAlignment = .center
+        return textField
+    }
+    func createTitleTextFieldItem() -> TitleTextFieldItem {
+        let item = TitleTextFieldItem()
+        item.titleLabel.textColor = Color.gray
+        item.titleLabel.textAlignment = .right
+        item.contentEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 5)
+        return item
     }
 }

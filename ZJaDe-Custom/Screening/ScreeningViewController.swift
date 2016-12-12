@@ -37,6 +37,7 @@ extension ScreeningViewController {
 // MARK: - ScreeningView
 extension ScreeningViewController {
     func configTitleView() {
+        self.titleView.contentVerticalPriority(UILayoutPriorityRequired)
         self.titleView.configSelectItemChanged {[unowned self] (index,item) in
             if let item = item {
                 self.showList(index:index!,item:item)

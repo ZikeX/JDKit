@@ -52,23 +52,28 @@ class JDTableViewModel: JDListViewModel {
 }
 extension JDTableViewModel {
     override func whenCellSelected(_ indexPath:IndexPath) {
-        guard let maxSelectedCount = maxSelectedCount,maxSelectedCount > 0 else {
+        guard self.maxSelectedCount > 0 else {
             return
         }
         super.whenCellSelected(indexPath)
-        
-        let cell = tableView.cellForRow(at: indexPath) as? JDTableCell
-        self.updateSelectedState(true, cell: cell)
-        self.rxDataSource[indexPath].isSelected = true
-        while self.selectedIndexPaths.count > maxSelectedCount {
-            let firstIndexPath = self.selectedIndexPaths.removeFirst()
-            let firstCell = tableView.cellForRow(at: firstIndexPath) as? JDTableCell
-            self.updateSelectedState(false, cell: firstCell)
-            self.rxDataSource[firstIndexPath].isSelected = false
+        if self.selectedIndexPaths.contains(indexPath) {
+            self.updateSelectedState(true, indexPath: indexPath)
+            while self.selectedIndexPaths.count > maxSelectedCount {
+                let firstIndexPath = self.selectedIndexPaths.removeFirst()
+                self.updateSelectedState(false, indexPath: firstIndexPath)
+            }
+        }else {
+            self.updateSelectedState(false, indexPath: indexPath)
         }
     }
-    func updateSelectedState(_ selected:Bool,cell:JDTableCell?) {
-        cell?.accessoryView = selected ? ImageView(image: R.image.ic_cell_checkmark()) : nil
+    private func updateSelectedState(_ selected:Bool,indexPath:IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) as? JDTableCell {
+            updateCellSelectedState(selected, cell: cell)
+        }
+        self.getModel(indexPath)?.isSelected = selected
+    }
+    func updateCellSelectedState(_ selected:Bool,cell:JDTableCell) {
+        cell.accessoryView = selected ? ImageView(image: R.image.ic_cell_checkmark()) : nil
     }
 }
 extension JDTableViewModel {
@@ -96,8 +101,15 @@ extension JDTableViewModel:UITableViewDelegate {
     final func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? JDTableCell {
             let model = getModel(indexPath)!
-            cell.itemDidLoad(model)
             cell.itemWillAppear(model)
+            if self.maxSelectedCount > 0 {
+                if model.isSelected {
+                    self.selectedIndexPaths.append(indexPath)
+                }else if let index = self.selectedIndexPaths.index(of: indexPath){
+                    self.selectedIndexPaths.remove(at: index)
+                }
+                updateCellSelectedState(model.isSelected, cell: cell)
+            }
         }
     }
     final func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {

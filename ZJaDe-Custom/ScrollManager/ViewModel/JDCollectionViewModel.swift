@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 class JDCollectionViewModel: JDListViewModel {
     var layout:UICollectionViewLayout = UICollectionViewFlowLayout()
-    
+    let updateCellSelectedState = PublishSubject<Void>()
     weak var collectionView:JDCollectionView!
     weak var listVC:JDCollectionViewController?
     override var listTitle:String? {
@@ -25,6 +25,11 @@ class JDCollectionViewModel: JDListViewModel {
     var headerModelArray = [IndexPath:JDCollectionReusableModel]()
     var footerModelArray = [IndexPath:JDCollectionReusableModel]()
     
+    override func configInit() {
+        super.configInit()
+        subscribeUpdateCellSelectedState()
+        
+    }
     // MARK: - 
     func resetInit() {/// ZJaDe: 当self被设置进入collectionView之后调用
         self.configCollectionView(collectionView)
@@ -49,30 +54,39 @@ class JDCollectionViewModel: JDListViewModel {
 }
 extension JDCollectionViewModel {
     override func whenCellSelected(_ indexPath:IndexPath) {
-        guard let maxSelectedCount = maxSelectedCount,maxSelectedCount > 0 else {
+        guard self.maxSelectedCount > 0 else {
             return
         }
         super.whenCellSelected(indexPath)
-        
-        let cell = collectionView.cellForItem(at: indexPath) as? JDCollectionCell
-        self.updateSelectedState(true, cell: cell, index: self.selectedIndexPaths.count-1)
-        self.rxDataSource[indexPath].isSelected = true
-        while self.selectedIndexPaths.count > maxSelectedCount {
-            let firstIndexPath = self.selectedIndexPaths.removeFirst()
-            let firstCell = collectionView.cellForItem(at: firstIndexPath) as? JDCollectionCell
-            self.updateSelectedState(false, cell: firstCell, index: nil)
-            self.rxDataSource[firstIndexPath].isSelected = false
+        if self.selectedIndexPaths.contains(indexPath) {
+            self.updateSelectedState(true, indexPath: indexPath, index: self.selectedIndexPaths.count-1)
+            while self.selectedIndexPaths.count > maxSelectedCount {
+                let firstIndexPath = self.selectedIndexPaths.removeFirst()
+                self.updateSelectedState(false, indexPath: firstIndexPath, index: nil)
+            }
+        }else {
+            self.updateSelectedState(false, indexPath: indexPath, index: nil)
         }
-        self.selectedIndexPaths.enumerated().forEach({ (index,indexPath) in
-            let eachCell = collectionView.cellForItem(at: indexPath) as? JDCollectionCell
-            self.updateSelectedState(true, cell: eachCell, index: index)
-        })
     }
-    func updateSelectedState(_ selected:Bool,cell:JDCollectionCell?,index:Int?) {
-        guard let cell = cell else {
-            return
+    private func updateSelectedState(_ selected:Bool,indexPath:IndexPath,index:Int?) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? JDCollectionCell {
+            updateCellSelectedState(selected, cell: cell, index: index)
         }
-        logDebug(cell)
+        self.rxDataSource[indexPath].isSelected = selected
+        if index == nil {
+            updateCellSelectedState.onNext()
+        }
+    }
+    func subscribeUpdateCellSelectedState() {
+        self.updateCellSelectedState
+            .throttle(0.3, scheduler: MainScheduler.instance)
+            .subscribe(onNext:{ [unowned self]() in
+            self.selectedIndexPaths.enumerated().forEach({ (index,indexPath) in
+                self.updateSelectedState(true, indexPath: indexPath, index: index)
+            })
+        }).addDisposableTo(disposeBag)
+    }
+    func updateCellSelectedState(_ selected:Bool,cell:JDCollectionCell,index:Int?) {
         fatalError("待实现")
     }
 }
@@ -100,8 +114,15 @@ extension JDCollectionViewModel:UICollectionViewDelegateFlowLayout {
     final func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if let cell = cell as? JDCollectionCell {
             let model = getModel(indexPath)!
-            cell.itemDidLoad(model)
             cell.itemWillAppear(model)
+            if self.maxSelectedCount > 0 {
+                if model.isSelected {
+                    self.selectedIndexPaths.append(indexPath)
+                }else if let index = self.selectedIndexPaths.index(of: indexPath) {
+                    self.selectedIndexPaths.remove(at: index)
+                }
+                updateCellSelectedState.onNext()
+            }
         }
     }
     final func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

@@ -106,7 +106,7 @@ extension SearchTextField {
         self.cornerRadius = defaultHeight / 2
         
         self.leftView = self.cityButton
-        self.leftView?.addBorderRight(padding: 7)
+        self.leftView!.addBorderRight(padding: 7)
         self.leftViewMode = .always
         
         self.rightView = self.searchIconView
@@ -120,7 +120,7 @@ extension SearchTextField {
         self.backgroundColor = Color.white.alpha(0.8)
         
         self.leftView = self.cityButton
-        self.leftView?.addBorderRight(color:Color.white,padding: 7)
+        self.leftView!.addBorderRight(color:Color.white,padding: 7)
         self.leftViewMode = .always
         
         self.rightView = self.searchIconView

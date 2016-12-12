@@ -25,7 +25,7 @@ class JDAddressSection: JDTableSection {
 }
 extension JDAddressSection {
     func configLocationCell(model:JDLabelModel) {
-        configItem(model: model)
+        configCell(model: model)
         model.reuseIdentifier = "LocationCell"
         model.accessoryType.value = .disclosureIndicator
         model.configBindingCell { (cell) in
@@ -40,10 +40,10 @@ extension JDAddressSection {
         }
     }
     func configDetailAddressCell(model:JDTextFieldModel) {
-        self.configItem(model: model)
+        self.configCell(model: model)
         model.reuseIdentifier = "DetailAddressCell"
     }
-    func configItem(model:JDFormModel) {
+    func configCell(model:JDFormModel) {
         model.spaceEdges = UIEdgeInsetsMake(10, 10, 10, 10)
         model.cellHeight = 64
         model.titleRightSpace = 50

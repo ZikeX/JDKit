@@ -10,7 +10,7 @@ import UIKit
 
 extension JDTableModel {
     /// ZJaDe: 创建cell
-    func createCellWithTableView(_ tableView:UITableView,indexPath:IndexPath? = nil) -> UITableViewCell? {
+    func createCellWithTableView(_ tableView:UITableView,indexPath:IndexPath? = nil) -> UITableViewCell {
         var cell:UITableViewCell? = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier)
         if cell == nil {
             if isNibCell {
@@ -20,7 +20,7 @@ extension JDTableModel {
             }
             cell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier)
         }
-        return cell
+        return cell!
     }
     /// ZJaDe: 计算高度
     func calculateCellHeight(_ tableView:UITableView,wait:Bool) {

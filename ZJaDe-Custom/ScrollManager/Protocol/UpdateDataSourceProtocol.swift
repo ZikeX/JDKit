@@ -35,7 +35,6 @@ extension UpdateDataSourceProtocol where Self:JDListViewModel {
             if let newData = closure(self.dataArray) {
                 self.dataArray = newData
                 self.dataArrayDidSet()
-                self.updateSelectIndexPath()
                 var sectionModels = [AnimatableSectionModel<SectionType,ModelType>]()
                 for (section,models) in newData {
                     let showModels = models.filter({ (model) -> Bool in
@@ -78,18 +77,6 @@ extension UpdateDataSourceProtocol where Self:JDListViewModel {
     func dataArrayDidSet() {
         
     }
-    func updateSelectIndexPath() {
-        for (i,(_,models)) in dataArray.enumerated() {
-            for (j,model) in models.enumerated() {
-                let indexPath = IndexPath(item: j, section: i)
-                if model.isSelected {
-                    self.selectedIndexPaths.append(indexPath)
-                }else if let index = self.selectedIndexPaths.index(of: indexPath){
-                    self.selectedIndexPaths.remove(at: index)
-                }
-            }
-        }
-    }
 }
 private var JDTableViewRunloopTimerKey: UInt8 = 0
 extension JDTableViewModel:UpdateDataSourceProtocol {
@@ -109,7 +96,8 @@ extension JDTableViewModel:UpdateDataSourceProtocol {
     typealias ModelType = JDTableModel
     func configDataSource() {
         rxDataSource.configureCell = {(dataSource, tableView, indexPath, model) in
-            let cell = model.createCellWithTableView(tableView, indexPath: indexPath)!
+            let cell = model.createCellWithTableView(tableView, indexPath: indexPath) as! JDTableCell
+            cell.itemDidLoad(model)
             _ = model.calculateCellHeight(tableView,wait: true)
             return cell
         }
@@ -153,6 +141,7 @@ extension JDCollectionViewModel:UpdateDataSourceProtocol {
     func configDataSource() {
         rxDataSource.configureCell = {(dataSource,collectionView,indexPath,model) in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: model.reuseIdentifier, for: indexPath) as! JDCollectionCell
+            cell.itemDidLoad(model)
             return cell
         }
         rxDataSource.supplementaryViewFactory = {[unowned self] (dataSource,collectionView,kind,indexPath) in

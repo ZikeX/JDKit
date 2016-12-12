@@ -31,7 +31,7 @@ class JDListViewModel: NSObject {
     }
     // MARK: - selected
     var selectedIndexPaths = [IndexPath]()
-    var maxSelectedCount:Int?
+    var maxSelectedCount:Int = 0
     
     deinit {
         logDebug("\(type(of:self))->\(self)注销")
@@ -39,12 +39,15 @@ class JDListViewModel: NSObject {
 }
 extension JDListViewModel {
     func whenCellSelected(_ indexPath:IndexPath) {
-        guard let maxSelectedCount = maxSelectedCount,maxSelectedCount > 0 else {
+        guard self.maxSelectedCount > 0 else {
             return
         }
         // MARK: - cell
-        if !self.selectedIndexPaths.contains(indexPath) {
+        if let index = self.selectedIndexPaths.index(of: indexPath) {
+            self.selectedIndexPaths.remove(at: index)
+        }else {
             self.selectedIndexPaths.append(indexPath)
+            
         }
     }
 }

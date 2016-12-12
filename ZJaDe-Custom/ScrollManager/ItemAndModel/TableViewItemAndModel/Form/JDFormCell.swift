@@ -21,8 +21,8 @@ class JDFormCell: JDStaticCell {
         super.configItemInit()
         jdContentView.addSubview(stackView)
         stackView.snp.makeConstraints { (maker) in
-            maker.left.top.equalToSuperview()
-            maker.height.greaterThanOrEqualTo(28)
+            maker.left.top.equalToSuperview().priority(900)
+            maker.height.greaterThanOrEqualTo(28).priority(900)
             maker.bottom.lessThanOrEqualTo(jdContentView)
         }
         titleLabel.contentPriority(UILayoutPriorityRequired)

@@ -13,7 +13,7 @@ enum EntryType {
     case phone
     case email
     case price
-    case count
+    case count(min:Int?,max:Int?)
     case date(mode:UIDatePickerMode)
 }
 
