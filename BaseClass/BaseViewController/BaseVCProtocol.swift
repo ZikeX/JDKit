@@ -46,9 +46,3 @@ extension BaseViewController:BaseVCProtocol {
 extension BaseTabBarController:BaseVCProtocol {
     
 }
-//extension BaseTableViewController:BaseVCProtocol {
-//    
-//}
-//extension BaseCollectionViewController:BaseVCProtocol {
-//    
-//}

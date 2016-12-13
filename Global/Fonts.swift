@@ -9,6 +9,7 @@
 import UIKit
 
 class Font {
+    static var p24 = UIFont(name:"PingFang SC", size: 18)!
     static var p30 = UIFont(name:"PingFang SC", size: 22.5)!
     static var p40 = UIFont(name:"PingFang SC", size: 30)!
     

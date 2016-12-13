@@ -31,8 +31,14 @@ enum RootViewState {
 protocol ViewStateProtocol {
     var viewState:RootViewState {get set}
 }
+extension BaseViewController:ViewStateProtocol {
+
+}
+extension BaseTabBarController:ViewStateProtocol {
+    
+}
 private var jd_viewStateKey: UInt8 = 0
-extension UIViewController:ViewStateProtocol {
+extension UIViewController {
     var viewState: RootViewState {
         get {
             let viewState = objc_getAssociatedObject(self, &jd_viewStateKey) as? RootViewState

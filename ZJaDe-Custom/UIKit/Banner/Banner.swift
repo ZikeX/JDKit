@@ -32,8 +32,9 @@ class Banner: UIView {
     func configInit() {
         self.insertSubview(self.scrollView, at: 0)
         self.addSubview(self.pageControl)
-        self.pageControl.bringSubview(toFront: self.pageControl)
-        self.scrollView.edgesToView()
+        self.scrollView.snp.makeConstraints { (maker) in
+            maker.edges.equalToSuperview()
+        }
         let updateLayout = self.pageControl.updateLayout
         updateLayout.deactivate()
         updateLayout.constraintArr += self.pageControl.snp.prepareConstraints({ (maker) in

@@ -128,7 +128,7 @@ extension TransitionViewController {
                 scrollView.addSubview(headerView)
                 headerView.snp.makeConstraints { (maker) in
                     maker.left.centerX.equalTo(self.view)
-                    maker.bottomSpace(scrollView).priority(900)
+                    maker.bottomSpace(scrollView).priority(990)
                 }
             }
         }

@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 class BaseScrollHeaderView: UIView {
+    var defaultHeight:CGFloat?
     
     lazy var stackView:UIStackView = {
         let stackView = UIStackView(axis: .vertical, alignment: .center, spacing: 10)

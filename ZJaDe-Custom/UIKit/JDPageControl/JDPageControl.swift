@@ -19,8 +19,8 @@ class JDPageControl: UIControl {
         }
     }
     @IBInspectable var hidesForSinglePage: Bool = false
-    @IBInspectable var pageIndicatorTintColor: UIColor = UIColor.red
-    @IBInspectable var currentPageIndicatorTintColor: UIColor = UIColor.black
+    @IBInspectable var pageIndicatorTintColor: UIColor = Color.red
+    @IBInspectable var currentPageIndicatorTintColor: UIColor = Color.black
     
     weak var delegate:JDPageControlDelegate?
     

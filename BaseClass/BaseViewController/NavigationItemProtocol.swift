@@ -63,6 +63,9 @@ extension UIViewController:NavigationItemProtocol {
         }
         set {
             objc_setAssociatedObject(self, &jd_navBarIsHiddenKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            guard !(self is BaseTabBarController) && (self.parent is BaseNavigationController || self.parent is BaseTabBarController) else {
+                return
+            }
             self.changeIsHidden(navVC: self.navigationController)
         }
     }
@@ -73,16 +76,22 @@ extension UIViewController:NavigationItemProtocol {
         }
         set {
             objc_setAssociatedObject(self, &jd_navBarTintColorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            guard !(self is BaseTabBarController) && (self.parent is BaseNavigationController || self.parent is BaseTabBarController) else {
+                return
+            }
             self.changeBarTintColor(navBar: self.navBar)
         }
     }
     var navTintColor: UIColor {
         get {
             let _navTintColor = objc_getAssociatedObject(self, &jd_navTintColorKey) as? UIColor
-            return _navTintColor ?? Color.black
+            return _navTintColor ?? Color.navBarTintColor
         }
         set {
             objc_setAssociatedObject(self, &jd_navTintColorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            guard !(self is BaseTabBarController) && (self.parent is BaseNavigationController || self.parent is BaseTabBarController) else {
+                return
+            }
             self.changeTintColor(navBar: self.navBar)
         }
     }
@@ -93,6 +102,9 @@ extension UIViewController:NavigationItemProtocol {
         }
         set {
             objc_setAssociatedObject(self, &jd_navBarAlphaKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            guard !(self is BaseTabBarController) && (self.parent is BaseNavigationController || self.parent is BaseTabBarController) else {
+                return
+            }
             changeAlpha(alpha: newValue, navBar: self.navBar)
         }
     }
@@ -103,6 +115,9 @@ extension UIViewController:NavigationItemProtocol {
         }
         set {
             objc_setAssociatedObject(self, &jd_navBarShadowColorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            guard !(self is BaseTabBarController) && (self.parent is BaseNavigationController || self.parent is BaseTabBarController) else {
+                return
+            }
             self.botttomLineColor(navigationBar: self.navBar, color: newValue)
         }
     }

@@ -13,23 +13,15 @@ protocol HeaderViewProtocol:TransitionProtocol {
     var headerView:HeaderViewType {get}
 }
 extension HeaderViewProtocol where Self:BaseViewController {
-    func whenAddTransitionVC(_ edgesToFill: Bool) {
+    func willAddTransitionVC(_ edgesToFill: Bool) {
+        self.transitionVC.defaultHeaderHeight = self.headerView.defaultHeight
         self.installHeaderView(self.headerView)
     }
 }
-protocol HeaderViewWithSegmentProtocol:SegmentProtocol {
-    associatedtype HeaderViewType:BaseScrollHeaderView
-    var headerView:HeaderViewType {get}
+protocol HeaderViewWithSegmentProtocol:SegmentProtocol,HeaderViewProtocol {
+    
 }
 extension HeaderViewWithSegmentProtocol where Self:BaseViewController {
-    func whenAddTransitionVC(_ edgesToFill: Bool) {
-        _ = segmentedControl.rx.value.asObservable().subscribe(onNext: {[unowned self] (index) in
-            if index < self.transitionVC.scrollVCCount {
-                self.transitionVC.selectedIndex = index
-            }
-        })
-        self.installHeaderView(self.headerView)
-    }
     var segmentedControl: SegmentedControl {
         return self.headerView.segmentedControl
     }

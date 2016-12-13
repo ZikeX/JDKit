@@ -40,7 +40,7 @@ class SearchTextField: UITextField {
     
     func configInit() {
         self.isEnabled = false
-        self.addBorder()
+        self.addBorder(width:0.5)
         self.font = Font.h4
         self.textColor = Color.lightGray
         self.backgroundColor = Color.clear
@@ -55,8 +55,9 @@ class SearchTextField: UITextField {
     }
     // MARK: -
     lazy var searchIconView:ImageView = {
-        let icon = ImageView(image: R.image.ic_searchIcon()?.templateImage)
-        icon.tintColor = Color.black
+        let icon = ImageView(image: R.image.ic_searchIcon())
+        icon.isTemplate = true
+        icon.tintColor = Color.boderLine
         icon.contentMode = .center
         icon.bounds = CGRect(x: 0, y: 0, width: defaultHeight, height: defaultHeight)
         return icon

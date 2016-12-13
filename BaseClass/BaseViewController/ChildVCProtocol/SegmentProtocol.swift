@@ -13,7 +13,7 @@ protocol SegmentProtocol:TransitionProtocol {
     // MARK: - 根据segmentedControl的item数量来创建子控制器
 }
 extension SegmentProtocol where Self:BaseViewController {
-    func whenAddTransitionVC(_ edgesToFill: Bool) {
+    func didAddTransitionVC(_ edgesToFill: Bool) {
         _ = segmentedControl.rx.value.asObservable().subscribe(onNext: {[unowned self] (index) in
             if index < self.transitionVC.scrollVCCount {
                 self.transitionVC.selectedIndex = index

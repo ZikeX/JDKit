@@ -19,7 +19,6 @@ class BaseTabBarController: JDAnimatedTabBarController {
     override var childViewControllerForStatusBarStyle: UIViewController? {
         return self.selectedViewController
     }
-    
 }
 extension BaseTabBarController {
     override func viewDidLoad() {

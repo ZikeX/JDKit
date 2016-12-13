@@ -17,9 +17,8 @@ class PageScrollView: UIScrollView {
     
     var imgArray = [ImageDataProtocol]() {
         didSet {
-            stackView.snp.removeConstraints()
-            stackView.edgesToView()
-            stackView.snp.makeConstraints { (maker) in
+            stackView.snp.remakeConstraints { (maker) in
+                maker.edges.equalToSuperview()
                 maker.height.equalTo(self)
                 maker.width.equalTo(self).multipliedBy(imgArray.count)
             }

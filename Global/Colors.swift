@@ -34,6 +34,8 @@ class Color {
     static var placeholder = Color.colorFromRGB("#c7c7cd")!
     
     
+    static var navBarTintColor = Color.black
+    
     class func colorFromRGB(_ hexString:String) -> UIColor? {
         var red:CGFloat
         var blue:CGFloat
