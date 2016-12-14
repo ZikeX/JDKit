@@ -14,28 +14,6 @@ import FBRetainCycleDetector
 class BaseViewController: UIViewController {
     var hasSegmentedControl:Bool = false
     
-    lazy var titleLabel:UILabel = {
-        let label = UILabel(color: Color.navBarTintColor, font: Font.p24)
-        return label
-    }()
-    var navItemTitle:String {
-        get {
-            return self.titleLabel.text ?? ""
-        }
-        set {
-            self.titleLabel.text = newValue
-            self.titleLabel.sizeToFit()
-            let navItem:UINavigationItem
-            if self.parent is UITabBarController {
-                navItem = self.tabBarController!.navigationItem
-            }else {
-                navItem = self.navigationItem
-            }
-            if navItem.titleView != self.titleLabel {
-                navItem.titleView = self.titleLabel
-            }
-        }
-    }
     // MARK: - Button
     lazy var messageButton:Button = {
         let button = Button(image:R.image.ic_home_消息(),isTemplate:true)

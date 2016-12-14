@@ -30,7 +30,7 @@ extension BaseVCProtocol where Self:UIViewController {
     }
     func BViewDidAppear() {
         viewState = .viewDidAppear
-//        configInitAboutNavBar()
+        configInitAboutNavBar()
     }
     func BViewWillDisappear() {
         viewState = .viewWillDisappear

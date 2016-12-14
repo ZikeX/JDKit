@@ -22,17 +22,14 @@ class ImageArrView: CustomIBView {
     }
     @IBInspectable var maxImageCount:Int = 3 {
         didSet {
+            self.updateItemArray()
             self.updateHeightLayout()
         }
     }
     /// ZJaDe: 配置数据
     var imgDataArray:[ImageDataProtocol]? {
         didSet {
-            if self.imgDataArray?.count != oldValue?.count {
-                self.updateHeightLayout()
-            }else {
-                self.configImgViews(imgDataArray)
-            }
+            self.configImgViews(imgDataArray)
         }
     }
     lazy var itemArray = [ImageView]()
@@ -41,6 +38,7 @@ class ImageArrView: CustomIBView {
 
     override func configInit() {
         super.configInit()
+        self.updateItemArray()
         self.addSubview(mainView)
         mainView.clipsToBounds = true
         
@@ -64,19 +62,17 @@ extension ImageArrView {
         return self.itemWidth() * self.imageScale
     }
     func updateHeightLayout() {
+        let height:CGFloat
+        if self.isHidden {
+            height = 0
+        }else {
+            height = self.itemHeight()
+        }
         self.snp.updateConstraints { (maker) in
-            if self.isHidden {
-                maker.height.equalTo(0)
-            }else {
-                maker.height.equalTo(self.itemHeight())
-            }
+            maker.height.equalTo(height)
         }
     }
-    func updateFrame() {
-        guard maxImageCount > 0 else {
-            fatalError("图片最大数量必须大于0")
-        }
-        mainView.frame = self.bounds
+    func updateItemArray() {
         while itemArray.count != maxImageCount {
             if itemArray.count > maxImageCount {
                 let lastItem = itemArray.removeLast()
@@ -88,6 +84,12 @@ extension ImageArrView {
                 itemArray.append(imageView)
             }
         }
+    }
+    func updateFrame() {
+        guard maxImageCount > 0 else {
+            fatalError("图片最大数量必须大于0")
+        }
+        mainView.frame = self.bounds
         let width = self.itemWidth()
         let height = self.itemHeight()
         itemArray.layoutItems { (preItem, item, index) in
@@ -103,7 +105,6 @@ extension ImageArrView {
     func configImgViews(_ itemDataArray:[ImageDataProtocol]?) {
         guard itemDataArray != nil && itemDataArray!.count > 0 else {
             self.isHidden = true
-            self.updateHeightLayout()
             return
         }
         self.isHidden = false
@@ -120,5 +121,6 @@ extension ImageArrView {
                 imageView.isHidden = true
             }
         }
+        self.updateHeightLayout()
     }
 }
