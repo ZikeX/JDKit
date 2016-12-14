@@ -7,90 +7,115 @@
 //
 
 import UIKit
-
+import RxSwift
 class ImageArrView: CustomIBView {
     /// ZJaDe: height / width
     @IBInspectable var imageScale:CGFloat = 1.0 {
         didSet {
-            self.updateLayout()
+            self.updateHeightLayout()
         }
     }
     @IBInspectable var imageSpacing:CGFloat = 1.0 {
         didSet {
-            self.stackView.spacing = imageSpacing
-            self.updateLayout()
+            self.updateHeightLayout()
         }
     }
     @IBInspectable var maxImageCount:Int = 3 {
         didSet {
-            self.updateLayout()
+            self.updateHeightLayout()
         }
     }
+    /// ZJaDe: 配置数据
+    var imgDataArray:[ImageDataProtocol]? {
+        didSet {
+            if self.imgDataArray?.count != oldValue?.count {
+                self.updateHeightLayout()
+            }else {
+                self.configImgViews(imgDataArray)
+            }
+        }
+    }
+    lazy var itemArray = [ImageView]()
     // MARK: -
     var mainView = UIView()
-    fileprivate var stackView:UIStackView = {
-        let stackView = UIStackView(alignment: .fill, distribution:.fillEqually, spacing: 1.0)
-        return stackView
-    }()
+
     override func configInit() {
         super.configInit()
         self.addSubview(mainView)
         mainView.clipsToBounds = true
-        mainView.snp.makeConstraints { (maker) in
-            maker.top.centerY.left.equalToSuperview()
-            maker.right.equalToSuperview().priority(900)
-        }
-        mainView.addSubview(stackView)
-        stackView.edgesToView()
-    }
-    
-    /// ZJaDe: 配置数据
-    var imgDataArray:[ImageDataProtocol]? {
-        didSet {
-            updateLayout()
+        
+        self.snp.makeConstraints { (maker) in
+            maker.height.equalTo(100)
         }
     }
     override var intrinsicContentSize: CGSize {
         return CGSize(width: jd.screenWidth, height: 100)
     }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.updateFrame()
+    }
 }
 extension ImageArrView {
-    func updateLayout() {
+    func itemWidth() -> CGFloat {
+        return (self.width - self.imageSpacing * (self.maxImageCount - 1).toCGFloat) / self.maxImageCount.toCGFloat
+    }
+    func itemHeight() -> CGFloat {
+        return self.itemWidth() * self.imageScale
+    }
+    func updateHeightLayout() {
+        self.snp.updateConstraints { (maker) in
+            if self.isHidden {
+                maker.height.equalTo(0)
+            }else {
+                maker.height.equalTo(self.itemHeight())
+            }
+        }
+    }
+    func updateFrame() {
         guard maxImageCount > 0 else {
             fatalError("图片最大数量必须大于0")
         }
-        while stackView.arrangedSubviews.count != maxImageCount {
-            if stackView.arrangedSubviews.count > maxImageCount {
-                stackView.removeArrangedSubview(stackView.arrangedSubviews.last!)
+        mainView.frame = self.bounds
+        while itemArray.count != maxImageCount {
+            if itemArray.count > maxImageCount {
+                let lastItem = itemArray.removeLast()
+                lastItem.removeFromSuperview()
             }else {
                 let imageView = ImageView()
                 imageView.contentMode = .scaleAspectFill
-                if stackView.arrangedSubviews.count == 0 {
-                    imageView.tag = 10
-                }
-                stackView.addArrangedSubview(imageView)
+                mainView.addSubview(imageView)
+                itemArray.append(imageView)
             }
         }
-        let firstImageView = stackView.viewWithTag(10)!
-        firstImageView.snp.remakeConstraints { (maker) in
-            maker.height_width(scale: self.imageScale)
-            let offset = self.imageSpacing * (1 - maxImageCount).toCGFloat / maxImageCount.toCGFloat
-            maker.width.equalTo(self).dividedBy(maxImageCount).offset(offset).priority(999)
+        let width = self.itemWidth()
+        let height = self.itemHeight()
+        itemArray.layoutItems { (preItem, item, index) in
+            item.size = CGSize(width: width, height: height)
+            if let preItem = preItem {
+                item.left = preItem.right + self.imageSpacing
+            }else {
+                item.left = 0
+            }
         }
         self.configImgViews(self.imgDataArray)
     }
-    func configImgViews(_ itemArray:[ImageDataProtocol]?) {
-        guard itemArray != nil && itemArray!.count > 0 else {
+    func configImgViews(_ itemDataArray:[ImageDataProtocol]?) {
+        guard itemDataArray != nil && itemDataArray!.count > 0 else {
             self.isHidden = true
+            self.updateHeightLayout()
             return
         }
         self.isHidden = false
-        let imageDataCount = itemArray!.count
-        let images = stackView.arrangedSubviews as! [ImageView]
-        for (index,imageView) in images.enumerated() {
+        var imageDataCount = itemDataArray!.count
+        if imageDataCount > self.maxImageCount {
+            imageDataCount = self.maxImageCount
+        }
+        self.mainView.width = itemArray[imageDataCount - 1].right
+        for (index,imageView) in itemArray.enumerated() {
             if index < imageDataCount {
                 imageView.isHidden = false
-                imageView.setImage(imageData: itemArray![index])
+                imageView.setImage(imageData: itemDataArray![index])
             }else {
                 imageView.isHidden = true
             }

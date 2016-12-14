@@ -143,6 +143,9 @@ class SwiftCountDownTimer {
     func start() {
         self.internalTimer.start()
     }
+    func fire() {
+        self.internalTimer.fire()
+    }
     
     func suspend() {
         self.internalTimer.suspend()
@@ -152,11 +155,4 @@ class SwiftCountDownTimer {
         self.leftTimes = self.originalTimes
     }
     
-}
-
-extension DispatchTimeInterval {
-    
-    static func fromSeconds(_ seconds: Double) -> DispatchTimeInterval {
-        return .nanoseconds(Int(seconds * Double(NSEC_PER_SEC)))
-    }
 }

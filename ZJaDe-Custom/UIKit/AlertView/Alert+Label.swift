@@ -9,22 +9,25 @@
 import UIKit
 
 extension Alert {
+    
     @discardableResult
-    static func prompt(title:String,content:String,closure:@escaping (Int)->()) -> Alert {
+    static func prompt(title:String? = nil, _ content:String, _ closure:AlertCancelClosure? = nil) -> Alert {
         let alert = Alert.content(itemArr:nil,title: title, content: content)
         alert.cancelButton.textStr = "知道了"
-        alert.configClick(closure)
+        alert.configCancel(closure)
+        alert.show()
         return alert
     }
     @discardableResult
-    static func warning(title:String,content:String,closure:@escaping (Int)->()) -> Alert {
+    static func choice(_ title:String, _ content:String, _ closure:AlertCallBackClosure? = nil) -> Alert {
         let alert = Alert.content(title: title, content: content)
         alert.configClick(closure)
+        alert.show()
         return alert
     }
 }
 extension Alert {
-    fileprivate static func content(itemArr:[String]? = ["确定"],title:String,content:String) -> Alert {
+    fileprivate static func content(itemArr:[String]? = ["确定"],title:String?,content:String) -> Alert {
         let alert = Alert(itemTitleArray: itemArr)
         alert.baseView.backgroundColor = Color.white.alpha(0.85)
         alert.bottomStackView.addBorderTop()
@@ -32,7 +35,7 @@ extension Alert {
             view.addBorderRight(fixedLength:20)
         }
         alert.bottomStackView.heightValue(height: 44)
-        alert.titleButton.textStr = title
+        alert.titleButton.textStr = title ?? "你好！"
         alert.configShowLayout { (alert, contentView) in
             contentView.snp.makeConstraints({ (maker) in
                 maker.width.equalTo(jd.screenWidth * 0.75)

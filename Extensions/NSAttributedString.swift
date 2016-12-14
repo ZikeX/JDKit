@@ -23,7 +23,7 @@ class AttrStrContainer {
     init(_ str: String) {
         self.attrStr = NSMutableAttributedString(string: str)
     }
-    init(_ attrStr: NSAttributedString?) {
+    init(_ attrStr: NSAttributedString? = nil) {
         if attrStr == nil {
             self.attrStr = NSMutableAttributedString()
         }else {

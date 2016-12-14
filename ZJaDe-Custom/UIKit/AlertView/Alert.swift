@@ -48,8 +48,10 @@ class Alert: WindowBgView {
         return button
     }()
     // MARK: - closure
-    fileprivate var clickClosure:((Int)->())?
-    fileprivate var cancelClosure:(()->())?
+    typealias AlertCallBackClosure = (Int)->()
+    typealias AlertCancelClosure = ()->()
+    fileprivate var clickClosure:AlertCallBackClosure?
+    fileprivate var cancelClosure:AlertCancelClosure?
     // MARK: -
     var tinColor:UIColor? {
         didSet {
@@ -104,12 +106,12 @@ extension Alert {
         return self
     }
     @discardableResult
-    func configClick(_ closure:@escaping (Int)->()) -> Alert {
+    func configClick(_ closure:AlertCallBackClosure?) -> Alert {
         self.clickClosure = closure
         return self
     }
     @discardableResult
-    func configCancel(_ closure:@escaping ()->()) -> Alert {
+    func configCancel(_ closure:AlertCancelClosure?) -> Alert {
         self.cancelClosure = closure
         return self
     }

@@ -47,7 +47,7 @@ class ComposeTextField: UITextField {
     }
     func configInit() {
         self.delegate = self
-        
+        self.clearButtonMode = .whileEditing
     }
 }
 extension ComposeTextField:UITextFieldDelegate {

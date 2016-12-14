@@ -23,9 +23,17 @@ class BaseViewController: UIViewController {
             return self.titleLabel.text ?? ""
         }
         set {
-            self.titleLabel.text = title
+            self.titleLabel.text = newValue
             self.titleLabel.sizeToFit()
-            self.navigationItem.titleView = self.titleLabel
+            let navItem:UINavigationItem
+            if self.parent is UITabBarController {
+                navItem = self.tabBarController!.navigationItem
+            }else {
+                navItem = self.navigationItem
+            }
+            if navItem.titleView != self.titleLabel {
+                navItem.titleView = self.titleLabel
+            }
         }
     }
     // MARK: - Button

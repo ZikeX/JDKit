@@ -16,4 +16,28 @@ extension UIStackView {
         self.spacing = spacing
         self.distribution = distribution
     }
+    func makeSpaces(_ spaces:[CGFloat]) {
+        guard spaces.count > 0 else {
+            return
+        }
+        var preItem:UIView?
+        for (index,item) in self.arrangedSubviews.enumerated() {
+            if let preItem = preItem {
+                item.snp.makeConstraints({ (maker) in
+                    let space:CGFloat
+                    if index - 1 < spaces.count {
+                        space = spaces[index - 1]
+                    }else {
+                        space = spaces.last!
+                    }
+                    if self.axis == .horizontal {
+                        maker.leftSpace(preItem).offset(space)
+                    }else {
+                        maker.topSpace(preItem).offset(space)
+                    }
+                })
+            }
+            preItem = item
+        }
+    }
 }
