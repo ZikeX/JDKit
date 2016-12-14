@@ -44,6 +44,20 @@ extension UIViewController {
     }
 }
 extension UIViewController {
+    func parentVC<T:UIViewController>(_ vcType:T.Type) -> T? {
+        if let viewCon = self.parent as? T {
+            return viewCon
+        }else {
+            return nil
+        }
+    }
+    func findParentVC<T:UIViewController>(_ vcType:T.Type) -> T? {
+        if let viewCon = self.parentVC(T.self) {
+            return viewCon
+        }else {
+            return self.parentVC(UIViewController.self)?.parentVC(T.self)
+        }
+    }
     func previousVC<T:UIViewController>(_ vcType:T.Type) -> T? {
         guard let navC = self.navigationController else {
             return nil

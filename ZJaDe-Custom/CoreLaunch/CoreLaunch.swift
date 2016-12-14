@@ -33,16 +33,21 @@ class CoreLaunch {
         }
         return image
     }
-    class func animate(window:UIWindow,image:UIImage? = nil,animateType:CoreLaunchAnimateType = .Lite) {
+    class func animate(image:UIImage? = nil,animateType:CoreLaunchAnimateType = .Lite) {
         guard let image = image ?? self.launchImage else {
             return
         }
         let imageView = ImageView(frame: UIScreen.main.bounds)
         imageView.image = image
         
-        window.rootViewController?.view.addSubview(imageView)
+        let loginGuide = LoginGuideView(frame:jd.screenBounds)
+        jd.appRootVC.view.addSubview(loginGuide)
+        loginGuide.alpha = 0
+        
+        jd.appRootVC.view.addSubview(imageView)
         SwiftTimer.asyncAfter(seconds: 0.5) {
             UIView.animate(withDuration: 1.0, animations: {
+                loginGuide.alpha = 1
                 switch animateType {
                 case .Lite:
                     UIView.setAnimationCurve(.easeOut)

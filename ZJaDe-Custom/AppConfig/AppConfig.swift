@@ -75,6 +75,6 @@ class AppConfig {
         //        navC.viewControllers = [tabbarVC,play,travel,mine]
         window.rootViewController = navC
         window.makeKeyAndVisible()
-        CoreLaunch.animate(window: window)
+        CoreLaunch.animate()
     }
 }

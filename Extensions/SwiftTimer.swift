@@ -13,7 +13,7 @@ class SwiftTimer {
     
     private var handler: SwiftTimerHandler
     
-    init(interval: DispatchTimeInterval, repeats: Bool = true, queue: DispatchQueue = .main , handler: @escaping SwiftTimerHandler) {
+    init(interval: DispatchTimeInterval, repeats: Bool = false, queue: DispatchQueue = .main , handler: @escaping SwiftTimerHandler) {
         
         self.handler = handler
         self.repeats = repeats
