@@ -17,19 +17,13 @@ extension UIView {
 }
 class UpdateLayout {
     let view:UIView
-    lazy var constraintArr:[Constraint] = {
-        var constraintArr: [Constraint]
-        if let existing = objc_getAssociatedObject(self.view, &updateLayoutArrKey) as? [Constraint] {
-            constraintArr = existing
-        } else {
-            constraintArr = [Constraint]()
-            objc_setAssociatedObject(self.view, &updateLayoutArrKey, constraintArr, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    var constraintArr:[Constraint] {
+        get {
+            return self.view.associatedObject(&updateLayoutArrKey, createIfNeed:{[Constraint]()})
         }
-        return constraintArr
-    }()
-    // MARK: -
-    deinit {
-        objc_setAssociatedObject(self.view, &updateLayoutArrKey, self.constraintArr, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        set {
+            self.view.setAssociatedObject(&updateLayoutArrKey, newValue)
+        }
     }
     init(view:UIView) {
         self.view = view

@@ -8,21 +8,14 @@
 
 import UIKit
 import RxSwift
-private var DateChangeObserKey:Int8 = 0
+private var dateChangeObserKey:UInt8 = 0
 extension UIDatePicker {
     var dateObservable:PublishSubject<(Date)> {
         get {
-            var _dateObservable:PublishSubject<Date>
-            if let existing = objc_getAssociatedObject(self, &DateChangeObserKey) as? PublishSubject<Date> {
-                _dateObservable = existing
-            }else {
-                _dateObservable = PublishSubject<(Date)>()
-                self.dateObservable = _dateObservable
-            }
-            return _dateObservable
+            return associatedObject(&dateChangeObserKey, createIfNeed: {PublishSubject<(Date)>()})
         }
         set {
-            objc_setAssociatedObject(self, &DateChangeObserKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            setAssociatedObject(&dateChangeObserKey, newValue)
         }
     }
     

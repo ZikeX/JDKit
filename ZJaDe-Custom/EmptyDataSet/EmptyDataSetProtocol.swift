@@ -7,7 +7,7 @@
 //
 
 import UIKit
-protocol EmptyDataSetProtocol {
+protocol EmptyDataSetProtocol:AssociatedObjectProtocol {
     var emptyDataSetView:EmptyDataSetView {get}
     var itemsCount:Int {get}
     func reloadEmptyDataSet(_ state:EmptyViewState)
@@ -15,14 +15,9 @@ protocol EmptyDataSetProtocol {
 private var emptyDataSetViewKey:UInt8 = 0
 extension EmptyDataSetProtocol where Self:UIScrollView {
     var emptyDataSetView:EmptyDataSetView {
-        var view:EmptyDataSetView
-        if let existing = objc_getAssociatedObject(self, &emptyDataSetViewKey) as? EmptyDataSetView {
-            view = existing
-        }else {
-            view = EmptyDataSetView()
-            objc_setAssociatedObject(self, &emptyDataSetViewKey, view, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-        return view
+        return associatedObject(&emptyDataSetViewKey, createIfNeed: { () -> EmptyDataSetView in
+            EmptyDataSetView()
+        })
     }
 
 }

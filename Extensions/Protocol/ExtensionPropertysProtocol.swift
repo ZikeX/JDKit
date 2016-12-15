@@ -8,25 +8,21 @@
 
 import Foundation
 
-protocol ExtensionPropertysProtocol:class {
+protocol ExtensionPropertysProtocol:AssociatedObjectProtocol {
     typealias DictType = [String:Any]
     var extenPropertys:DictType {get set}
 }
-private var ExtensionPropertysKey: UInt8 = 0
+private var extensionPropertysKey: UInt8 = 0
 extension ExtensionPropertysProtocol where Self:AnyObject {
     
     var extenPropertys:DictType {
         get {
-            if let dict = objc_getAssociatedObject(self, &ExtensionPropertysKey) as? DictType {
-                return dict
-            }else {
-                let dict = DictType.init()
-                self.extenPropertys = dict
-                return dict
-            }
+            return associatedObject(&extensionPropertysKey, createIfNeed: { () -> DictType in
+                DictType.init()
+            })
         }
         set {
-            objc_setAssociatedObject(self, &ExtensionPropertysKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            setAssociatedObject(&extensionPropertysKey, newValue)
         }
     }
 }

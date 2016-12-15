@@ -105,6 +105,7 @@ class Button: CustomIBControl {
         super.configInit()
         mainView.isUserInteractionEnabled = false
         configStackView()
+        self.addHighlightedShadowAnimate()
     }
     override func viewDidLoad() {
         super.viewDidLoad()

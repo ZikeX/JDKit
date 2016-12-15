@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-protocol ObjDisposeBagProtocol:class {
+protocol ObjDisposeBagProtocol:AssociatedObjectProtocol {
     var disposeBag:DisposeBag {get set}
 }
 
@@ -18,17 +18,12 @@ private var jdDisposeBagKey:UInt8 = 0
 extension ObjDisposeBagProtocol {
     var disposeBag:DisposeBag {
         get {
-            var bag:DisposeBag
-            if let existing = objc_getAssociatedObject(self, &jdDisposeBagKey) as? DisposeBag {
-                bag = existing
-            }else {
-                bag = DisposeBag()
-                self.disposeBag = bag
-            }
-            return bag
+            return associatedObject(&jdDisposeBagKey, createIfNeed: { () -> DisposeBag in
+                return DisposeBag()
+            })
         }
         set {
-            objc_setAssociatedObject(self, &jdDisposeBagKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            setAssociatedObject(&jdDisposeBagKey, newValue)
         }
     }
 }

@@ -57,17 +57,10 @@ extension UIViewController:NavigationItemProtocol {
     }
     private var navItemStruct:NavigationItemStruct {
         get {
-            let _navItemStruct:NavigationItemStruct
-            if let existing = objc_getAssociatedObject(self, &jd_navBarItemKey) as? NavigationItemStruct {
-                _navItemStruct = existing
-            }else {
-                _navItemStruct = NavigationItemStruct()
-                self.navItemStruct = _navItemStruct
-            }
-            return _navItemStruct
+            return associatedObject(&jd_navBarItemKey, createIfNeed: {NavigationItemStruct()})
         }
         set {
-            objc_setAssociatedObject(self, &jd_navBarItemKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            setAssociatedObject(&jd_navBarItemKey, newValue)
         }
     }
     func checkVCType() -> Bool {
@@ -160,11 +153,14 @@ extension UIViewController {
         self.navBar?.setValue(alpha, forKeyPath: "_backgroundView.alpha")
     }
     fileprivate func changeTitleAlpha(alpha:CGFloat) {
-        self.navBar?.titleTextAttributes = [NSForegroundColorAttributeName:self.navTintColor.alpha(alpha),NSFontAttributeName:Font.p24]
+        if let titleView = self.navBar?.value(forKey: "_titleView") as? UIView {
+            titleView.alpha = alpha
+        }
     }
     fileprivate func changeTintColor() {
         self.navBar?.tintColor = self.navTintColor
-        self.changeTitleAlpha(alpha: self.navBarTitleAlpha)
+        self.navBar?.titleTextAttributes = [NSForegroundColorAttributeName:self.navTintColor,NSFontAttributeName:Font.p24]
+        self.navBar?.setNeedsDisplay()
         if let titleView = self.navBar?.value(forKey: "_titleView") as? UIView {
             let scale:CGFloat = self.navTintColor == Color.white ? 1.0 : 0.0
             titleView.addShadowInWhiteView(scale: scale)

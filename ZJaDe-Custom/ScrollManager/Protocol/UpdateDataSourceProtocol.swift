@@ -78,17 +78,17 @@ extension UpdateDataSourceProtocol where Self:JDListViewModel {
         
     }
 }
-private var JDTableViewRunloopTimerKey: UInt8 = 0
+private var tableViewRunloopTimerKey: UInt8 = 0
 extension JDTableViewModel:UpdateDataSourceProtocol {
     var listView: SectionedViewType? {
         return self.tableView
     }
     var timer:Timer? {
         get {
-            return objc_getAssociatedObject(self, &JDTableViewRunloopTimerKey) as! Timer?
+            return associatedObject(&tableViewRunloopTimerKey)
         }
         set {
-            objc_setAssociatedObject(self, &JDTableViewRunloopTimerKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            setAssociatedObject(&tableViewRunloopTimerKey, newValue)
         }
     }
     

@@ -132,36 +132,28 @@ private var centerLayoutViewKey:UInt8 = 0
 private var centerStackViewKey:UInt8 = 0
 extension UIView {
     var centerLayoutView:UIView {
-        var centerLayoutView: UIView
-        if let existing = objc_getAssociatedObject(self, &centerLayoutViewKey) as? UIView {
-            centerLayoutView = existing
-        }else {
-            centerLayoutView = UIView()
+        return associatedObject(&centerLayoutViewKey, createIfNeed: { () -> UIView in
+            let centerLayoutView = UIView()
             self.addSubview(centerLayoutView)
             centerLayoutView.snp.makeConstraints({ (maker) in
                 maker.center.equalToSuperview()
                 maker.left.greaterThanOrEqualTo(self)
                 maker.top.greaterThanOrEqualTo(self)
             })
-            objc_setAssociatedObject(self, &centerLayoutViewKey, centerLayoutView, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-        return centerLayoutView
+            return centerLayoutView
+        })
     }
     var centerStackView:UIStackView {
-        var centerStackView: UIStackView
-        if let existing = objc_getAssociatedObject(self, &centerStackViewKey) as? UIStackView {
-            centerStackView = existing
-        }else {
-            centerStackView = UIStackView(alignment: .center, distribution: .equalCentering)
+        return associatedObject(&centerStackViewKey, createIfNeed: { () -> UIStackView in
+            let centerStackView = UIStackView(alignment: .center, distribution: .equalCentering)
             self.addSubview(centerStackView)
             centerStackView.snp.makeConstraints({ (maker) in
                 maker.center.equalToSuperview()
                 maker.left.greaterThanOrEqualTo(self)
                 maker.top.greaterThanOrEqualTo(self)
             })
-            objc_setAssociatedObject(self, &centerStackViewKey, centerStackView, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-        return centerStackView
+            return centerStackView
+        })
     }
 }
 extension UIView {

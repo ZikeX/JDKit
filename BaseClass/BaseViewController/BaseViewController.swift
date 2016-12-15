@@ -17,43 +17,26 @@ class BaseViewController: UIViewController {
     // MARK: - Button
     lazy var messageButton:Button = {
         let button = Button(image:R.image.ic_home_消息(),isTemplate:true)
-        button.tintColor = Color.navBarTintColor
         button.sizeToFit()
-        button.rx.touchUpInside({[unowned self] (button) in
-            // TODO: 点击消息按钮时
-        })
         return button
     }()
     lazy var shareButton:Button = {
         let button = Button(image: R.image.ic_share_navItem(),isTemplate:true)
-        button.tintColor = Color.navBarTintColor
         button.sizeToFit()
-        button.rx.touchUpInside({[unowned self] (button) in
-            // TODO: 点击分享按钮时
-        })
         return button
     }()
     lazy var menuButton:Button = {
         let button = Button(image: R.image.ic_menu(),isTemplate:true)
-        button.tintColor = Color.navBarTintColor
         button.sizeToFit()
-        button.rx.touchUpInside({[unowned self] (button) in
-            // TODO: 点击目录按钮时
-        })
         return button
     }()
     lazy var doneButton:Button = {
         let button = Button(title: "完成")
-        button.tintColor = Color.navBarTintColor
         button.sizeToFit()
-        button.rx.touchUpInside({[unowned self] (button) in
-            
-        })
         return button
     }()
     lazy var cacelButton:Button = {
         let button = Button(image: R.image.ic_cancel(),isTemplate:true)
-        button.tintColor = Color.navBarTintColor
         button.sizeToFit()
         button.rx.touchUpInside({[unowned self] (button) in
             self.cacelVC()
@@ -65,18 +48,11 @@ class BaseViewController: UIViewController {
     }
     lazy var backButton:Button = {
         let button = Button(image: R.image.ic_back(),isTemplate:true)
-        button.tintColor = Color.navBarTintColor
         button.sizeToFit()
         button.rx.touchUpInside({[unowned self] (button) in
             self.popVC()
         })
         return button
-    }()
-    lazy var backItem:UIBarButtonItem = {
-        let item = UIBarButtonItem.image(R.image.ic_back()!, {[unowned self] (item) in
-            self.popVC()
-        })
-        return item
     }()
     // MARK: - 
     lazy var transitionVC:TransitionViewController = TransitionViewController()

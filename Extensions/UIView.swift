@@ -4,25 +4,18 @@ private var jd_panKey: UInt8 = 0
 private var jd_tapKey: UInt8 = 0
 extension UIView {
     func getPan() -> UIPanGestureRecognizer {
-        if let pan = objc_getAssociatedObject(self, &jd_panKey) as? UIPanGestureRecognizer {
-            return pan
-        }else {
+        return associatedObject(&jd_panKey, createIfNeed: { () -> UIPanGestureRecognizer in
             let pan = UIPanGestureRecognizer()
             self.addGestureRecognizer(pan)
-            objc_setAssociatedObject(self, &jd_panKey, pan, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             return pan
-        }
+        })
     }
     func getTap() -> UITapGestureRecognizer {
-        let tap:UITapGestureRecognizer
-        if let existing = objc_getAssociatedObject(self, &jd_tapKey) as? UITapGestureRecognizer {
-            tap = existing
-        }else {
-            tap = UITapGestureRecognizer()
+        return associatedObject(&jd_tapKey, createIfNeed: { () -> UITapGestureRecognizer in
+            let tap = UITapGestureRecognizer()
             self.addGestureRecognizer(tap)
-            objc_setAssociatedObject(self, &jd_tapKey, tap, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-        return tap
+            return tap
+        })
     }
 }
 extension UIView {

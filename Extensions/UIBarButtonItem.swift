@@ -26,3 +26,8 @@ extension UIBarButtonItem {
         return item
     }
 }
+extension Button {
+    func barButtonItem() -> UIBarButtonItem {
+        return UIBarButtonItem(customView: self)
+    }
+}

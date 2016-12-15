@@ -41,11 +41,10 @@ private var jd_viewStateKey: UInt8 = 0
 extension UIViewController {
     var viewState: RootViewState {
         get {
-            let viewState = objc_getAssociatedObject(self, &jd_viewStateKey) as? RootViewState
-            return viewState ?? .viewNoLoad
+            return associatedObject(&jd_viewStateKey, createIfNeed: {.viewNoLoad})
         }
         set {
-            objc_setAssociatedObject(self, &jd_viewStateKey, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            setAssociatedObject(&jd_viewStateKey, newValue)
         }
     }
 }

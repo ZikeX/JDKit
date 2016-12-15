@@ -50,7 +50,6 @@ extension JDButtonCell {
         button.cornerRadius = 5
         button.tintColor = Color.white
         button.textLabel.font = Font.h2
-        button.addHighlightedShadowAnimate()
     }
     override func configCell() {
         super.configCell()

@@ -3,6 +3,12 @@ import UIKit
 extension UIViewController {
     func configNavBarItem(closure:((UINavigationItem) -> ())?) {
         func clearNavigationItem() {
+            let backItem = UIBarButtonItem(title: "", style: .done, target: nil, action: nil)
+            backItem.rx.tap.subscribe(onNext:{ [unowned self](_) in
+                self.popVC()
+            }).addDisposableTo(disposeBag)
+            self.navigationItem.backBarButtonItem = backItem
+                
             self.navigationItem.titleView?.removeFromSuperview()
             self.navigationItem.titleView = nil
             self.navigationItem.title = nil

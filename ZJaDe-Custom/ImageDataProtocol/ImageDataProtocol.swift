@@ -6,14 +6,14 @@
 //  Copyright © 2016 Z_JaDe. All rights reserved.
 //
 import UIKit
-private var UIImageViewActivityIndicatorKey: UInt8 = 0
+private var imageViewActivityIndicatorKey: UInt8 = 0
 extension UIImageView {
     fileprivate var activityIndicator:UIActivityIndicatorView? {
         get {
-            return objc_getAssociatedObject(self, &UIImageViewActivityIndicatorKey) as? UIActivityIndicatorView
+            return associatedObject(&imageViewActivityIndicatorKey)
         }
         set {
-            objc_setAssociatedObject(self, &UIImageViewActivityIndicatorKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            setAssociatedObject(&imageViewActivityIndicatorKey, newValue)
         }
     }
     fileprivate func addActivityIndicator(style:UIActivityIndicatorViewStyle) {
