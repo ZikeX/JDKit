@@ -20,11 +20,15 @@ class JDSwitchCell: JDLabelCell {
 extension JDSwitchCell {
     override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
-        guard let switchModel = model as? JDSwitchModel else {
+        guard let model = model as? JDSwitchModel else {
             return
         }
-        switchModel.valueChanged.distinctUntilChanged().bindTo(switchView.rx.value).addDisposableTo(disposeBag)
-        switchView.rx.value.distinctUntilChanged().bindTo(switchModel.valueChanged).addDisposableTo(disposeBag)
+        model.isOn.asObservable().distinctUntilChanged().bindTo(switchView.rx.value).addDisposableTo(disposeBag)
+        switchView.rx.value.distinctUntilChanged().bindTo(model.isOn).addDisposableTo(disposeBag)
+        
+        switchView.rx.valueChanged {[unowned model] (switchView) in
+            model.valueChanged.onNext(switchView.isOn)
+        }.addDisposableTo(disposeBag)
     }
     override func updateEnabledState(_ model: JDTableModel, enabled: Bool) {
         super.updateEnabledState(model, enabled: enabled)

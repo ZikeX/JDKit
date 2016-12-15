@@ -28,18 +28,18 @@ extension ServiceStructProtocol {
         return self.struct.parameters
     }
     var path:String {
-        return "/json/dataServer/\(jd.appVersion)" + self.struct.path
+        return "/json/\(jd.appVersion)/" + self.struct.path
     }
 }
 
 struct ServiceStruct:TargetType {
-    var baseURL = URL(string:BaseURL)!
+    var baseURL = URL(string:appBaseURL)!
     var method:Moya.Method = .post
     var task: Task = .request
     var sampleData = Data()
-    var parameters: [String: Any]?
     
     var path:String
+    var parameters: [String: Any]?
     
     init(path:String, parameters:[String: Any]?) {
         self.path = path

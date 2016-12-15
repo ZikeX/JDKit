@@ -1,5 +1,5 @@
 //
-//  HandyJSON+Extensions.swift
+//  HandyJSON+Extension.swift
 //  ZiWoYou
 //
 //  Created by 茶古电子商务 on 16/12/15.
