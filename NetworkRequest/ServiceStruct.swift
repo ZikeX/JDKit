@@ -8,18 +8,10 @@
 
 import Moya
 
-enum JDServiceType:TargetType {
-    case Home
+protocol ServiceStructProtocol:TargetType {
+    var `struct`:ServiceStruct {get}
 }
-extension JDServiceType {
-    fileprivate var `struct`:ServiceStruct {
-        switch self {
-        case .Home:
-            return ServiceStruct(path: "/home", parameters: nil)
-        }
-    }
-}
-extension JDServiceType {
+extension ServiceStructProtocol {
     var baseURL:URL {
         return self.struct.baseURL
     }
@@ -36,11 +28,12 @@ extension JDServiceType {
         return self.struct.parameters
     }
     var path:String {
-        return self.struct.path
+        return "/json/dataServer/\(jd.appVersion)" + self.struct.path
     }
 }
-private struct ServiceStruct:TargetType {
-    var baseURL = URL(string:"http://www.ziwoyou.com")!
+
+struct ServiceStruct:TargetType {
+    var baseURL = URL(string:BaseURL)!
     var method:Moya.Method = .post
     var task: Task = .request
     var sampleData = Data()
@@ -48,7 +41,7 @@ private struct ServiceStruct:TargetType {
     
     var path:String
     
-    init(path:String,parameters:[String: Any]?) {
+    init(path:String, parameters:[String: Any]?) {
         self.path = path
         self.parameters = parameters
     }

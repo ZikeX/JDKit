@@ -22,5 +22,6 @@ class BaseModel: JDTableModel,HandyJSON {
     func mapping(mapper: HelpingMapper) {
         
     }
+    
 }
 

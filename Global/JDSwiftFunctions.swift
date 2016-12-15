@@ -33,7 +33,7 @@ extension jd {
         if appVersion == appBuild {
             return "v\(appVersion)"
         } else {
-            return "v\(appVersion)(\(appBuild))"
+            return "v\(appVersion)+(\(appBuild))"
         }
     }
     

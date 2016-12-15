@@ -12,7 +12,9 @@ enum RouteType {
     case present
     case popAndPush(popCount:Int)
 }
-
+protocol RouteUrlType {
+    func createViewCon(_ manager:RouterManager) -> UIViewController
+}
 import UIKit
 /// ZJaDe: 路由器管理
 class RouterManager {
@@ -20,28 +22,28 @@ class RouterManager {
     init(_ routeType:RouteType) {
         self.routeType = routeType
     }
-    static func popAndPush(_ routeUrl:RouteUrl, popCount:Int = 1, completion:(()->Void)? = nil) {
+    static func popAndPush(_ routeUrl:RouteUrlType, popCount:Int = 1, completion:(()->Void)? = nil) {
         let routerManager = RouterManager(.popAndPush(popCount: popCount))
         routerManager.show(routeUrl, completion)
     }
-    static func push(_ routeUrl:RouteUrl, completion:((Any?)->Void)? = nil) {
+    static func push(_ routeUrl:RouteUrlType, completion:((Any?)->Void)? = nil) {
         let routerManager = RouterManager(.push)
         routerManager.show(routeUrl, completion)
     }
-    static func present(_ routeUrl:RouteUrl, completion:((Any?)->Void)? = nil) {
+    static func present(_ routeUrl:RouteUrlType, completion:((Any?)->Void)? = nil) {
         let routerManager = RouterManager(.present)
         routerManager.show(routeUrl, completion)
     }
     // MARK: -
     /// ZJaDe: completion只有在present时有用
-    private func show(_ routeUrl:RouteUrl, _ completion:(()->Void)?) {
+    private func show(_ routeUrl:RouteUrlType, _ completion:(()->Void)?) {
         let currentNavc = jd.currentNavC
         
 //        guard checkCanJump(currentNavc) else {
 //            return
 //        }
         jd.endEditing()
-        let viewController = createVC(routeUrl: routeUrl)
+        let viewController = routeUrl.createViewCon(self)
         switch self.routeType {
         case .popAndPush(let count):
             currentNavc.popAndPush(count: count, pushVC: viewController, animated: true)

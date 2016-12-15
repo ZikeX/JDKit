@@ -35,7 +35,7 @@ extension JDAddressSection {
             cell.detailTitleLabel.textColor = Color.lightGray
             cell.detailTitleLabel.textAlignment = .left
             cell.touchCell = {
-                RouterManager.push(.route_地图_定位)
+                RouterManager.push(Route_地图.定位)
             }
         }
     }

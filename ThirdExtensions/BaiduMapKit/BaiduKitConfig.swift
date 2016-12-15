@@ -7,7 +7,7 @@
 //
 
 import Foundation
-class BaiduMap {
+class BaiduKitConfig {
     static func register() {
         let mapManager = BMKMapManager()
         let ret = mapManager.start(BapduMapAppKey, generalDelegate: nil)
