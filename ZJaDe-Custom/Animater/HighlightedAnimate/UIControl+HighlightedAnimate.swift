@@ -64,7 +64,7 @@ extension UIControl {
             }
         }
     }
-    func addHighlightedColorAnimate(_ highlightedColor:UIColor) {
+    func addHighlightedColorAnimate(_ highlightedColor:UIColor = Color.selectedCell) {
         self.highlightedView.backgroundColor = highlightedColor
         hasHighlightedColorAnimate = true
     }
