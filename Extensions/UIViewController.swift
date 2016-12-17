@@ -28,6 +28,9 @@ extension UIViewController {
     func popVC(animated:Bool = true) {
         _ = navigationController?.popViewController(animated: animated)
     }
+    func popToRootVC(animated:Bool = true) {
+        _ = navigationController?.popToRootViewController(animated: animated)
+    }
     func presentVC(_ vc: UIViewController,animated:Bool = true) {
         present(vc, animated: animated, completion: nil)
     }
