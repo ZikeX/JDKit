@@ -8,3 +8,8 @@
 
 import Foundation
 
+class UserInfo {
+    static let shared:UserInfo = UserInfo()
+    var personModel:PersonModel = PersonModel()
+    var loginModel:LoginModel = LoginModel()
+}
