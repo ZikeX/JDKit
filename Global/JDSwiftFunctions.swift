@@ -116,7 +116,7 @@ extension jd {
         }
         
         if presentedVC == nil {
-            print("EZSwiftExtensions Error: You don't have any views set. You may be calling them in viewDidLoad. Try viewDidAppear instead.")
+            print("Error: You don't have any views set. You may be calling them in viewDidLoad. Try viewDidAppear instead.")
         }
         return presentedVC
     }
