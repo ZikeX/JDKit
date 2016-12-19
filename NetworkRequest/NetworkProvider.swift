@@ -8,21 +8,25 @@
 
 import UIKit
 import Moya
+import RxSwift
+import HandyJSON
 
-class NetworkProvider<Target: TargetType>: MoyaProvider<Target> {
-    override init(endpointClosure: @escaping EndpointClosure = NetworkProvider.endpointMapping,
-         requestClosure: @escaping RequestClosure = NetworkProvider.requestMapping,
+class RxJDProvider<Target: TargetType>: RxMoyaProvider<Target> {
+    override init(endpointClosure: @escaping EndpointClosure = RxJDProvider.endpointMapping,
+         requestClosure: @escaping RequestClosure = RxJDProvider.requestMapping,
          stubClosure: @escaping StubClosure = MoyaProvider.neverStub,
-         manager: Manager = NetworkProvider.alamofireManager(),
+         manager: Manager = RxJDProvider.alamofireManager(),
          plugins: [PluginType] = [],
          trackInflights: Bool = false) {
         
         super.init(endpointClosure: endpointClosure, requestClosure: requestClosure, stubClosure: stubClosure, plugins: plugins, trackInflights: trackInflights)
     }
 }
-extension NetworkProvider {
+
+extension RxJDProvider {
     final class func endpointMapping(_ target: Target) -> Endpoint<Target> {
         let url = target.baseURL.appendingPathComponent(target.path).absoluteString
+        logDebug("请求地址:\(url)")
         return Endpoint(URL: url, sampleResponseClosure: {.networkResponse(200, target.sampleData)}, method: target.method, parameters: target.parameters)
     }
     

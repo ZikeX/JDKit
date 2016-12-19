@@ -11,7 +11,7 @@ import UIKit
 extension Alert {
     
     @discardableResult
-    static func prompt(title:String? = nil, _ content:String, _ closure:AlertCancelClosure? = nil) -> Alert {
+    static func showPrompt(title:String? = nil, _ content:String, _ closure:AlertCancelClosure? = nil) -> Alert {
         let alert = Alert.content(itemArr:nil,title: title, content: content)
         alert.cancelButton.textStr = "知道了"
         alert.configCancel(closure)
@@ -19,7 +19,7 @@ extension Alert {
         return alert
     }
     @discardableResult
-    static func choice(_ title:String, _ content:String, _ closure:AlertCallBackClosure? = nil) -> Alert {
+    static func showChoice(title:String, _ content:String, _ closure:AlertCallBackClosure? = nil) -> Alert {
         let alert = Alert.content(title: title, content: content)
         alert.configClick(closure)
         alert.show()

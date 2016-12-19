@@ -95,6 +95,7 @@ extension Alert {
         }
         button.rx.touchUpInside({[unowned self] (button) in
             self.clickClosure?(index)
+            Alert.hide()
         })
         return button
     }

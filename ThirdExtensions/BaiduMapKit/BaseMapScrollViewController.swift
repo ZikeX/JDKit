@@ -50,7 +50,7 @@ extension BaseMapScrollViewController {
             }else {
                 button.shake()
                 zoomView.shake()
-                Alert.prompt("已经放大到最大级别！")
+                Alert.showPrompt("已经放大到最大级别！")
             }
             logDebug("2->zoomLevel\(self.mapView.zoomLevel),maxZoomLevel\(self.mapView.maxZoomLevel)")
         })
@@ -61,7 +61,7 @@ extension BaseMapScrollViewController {
             }else {
                 button.shake()
                 zoomView.shake()
-                Alert.prompt("已经缩小到最小级别！")
+                Alert.showPrompt("已经缩小到最小级别！")
             }
             logDebug("2->zoomLevel\(self.mapView.zoomLevel),minZoomLevel\(self.mapView.minZoomLevel)")
         }

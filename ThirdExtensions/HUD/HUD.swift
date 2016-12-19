@@ -9,9 +9,10 @@
 import Foundation
 import MBProgressHUD
 class HUD {
-    class _MBProgressHUD: MBProgressHUD {
+    class _ProgressHUD: MBProgressHUD {
         var canInteractive:Bool = false
         override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+            logDebug(point)
             if canInteractive {
                 if self.bezelView.frame.contains(point) {
                     return self.bezelView
@@ -24,14 +25,26 @@ class HUD {
         }
         func hideWhenTap() {
             _ = self.bezelView.rx.whenTouch({[unowned self] (bezelView) in
-                self.hide(animated: true)
+                self.hide()
             })
         }
+        func hide(delay:TimeInterval = 0, duration:TimeInterval = 1.5) {
+            SwiftTimer.asyncAfter(seconds: delay) { 
+                UIView.animate(withDuration: duration, animations: {
+                    self.bezelView.alpha = 0
+                    self.offset.y = 200
+                    self.setNeedsLayout()
+                    self.layoutIfNeeded()
+                }, completion: { (finished) in
+                    self.hide(animated: false)
+                })
+            }
+        }
     }
-    fileprivate var MBhud:_MBProgressHUD?
+    fileprivate var MBhud:_ProgressHUD?
     
-    static func createMBHUD(_ view:UIView) -> _MBProgressHUD {
-        let MBhud = _MBProgressHUD(view: view)
+    static func createMBHUD(_ view:UIView) -> _ProgressHUD {
+        let MBhud = _ProgressHUD(view: view)
         view.addSubview(MBhud)
         MBhud.removeFromSuperViewOnHide = true
         return MBhud
@@ -50,13 +63,17 @@ class HUD {
         return hud
     }
     func hide() {
-        Async.main {
-            self.MBhud?.hide(animated: true)
-        }
+        self.MBhud?.hide()
     }
-    static func hide(_ forView:UIView) {
-        Async.main {
-            _MBProgressHUD.hide(for: forView, animated: true)
+    static func hide(for view:UIView, isAll:Bool = false) {
+        for subView in view.subviews.reversed() {
+            if let hud = subView as? _ProgressHUD {
+                hud.removeFromSuperViewOnHide = true;
+                hud.hide()
+                if !isAll {
+                    break
+                }
+            }
         }
     }
 }
@@ -73,7 +90,7 @@ extension HUD {
             MBhud.mode = .customView
             
             MBhud.show(animated: true)
-            MBhud.hide(animated: true, afterDelay: 0.7)
+            MBhud.hide(delay: 0.7)
         }
     }
     static func showSuccess(_ text:String, toView:UIView? = nil) {
@@ -84,7 +101,7 @@ extension HUD {
     }
 }
 extension HUD {
-    private static var promptArray = [_MBProgressHUD]()
+    private static var promptArray = [_ProgressHUD]()
     
     static func showPrompt(_ text:String, toView:UIView? = nil) {
         Async.main {
@@ -114,16 +131,7 @@ extension HUD {
                     promptArray.remove(at: index)
                 }
             }
-            SwiftTimer.asyncAfter(seconds: 0.5, after: {
-                UIView.animate(withDuration: 1.5, animations: {
-                    prompt.bezelView.alpha = 0
-                    prompt.offset.y = 200
-                    prompt.setNeedsLayout()
-                    prompt.layoutIfNeeded()
-                }, completion: { (finished) in
-                    prompt.hide(animated: false)
-                })
-            })
+            prompt.hide(delay: 0.7)
         }
     }
 }

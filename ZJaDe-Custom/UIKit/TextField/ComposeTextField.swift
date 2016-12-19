@@ -13,6 +13,7 @@ enum EntryType {
     case phone
     case email
     case price
+    case number
     case count(min:Int?,max:Int?)
     case date(mode:UIDatePickerMode)
 }
@@ -29,7 +30,7 @@ class ComposeTextField: UITextField {
                 self.keyboardType = .emailAddress
             case .price:
                 self.keyboardType = .decimalPad
-            case .count:
+            case .count,.number:
                 self.keyboardType = .numberPad
             default:
                 self.keyboardType = .default
