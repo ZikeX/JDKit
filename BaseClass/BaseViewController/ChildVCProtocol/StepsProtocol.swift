@@ -48,7 +48,7 @@ extension StepsProtocol where Self:UIViewController {
         self.transitionTo(nextIndex, newStepsVC)
     }
     func resetCurrentVC() {
-        let newStepsVC = self.getStepsVC(stepsIndex: self.stepsIndex)
+        let newStepsVC = self.createStepsVC(stepsIndex: self.stepsIndex)
         self.transitionTo(self.stepsIndex, newStepsVC)
     }
     func transitionTo(_ nextIndex:Int, _ newStepsVC:StepsVCType) {
@@ -74,6 +74,7 @@ extension StepsProtocol where Self:UIViewController {
             self.currentStepsVC.view.removeFromSuperview()
             self.currentStepsVC.removeFromParentViewController()
             self.stepsIndex = nextIndex
+            self.allStepsVC[self.stepsIndex] = newStepsVC
             self.navigationItem.title = self.currentStepsVC.title
         })
     }

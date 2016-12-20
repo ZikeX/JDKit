@@ -13,4 +13,7 @@ extension HandyJSON {
     func toSimpleDictionary() -> [String:Any] {
         return JSONSerializer.serialize(model: self).toSimpleDictionary() ?? [String:Any]()
     }
+    static func createModel(dict:[String:Any]) -> Self {
+        return JSONDeserializer<Self>.deserializeFrom(dict: dict as NSDictionary)!
+    }
 }

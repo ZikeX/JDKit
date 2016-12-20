@@ -11,38 +11,44 @@ import Moya
 import HandyJSON
 
 extension Response {
-    
-    func mapObject<T: HandyJSON>(type: T.Type, _ sectionTitle:String) throws -> ObjectResultModel<T> {
-        guard let dict = try mapJSON() as? NSDictionary,let result = JSONDeserializer<ObjectResultModel<T>>.deserializeFrom(dict:dict) else {
+    func mapResult(_ sectionTitle:String?,showHUD:Bool) throws -> DictResultModel {
+        debugSelf()
+        guard let dict = try mapJSON() as? NSDictionary,let result = JSONDeserializer<DictResultModel>.deserializeFrom(dict:dict) else {
             throw Moya.Error.jsonMapping(self)
         }
-        logDebug("获取到Object->\(dict)")
-        result.data = JSONDeserializer<T>.deserializeFrom(dict: dict, designatedPath: "data.\(sectionTitle)")
-        if result.result == nil || result.msg == nil || result.data == nil {
-            throw Moya.Error.jsonMapping(self)
-        }
-        
-        handle(showHUD: false, result: result)
-        return result
-    }
-    func mapResult(showHUD:Bool) throws -> ResultModel {
-        guard let dict = try mapJSON() as? NSDictionary,let result = JSONDeserializer<ResultModel>.deserializeFrom(dict:dict) else {
-            throw Moya.Error.jsonMapping(self)
-        }
-        logDebug("获取到Result->\(dict)")
         if result.result == nil || result.msg == nil {
             throw Moya.Error.jsonMapping(self)
+        }
+        let data = dict["data"] as? [String:Any]
+        if let sectionTitle = sectionTitle {
+            result.data = data![sectionTitle] as! [String : String]
+        }else {
+            result.data = data as? [String : String]
         }
         
         handle(showHUD: showHUD, result: result)
         return result
     }
-    func mapArray<T: HandyJSON>(type: T.Type, _ sectionTitle:String) throws -> ArrayResultModel<T> {
+    
+    func mapObject<T: HandyJSON>(type: T.Type, _ sectionTitle:String,showHUD:Bool) throws -> ObjectResultModel<T> {
+        debugSelf()
+        guard let dict = try mapJSON() as? NSDictionary,let result = JSONDeserializer<ObjectResultModel<T>>.deserializeFrom(dict:dict) else {
+            throw Moya.Error.jsonMapping(self)
+        }
+        if result.result == nil || result.msg == nil {
+            throw Moya.Error.jsonMapping(self)
+        }
+        result.data = JSONDeserializer<T>.deserializeFrom(dict: dict, designatedPath: "data.\(sectionTitle)")
+        
+        handle(showHUD: showHUD, result: result)
+        return result
+    }
+    func mapArray<T: HandyJSON>(type: T.Type, _ sectionTitle:String,showHUD:Bool) throws -> ArrayResultModel<T> {
+        debugSelf()
         guard let dict = try mapJSON() as? NSDictionary,let result = JSONDeserializer<ArrayResultModel<T>>.deserializeFrom(dict:dict) else {
             throw Moya.Error.jsonMapping(self)
         }
-        logDebug("获取到Array->\(dict)")
-        if result.result == nil || result.msg == nil || result.data == nil {
+        if result.result == nil || result.msg == nil {
             throw Moya.Error.jsonMapping(self)
         }
         if let data = dict["data"] as? NSDictionary,let dataArray = data[sectionTitle] as? Array<NSDictionary> {
@@ -55,7 +61,7 @@ extension Response {
             }
             result.data = modelArray
         }
-        handle(showHUD: false, result: result)
+        handle(showHUD: showHUD, result: result)
         return result
     }
     
@@ -80,7 +86,12 @@ extension Response {
             })
         default:
             HUD.showError(result.msg!)
-            
         }
+    }
+    func debugSelf() {
+        #if DEBUG
+            let str = try? mapString()
+            logDebug("获取到数据->\(str)")
+        #endif
     }
 }

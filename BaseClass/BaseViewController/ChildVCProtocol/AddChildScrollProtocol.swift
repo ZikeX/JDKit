@@ -12,27 +12,12 @@ protocol AddChildScrollProtocol:class {
     associatedtype ChildScrollVCType:JDScrollViewController
     // MARK: - 实现下面方法创建控制器
     func createScrollVC(index:Int) -> ChildScrollVCType
-    // MARK: - 获取子控制器
-    var firstChildVC:ChildScrollVCType? {get}
-    func childVC(index:Int) -> ChildScrollVCType?
     // MARK: - 调用该方法可添加子控制器到本控制器中
     func addChildScrollVC(edgesToFill:Bool?,index:Int) -> ChildScrollVCType
     // MARK: - 添加子控制器后的一些设置
     func configChildScrollVC(scrollVC:ChildScrollVCType,index:Int)
 }
 extension AddChildScrollProtocol where Self:BaseViewController {
-    // MARK: -
-    var firstChildVC:ChildScrollVCType? {
-        return self.childVC(index: 0)
-    }
-    func childVC(index:Int) -> ChildScrollVCType? {
-        for childVC in self.childViewControllers {
-            if let childVC = childVC as? ChildScrollVCType,childVC.index == index {
-                return childVC
-            }
-        }
-        return nil
-    }
     // MARK: -
     @discardableResult
     func addChildScrollVC(edgesToFill:Bool? = false,index:Int = 0) -> ChildScrollVCType {

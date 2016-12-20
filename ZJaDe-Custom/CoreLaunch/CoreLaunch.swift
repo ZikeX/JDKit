@@ -40,14 +40,18 @@ class CoreLaunch {
         let imageView = ImageView(frame: UIScreen.main.bounds)
         imageView.image = image
         
-        let loginGuide = LoginGuideView(frame:jd.screenBounds)
-        jd.appRootVC.view.addSubview(loginGuide)
-        loginGuide.alpha = 0
+        let isLogined = LoginModel.isLogined
+        var loginGuide:LoginGuideView?
+        if !isLogined {
+            loginGuide = LoginGuideView(frame:jd.screenBounds)
+            jd.appRootVC.view.addSubview(loginGuide!)
+            loginGuide!.alpha = 0
+        }
         
         jd.appRootVC.view.addSubview(imageView)
         SwiftTimer.asyncAfter(seconds: 0.5) {
             UIView.animate(withDuration: 1.0, animations: {
-                loginGuide.alpha = 1
+                loginGuide?.alpha = 1
                 switch animateType {
                 case .Lite:
                     UIView.setAnimationCurve(.easeOut)

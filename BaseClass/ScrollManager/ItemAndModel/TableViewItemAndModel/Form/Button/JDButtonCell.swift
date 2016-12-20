@@ -20,24 +20,30 @@ class JDButtonCell: JDFormCell {
 extension JDButtonCell {
     override func configItem(_ model: JDTableModel) {
         super.configItem(model)
+        guard let model = model as? JDButtonModel else {
+            return
+        }
         stackView.removeFromSuperview()
         button.edgesToView()
+        self.touchCell = {[unowned model] in
+            model.buttonClick.onNext()
+        }
     }
     override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
-        guard let buttonModel = model as? JDButtonModel else {
+        guard let model = model as? JDButtonModel else {
             return
         }
         self.configButton(button)
-        buttonModel.title.asObservable().subscribe(onNext:{[unowned self] (title) in
+        model.title.asObservable().subscribe(onNext:{[unowned self] (title) in
             self.button.textStr = title
         }).addDisposableTo(disposeBag)
         
-        buttonModel.image.asObservable().subscribe(onNext:{[unowned self] (image) in
+        model.image.asObservable().subscribe(onNext:{[unowned self] (image) in
             self.button.img = image
         }).addDisposableTo(disposeBag)
         
-        button.rx.tap.bindTo(buttonModel.buttonClick).addDisposableTo(disposeBag)
+        button.rx.tap.bindTo(model.buttonClick).addDisposableTo(disposeBag)
     }
     override func updateEnabledState(_ model: JDTableModel, enabled: Bool) {
         super.updateEnabledState(model, enabled: enabled)

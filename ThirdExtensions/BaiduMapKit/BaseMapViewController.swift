@@ -19,9 +19,8 @@ class BaseMapViewController: BaseViewController {
         view.frame = CGRect(x: 0, y: 0, width: jd.screenWidth, height: 106)
         return view
     }()
-    var mapVC:BaseMapScrollViewController {
-        return self.firstChildVC!
-    }
+    lazy var mapVC:BaseMapScrollViewController = BaseMapScrollViewController()
+    
     var mapView:BMKMapView {
         return self.mapVC.mapView
     }
@@ -43,7 +42,7 @@ class BaseMapViewController: BaseViewController {
 
 extension BaseMapViewController:AddChildScrollProtocol {
     func createScrollVC(index: Int) -> BaseMapScrollViewController {
-        return BaseMapScrollViewController()
+        return self.mapVC
     }
 }
 extension BaseMapViewController:BMKMapViewDelegate {

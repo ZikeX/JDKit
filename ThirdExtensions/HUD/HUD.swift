@@ -23,18 +23,23 @@ class HUD {
                 return super.hitTest(point, with: event)
             }
         }
-        func hideWhenTap() {
+        func hideWhenTap(falling:Bool = false) {
             _ = self.bezelView.rx.whenTouch({[unowned self] (bezelView) in
-                self.hide()
+                self.hide(falling:falling)
             })
         }
-        func hide(delay:TimeInterval = 0, duration:TimeInterval = 1.5) {
-            SwiftTimer.asyncAfter(seconds: delay) { 
+        func hide(delay:TimeInterval = 0, duration:TimeInterval = 1.5,falling:Bool = false) {
+            SwiftTimer.asyncAfter(seconds: delay) {
+                self.bezelView.transform = CGAffineTransform.identity
                 UIView.animate(withDuration: duration, animations: {
                     self.bezelView.alpha = 0
-                    self.offset.y = 200
-                    self.setNeedsLayout()
-                    self.layoutIfNeeded()
+                    if falling {
+                        self.offset.y = 200
+                        self.setNeedsLayout()
+                        self.layoutIfNeeded()
+                    }else {
+                        self.bezelView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
+                    }
                 }, completion: { (finished) in
                     self.hide(animated: false)
                 })
@@ -78,26 +83,26 @@ class HUD {
     }
 }
 extension HUD {
-    private static func show(_ text:String, icon:String, toView:UIView?) {
+    private static func show(_ text:String, icon:String, delay:TimeInterval, toView:UIView?) {
         Async.main {
             let view = toView ?? jd.keyWindow
             
             let MBhud = createMBHUD(view)
             MBhud.canInteractive = true
             MBhud.hideWhenTap()
-            MBhud.label.text = text
+            MBhud.detailsLabel.text = text
             MBhud.customView = ImageView(image: UIImage(named: "MBProgressHUD.bundle/" + icon))
             MBhud.mode = .customView
             
             MBhud.show(animated: true)
-            MBhud.hide(delay: 0.7)
+            MBhud.hide(delay: delay)
         }
     }
-    static func showSuccess(_ text:String, toView:UIView? = nil) {
-        self.show(text, icon: "success", toView: toView)
+    static func showSuccess(_ text:String, delay:TimeInterval = 0.7, toView:UIView? = nil) {
+        self.show(text, icon: "success", delay:delay, toView: toView)
     }
-    static func showError(_ text:String, toView:UIView? = nil) {
-        self.show(text, icon: "error", toView: toView)
+    static func showError(_ text:String, delay:TimeInterval = 0.7, toView:UIView? = nil) {
+        self.show(text, icon: "error", delay:delay, toView: toView)
     }
 }
 extension HUD {
@@ -110,7 +115,7 @@ extension HUD {
             let prompt = createMBHUD(view)
             prompt.canInteractive = true
             prompt.hideWhenTap()
-            prompt.label.text = text
+            prompt.detailsLabel.text = text
             prompt.mode = .text
             prompt.margin = 10
             prompt.offset.y = {
@@ -123,7 +128,7 @@ extension HUD {
             prompt.bezelView.style = .solidColor
             prompt.bezelView.color = Color.black
             prompt.bezelView.addBorder(color:Color.white)
-            prompt.label.textColor = Color.white
+            prompt.detailsLabel.textColor = Color.white
             prompt.show(animated: true)
             promptArray.append(prompt)
             prompt.completionBlock = {[unowned prompt] in
@@ -131,7 +136,7 @@ extension HUD {
                     promptArray.remove(at: index)
                 }
             }
-            prompt.hide(delay: 0.7)
+            prompt.hide(delay: 0.7,falling:true)
         }
     }
 }

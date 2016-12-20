@@ -24,8 +24,8 @@ extension ResultCode:HandyJSONEnum {
 }
 class ResultModel:HandyJSON {
     /// ZJaDe: [0[错误]，1[正确]，2[帐户其它地方登陆], 3[QQ或微信帐户未注册]，4[有新版本]，5[当前版本过低]
-    var result:ResultCode?
-    var msg:String?
+    var result:ResultCode!
+    var msg:String!
     required init() {
         
     }
@@ -44,10 +44,12 @@ class ResultModel:HandyJSON {
         return result! == .offline
     }
 }
-
+class DictResultModel:ResultModel {
+    var data:[String:String]!
+}
 class ObjectResultModel<Model>:ResultModel {
-    var data:Model?
+    var data:Model!
 }
 class ArrayResultModel<Model>:ResultModel {
-    var data:[Model]?
+    var data:[Model]!
 }

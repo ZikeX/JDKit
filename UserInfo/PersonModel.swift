@@ -9,5 +9,17 @@
 import UIKit
 
 class PersonModel: BaseEntityModel {
-
+    var authToken:String?
+    
+    var hxcode:String?
+    
+    var email:String?
+    var mobile:String?
+    
+    var nickname:String?
+    var username:String?
+    var imgUrl:String?
+    var gender:String?
+    var address:String?
+    var birthday:String?
 }

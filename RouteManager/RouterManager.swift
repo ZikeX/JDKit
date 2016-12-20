@@ -13,7 +13,7 @@ enum RouteType {
     case popAndPush(popCount:Int)
 }
 protocol RouteUrlType {
-    func createViewCon(_ manager:RouterManager) -> UIViewController
+    func createViewCon(_ manager:RouterManager) -> UIViewController?
 }
 import UIKit
 /// ZJaDe: 路由器管理
@@ -43,7 +43,10 @@ class RouterManager {
 //            return
 //        }
         jd.endEditing()
-        let viewController = routeUrl.createViewCon(self)
+        guard let viewController = routeUrl.createViewCon(self) else {
+            logDebug("跳转失败")
+            return
+        }
         switch self.routeType {
         case .popAndPush(let count):
             currentNavc.popAndPush(count: count, pushVC: viewController, animated: true)
