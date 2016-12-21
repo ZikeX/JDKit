@@ -1,5 +1,5 @@
 //
-//  ThirdLoginManager.swift
+//  ThirdManager.swift
 //  ZiWoYou
 //
 //  Created by 茶古电子商务 on 16/12/21.
@@ -13,34 +13,32 @@ enum ThirdAuthType {
     case login
 }
 
-class ThirdLoginManager:NSObject {
+class ThirdManager:NSObject {
     var authType:ThirdAuthType!
     
     func binding() {
         self.authType = .binding
-        jumpAndAuth()
+        self.jumpAndAuth()
     }
     func loginAndAuth() {
         self.authType = .login
-        jumpAndAuth()
+        self.jumpAndAuth()
     }
     func jumpAndAuth() {
         
     }
 }
-extension ThirdLoginManager {
+extension ThirdManager {
     static func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
         var result = false
         if result == false {
-            if url.host == "oauth" {
-                result = WXApi.handleOpen(url, delegate: WechatOAuthManager.shared)
-            }
+            result = WXApi.handleOpen(url, delegate: WechatManager.shared)
         }
         if result == false && TencentOAuth.canHandleOpen(url) {
             result = TencentOAuth.handleOpen(url)
         }
         if result == false {
-            result = WeiboSDK.handleOpen(url, delegate: nil)
+            result = WeiboSDK.handleOpen(url, delegate: WeiboManager.shared)
         }
         return result
     }

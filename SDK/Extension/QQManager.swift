@@ -17,7 +17,7 @@ class QQManager:ThirdManager {
         return tencentOAuth
     }()
     override func jumpAndAuth() {
-        guard ThirdPartyPermissions.canUseQQSSOLogin() else {
+        guard TencentOAuth.iphoneQQSupportSSOLogin() else {
             Alert.showPrompt(title: "QQ登录", "请安装QQ客户端")
             return
         }

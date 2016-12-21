@@ -10,8 +10,12 @@ import UIKit
 import Moya
 import RxSwift
 import HandyJSON
+protocol JDStructTarget {
+    associatedtype StructType:TargetType
+    var `struct`:StructType {get}
+}
 
-class RxJDProvider<Target>: RxMoyaProvider<Target> where Target: TargetType {
+class RxJDProvider<Target:JDStructTarget>: RxMoyaProvider<Target.StructType> where Target: JDStructTarget {
     override init(endpointClosure: @escaping EndpointClosure = RxJDProvider.endpointMapping,
          requestClosure: @escaping RequestClosure = RxJDProvider.requestMapping,
          stubClosure: @escaping StubClosure = MoyaProvider.neverStub,
@@ -21,16 +25,19 @@ class RxJDProvider<Target>: RxMoyaProvider<Target> where Target: TargetType {
         
         super.init(endpointClosure: endpointClosure, requestClosure: requestClosure, stubClosure: stubClosure, plugins: plugins, trackInflights: trackInflights)
     }
+    func request(_ token: Target) -> Observable<Response> {
+        return self.request(token.struct)
+    }
 }
 
 extension RxJDProvider {
-    final class func endpointMapping(_ target: Target) -> Endpoint<Target> {
+    final class func endpointMapping(_ target: Target.StructType) -> Endpoint<Target.StructType> {
         let url = target.baseURL.appendingPathComponent(target.path).absoluteString
         logDebug("请求地址:\(url)")
         return Endpoint(URL: url, sampleResponseClosure: {.networkResponse(200, target.sampleData)}, method: target.method, parameters: target.parameters)
     }
     
-    final class func requestMapping(_ endpoint: Endpoint<Target>, closure: RequestResultClosure) {
+    final class func requestMapping(_ endpoint: Endpoint<Target.StructType>, closure: RequestResultClosure) {
         if var request = endpoint.urlRequest {
             request.timeoutInterval = 20
             closure(.success(request))

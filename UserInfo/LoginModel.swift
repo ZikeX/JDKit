@@ -16,8 +16,9 @@ enum LoginState:String {
 }
 enum LoginType:String {
     case normalLogin
-    case qqLogin
     case weChatLogin
+    case qqLogin
+    case weiboLogin
 }
 extension DefaultsKeys {
     static let loginState = DefaultsKey<String?>("loginState")

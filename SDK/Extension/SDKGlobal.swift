@@ -18,8 +18,9 @@ let WechatAuthState:String = "com.chagu.ziwoyou.shil"
 // MARK: - QQ
 let TencentAppid:String = "1104847694"
 // MARK: - Weibo
-let WeiboAppKey:String = ""
-let WeiboRedirectURI:String = ""
+let WeiboAppKey:String = "3104101359"
+let WeiboRedirectURI:String = "http://www.sina.com"
+let WeiboScope = "all"
 // MARK: - EaseMob
 let EaseMobAppkey:String = ""
 let EaseMobAPNsDevelopment:String = ""

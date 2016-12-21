@@ -8,13 +8,12 @@
 
 import Foundation
 
-class WechatOAuthManager:ThirdLoginManager {
-    static let shared = WechatOAuthManager()
-}
-extension WechatOAuthManager {
+class WechatManager:ThirdManager {
+    static let shared = WechatManager()
+    
     override func jumpAndAuth() {
-        guard ThirdPartyPermissions.canUseWechat() else {
-            Alert.showPrompt(title: "微信登录", "请安装微信客户端")
+        guard WXApi.isWXAppSupport() else {
+            Alert.showPrompt(title: "微信登录", "请检查是否已经安装微信客户端")
             return
         }
         let req = SendAuthReq()
@@ -22,6 +21,8 @@ extension WechatOAuthManager {
         req.openID = Defaults[.wx_openID]
         WXApi.sendAuthReq(req, viewController: jd.visibleVC(), delegate: self)
     }
+}
+extension WechatManager {
     
     fileprivate func requestLogin(needRefreshToken:Bool = true) {
         UserInfo.shared.loginModel.loginType = .weChatLogin
@@ -42,13 +43,18 @@ extension WechatOAuthManager {
     }
     
 }
-extension WechatOAuthManager {
+extension WechatManager {
     fileprivate func wechatAccessToken(_ resp:SendAuthResp) {
         guard resp.errCode == 0 else {
             return
         }
+        let hud = HUD.showMessage("获取微信登录参数中")
         _ = thirdAuthProvider.request(.wechatAccessToken(code: resp.code)).mapJSON().subscribe(onNext:{[unowned self] (result) in
+            hud.hide()
             guard let dict = result as? NSDictionary,dict[errcode_key] == nil else {
+                Alert.showChoice(title: "微信登录", "获取微信登录参数出错，请重新获取授权", { (index) in
+                    self.jumpAndAuth()
+                })
                 return
             }
             Defaults[.wx_access_token] = dict[access_token_key] as? String
@@ -63,7 +69,9 @@ extension WechatOAuthManager {
         })
     }
     fileprivate func wechatRefreshToken(_ callback:@escaping ()->()) {
+        let hud = HUD.showMessage("刷新微信登录参数中")
         _ = thirdAuthProvider.request(.wechatRefreshToken).mapJSON().subscribe(onNext:{ (result) in
+            hud.hide()
             guard let dict = result as? NSDictionary,dict[errcode_key] == nil,dict[refresh_token_key] != nil else {
                 Alert.showChoice(title: "微信登录", "微信登录失效，请重新获取授权", { (index) in
                     self.jumpAndAuth()
@@ -75,10 +83,11 @@ extension WechatOAuthManager {
         })
     }
 }
-extension WechatOAuthManager:WXApiDelegate {
+extension WechatManager:WXApiDelegate {
     // MARK: - delegate
     func onResp(_ resp: BaseResp!) {
         if let resp = resp as? SendAuthResp {
+            // MARK: - 登录回调
             self.wechatAccessToken(resp)
         }
     }

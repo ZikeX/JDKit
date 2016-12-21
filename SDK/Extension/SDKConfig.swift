@@ -14,6 +14,10 @@ class SDKConfig {
         if ret == false {
             NSLog("百度地图 manager start failed!")
         }
-//        WXApi
+        WXApi.registerApp(WechatAppid, withDescription: jd.appDisplayName)
+        #if DEBUG
+            WeiboSDK.enableDebugMode(true)
+        #endif
+        WeiboSDK.registerApp(WeiboAppKey)
     }
 }
