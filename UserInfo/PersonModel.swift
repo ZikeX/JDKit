@@ -22,4 +22,10 @@ class PersonModel: BaseEntityModel {
     var gender:String?
     var address:String?
     var birthday:String?
+    
+    var bindAccountMobile:Bool = false
+    var bindAccountEmail:Bool = false
+    var bindAccountWechat:Bool = false
+    var bindAccountQQ:Bool = false
+    var bindAccountWeibo:Bool = false
 }

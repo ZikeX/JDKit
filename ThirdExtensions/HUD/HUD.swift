@@ -12,7 +12,6 @@ class HUD {
     class _ProgressHUD: MBProgressHUD {
         var canInteractive:Bool = false
         override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-            logDebug(point)
             if canInteractive {
                 if self.bezelView.frame.contains(point) {
                     return self.bezelView

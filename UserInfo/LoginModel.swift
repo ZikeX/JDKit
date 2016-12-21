@@ -8,21 +8,46 @@
 
 import UIKit
 
-enum LoginState {
+enum LoginState:String {
     case noLogin
     case logining
     case logined
     case loginFailed
 }
-enum LoginType {
+enum LoginType:String {
     case normalLogin
     case qqLogin
     case weChatLogin
 }
-
+extension DefaultsKeys {
+    static let loginState = DefaultsKey<String?>("loginState")
+    static let loginType = DefaultsKey<String?>("loginType")
+}
 class LoginModel: BaseEntityModel {
-    var loginState:LoginState = .noLogin
-    var loginType:LoginType = .normalLogin
+    var loginState:LoginState {
+        get {
+            var _loginState:LoginState?
+            if let existing = Defaults[.loginState] {
+                _loginState = LoginState(rawValue: existing)
+            }
+            return _loginState ?? .noLogin
+        }
+        set {
+            Defaults[.loginState] = newValue.rawValue
+        }
+    }
+    var loginType:LoginType {
+        get {
+            var _loginType:LoginType?
+            if let existing = Defaults[.loginType] {
+                _loginType = LoginType(rawValue: existing)
+            }
+            return _loginType ?? .normalLogin
+        }
+        set {
+            Defaults[.loginType] = newValue.rawValue
+        }
+    }
     
     var isLogined:Bool {
         return self.loginState == .logined
@@ -43,7 +68,7 @@ extension LoginModel {
     }
 }
 extension LoginModel {
-    func requestToLogin(params:LoginParams,onlyRequest:Bool) {
+    static func requestToLogin(params:LoginParams,onlyRequest:Bool) {
         var hud:HUD?
         if !onlyRequest {
             UserInfo.shared.loginModel.loginState = .logining
@@ -56,7 +81,7 @@ extension LoginModel {
             }
         }
     }
-    func requestToRegister(params:RegisterParams) {
+    static func requestToRegister(params:RegisterParams) {
         UserInfo.shared.loginModel.loginState = .logining
         let hud = HUD.showMessage("注册中")
         userAuthProvider.request(.register(registerParams: params)).mapObject(type: PersonModel.self,"userReg",showHUD:true).callback({ (result) in
@@ -66,7 +91,7 @@ extension LoginModel {
             }
         })
     }
-    func userAuthCompleteHandle(_ result:ObjectResultModel<PersonModel>) {
+    static func userAuthCompleteHandle(_ result:ObjectResultModel<PersonModel>) {
         if result.isSuccessful == true {
             UserInfo.shared.loginModel.loginState = .logined
             UserInfo.shared.personModel = result.data

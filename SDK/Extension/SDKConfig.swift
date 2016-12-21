@@ -7,12 +7,13 @@
 //
 
 import Foundation
-class BaiduKitConfig {
+class SDKConfig {
     static func register() {
         let mapManager = BMKMapManager()
         let ret = mapManager.start(BapduMapAppKey, generalDelegate: nil)
         if ret == false {
             NSLog("百度地图 manager start failed!")
         }
+//        WXApi
     }
 }

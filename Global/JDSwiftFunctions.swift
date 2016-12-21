@@ -94,7 +94,7 @@ extension jd {
         self.keyWindow.endEditing(true)
     }
     /// ZJaDe: 返回最顶端的控制器
-    static func visibleVC(_ base: UIViewController? = rootWindow.rootViewController) -> UIViewController? {
+    static func visibleVC(_ base: UIViewController? = appRootVC) -> UIViewController? {
         if let nav = base as? UINavigationController {
             return visibleVC(nav.visibleViewController)
         }
@@ -109,7 +109,7 @@ extension jd {
         return base
     }
     /// ZJaDe: 返回modal时最上层的控制器
-    static var topMostVC: UIViewController? {
+    static var topPresentedVC: UIViewController? {
         var presentedVC = rootWindow.rootViewController
         while let pVC = presentedVC?.presentedViewController {
             presentedVC = pVC
@@ -145,12 +145,12 @@ extension jd {
     
     /// ZJaDe: horizontalSizeClass
     static var horizontalSizeClass: UIUserInterfaceSizeClass {
-        return self.topMostVC?.traitCollection.horizontalSizeClass ?? UIUserInterfaceSizeClass.unspecified
+        return self.topPresentedVC?.traitCollection.horizontalSizeClass ?? UIUserInterfaceSizeClass.unspecified
     }
     
     /// ZJaDe: verticalSizeClass
     static var verticalSizeClass: UIUserInterfaceSizeClass {
-        return self.topMostVC?.traitCollection.verticalSizeClass ?? UIUserInterfaceSizeClass.unspecified
+        return self.topPresentedVC?.traitCollection.verticalSizeClass ?? UIUserInterfaceSizeClass.unspecified
     }
     
     /// ZJaDe: 返回屏幕scale
