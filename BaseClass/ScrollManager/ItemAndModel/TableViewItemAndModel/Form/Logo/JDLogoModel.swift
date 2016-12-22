@@ -11,18 +11,17 @@ import RxSwift
 
 class JDLogoModel: JDFormModel {
     
-    convenience init(image:UIImage? = nil,title:String? = nil,logo:UIImage? = nil) {
+    convenience init(image:UIImage? = nil,title:String? = nil,logo:UIImage? = nil,centerTitle:String? = nil) {
         self.init(image: image, title: title)
         self.logo.value = logo
+        self.centerTitle.value = centerTitle
     }
-    
     var logo:Variable<UIImage?> = Variable(nil)
+    var centerTitle:Variable<String?> = Variable(nil)
     
     override func configModelInit() {
         super.configModelInit()
-        cellContentHeight = 70
         
-        spaceEdges = UIEdgeInsetsMake(8, 20, 8, 20)
     }
-    var logoClick = PublishSubject<ImageView>()
+    var logoClick = PublishSubject<Button>()
 }

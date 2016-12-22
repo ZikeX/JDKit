@@ -9,55 +9,39 @@
 import UIKit
 
 class JDLogoCell: JDFormCell {
-    var logo = ImageView()
-    
+    var centerButton = Button()
     override func configItemInit() {
         super.configItemInit()
-        self.jdFocusView = logo
-        jdContentView.addSubview(logo)
-        logo.cornerRadius = 35
+        self.jdFocusView = centerButton
+        stackView.makeLayoutView { (view, maker) in
+            maker.centerY.equalToSuperview()
+        }
+        self.jdContentView.addSubview(centerButton)
+        centerButton.snp.makeConstraints { (maker) in
+            maker.center.equalToSuperview()
+        }
+        
+        centerButton.titleAndImgLocation = .bottomToTop
+        centerButton.itemSpace = 10
+        centerButton.imgView.clipsToBounds = true
+        centerButton.textLabel.textColor = Color.black
+        centerButton.textLabel.font = Font.h5
     }
 }
 extension JDLogoCell {
-    override func configItem(_ model: JDTableModel) {
-        super.configItem(model)
-        stackView.makeLayoutView { (view, maker) in
-            maker.top.centerY.equalToSuperview()
-        }
-        logo.makeLayoutView { (logo, maker) in
-            maker.centerY.top.equalToSuperview()
-            maker.centerX.equalToSuperview()
-            maker.width.height.equalTo(70)
-        }
-    }
     override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
         guard let model = model as? JDLogoModel else {
             return
         }
-        self.configLogo(logo)
-        
-        model.logo.asObservable().subscribe(onNext:{[unowned self] (image) in
-            self.logo.image = image ?? R.image.ic_default_userImg()
+        model.centerTitle.asObservable().subscribe(onNext:{[unowned self] (text) in
+            self.centerButton.textStr = text
         }).addDisposableTo(disposeBag)
         
-        self.logo.rx.whenTouch { (imageView) in
-            model.logoClick.onNext(imageView)
+        centerButton.rx.touchUpInside { (button) in
+            // TODO: 点击此处选择图片
         }.addDisposableTo(disposeBag)
-        
     }
-    override func unbindingModel(_ model: JDTableModel?) {
-        super.unbindingModel(model)
-        guard let model = model as? JDLogoModel else {
-            return
-        }
-        model.logo.value = self.logo.image
-    }
+    
 }
-extension JDLogoCell {
-    func configLogo(_ logo:ImageView) {
-    }
-    override func configCell() {
-        super.configCell()
-    }
-}
+
