@@ -22,13 +22,13 @@ class RouterManager {
     init(_ routeType:RouteType) {
         self.routeType = routeType
     }
-    static func popAndPush(_ routeUrl:RouteUrlType, popCount:Int = 1, completion:(()->Void)? = nil) {
+    static func popAndPush(_ routeUrl:RouteUrlType, popCount:Int = 1) {
         let routerManager = RouterManager(.popAndPush(popCount: popCount))
-        routerManager.show(routeUrl, completion)
+        routerManager.show(routeUrl)
     }
-    static func push(_ routeUrl:RouteUrlType, completion:((Any?)->Void)? = nil) {
+    static func push(_ routeUrl:RouteUrlType) {
         let routerManager = RouterManager(.push)
-        routerManager.show(routeUrl, completion)
+        routerManager.show(routeUrl)
     }
     static func present(_ routeUrl:RouteUrlType, completion:((Any?)->Void)? = nil) {
         let routerManager = RouterManager(.present)
@@ -36,7 +36,7 @@ class RouterManager {
     }
     // MARK: -
     /// ZJaDe: completion只有在present时有用
-    private func show(_ routeUrl:RouteUrlType, _ completion:(()->Void)?) {
+    private func show(_ routeUrl:RouteUrlType, _ completion:(()->Void)? = nil) {
         let currentNavc = jd.currentNavC
         
 //        guard checkCanJump(currentNavc) else {

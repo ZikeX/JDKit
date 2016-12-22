@@ -29,9 +29,11 @@ extension UIView {
         }
     }
     func shadow(_ animatedDuration:TimeInterval = UIViewAnimationDuration, isHighlighted:Bool,animated:Bool) {
-        self.layer.shadowColor = Color.shadow.cgColor
-        self.layer.shadowOffset = CGSize(width: 0.5, height: 2)
-        self.layer.shadowRadius = 3
+        if self.layer.shadowRadius == 0 {
+            self.layer.shadowColor = Color.shadow.cgColor
+            self.layer.shadowOffset = CGSize(width: 0.5, height: 2)
+            self.layer.shadowRadius = 3            
+        }
         let shadowOpacity:Float = isHighlighted ? 0.25 : 0.0
         
         let animate = CABasicAnimation(keyPath: "shadowOpacity")

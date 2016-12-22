@@ -13,7 +13,7 @@ class JDBgImageCell: JDLogoCell {
     var bgImageView = ImageView()
     override func configItemInit() {
         super.configItemInit()
-        self.jdFocusView = centerButton
+        self.jdFocusView = centerImageView
         
         self.jdContentView.insertSubview(bgImageView, at: 0)
         bgImageView.snp.makeConstraints { (maker) in
@@ -32,7 +32,7 @@ extension JDBgImageCell {
         }).addDisposableTo(disposeBag)
         
         model.centerImage.asObservable().subscribe(onNext:{[unowned self] (image) in
-            self.centerButton.img = image ?? R.image.ic_default_image()!
+            self.centerImageView.image = image ?? R.image.ic_default_image()!
         }).addDisposableTo(disposeBag)
         
     }

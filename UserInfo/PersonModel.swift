@@ -16,6 +16,8 @@ class PersonModel: BaseEntityModel {
     var email:String?
     var mobile:String?
     
+    var hasPaypwd:Bool?
+    
     var nickname:String?
     var username:String?
     var imgUrl:String?

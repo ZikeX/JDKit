@@ -41,7 +41,17 @@ extension JDLabelCell {
         guard let model = model as? JDLabelModel else {
             return
         }
-        model.detailTitle.asObservable().bindTo(detailTitleLabel.rx.text).addDisposableTo(disposeBag)
+        model.detailAttributeTitle.asObservable().subscribe(onNext:{ [unowned self](attributeText) in
+            if attributeText != nil {
+                self.detailTitleLabel.attributedText = attributeText
+            }
+        }).addDisposableTo(disposeBag)
+        
+        model.detailTitle.asObservable().asObservable().subscribe(onNext:{ [unowned self,unowned model](text) in
+            if model.detailAttributeTitle.value == nil {
+                self.detailTitleLabel.text = text
+            }
+        }).addDisposableTo(disposeBag)
         self.configDetailLabel(detailTitleLabel)
     }
 }

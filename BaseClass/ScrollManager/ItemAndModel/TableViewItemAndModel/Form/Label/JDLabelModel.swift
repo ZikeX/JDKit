@@ -11,6 +11,7 @@ import RxSwift
 
 class JDLabelModel: JDFormModel {
     var detailTitle:Variable<String?> = Variable("")
+    var detailAttributeTitle:Variable<NSAttributedString?> = Variable(nil)
 
     convenience init(image:UIImage? = nil,title:String? = nil,detailTitle:String? = nil) {
         self.init(image: image, title: title)
@@ -23,6 +24,6 @@ class JDLabelModel: JDFormModel {
 }
 extension JDLabelModel {    
     var detailTitleIsEmpty:Bool {
-        return self.detailTitle.value?.isEmpty != false
+        return self.detailTitle.value?.isEmpty != false && detailAttributeTitle.value == nil
     }
 }

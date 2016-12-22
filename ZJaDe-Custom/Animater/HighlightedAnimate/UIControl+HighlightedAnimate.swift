@@ -23,6 +23,7 @@ extension UIControl {
             self.rx.observe(Bool.self, "highlighted",retainSelf: false).distinctUntilChanged{$0==$1}.subscribe(onNext: {[unowned self] (highlighted) in
                 if let highlighted = highlighted {
                     if self.hasHighlightedShadowAnimate {
+                        logDebug("\(self)->isHighlighted->\(highlighted)")
                         self.shadow(isHighlighted: highlighted, animated: true)
                     }
                     if self.hasHighlightedColorAnimate {

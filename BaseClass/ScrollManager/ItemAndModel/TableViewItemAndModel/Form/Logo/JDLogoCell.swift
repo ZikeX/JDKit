@@ -9,23 +9,29 @@
 import UIKit
 
 class JDLogoCell: JDFormCell {
-    var centerButton = Button()
+    var imgBgView = UIView()
+    var centerImageView = ImageView()
+    var centerLabel = UILabel(color: Color.black, font: Font.h5)
+    
     override func configItemInit() {
         super.configItemInit()
-        self.jdFocusView = centerButton
+        self.jdFocusView = centerImageView
         stackView.makeLayoutView { (view, maker) in
             maker.centerY.equalToSuperview()
         }
-        self.jdContentView.addSubview(centerButton)
-        centerButton.snp.makeConstraints { (maker) in
+        let centerStackView = UIStackView(axis: .vertical, alignment: .center, distribution: .equalCentering, spacing: 10)
+        self.jdContentView.addSubview(centerStackView)
+        centerStackView.snp.makeConstraints { (maker) in
             maker.center.equalToSuperview()
         }
+        centerStackView.addArrangedSubview(imgBgView)
+        centerStackView.addArrangedSubview(centerLabel)
         
-        centerButton.titleAndImgLocation = .bottomToTop
-        centerButton.itemSpace = 10
-        centerButton.imgView.clipsToBounds = true
-        centerButton.textLabel.textColor = Color.black
-        centerButton.textLabel.font = Font.h5
+        imgBgView.addSubview(centerImageView)
+        imgBgView.backgroundColor = Color.clear
+        centerImageView.edgesToView()
+        centerImageView.clipsToBounds = true
+        centerImageView.isUserInteractionEnabled = true
     }
 }
 extension JDLogoCell {
@@ -35,10 +41,10 @@ extension JDLogoCell {
             return
         }
         model.centerTitle.asObservable().subscribe(onNext:{[unowned self] (text) in
-            self.centerButton.textStr = text
+            self.centerLabel.text = text
         }).addDisposableTo(disposeBag)
         
-        centerButton.rx.touchUpInside { (button) in
+        centerImageView.rx.whenTouch { (image) in
             // TODO: 点击此处选择图片
         }.addDisposableTo(disposeBag)
     }

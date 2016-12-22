@@ -99,8 +99,10 @@ extension UIWindow {
                 bgView.view.alpha = 0
             }) { (finish) in
                 bgView.view.removeFromSuperview()
-                windowBgViews.removeFirst()
-                self.showFirstBgView()
+                if windowBgViews.count > 0 {
+                    windowBgViews.removeFirst()
+                    self.showFirstBgView()
+                }
             }
         }
     }
