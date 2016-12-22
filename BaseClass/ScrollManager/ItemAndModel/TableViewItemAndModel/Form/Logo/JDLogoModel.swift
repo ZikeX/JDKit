@@ -25,3 +25,10 @@ class JDLogoModel: JDFormModel {
     }
     var logoClick = PublishSubject<Button>()
 }
+extension JDLogoModel:CatchParamsProtocol {
+    func catchParms() -> [String : Any] {
+        var params = [String:Any]()
+        params[key] = logo.value
+        return params
+    }
+}

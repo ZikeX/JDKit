@@ -51,6 +51,26 @@ class JDTableViewModel: JDListViewModel {
     }
 }
 extension JDTableViewModel {
+    func catchAllParams() -> [String:Any] {
+        let allModel = dataArray.flatMap { (section,models) -> [JDTableModel] in
+            return models
+        }
+        var params = [String:Any]()
+        let catchModels = allModel.reduce([CatchParamsProtocol]()) { (result, model) -> [CatchParamsProtocol] in
+            if let model = model as? CatchParamsProtocol,model.key.length > 0 {
+                return result + [model]
+            }
+            return result
+        }
+        catchModels.forEach { (model) in
+            model.catchParms().forEach({ (key: String, value: Any) in
+                params[key] = value
+            })
+        }
+        return params
+    }
+}
+extension JDTableViewModel {
     override func whenCellSelected(_ indexPath:IndexPath) {
         guard self.maxSelectedCount > 0 else {
             return

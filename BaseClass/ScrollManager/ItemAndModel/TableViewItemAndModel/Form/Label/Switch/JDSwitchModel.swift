@@ -17,3 +17,10 @@ class JDSwitchModel: JDLabelModel {
         separatorInset = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: -8)
     }
 }
+extension JDSwitchModel:CatchParamsProtocol {
+    func catchParms() -> [String : Any] {
+        var params = [String:Any]()
+        params[key] = isOn.value
+        return params
+    }
+}

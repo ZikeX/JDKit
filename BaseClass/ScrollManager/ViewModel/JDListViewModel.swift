@@ -37,6 +37,7 @@ class JDListViewModel: NSObject {
         logDebug("\(type(of:self))->\(self)注销")
     }
 }
+
 extension JDListViewModel {
     func whenCellSelected(_ indexPath:IndexPath) {
         guard self.maxSelectedCount > 0 else {

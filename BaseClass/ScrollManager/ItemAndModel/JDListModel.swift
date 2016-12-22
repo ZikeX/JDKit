@@ -9,7 +9,6 @@
 import UIKit
 import RxSwift
 protocol ListModelStateProtocol {
-    var key:String? {get set}
     var enabled:Bool? {get set}
     func canEnabled() -> Bool
     var isSelected:Bool {get set}
@@ -57,7 +56,7 @@ class JDListModel:NSObject {
     func canEnabled() -> Bool {
         return self.enabled ?? true
     }
-    var key:String?
+    var key:String = ""
     var isSelected:Bool = false
     
     deinit {

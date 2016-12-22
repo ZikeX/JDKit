@@ -40,3 +40,10 @@ class JDEntryModel: JDFormModel {
         self.texts = [Variable(text)]
     }
 }
+extension JDEntryModel:CatchParamsProtocol {
+    func catchParms() -> [String : Any] {
+        var params = [String:Any]()
+        params[key] = texts.first?.value
+        return params
+    }
+}

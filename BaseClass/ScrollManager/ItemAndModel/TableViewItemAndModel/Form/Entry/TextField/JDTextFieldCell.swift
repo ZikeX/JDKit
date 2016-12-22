@@ -20,6 +20,10 @@ class JDTextFieldCell: JDEntryCell {
         stackView.snp.makeConstraints { (maker) in
             maker.centerY.equalToSuperview()
         }
+        textField.snp.makeConstraints({ (maker) in
+            maker.centerY.top.right.equalToSuperview()
+            maker.leftSpace(stackView).offset(0)
+        })
     }
 }
 extension JDTextFieldCell {
@@ -28,10 +32,9 @@ extension JDTextFieldCell {
         guard let model = model as? JDTextFieldModel else {
             return
         }
-        textField.snp.remakeConstraints({ (maker) in
-            maker.centerY.top.right.equalToSuperview()
+        textField.snp.updateConstraints { (maker) in
             maker.leftSpace(stackView).offset(model.titleRightSpace)
-        })
+        }
     }
     override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
