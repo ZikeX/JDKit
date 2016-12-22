@@ -38,12 +38,20 @@ class QQManager:ThirdManager {
 }
 extension QQManager {
     fileprivate func requestLogin() {
-        UserInfo.shared.loginModel.loginType = .qqLogin
         self.qqRefreshToken {
-            var loginParams = LoginParams()
-            loginParams.openid = Defaults[.qq_openId]
-            loginParams.accessToken = Defaults[.qq_access_token]
-            LoginModel.requestToLogin(params: loginParams, onlyRequest: false)
+            LoginModel.requestToLogin(loginType: .qqLogin)
+        }
+    }
+    fileprivate func requestToBinding() {
+        let hud = HUD.showMessage("绑定QQ中")
+        userAuthProvider.request(.bindingQQ).mapResult().callback { (result) in
+            hud.hide()
+            if let result = result,result.isSuccessful {
+                UserInfo.shared.personModel.bindAccountQQ = true
+                if let viewCon = jd.visibleVC() as? JDAccountManagerViewController {
+                    viewCon.updateData()
+                }
+            }
         }
     }
 }
@@ -74,7 +82,7 @@ extension QQManager:TencentSessionDelegate {
         Defaults[.qq_expirationDate] = self.tencentOAuth.expirationDate
         switch self.authType! {
         case .binding:
-            break
+            self.requestToBinding()
         case .login:
             self.requestLogin()
         }

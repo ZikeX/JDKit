@@ -25,13 +25,8 @@ class WechatManager:ThirdManager {
 extension WechatManager {
     
     fileprivate func requestLogin(needRefreshToken:Bool = true) {
-        UserInfo.shared.loginModel.loginType = .weChatLogin
         func requestToLogin() {
-            var loginParams = LoginParams()
-            loginParams.refreshToken = Defaults[.wx_refresh_token]
-            loginParams.openid = Defaults[.wx_openID]
-            loginParams.accessToken = Defaults[.wx_access_token]
-            LoginModel.requestToLogin(params: loginParams, onlyRequest: false)
+            LoginModel.requestToLogin(loginType: .weChatLogin)
         }
         if needRefreshToken {
             self.wechatRefreshToken {
@@ -41,7 +36,18 @@ extension WechatManager {
             requestToLogin()
         }
     }
-    
+    fileprivate func requestToBinding() {
+        let hud = HUD.showMessage("绑定微信中")
+        userAuthProvider.request(.bindingWechat).mapResult().callback { (result) in
+            hud.hide()
+            if let result = result,result.isSuccessful {
+                UserInfo.shared.personModel.bindAccountWechat = true
+                if let viewCon = jd.visibleVC() as? JDAccountManagerViewController {
+                    viewCon.updateData()
+                }
+            }
+        }
+    }
 }
 extension WechatManager {
     fileprivate func wechatAccessToken(_ resp:SendAuthResp) {
@@ -62,7 +68,7 @@ extension WechatManager {
             Defaults[.wx_openID] = dict[openId_key] as? String
             switch self.authType! {
             case .binding:
-                break
+                self.requestToBinding()
             case .login:
                 self.requestLogin(needRefreshToken:false)
             }

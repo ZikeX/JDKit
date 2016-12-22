@@ -19,15 +19,13 @@ class WeiboManager: ThirdManager {
     }
 }
 extension WeiboManager {
-    func requestLogin() {
-        UserInfo.shared.loginModel.loginType = .weiboLogin
+    fileprivate func requestLogin() {
         self.weiboRefreshToken {
-            var loginParams = LoginParams()
-            loginParams.openid = Defaults[.wb_userID]
-            loginParams.accessToken = Defaults[.wb_access_token]
-            loginParams.refreshToken = Defaults[.wb_refresh_token]
-            LoginModel.requestToLogin(params: loginParams, onlyRequest: false)
+            LoginModel.requestToLogin(loginType: .weiboLogin)
         }
+    }
+    fileprivate func requestToBinding() {
+        
     }
 }
 extension WeiboManager {
@@ -68,7 +66,7 @@ extension WeiboManager:WeiboSDKDelegate {
             Defaults[.wb_expirationDate] = response.expirationDate
             switch self.authType! {
             case .binding:
-                break
+                self.requestToBinding()
             case .login:
                 self.requestLogin()
             }

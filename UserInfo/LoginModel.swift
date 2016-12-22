@@ -69,23 +69,68 @@ extension LoginModel {
     }
 }
 extension LoginModel {
-    static func requestToLogin(params:LoginParams,onlyRequest:Bool) {
+    static func requestToLogin(loginType:LoginType,params:LoginParams? = nil, onlyRequest:Bool = false) {
+        guard !(loginType == .normalLogin && params == nil) else {
+            /// ZJaDe: 普通登录必须传进来参数
+            return
+        }
+        UserInfo.shared.loginModel.loginType = loginType
+        /// ZJaDe: 登录时如果传进来参数就用，没有的话说明是第三方登录；打开App时无论loginType是什么，都要传参数
+        var paramsModel = LoginParams()
+        if let params = params {
+            paramsModel = params
+        }else {
+            switch loginType {
+            case .normalLogin:
+                break
+            case .weChatLogin:
+                paramsModel.refreshToken = Defaults[.wx_refresh_token]
+                paramsModel.openid = Defaults[.wx_openID]
+                paramsModel.accessToken = Defaults[.wx_access_token]
+            case .qqLogin:
+                paramsModel.openid = Defaults[.qq_openId]
+                paramsModel.accessToken = Defaults[.qq_access_token]
+            case .weiboLogin:
+                paramsModel.openid = Defaults[.wb_userID]
+                paramsModel.accessToken = Defaults[.wb_access_token]
+            }
+        }
         var hud:HUD?
         if !onlyRequest {
             UserInfo.shared.loginModel.loginState = .logining
             hud = HUD.showMessage("正在登录")
         }
-        userAuthProvider.request(.login(loginParams: params)).mapObject(type: PersonModel.self, "userLogin",showHUD:true).callback { (result) in
+        userAuthProvider.request(.login(loginParams: paramsModel)).mapObject(type: PersonModel.self, "userLogin",showHUD:true).callback { (result) in
             hud?.hide()
             if let result = result {
                 self.userAuthCompleteHandle(result)
+                if result.result == .unregistered {
+                    RouterManager.push(Route_个人.注册(loginType))
+                }
             }
         }
     }
-    static func requestToRegister(params:RegisterParams) {
+    static func requestToRegister(loginType:LoginType, params:RegisterParams) {
+        UserInfo.shared.loginModel.loginType = loginType
+        /// ZJaDe: 注册时是拼接参数
+        var paramsModel = params
+        switch loginType {
+        case .normalLogin:
+            break
+        case .weChatLogin:
+            paramsModel.openid = Defaults[.wx_openID]
+            paramsModel.accessToken = Defaults[.wx_access_token]
+        case .qqLogin:
+            paramsModel.openid = Defaults[.qq_openId]
+            paramsModel.accessToken = Defaults[.qq_access_token]
+        case .weiboLogin:
+            paramsModel.openid = Defaults[.wb_userID]
+            paramsModel.accessToken = Defaults[.wb_access_token]
+        }
+        
         UserInfo.shared.loginModel.loginState = .logining
         let hud = HUD.showMessage("注册中")
-        userAuthProvider.request(.register(registerParams: params)).mapObject(type: PersonModel.self,"userReg",showHUD:true).callback({ (result) in
+        userAuthProvider.request(.register(registerParams: paramsModel)).mapObject(type: PersonModel.self,"userReg",showHUD:true).callback({ (result) in
             hud.hide()
             if let result = result {
                 self.userAuthCompleteHandle(result)
@@ -99,6 +144,7 @@ extension LoginModel {
             if jd.currentNavC != jd.appRootVC {
                 jd.currentNavC.dismissVC()
             }
+            
         }else {
             UserInfo.shared.loginModel.loginState = .loginFailed
         }

@@ -12,7 +12,7 @@ let ZiWoYouScheme:String = "ZiWoYou"
 let BapduMapAppKey:String = "Bc7XtKqwGo5bNgqCNBOXGEgK"
 // MARK: - Wechat
 let WechatAppid:String = "wxa71bb90bda54b328"
-let WechatAppSecret:String = "6a1h8n7ewv0sd34180ks1990sw3ylvt5"
+let WechatAppSecret:String = "167bf8d00d86f9c457e83861c6e37224"
 let WechatAuthScope:String = "snsapi_message,snsapi_userinfo,snsapi_friend,snsapi_contact"
 let WechatAuthState:String = "com.chagu.ziwoyou.shil"
 // MARK: - QQ
