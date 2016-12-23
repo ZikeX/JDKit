@@ -11,19 +11,27 @@ import UIKit
 class PersonModel: BaseEntityModel {
     var authToken:String?
     
-    var hxcode:String?
+    var hxcode:String = ""
     
-    var email:String?
-    var mobile:String?
+    var email:String = ""
+    var mobile:String = ""
     
     var hasPaypwd:Bool?
     
-    var nickname:String?
-    var username:String?
-    var imgUrl:String?
+    var nickname:String = ""
+    var username:String = ""
+    var imgUrl:String = ""
     var gender:String?
-    var address:String?
     var birthday:String?
+    
+    var address:String = ""
+    var province:String = ""
+    var city:String = ""
+    var area:String = ""
+    var coordinate:CLLocationCoordinate2D?
+    func provinces() -> String {
+        return self.province + self.city + self.area
+    }
     
     var bindAccountMobile:Bool = false
     var bindAccountEmail:Bool = false

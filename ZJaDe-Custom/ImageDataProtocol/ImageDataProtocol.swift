@@ -49,12 +49,10 @@ protocol ImageDataProtocol {
 extension String:ImageDataProtocol {
     func injectImageToView(imageView: UIImageView,isUserImg:Bool, style:UIActivityIndicatorViewStyle? = nil) {
         imageView.addActivityIndicator(style: style ?? .white)
-        _ = imageProvider.jd_request(.str(self)).mapImage().subscribe { (event) in
+        
+        UIImage.jd_requestImage(url: self) { (image) in
             imageView.removeActivityIndicator()
-            guard let element = event.element else {
-                return
-            }
-            if let image = element {
+            if let image = image {
                 imageView.set(image: image, focusOnFaces: isUserImg)
             }else {
                 if isUserImg {

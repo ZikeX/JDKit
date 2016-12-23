@@ -104,7 +104,7 @@ extension LoginModel {
             hud?.hide()
             if let result = result {
                 self.userAuthCompleteHandle(result)
-                if result.result == .unregistered {
+                if result.resultCode == .unregistered {
                     RouterManager.push(Route_个人.注册(loginType))
                 }
             }

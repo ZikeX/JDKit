@@ -54,9 +54,9 @@ class BaseViewController: UIViewController {
         })
         return button
     }()
-    // MARK: - 
+    // MARK: - transitionVC
     lazy var transitionVC:TransitionViewController = TransitionViewController()
-    // MARK: -
+    // MARK: - init
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         configInit()
@@ -66,28 +66,28 @@ class BaseViewController: UIViewController {
         configInit()
     }
     func configInit() {
-        self.BConfigInit()
+        self.jdConfigInit()
     }
-}
-extension BaseViewController {
+    // MARK: - BaseVCProtocol
+    var isFirstIn: Bool = true
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.BViewDidLoad()
+        self.jdViewDidLoad()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.BViewWillAppear()
+        self.jdViewWillAppear()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.BViewDidAppear()
+        self.jdViewDidAppear()
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.BViewWillDisappear()
+        self.jdViewWillDisappear()
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        self.BViewDidDisappear()
+        self.jdViewDidDisappear()
     }
 }

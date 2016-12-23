@@ -31,5 +31,8 @@ class JDTableModel:JDListModel {
     // MARK: -
     var cellSelectedBackgroundView = UIView()
     var cellSelectedBackgroundColor:UIColor? = Color.selectedCell
-    
+    // MARK: - CatchParamsProtocol
+    var catchParamsClosure:CatchParamsProtocol.CatchParamsClosure?
+    // MARK: - CatchParamsProtocol
+    var checkParamsClosure:CheckParamsProtocol.CheckParamsClosure?
 }

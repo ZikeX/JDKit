@@ -10,12 +10,13 @@ import UIKit
 import Moya
 import RxSwift
 import HandyJSON
-protocol JDStructTarget {
+protocol JDStructTargetProtocol {
     associatedtype StructType:TargetType
     var `struct`:StructType {get}
 }
 
-class RxJDProvider<Target:JDStructTarget>: RxMoyaProvider<Target.StructType> where Target: JDStructTarget {
+class RxJDProvider<Target>: RxMoyaProvider<Target.StructType> where Target: JDStructTargetProtocol {
+    
     override init(endpointClosure: @escaping EndpointClosure = RxJDProvider.endpointMapping,
          requestClosure: @escaping RequestClosure = RxJDProvider.requestMapping,
          stubClosure: @escaping StubClosure = MoyaProvider.neverStub,

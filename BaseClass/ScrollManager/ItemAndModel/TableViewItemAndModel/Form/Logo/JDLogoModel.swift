@@ -24,11 +24,20 @@ class JDLogoModel: JDFormModel {
         
     }
     var logoClick = PublishSubject<Button>()
+    
+    
 }
-extension JDLogoModel:CatchParamsProtocol {
-    func catchParms() -> [String : Any] {
+extension JDLogoModel:CatchParamsProtocol,CheckParamsProtocol {
+    func catchParams() -> [String : Any] {
         var params = [String:Any]()
         params[key] = logo.value
         return params
+    }
+    func checkParams() -> Bool {
+        guard logo.value != nil else {
+            HUD.showPrompt("请选择图片")
+            return false
+        }
+        return true
     }
 }

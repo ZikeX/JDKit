@@ -8,41 +8,52 @@
 
 import UIKit
 
-protocol BaseVCProtocol {
-    func BConfigInit()
-    func BViewDidLoad()
-    func BViewWillAppear()
-    func BViewDidAppear()
-    func BViewWillDisappear()
-    func BViewDidDisappear()
+protocol BaseVCProtocol:class {
+    func jdConfigInit()
+    func jdViewDidLoad()
+    func jdViewWillAppear()
+    func jdViewDidAppear()
+    func jdViewWillDisappear()
+    func jdViewDidDisappear()
+    var isFirstIn:Bool {get set}
+    func viewDidFirstAppear()
 }
 extension BaseVCProtocol where Self:UIViewController {
-    func BConfigInit() {
+    func jdConfigInit() {
         self.automaticallyAdjustsScrollViewInsets = false
     }
-    func BViewDidLoad() {
+    func jdViewDidLoad() {
         view.backgroundColor = Color.viewBackground
         viewState = .viewDidLoad
     }
-    func BViewWillAppear() {
+    func jdViewWillAppear() {
         viewState = .viewWillAppear
         configInitAboutNavBar()
     }
-    func BViewDidAppear() {
+    func jdViewDidAppear() {
         viewState = .viewDidAppear
 //        configInitAboutNavBar()
+        if isFirstIn {
+            isFirstIn = false
+            viewDidFirstAppear()
+        }
     }
-    func BViewWillDisappear() {
+
+    func jdViewWillDisappear() {
         viewState = .viewWillDisappear
     }
-    func BViewDidDisappear() {
+    func jdViewDidDisappear() {
         viewState = .viewDidDisappear
     }
 }
 
 extension BaseViewController:BaseVCProtocol {
-    
+    func viewDidFirstAppear() {
+        
+    }
 }
 extension BaseTabBarController:BaseVCProtocol {
-    
+    func viewDidFirstAppear() {
+        
+    }
 }

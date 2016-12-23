@@ -18,10 +18,17 @@ class JDGenderModel: JDFormModel {
         self.enabled = false
     }
 }
-extension JDGenderModel:CatchParamsProtocol {
-    func catchParms() -> [String : Any] {
+extension JDGenderModel:CatchParamsProtocol,CheckParamsProtocol {
+    func catchParams() -> [String : Any] {
         var params = [String:Any]()
         params[key] = gender.value
         return params
+    }
+    func checkParams() -> Bool {
+        guard let genderStr = gender.value, genderStr.length > 0 else {
+            HUD.showPrompt("请选择性别")
+            return false
+        }
+        return true
     }
 }

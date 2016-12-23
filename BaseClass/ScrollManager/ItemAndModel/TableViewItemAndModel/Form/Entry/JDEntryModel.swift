@@ -39,11 +39,34 @@ class JDEntryModel: JDFormModel {
         self.entrys = [(Variable(nil),Variable(placeholder))]
         self.texts = [Variable(text)]
     }
+    var text:String? {
+        get {
+            return self.texts.first?.value
+        }
+        set {
+            self.texts.first?.value = newValue
+        }
+    }
+    var placeholder:String? {
+        get {
+            return self.entrys.first?.1.value
+        }
+        set {
+            self.entrys.first?.1.value = newValue
+        }
+    }
 }
-extension JDEntryModel:CatchParamsProtocol {
-    func catchParms() -> [String : Any] {
+extension JDEntryModel:CatchParamsProtocol,CheckParamsProtocol {
+    func catchParams() -> [String : Any] {
         var params = [String:Any]()
-        params[key] = texts.first?.value
+        params[key] = text
         return params
+    }
+    func checkParams() -> Bool {
+        guard let text = text, text.length > 0 else {
+            HUD.showPrompt(self.placeholder ?? "请把数据填写完整")
+            return false
+        }
+        return true
     }
 }

@@ -57,19 +57,21 @@ extension Response {
     }
     
     func handle(showHUD:Bool,result:ResultModel) {
-        switch result.result ?? .prompt {
+        switch result.resultCode ?? .prompt {
         case .successful,.newUpdateVersion:
             if showHUD {
                 HUD.showSuccess(result.msg ?? "数据加载成功！")
             }
-            if result.result! == .newUpdateVersion {
+            if result.resultCode == .newUpdateVersion {
                 Alert.showChoice(title:"有新的版本", result.msg!, { (index) in
                     // TODO: 这里跳转新版本
                 })
             }
         case .offline:
-            Alert.showPrompt(title:"账户验证", result.msg ?? "账号已被下线", { (index) in
-                // TODO: 这里跳转登录
+            Alert.showPrompt(title:"账户验证", result.msg ?? "账号已被下线")
+        case .needLogin:
+            Alert.showChoice(title: "用户未登录", result.msg ?? "点击确定跳转登录", { (index) in
+                RouterManager.present(Route_个人.登录)
             })
         case .unregistered:
             HUD.showError(result.msg ?? "用户没有注册")
@@ -78,9 +80,7 @@ extension Response {
                 exit(0)
             })
         case .error:
-            Alert.showPrompt(title:"账户被禁止", result.msg ?? "账户已被禁止", { (index) in
-                
-            })
+            Alert.showPrompt(title:"账户被禁止", result.msg ?? "账户已被禁止")
         case .prompt:
             HUD.showError(result.msg ?? "请求出现未知错误")
         }

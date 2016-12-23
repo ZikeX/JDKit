@@ -9,12 +9,14 @@
 import Foundation
 import HandyJSON
 
+/// ZJaDe:-1[高级错误], 0[错误]，1[正确]，2[用户未注册]，3[用户未登录], 4[其它地方登陆], 5[有新版本]，6[当前版本过低]
 enum ResultCode:Int {
     case error = -1
     case prompt = 0
     case successful
-    case offline
     case unregistered
+    case needLogin
+    case offline
     case newUpdateVersion
     case versionTooLow
 }
@@ -24,17 +26,16 @@ extension ResultCode:HandyJSONEnum {
     }
 }
 class ResultModel:HandyJSON {
-    /// ZJaDe:[-1[错误]，0[提示]，1[正确]，2[帐户其它地方登陆], 3[QQ或微信帐户未注册]， 4[有新版本]，5[当前版本过低]
-    var result:ResultCode?
+    var resultCode:ResultCode?
     var msg:String?
     required init() {
         
     }
     func mapping(mapper: HelpingMapper) {
-        
+        mapper.specify(property: &resultCode, name: "result")
     }
     var isSuccessful:Bool {
-        switch result ?? .error {
+        switch resultCode ?? .error {
         case .successful,.newUpdateVersion:
             return true
         default:
@@ -42,7 +43,7 @@ class ResultModel:HandyJSON {
         }
     }
     var isOffline:Bool {
-        return result == .offline
+        return resultCode == .offline
     }
 }
 class DictResultModel:ResultModel {

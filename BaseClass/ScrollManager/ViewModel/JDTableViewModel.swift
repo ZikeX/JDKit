@@ -49,28 +49,57 @@ class JDTableViewModel: JDListViewModel {
     func getLocalSectionModels() -> [(JDTableSection, [JDTableModel])]? {
         return nil
     }
-}
-extension JDTableViewModel {
+    // MARK: - eachModel
+    @discardableResult
+    func eachModel(_ closure:(JDTableModel)->(Bool)) -> Bool {
+        for sectionModel in dataArray {
+            for model in sectionModel.1 {
+                if closure(model) == false {
+                    return false
+                }
+            }
+        }
+        return true
+    }
+    // MARK: - checkAndCatchParams
+    
     func catchAllParams() -> [String:Any] {
-        let allModel = dataArray.flatMap { (section,models) -> [JDTableModel] in
-            return models
+        func catchModelParams(_ model:JDTableModel) -> [String:Any]? {
+            if model.catchParamsClosure != nil {
+                return model.catchParamsClosure!()
+            }else if let model = model as? CatchParamsProtocol,model.key.length > 0 {
+                return model.catchParams()
+            }else {
+                return nil
+            }
         }
         var params = [String:Any]()
-        let catchModels = allModel.reduce([CatchParamsProtocol]()) { (result, model) -> [CatchParamsProtocol] in
-            if let model = model as? CatchParamsProtocol,model.key.length > 0 {
-                return result + [model]
+        self.eachModel { (model) -> (Bool) in
+            if let modelParams = catchModelParams(model) {
+                modelParams.forEach({ (key: String, value: Any) in
+                    params[key] = value
+                })
             }
-            return result
-        }
-        catchModels.forEach { (model) in
-            model.catchParms().forEach({ (key: String, value: Any) in
-                params[key] = value
-            })
+            return true
         }
         return params
     }
-}
-extension JDTableViewModel {
+    func checkAllParams() -> Bool {
+        return self.eachModel { (model) -> (Bool) in
+            if let model = model as? CheckParamsProtocol,model.checkParams() == false {
+                return false
+            }
+            return true
+        }
+    }
+    func checkAndCatchParams() -> [String:Any]? {
+        if checkAllParams() {
+            return catchAllParams()
+        }else {
+            return nil
+        }
+    }
+    // MARK: - CellSelectedState
     override func whenCellSelected(_ indexPath:IndexPath) {
         guard self.maxSelectedCount > 0 else {
             return

@@ -26,7 +26,7 @@ extension JDUserPhotoCell {
         centerImageView.snp.updateConstraints { (maker) in
             maker.size.equalTo(model.logoImgSize)
         }
-        centerImageView.cornerRadius = min(model.imageSize.width, model.imageSize.height)
+        centerImageView.cornerRadius = min(model.logoImgSize.width, model.logoImgSize.height) / 2.0
     }
     override func bindingModel(_ model: JDTableModel) {
         super.bindingModel(model)
