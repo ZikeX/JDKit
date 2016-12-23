@@ -44,7 +44,7 @@ extension QQManager {
     }
     fileprivate func requestToBinding() {
         let hud = HUD.showMessage("绑定QQ中")
-        userAuthProvider.request(.bindingQQ).mapResult().callback { (result) in
+        userAuthProvider.jd_request(.bindingQQ).mapResult().callback { (result) in
             hud.hide()
             if let result = result,result.isSuccessful {
                 UserInfo.shared.personModel.bindAccountQQ = true

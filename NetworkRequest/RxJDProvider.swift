@@ -25,7 +25,7 @@ class RxJDProvider<Target:JDStructTarget>: RxMoyaProvider<Target.StructType> whe
         
         super.init(endpointClosure: endpointClosure, requestClosure: requestClosure, stubClosure: stubClosure, plugins: plugins, trackInflights: trackInflights)
     }
-    func request(_ token: Target) -> Observable<Response> {
+    func jd_request(_ token: Target) -> Observable<Response> {
         return self.request(token.struct)
     }
 }

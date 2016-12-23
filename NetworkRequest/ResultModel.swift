@@ -10,7 +10,8 @@ import Foundation
 import HandyJSON
 
 enum ResultCode:Int {
-    case error = 0
+    case error = -1
+    case prompt = 0
     case successful
     case offline
     case unregistered
@@ -23,9 +24,9 @@ extension ResultCode:HandyJSONEnum {
     }
 }
 class ResultModel:HandyJSON {
-    /// ZJaDe: [0[错误]，1[正确]，2[帐户其它地方登陆], 3[QQ或微信帐户未注册]，4[有新版本]，5[当前版本过低]
-    var result:ResultCode!
-    var msg:String!
+    /// ZJaDe:[-1[错误]，0[提示]，1[正确]，2[帐户其它地方登陆], 3[QQ或微信帐户未注册]， 4[有新版本]，5[当前版本过低]
+    var result:ResultCode?
+    var msg:String?
     required init() {
         
     }
@@ -33,7 +34,7 @@ class ResultModel:HandyJSON {
         
     }
     var isSuccessful:Bool {
-        switch result! {
+        switch result ?? .error {
         case .successful,.newUpdateVersion:
             return true
         default:
@@ -41,7 +42,7 @@ class ResultModel:HandyJSON {
         }
     }
     var isOffline:Bool {
-        return result! == .offline
+        return result == .offline
     }
 }
 class DictResultModel:ResultModel {

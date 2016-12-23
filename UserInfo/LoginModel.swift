@@ -100,7 +100,7 @@ extension LoginModel {
             UserInfo.shared.loginModel.loginState = .logining
             hud = HUD.showMessage("正在登录")
         }
-        userAuthProvider.request(.login(loginParams: paramsModel)).mapObject(type: PersonModel.self, "userLogin",showHUD:true).callback { (result) in
+        userAuthProvider.jd_request(.login(loginParams: paramsModel)).mapObject(type: PersonModel.self, "userLogin",showHUD:true).callback { (result) in
             hud?.hide()
             if let result = result {
                 self.userAuthCompleteHandle(result)
@@ -130,7 +130,7 @@ extension LoginModel {
         
         UserInfo.shared.loginModel.loginState = .logining
         let hud = HUD.showMessage("注册中")
-        userAuthProvider.request(.register(registerParams: paramsModel)).mapObject(type: PersonModel.self,"userReg",showHUD:true).callback({ (result) in
+        userAuthProvider.jd_request(.register(registerParams: paramsModel)).mapObject(type: PersonModel.self,"userReg",showHUD:true).callback({ (result) in
             hud.hide()
             if let result = result {
                 self.userAuthCompleteHandle(result)

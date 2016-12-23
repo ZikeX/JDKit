@@ -38,7 +38,7 @@ extension WechatManager {
     }
     fileprivate func requestToBinding() {
         let hud = HUD.showMessage("绑定微信中")
-        userAuthProvider.request(.bindingWechat).mapResult().callback { (result) in
+        userAuthProvider.jd_request(.bindingWechat).mapResult().callback { (result) in
             hud.hide()
             if let result = result,result.isSuccessful {
                 UserInfo.shared.personModel.bindAccountWechat = true
@@ -55,7 +55,7 @@ extension WechatManager {
             return
         }
         let hud = HUD.showMessage("获取微信登录参数中")
-        _ = thirdAuthProvider.request(.wechatAccessToken(code: resp.code)).mapJSON().subscribe(onNext:{[unowned self] (result) in
+        _ = thirdAuthProvider.jd_request(.wechatAccessToken(code: resp.code)).mapJSON().subscribe(onNext:{[unowned self] (result) in
             hud.hide()
             guard let dict = result as? NSDictionary,dict[errcode_key] == nil else {
                 Alert.showChoice(title: "微信登录", "获取微信登录参数出错，请重新获取授权", { (index) in
@@ -76,7 +76,7 @@ extension WechatManager {
     }
     fileprivate func wechatRefreshToken(_ callback:@escaping ()->()) {
         let hud = HUD.showMessage("刷新微信登录参数中")
-        _ = thirdAuthProvider.request(.wechatRefreshToken).mapJSON().subscribe(onNext:{ (result) in
+        _ = thirdAuthProvider.jd_request(.wechatRefreshToken).mapJSON().subscribe(onNext:{ (result) in
             hud.hide()
             guard let dict = result as? NSDictionary,dict[errcode_key] == nil,dict[refresh_token_key] != nil else {
                 Alert.showChoice(title: "微信登录", "微信登录失效，请重新获取授权", { (index) in

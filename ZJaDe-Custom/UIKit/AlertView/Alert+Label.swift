@@ -19,8 +19,8 @@ extension Alert {
         return alert
     }
     @discardableResult
-    static func showChoice(title:String, _ content:String, _ closure:AlertCallBackClosure? = nil) -> Alert {
-        let alert = Alert.content(title: title, content: content)
+    static func showChoice(title:String, _ content:String,buttonTitle:String = "确定", _ closure:AlertCallBackClosure? = nil) -> Alert {
+        let alert = Alert.content(itemArr:[buttonTitle], title: title, content: content)
         alert.configClick(closure)
         alert.show()
         return alert
