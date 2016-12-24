@@ -45,7 +45,9 @@ extension JDLogoCell {
         }).addDisposableTo(disposeBag)
         
         centerImageView.rx.whenTouch { (image) in
-            // TODO: 点击此处选择图片
+            AddPhoto().callback { (images) in
+                logDebug(images)
+            }.show()
         }.addDisposableTo(disposeBag)
     }
     

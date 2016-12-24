@@ -33,8 +33,22 @@ class UserInfo {
         self.savePersonModel()
     }
     // MARK: - 
-    func canLogin() -> Bool {
-        return self.loginModel.isLogined && self.personModel.authToken != nil
+    func checkAndLogin() {
+        if self.loginModel.isLogined {
+            let loginType = self.loginModel.loginType
+            switch loginType {
+            case .normalLogin:
+                if let accountParams = self.getAccountParams() {
+                    LoginModel.requestToLogin(loginType: loginType, params: accountParams, onlyRequest: true)
+                }
+            case .weChatLogin:
+                WechatManager.shared.requestLogin(onlyRequest: true)
+            case .qqLogin:
+                QQManager.shared.requestLogin(onlyRequest: true)
+            case .weiboLogin:
+                WeiboManager.shared.requestLogin(onlyRequest: true)
+            }
+        }
     }
 }
 extension UserInfo {
