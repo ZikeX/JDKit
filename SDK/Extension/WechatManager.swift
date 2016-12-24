@@ -24,9 +24,9 @@ class WechatManager:ThirdManager {
 }
 extension WechatManager {
     
-    fileprivate func requestLogin(needRefreshToken:Bool = true) {
+    override func requestLogin(needRefreshToken:Bool = true,onlyRequest:Bool = false) {
         func requestToLogin() {
-            LoginModel.requestToLogin(loginType: .weChatLogin)
+            LoginModel.requestToLogin(loginType: .weChatLogin, onlyRequest: onlyRequest)
         }
         if needRefreshToken {
             self.wechatRefreshToken {

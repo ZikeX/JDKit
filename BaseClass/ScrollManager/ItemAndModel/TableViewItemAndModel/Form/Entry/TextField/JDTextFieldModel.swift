@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 class JDTextFieldModel: JDEntryModel {
-    var entryType:EntryType?
+    var entryType:EntryType = .default
     
     override func configModelInit() {
         super.configModelInit()

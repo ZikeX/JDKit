@@ -19,9 +19,9 @@ class WeiboManager: ThirdManager {
     }
 }
 extension WeiboManager {
-    fileprivate func requestLogin() {
+    override func requestLogin(needRefreshToken:Bool = true,onlyRequest:Bool = false) {
         self.weiboRefreshToken {
-            LoginModel.requestToLogin(loginType: .weiboLogin)
+            LoginModel.requestToLogin(loginType: .weiboLogin, onlyRequest: onlyRequest)
         }
     }
     fileprivate func requestToBinding() {

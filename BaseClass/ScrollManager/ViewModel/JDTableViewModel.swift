@@ -85,11 +85,16 @@ class JDTableViewModel: JDListViewModel {
         return params
     }
     func checkAllParams() -> Bool {
-        return self.eachModel { (model) -> (Bool) in
-            if let model = model as? CheckParamsProtocol,model.checkParams() == false {
+        func checkModelParams(_ model:JDTableModel) -> Bool {
+            if model.catchParamsClosure != nil {
+                return model.checkParamsClosure!()
+            }else if let model = model as? CheckParamsProtocol,model.checkParams() == false {
                 return false
             }
             return true
+        }
+        return self.eachModel { (model) -> (Bool) in
+            return checkModelParams(model)
         }
     }
     func checkAndCatchParams() -> [String:Any]? {

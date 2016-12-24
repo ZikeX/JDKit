@@ -8,8 +8,32 @@
 
 import Foundation
 import JDAnimatedTabBarController
-
+import IQKeyboardManagerSwift
 class AppConfig {
+    static func register() {
+        let keyboardManager = IQKeyboardManager.sharedManager()
+        keyboardManager.enable = true
+        keyboardManager.shouldResignOnTouchOutside = true
+        keyboardManager.shouldToolbarUsesTextFieldTintColor = true
+        keyboardManager.enableAutoToolbar = true
+    }
+    static func checkAndLogin() {
+        let userInfo = UserInfo.shared
+        if userInfo.canLogin() {
+            switch userInfo.loginModel.loginType {
+            case .normalLogin:
+                if let accountParams = userInfo.getAccountParams() {
+                    LoginModel.requestToLogin(loginType: userInfo.loginModel.loginType, params: accountParams, onlyRequest: true)
+                }
+            case .weChatLogin:
+                WechatManager.shared.requestLogin(onlyRequest: true)
+            case .qqLogin:
+                QQManager.shared.requestLogin(onlyRequest: true)
+            case .weiboLogin:
+                WeiboManager.shared.requestLogin(onlyRequest: true)
+            }
+        }
+    }
     static func appearance() {
         let navigationBar = UINavigationBar.appearance()
         navigationBar.backIndicatorImage = R.image.ic_back()

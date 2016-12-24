@@ -30,10 +30,8 @@ extension UIImageView {
         }
     }
     fileprivate func removeActivityIndicator() {
-        if self.activityIndicator != nil {
-            self.activityIndicator?.removeFromSuperview()
-            self.activityIndicator = nil
-        }
+        self.activityIndicator?.removeFromSuperview()
+        self.activityIndicator = nil
     }
     func setImage(imageData:ImageDataProtocol?,isUserImg:Bool = false,placeholderImage:UIImage? = nil,style:UIActivityIndicatorViewStyle? = nil) {
         

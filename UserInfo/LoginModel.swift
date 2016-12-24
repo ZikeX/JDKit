@@ -20,6 +20,9 @@ enum LoginType:String {
     case qqLogin
     case weiboLogin
 }
+extension NSNotification.Name {
+    public static let JDLoginComplete = NSNotification.Name("JDLoginComplete")
+}
 extension DefaultsKeys {
     static let loginState = DefaultsKey<String?>("loginState")
     static let loginType = DefaultsKey<String?>("loginType")
@@ -69,61 +72,71 @@ extension LoginModel {
     }
 }
 extension LoginModel {
-    static func requestToLogin(loginType:LoginType,params:LoginParams? = nil, onlyRequest:Bool = false) {
-        guard !(loginType == .normalLogin && params == nil) else {
-            /// ZJaDe: 普通登录必须传进来参数
+    static func requestToLogin(loginType:LoginType,params:LoginParams = LoginParams(), onlyRequest:Bool = false) {
+        if loginType == .normalLogin && (params.mobile == nil || params.password == nil) {
+            logDebug("普通登录必须传进来参数")
             return
         }
-        UserInfo.shared.loginModel.loginType = loginType
-        /// ZJaDe: 登录时如果传进来参数就用，没有的话说明是第三方登录；打开App时无论loginType是什么，都要传参数
-        var paramsModel = LoginParams()
-        if let params = params {
-            paramsModel = params
-        }else {
-            switch loginType {
-            case .normalLogin:
-                break
-            case .weChatLogin:
-                paramsModel.refreshToken = Defaults[.wx_refresh_token]
-                paramsModel.openid = Defaults[.wx_openID]
-                paramsModel.accessToken = Defaults[.wx_access_token]
-            case .qqLogin:
-                paramsModel.openid = Defaults[.qq_openId]
-                paramsModel.accessToken = Defaults[.qq_access_token]
-            case .weiboLogin:
-                paramsModel.openid = Defaults[.wb_userID]
-                paramsModel.accessToken = Defaults[.wb_access_token]
-            }
+        /// ZJaDe: 普通登录时必须传账号密码，第三方登录可以不用传，但要记得刷新token
+        var paramsModel = params
+        switch loginType {
+        case .normalLogin:
+            paramsModel.loginType = AccountType.common.rawValue
+        case .weChatLogin:
+            paramsModel.loginType = AccountType.wechat.rawValue
+            paramsModel.refreshToken = Defaults[.wx_refresh_token]
+            paramsModel.openid = Defaults[.wx_openID]
+            paramsModel.accessToken = Defaults[.wx_access_token]
+        case .qqLogin:
+            paramsModel.loginType = AccountType.qq.rawValue
+            paramsModel.openid = Defaults[.qq_openId]
+            paramsModel.accessToken = Defaults[.qq_access_token]
+        case .weiboLogin:
+            paramsModel.loginType = AccountType.weibo.rawValue
+            paramsModel.openid = Defaults[.wb_userID]
+            paramsModel.accessToken = Defaults[.wb_access_token]
         }
         var hud:HUD?
-        if !onlyRequest {
+        if onlyRequest == false {
+            UserInfo.shared.loginModel.loginType = loginType
             UserInfo.shared.loginModel.loginState = .logining
             hud = HUD.showMessage("正在登录")
         }
         userAuthProvider.jd_request(.login(loginParams: paramsModel)).mapObject(type: PersonModel.self, "userLogin",showHUD:true).callback { (result) in
             hud?.hide()
-            if let result = result {
-                self.userAuthCompleteHandle(result)
-                if result.resultCode == .unregistered {
-                    RouterManager.push(Route_个人.注册(loginType))
-                }
+            self.userAuthCompleteHandle(result,onlyRequest:onlyRequest)
+            guard let result = result else {
+                return
+            }
+            if result.isSuccessful,loginType == .normalLogin {
+                UserInfo.shared.setAccountInfo(paramsModel.mobile!, password: params.password!)
+            }
+            if result.resultCode == .unregistered {
+                RouterManager.push(Route_个人.注册(loginType))
             }
         }
     }
     static func requestToRegister(loginType:LoginType, params:RegisterParams) {
+        if loginType == .normalLogin && (params.password == nil) {
+            logDebug("普通注册必须传密码")
+            return
+        }
         UserInfo.shared.loginModel.loginType = loginType
         /// ZJaDe: 注册时是拼接参数
         var paramsModel = params
         switch loginType {
         case .normalLogin:
-            break
+            paramsModel.regType = AccountType.common.rawValue
         case .weChatLogin:
+            paramsModel.regType = AccountType.wechat.rawValue
             paramsModel.openid = Defaults[.wx_openID]
             paramsModel.accessToken = Defaults[.wx_access_token]
         case .qqLogin:
+            paramsModel.regType = AccountType.qq.rawValue
             paramsModel.openid = Defaults[.qq_openId]
             paramsModel.accessToken = Defaults[.qq_access_token]
         case .weiboLogin:
+            paramsModel.regType = AccountType.weibo.rawValue
             paramsModel.openid = Defaults[.wb_userID]
             paramsModel.accessToken = Defaults[.wb_access_token]
         }
@@ -132,21 +145,28 @@ extension LoginModel {
         let hud = HUD.showMessage("注册中")
         userAuthProvider.jd_request(.register(registerParams: paramsModel)).mapObject(type: PersonModel.self,"userReg",showHUD:true).callback({ (result) in
             hud.hide()
-            if let result = result {
-                self.userAuthCompleteHandle(result)
+            self.userAuthCompleteHandle(result)
+            guard let result = result else {
+                return
+            }
+            if result.isSuccessful,loginType == .normalLogin {
+                UserInfo.shared.setAccountInfo(paramsModel.mobile!, password: params.password!)
             }
         })
     }
-    static func userAuthCompleteHandle(_ result:ObjectResultModel<PersonModel>) {
-        if result.isSuccessful == true {
+    static func userAuthCompleteHandle(_ result:ObjectResultModel<PersonModel>?, onlyRequest:Bool = false) {
+        if let result = result,result.isSuccessful == true {
             UserInfo.shared.loginModel.loginState = .logined
             UserInfo.shared.personModel = result.data
             if jd.currentNavC != jd.appRootVC {
                 jd.currentNavC.dismissVC()
             }
-            
         }else {
             UserInfo.shared.loginModel.loginState = .loginFailed
+            UserInfo.shared.personModel = PersonModel()
+        }
+        if onlyRequest {
+            NotificationCenter.default.post(name: .JDLoginComplete, object: nil)
         }
     }
 }

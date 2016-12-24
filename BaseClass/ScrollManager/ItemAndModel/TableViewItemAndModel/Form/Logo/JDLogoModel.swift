@@ -23,7 +23,7 @@ class JDLogoModel: JDFormModel {
         super.configModelInit()
         
     }
-    var logoClick = PublishSubject<Button>()
+    var logoClick = PublishSubject<UIImage>()
     
     
 }

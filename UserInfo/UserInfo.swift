@@ -7,9 +7,54 @@
 //
 
 import Foundation
+import HandyJSON
 
 class UserInfo {
     static let shared:UserInfo = UserInfo()
-    var personModel:PersonModel = PersonModel()
+    lazy var personModel:PersonModel = {
+        let personModel:PersonModel = self.readPersonModel()
+        return personModel
+    }()
     var loginModel:LoginModel = LoginModel()
+    init() {
+        self.configNotification()
+    }
+    deinit {
+        self.removeNotification()
+    }
+    // MARK: - 
+    func configNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(saveModel), name: .UIApplicationDidEnterBackground, object: nil)
+    }
+    func removeNotification() {
+        NotificationCenter.default.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
+    }
+    @objc func saveModel() {
+        self.savePersonModel()
+    }
+    // MARK: - 
+    func canLogin() -> Bool {
+        return self.loginModel.isLogined && self.personModel.authToken != nil
+    }
+}
+extension UserInfo {
+    fileprivate func getFileName() -> String {
+        return "personModel"
+    }
+    // MARK: -
+    fileprivate func savePersonModel() {
+        let result = NSKeyedArchiver.archiveRootObject(self.personModel.toSimpleDictionary(), toFile: self.getFilePath("personModel"))
+        logInfo("保存PersonModel->\(result ? "成功" : "失败")")
+    }
+    fileprivate func readPersonModel() -> PersonModel {
+        let dict = NSKeyedUnarchiver.unarchiveObject(withFile: self.getFilePath("personModel")) as? [String : Any]
+        if let dict = dict {
+            return PersonModel.createModel(dict: dict)
+        }else {
+            return PersonModel()
+        }
+    }
+    fileprivate func getFilePath(_ fileName:String) -> String {
+        return NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!.appending("/\(fileName).src")
+    }
 }

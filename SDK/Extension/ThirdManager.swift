@@ -27,6 +27,10 @@ class ThirdManager:NSObject {
     func jumpAndAuth() {
         
     }
+    
+    func requestLogin(needRefreshToken:Bool,onlyRequest:Bool) {
+        
+    }
 }
 extension ThirdManager {
     static func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {

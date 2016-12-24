@@ -21,9 +21,13 @@ enum EntryType {
 class ComposeTextField: UITextField {
     var prefix:String?
     var suffix:String?
-    var entryType:EntryType? {
+    
+    lazy var datePicker = UIDatePicker()
+    
+    var entryType:EntryType = .default {
         didSet {
-            switch entryType ?? .default {
+            self.removeTarget(self, action: #selector(showDatePicker), for: .touchUpInside)
+            switch entryType {
             case .phone:
                 self.keyboardType = .phonePad
             case .email:
@@ -32,6 +36,8 @@ class ComposeTextField: UITextField {
                 self.keyboardType = .decimalPad
             case .count,.number:
                 self.keyboardType = .numberPad
+            case .date(mode: _):
+                self.addTarget(self, action: #selector(showDatePicker), for: .touchUpInside)
             default:
                 self.keyboardType = .default
             }
@@ -53,34 +59,36 @@ class ComposeTextField: UITextField {
 }
 extension ComposeTextField:UITextFieldDelegate {
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        switch self.entryType ?? .default {
-        case .date(mode: let mode):
-            jd.endEditing()
-            showDatePicker(mode: mode)
+        switch self.entryType {
+        case .date(mode:_):
             return false
         default:
             return true
         }
     }
-    func showDatePicker(mode: UIDatePickerMode) {
-        let format:String
-        switch mode {
-        case .date:
-            format = "yyyy.MM.dd"
-        case .time:
-            format = "HH:mm"
-        case .dateAndTime:
-            format = "yyyy.MM.dd HH:mm"
-        case .countDownTimer:
-            format = "HH:mm:ss"
+    func showDatePicker() {
+        switch self.entryType {
+        case .date(mode:let mode):
+            let format:String
+            switch mode {
+            case .date:
+                format = "yyyy.MM.dd"
+            case .time:
+                format = "HH:mm"
+            case .dateAndTime:
+                format = "yyyy.MM.dd HH:mm"
+            case .countDownTimer:
+                format = "HH:mm:ss"
+            }
+            datePicker.datePickerMode = mode
+            _ = datePicker.dateObservable.subscribe(onNext: {[unowned self] (date) in
+                self.text = date.toString(format: format)
+                self.sendActions(for: .editingChanged)
+            });
+            datePicker.show(title: placeholder ?? "日期")
+        default:
+            break
         }
-        let datePicker = UIDatePicker()
-        datePicker.datePickerMode = mode
-        _ = datePicker.dateObservable.subscribe(onNext: {[unowned self] (date) in
-            self.text = date.toString(format: format)
-            self.sendActions(for: .editingChanged)
-        });
-        datePicker.show(title: placeholder ?? "日期")
     }
 }
 extension ComposeTextField {

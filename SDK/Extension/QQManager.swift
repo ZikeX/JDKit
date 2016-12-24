@@ -37,9 +37,9 @@ class QQManager:ThirdManager {
     }
 }
 extension QQManager {
-    fileprivate func requestLogin() {
+    override func requestLogin(needRefreshToken:Bool = true,onlyRequest:Bool = false) {
         self.qqRefreshToken {
-            LoginModel.requestToLogin(loginType: .qqLogin)
+            LoginModel.requestToLogin(loginType: .qqLogin, onlyRequest: onlyRequest)
         }
     }
     fileprivate func requestToBinding() {
