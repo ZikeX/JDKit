@@ -25,10 +25,10 @@ extension SegmentProtocol where Self:BaseViewController {
         self.transitionVC.scrollVCCount = self.segmentedControl.modelArray.count
         self.transitionVC.createScrollVCClosure = {[unowned self] (index) in
             let listVC = self.addChildScrollVC(edgesToFill: nil, index: index)
-            var viewModel:JDListViewModel?
-            if let tableVC = listVC as? JDTableViewController {
+            var viewModel:ListViewModel?
+            if let tableVC = listVC as? TableViewController {
                 viewModel = tableVC.viewModel
-            }else if let collectionVC = listVC as? JDCollectionViewController {
+            }else if let collectionVC = listVC as? CollectionViewController {
                 viewModel = collectionVC.viewModel
             }
             if let viewModel = viewModel {

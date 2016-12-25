@@ -8,64 +8,64 @@
 
 import Foundation
 protocol BindingModelProtocol {
-    associatedtype ModelType:JDListModel
+    associatedtype ModelType:ListModel
     func configItem(_ model: ModelType)
     func bindingModel(_ model: ModelType)
     func didBindingModel(_ model: ModelType)
     func updateEnabledState(_ model:ModelType,enabled:Bool)
     func unbindingModel(_ model: ModelType?)
 }
-extension JDTableCell:BindingModelProtocol {
+extension TableCell:BindingModelProtocol {
     
-    func configItem(_ model: JDTableModel) {
+    func configItem(_ model: TableModel) {
         
     }
-    func bindingModel(_ model: JDTableModel) {
+    func bindingModel(_ model: TableModel) {
         
     }
-    func didBindingModel(_ model: JDTableModel) {
+    func didBindingModel(_ model: TableModel) {
         
     }
-    func updateEnabledState(_ model:JDTableModel,enabled:Bool) {
+    func updateEnabledState(_ model:TableModel,enabled:Bool) {
         
     }
-    func unbindingModel(_ model: JDTableModel?) {
+    func unbindingModel(_ model: TableModel?) {
         
     }
 }
-extension JDCollectionCell:BindingModelProtocol {
+extension CollectionCell:BindingModelProtocol {
     
-    func configItem(_ model: JDCollectionModel) {
+    func configItem(_ model: CollectionModel) {
         
     }
-    func bindingModel(_ model: JDCollectionModel) {
+    func bindingModel(_ model: CollectionModel) {
         
     }
-    func didBindingModel(_ model: JDCollectionModel) {
+    func didBindingModel(_ model: CollectionModel) {
         
     }
-    func updateEnabledState(_ model:JDCollectionModel,enabled:Bool) {
+    func updateEnabledState(_ model:CollectionModel,enabled:Bool) {
         
     }
-    func unbindingModel(_ model: JDCollectionModel?) {
+    func unbindingModel(_ model: CollectionModel?) {
         
     }
 }
-extension JDCollectionReusableView:BindingModelProtocol {
+extension CollectionReusableView:BindingModelProtocol {
     
-    func configItem(_ model: JDCollectionReusableModel) {
+    func configItem(_ model: CollectionReusableModel) {
         
     }
-    func bindingModel(_ model: JDCollectionReusableModel) {
+    func bindingModel(_ model: CollectionReusableModel) {
         
     }
-    func didBindingModel(_ model: JDCollectionReusableModel) {
+    func didBindingModel(_ model: CollectionReusableModel) {
         
     }
-    func updateEnabledState(_ model:JDCollectionReusableModel,enabled:Bool) {
+    func updateEnabledState(_ model:CollectionReusableModel,enabled:Bool) {
         
     }
-    func unbindingModel(_ model: JDCollectionReusableModel?) {
+    func unbindingModel(_ model: CollectionReusableModel?) {
         
     }
 }

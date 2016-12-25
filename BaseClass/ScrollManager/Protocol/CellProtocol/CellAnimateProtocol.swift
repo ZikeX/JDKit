@@ -49,7 +49,7 @@ extension CellAnimateProtocol where Self:UIView {
     
 }
 
-extension JDTableCell:CellAnimateProtocol {
+extension TableCell:CellAnimateProtocol {
     override func setHighlighted(_ highlighted: Bool, animated: Bool) {
         switch highlightAnimatedStyle {
         case .touchZoomOut:

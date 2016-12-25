@@ -18,9 +18,9 @@ extension LocalDataArrayProtocol {
         })
     }
 }
-extension JDTableViewModel:LocalDataArrayProtocol {
+extension TableViewModel:LocalDataArrayProtocol {
 
 }
-extension JDCollectionViewModel:LocalDataArrayProtocol {
+extension CollectionViewModel:LocalDataArrayProtocol {
     
 }

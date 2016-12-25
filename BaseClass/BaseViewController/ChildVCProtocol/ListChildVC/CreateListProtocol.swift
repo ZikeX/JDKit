@@ -8,11 +8,11 @@
 
 import Foundation
 protocol CreateChildListVCProtocol:class {
-    associatedtype ChildListViewModelType:JDListViewModel
+    associatedtype ChildListViewModelType:ListViewModel
     func createListViewModel(index:Int) -> ChildListViewModelType
 }
 extension CreateChildListVCProtocol where Self:BaseViewController {
-    func createScrollVC(index:Int) -> JDListViewController {
+    func createScrollVC(index:Int) -> ListViewController {
         let viewModel = createListViewModel(index: index)
         viewModel.index = index
         return viewModel.createBaseListVC()

@@ -28,7 +28,7 @@ protocol UpdateDataSourceProtocol:class {
     /// ZJaDe: 计算tableView的cell高度
     func dataArrayDidSet()
 }
-extension UpdateDataSourceProtocol where Self:JDListViewModel {
+extension UpdateDataSourceProtocol where Self:ListViewModel {
     @discardableResult
     final func updateDataSource(_ closure:@escaping UpdateDataClosureType) {
         Async.background { () -> [AnimatableSectionModel<SectionType,ModelType>]? in
@@ -79,7 +79,7 @@ extension UpdateDataSourceProtocol where Self:JDListViewModel {
     }
 }
 private var tableViewRunloopTimerKey: UInt8 = 0
-extension JDTableViewModel:UpdateDataSourceProtocol {
+extension TableViewModel:UpdateDataSourceProtocol {
     var listView: SectionedViewType? {
         return self.tableView
     }
@@ -92,11 +92,11 @@ extension JDTableViewModel:UpdateDataSourceProtocol {
         }
     }
     
-    typealias SectionType = JDTableSection
-    typealias ModelType = JDTableModel
+    typealias SectionType = TableSection
+    typealias ModelType = TableModel
     func configDataSource() {
         rxDataSource.configureCell = {(dataSource, tableView, indexPath, model) in
-            let cell = model.createCellWithTableView(tableView, indexPath: indexPath) as! JDTableCell
+            let cell = model.createCellWithTableView(tableView, indexPath: indexPath) as! TableCell
             cell.itemDidLoad(model)
             _ = model.calculateCellHeight(tableView,wait: true)
             return cell
@@ -115,7 +115,7 @@ extension JDTableViewModel:UpdateDataSourceProtocol {
         }
     }
     func calculateItemsHeight() {
-        let modelTable = NSHashTable<JDTableModel>.weakObjects()
+        let modelTable = NSHashTable<TableModel>.weakObjects()
         self.dataArray.forEach { (section,models) in
             models.forEach({ (model) in
                 modelTable.add(model)
@@ -132,15 +132,15 @@ extension JDTableViewModel:UpdateDataSourceProtocol {
         }
     }
 }
-extension JDCollectionViewModel:UpdateDataSourceProtocol {
+extension CollectionViewModel:UpdateDataSourceProtocol {
     var listView: SectionedViewType? {
         return self.collectionView
     }
-    typealias SectionType = JDCollectionSection
-    typealias ModelType = JDCollectionModel
+    typealias SectionType = CollectionSection
+    typealias ModelType = CollectionModel
     func configDataSource() {
         rxDataSource.configureCell = {(dataSource,collectionView,indexPath,model) in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: model.reuseIdentifier, for: indexPath) as! JDCollectionCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: model.reuseIdentifier, for: indexPath) as! CollectionCell
             cell.itemDidLoad(model)
             return cell
         }

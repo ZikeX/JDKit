@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BaseMapScrollViewController: JDScrollViewController {
+class BaseMapScrollViewController: ScrollViewController {
     lazy private(set) var mapView = BMKMapView()
     lazy private(set) var positionIndicator:Button = {
         let button = Button(image: R.image.ic_map_positionIndicator())

@@ -19,6 +19,6 @@ extension NeedUpdateProtocol {
         self.needUpdate = true
     }
 }
-extension JDListModel:NeedUpdateProtocol {
+extension ListModel:NeedUpdateProtocol {
     
 }

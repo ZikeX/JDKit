@@ -1,5 +1,5 @@
 //
-//  JDTableCell+CellProtocol.swift
+//  TableCell+CellProtocol.swift
 //  ZiWoYou
 //
 //  Created by Z_JaDe on 2016/11/14.
@@ -9,8 +9,8 @@
 import UIKit
 import RxSwift
 
-extension JDTableCell : CellProtocol {
-    typealias ModelType = JDTableModel
+extension TableCell : CellProtocol {
+    typealias ModelType = TableModel
     
     // MARK: - cell初始化
     func configItemInit() {
@@ -23,7 +23,7 @@ extension JDTableCell : CellProtocol {
         self.contentView.addSubview(separatorLineView)
     }
     // MARK: - cell加载完毕，初始化数据及约束
-    final func itemDidLoad(_ element: JDTableModel) {
+    final func itemDidLoad(_ element: TableModel) {
         self.updateLayout.deactivate()
         self.updateLayout.constraintArr += self.jdContentView.snp.prepareConstraints({ (maker) in
             maker.left.equalToSuperview().offset(element.spaceEdges.left)
@@ -54,13 +54,13 @@ extension JDTableCell : CellProtocol {
         }
     }
     // MARK: - cell将要显示，做动画，element绑定cell
-    final func itemWillAppear(_ element: JDTableModel) {
+    final func itemWillAppear(_ element: TableModel) {
         self.cellAppearAnimate()
         self.configItemWithElement(element)
         self.itemUpdateConstraints(element)
     }
     // MARK: cell根据element绑定数据
-    final func configItemWithElement(_ element: JDTableModel) {
+    final func configItemWithElement(_ element: TableModel) {
         self.selectedBackgroundView = element.cellSelectedBackgroundView
         if let color = element.cellSelectedBackgroundColor {
             self.selectedBackgroundView?.backgroundColor = color
@@ -90,12 +90,12 @@ extension JDTableCell : CellProtocol {
         }).addDisposableTo(disposeBag)
     }
     // MARK: - cell设置数据后,如果需要在这里更新约束
-    final func itemUpdateConstraints(_ element: JDTableModel) {
+    final func itemUpdateConstraints(_ element: TableModel) {
         self.didBindingModel(element)
         self.setNeedsUpdateConstraints()
     }
     // MARK: - cell已经消失,element解绑cell
-    final func itemDidDisappear(_ element: JDTableModel?) {
+    final func itemDidDisappear(_ element: TableModel?) {
         disposeBag = DisposeBag()
         
         self.unbindingModel(element)

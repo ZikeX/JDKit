@@ -67,7 +67,7 @@ extension ScreeningViewController:ListTransitionProtocol {
     func configTransitionVC(_ edgesToFill: Bool) {
         self.installTitleView(self.titleView)
     }
-    func createListViewModel(index: Int) -> JDListViewModel {
+    func createListViewModel(index: Int) -> ListViewModel {
         fatalError("子类实现")
     }
 }

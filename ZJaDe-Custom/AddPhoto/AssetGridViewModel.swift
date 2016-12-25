@@ -8,6 +8,6 @@
 
 import UIKit
 
-class AssetGridViewModel: BaseCollectionViewModel {
+class AssetGridViewModel: CollectionViewModel {
 
 }

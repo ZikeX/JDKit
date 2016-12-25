@@ -15,7 +15,7 @@ protocol CatchParamsProtocol {
     typealias CatchParamsClosure = () -> [String:Any]
     func configCatchParams(_ closure:@escaping CatchParamsClosure)
 }
-extension CatchParamsProtocol where Self:JDTableModel {
+extension CatchParamsProtocol where Self:TableModel {
     func configCatchParams(_ closure:@escaping CatchParamsClosure) {
         self.catchParamsClosure = closure
     }
@@ -27,7 +27,7 @@ protocol CheckParamsProtocol {
     typealias  CheckParamsClosure = () -> Bool
     func configCheckParams(_ closure:@escaping CheckParamsClosure)
 }
-extension CheckParamsProtocol where Self:JDTableModel {
+extension CheckParamsProtocol where Self:TableModel {
     func configCheckParams(_ closure:@escaping CheckParamsClosure) {
         self.checkParamsClosure = closure
     }

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol AddChildScrollProtocol:class {
-    associatedtype ChildScrollVCType:JDScrollViewController
+    associatedtype ChildScrollVCType:ScrollViewController
     // MARK: - 实现下面方法创建控制器
     func createScrollVC(index:Int) -> ChildScrollVCType
     // MARK: - 调用该方法可添加子控制器到本控制器中

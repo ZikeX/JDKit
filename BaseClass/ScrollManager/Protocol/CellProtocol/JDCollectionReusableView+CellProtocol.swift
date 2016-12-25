@@ -1,5 +1,5 @@
 //
-//  JDCollectionReusableView+CellProtocol.swift
+//  CollectionReusableView+CellProtocol.swift
 //  ZiWoYou
 //
 //  Created by 茶古电子商务 on 16/12/2.
@@ -8,8 +8,8 @@
 import UIKit
 import RxSwift
 
-extension JDCollectionReusableView : CellProtocol {
-    typealias ModelType = JDCollectionReusableModel
+extension CollectionReusableView : CellProtocol {
+    typealias ModelType = CollectionReusableModel
     
     // MARK: - view初始化
     func configItemInit() {
@@ -20,16 +20,16 @@ extension JDCollectionReusableView : CellProtocol {
         
     }
     // MARK: - view加载完毕，初始化数据及约束
-    final func itemDidLoad(_ element: JDCollectionReusableModel) {
+    final func itemDidLoad(_ element: CollectionReusableModel) {
         self.configItem(element)
     }
     // MARK: - view将要显示，做动画，element绑定view
-    final func itemWillAppear(_ element: JDCollectionReusableModel) {
+    final func itemWillAppear(_ element: CollectionReusableModel) {
         configItemWithElement(element)
         itemUpdateConstraints(element)
     }
     // MARK: view根据element绑定数据
-    final func configItemWithElement(_ element: JDCollectionReusableModel) {
+    final func configItemWithElement(_ element: CollectionReusableModel) {
         self.bindingModel(element)
         // MARK: - 更新enabled状态
         element.enabledVariable.asObservable().subscribe(onNext:{[unowned self,unowned element] (enabled) in
@@ -39,11 +39,11 @@ extension JDCollectionReusableView : CellProtocol {
         }).addDisposableTo(disposeBag)
     }
     // MARK: view设置数据后,如果需要在这里更新约束
-    final func itemUpdateConstraints(_ element: JDCollectionReusableModel) {
+    final func itemUpdateConstraints(_ element: CollectionReusableModel) {
         self.didBindingModel(element)
     }
     // MARK: - view已经消失,element解绑view
-    final func itemDidDisappear(_ element: JDCollectionReusableModel?) {
+    final func itemDidDisappear(_ element: CollectionReusableModel?) {
         disposeBag = DisposeBag()
         
         self.unbindingModel(element)
