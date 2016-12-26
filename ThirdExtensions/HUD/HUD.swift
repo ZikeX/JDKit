@@ -47,17 +47,17 @@ class HUD {
     }
     fileprivate var MBhud:_ProgressHUD?
     
-    static func createMBHUD(_ view:UIView) -> _ProgressHUD {
+    static fileprivate func createMBHUD(_ view:UIView) -> _ProgressHUD {
         let MBhud = _ProgressHUD(view: view)
         view.addSubview(MBhud)
         MBhud.removeFromSuperViewOnHide = true
         return MBhud
     }
     @discardableResult
-    static func showMessage(_ text:String, toView:UIView? = nil) -> HUD {
+    static func showMessage(_ text:String, to view:UIView? = nil) -> HUD {
         let hud = HUD()
         Async.main {
-            if let view = toView ?? jd.visibleVC()?.view {
+            if let view = view ?? jd.visibleVC()?.view {
                 let MBhud = createMBHUD(view)
                 MBhud.label.text = text
                 MBhud.show(animated: true)
@@ -82,9 +82,9 @@ class HUD {
     }
 }
 extension HUD {
-    private static func show(_ text:String, icon:String, delay:TimeInterval, toView:UIView?) {
+    private static func show(_ text:String, icon:String, delay:TimeInterval, to view:UIView?) {
         Async.main {
-            let view = toView ?? jd.keyWindow
+            let view = view ?? jd.keyWindow
             
             let MBhud = createMBHUD(view)
             MBhud.canInteractive = true
@@ -97,19 +97,19 @@ extension HUD {
             MBhud.hide(delay: delay)
         }
     }
-    static func showSuccess(_ text:String, delay:TimeInterval = 0.7, toView:UIView? = nil) {
-        self.show(text, icon: "success", delay:delay, toView: toView)
+    static func showSuccess(_ text:String, delay:TimeInterval = 0.7, to view:UIView? = nil) {
+        self.show(text, icon: "success", delay:delay, to: view)
     }
-    static func showError(_ text:String, delay:TimeInterval = 0.7, toView:UIView? = nil) {
-        self.show(text, icon: "error", delay:delay, toView: toView)
+    static func showError(_ text:String, delay:TimeInterval = 0.7, to view:UIView? = nil) {
+        self.show(text, icon: "error", delay:delay, to: view)
     }
 }
 extension HUD {
     private static var promptArray = [_ProgressHUD]()
     
-    static func showPrompt(_ text:String, toView:UIView? = nil) {
+    static func showPrompt(_ text:String, to view:UIView? = nil) {
         Async.main {
-            let view = toView ?? jd.keyWindow
+            let view = view ?? jd.keyWindow
             
             let prompt = createMBHUD(view)
             prompt.canInteractive = true

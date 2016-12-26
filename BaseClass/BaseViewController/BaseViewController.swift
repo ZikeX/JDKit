@@ -9,7 +9,8 @@
 import UIKit
 import RxSwift
 import SnapKit
-import FBRetainCycleDetector
+import Moya
+import Result
 
 class BaseViewController: UIViewController {
     
@@ -65,6 +66,13 @@ class BaseViewController: UIViewController {
     func configInit() {
         self.jdConfigInit()
     }
+    // MARK: - 
+    let taskCenter = TaskCenter()
+    // MARK: - 
+    lazy var networkProvider:RxJDProvider<StructTarget> = {
+        let provider = RxJDProvider<StructTarget>(viewCon:self)
+        return provider
+    }()
     // MARK: - BaseVCProtocol
     var isFirstIn: Bool = true
     override func viewDidLoad() {
@@ -78,6 +86,7 @@ class BaseViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.jdViewDidAppear()
+        self.taskCenter.start()
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -86,5 +95,33 @@ class BaseViewController: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.jdViewDidDisappear()
+        self.taskCenter.stop()
+    }
+    deinit {
+        self.taskCenter.clear()
+    }
+}
+extension BaseViewController:PluginType {
+    func willSendRequest(_ request: RequestType, target: TargetType) {
+        
+    }
+    func didReceiveResponse(_ result: Result<Response, Moya.Error>, target: TargetType) {
+        switch result {
+        case .success(let response):
+            response.viewCon = self
+        case .failure(let error):
+            switch error {
+            case .requestMapping(let url):
+                #if DEBUG
+                    HUD.showError("请求出错-->\(url)", delay:10.0, to: view)
+                #else
+                    HUD.showError("请求出错", to: view)
+                #endif
+            case .underlying(let error):
+                HUD.showError(error.localizedDescription, to: view)
+            default:
+                error.response?.viewCon = self
+            }
+        }
     }
 }

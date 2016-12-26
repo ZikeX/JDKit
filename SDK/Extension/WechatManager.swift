@@ -37,16 +37,7 @@ extension WechatManager {
         }
     }
     fileprivate func requestToBinding() {
-        let hud = HUD.showMessage("绑定微信中")
-        userAuthProvider.jd_request(.bindingWechat).mapResult().callback { (result) in
-            hud.hide()
-            if let result = result,result.isSuccessful {
-                UserInfo.shared.personModel.bindAccountWechat = true
-                if let viewCon = jd.visibleVC() as? JDAccountManagerViewController {
-                    viewCon.updateData()
-                }
-            }
-        }
+        LoginModel.requestToBindingWechat()
     }
 }
 extension WechatManager {

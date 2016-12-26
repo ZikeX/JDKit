@@ -122,7 +122,7 @@ extension TableViewModel:UpdateDataSourceProtocol {
             })
         }
         self.timer?.invalidate()
-        self.timer = Timer.scheduleTimer(0.01) {[weak self] (timer) in
+        self.timer = Timer.scheduleTimer(0) {[weak self] (timer) in
             if let model = modelTable.anyObject,self != nil {
                 modelTable.remove(model)
                 _ = model.calculateCellHeight(self!.tableView,wait: false)

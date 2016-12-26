@@ -14,23 +14,34 @@ protocol JDStructTargetProtocol {
     associatedtype StructType:TargetType
     var `struct`:StructType {get}
 }
-
+extension StructTarget:JDStructTargetProtocol {
+    var `struct`: StructTarget {
+        return self
+    }
+}
 class RxJDProvider<Target>: RxMoyaProvider<Target.StructType> where Target: JDStructTargetProtocol {
     
-    override init(endpointClosure: @escaping EndpointClosure = RxJDProvider.endpointMapping,
+    init(endpointClosure: @escaping EndpointClosure = RxJDProvider.endpointMapping,
          requestClosure: @escaping RequestClosure = RxJDProvider.requestMapping,
          stubClosure: @escaping StubClosure = MoyaProvider.neverStub,
          manager: Manager = RxJDProvider.alamofireManager(),
          plugins: [PluginType] = [],
-         trackInflights: Bool = false) {
-        
+         trackInflights: Bool = false,viewCon:BaseViewController? = nil) {
+        var plugins = plugins
+        if let plain = viewCon as? PluginType {
+           plugins.append(plain)
+        }
         super.init(endpointClosure: endpointClosure, requestClosure: requestClosure, stubClosure: stubClosure, plugins: plugins, trackInflights: trackInflights)
     }
     func jd_request(_ token: Target) -> Observable<Response> {
         return self.request(token.struct)
     }
 }
-
+extension RxJDProvider where Target.StructType == StructTarget {
+    func jd_request<T:JDStructTargetProtocol>(_ token: T) -> Observable<Response> {
+        return self.request(StructTarget(token.struct))
+    }
+}
 extension RxJDProvider {
     final class func endpointMapping(_ target: Target.StructType) -> Endpoint<Target.StructType> {
         let url = target.baseURL.appendingPathComponent(target.path).absoluteString

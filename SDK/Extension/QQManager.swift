@@ -43,16 +43,7 @@ extension QQManager {
         }
     }
     fileprivate func requestToBinding() {
-        let hud = HUD.showMessage("绑定QQ中")
-        userAuthProvider.jd_request(.bindingQQ).mapResult().callback { (result) in
-            hud.hide()
-            if let result = result,result.isSuccessful {
-                UserInfo.shared.personModel.bindAccountQQ = true
-                if let viewCon = jd.visibleVC() as? JDAccountManagerViewController {
-                    viewCon.updateData()
-                }
-            }
-        }
+        LoginModel.requestToBindingQQ()
     }
 }
 extension QQManager {

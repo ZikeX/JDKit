@@ -28,6 +28,8 @@ extension DefaultsKeys {
     static let loginType = DefaultsKey<String?>("loginType")
 }
 class LoginModel: BaseEntityModel {
+    static let loginProvider = RxJDProvider<UserAuthServer>()
+    
     var loginState:LoginState {
         get {
             var _loginState:LoginState?
@@ -102,7 +104,7 @@ extension LoginModel {
             UserInfo.shared.loginModel.loginState = .logining
             hud = HUD.showMessage("正在登录")
         }
-        userAuthProvider.jd_request(.login(loginParams: paramsModel)).mapObject(type: PersonModel.self, "userLogin",showHUD:true).callback { (result) in
+        self.loginProvider.jd_request(.login(loginParams: paramsModel)).mapObject(type: PersonModel.self, "userLogin",showHUD:true).callback { (result) in
             hud?.hide()
             self.userAuthCompleteHandle(result,onlyRequest:onlyRequest)
             guard let result = result else {
@@ -143,7 +145,7 @@ extension LoginModel {
         
         UserInfo.shared.loginModel.loginState = .logining
         let hud = HUD.showMessage("注册中")
-        userAuthProvider.jd_request(.register(registerParams: paramsModel)).mapObject(type: PersonModel.self,"userReg",showHUD:true).callback({ (result) in
+        self.loginProvider.jd_request(.register(registerParams: paramsModel)).mapObject(type: PersonModel.self,"userReg",showHUD:true).callback({ (result) in
             hud.hide()
             self.userAuthCompleteHandle(result)
             guard let result = result else {
@@ -167,6 +169,32 @@ extension LoginModel {
         }
         if onlyRequest {
             NotificationCenter.default.post(name: .JDLoginComplete, object: nil)
+        }
+    }
+}
+extension LoginModel {
+    static func requestToBindingQQ() {
+        let hud = HUD.showMessage("绑定QQ中")
+        self.loginProvider.jd_request(.bindingQQ).mapResult().callback { (result) in
+            hud.hide()
+            if let result = result,result.isSuccessful {
+                UserInfo.shared.personModel.bindAccountQQ = true
+                if let viewCon = jd.visibleVC() as? JDAccountManagerViewController {
+                    viewCon.updateData()
+                }
+            }
+        }
+    }
+    static func requestToBindingWechat() {
+        let hud = HUD.showMessage("绑定微信中")
+        self.loginProvider.jd_request(.bindingWechat).mapResult().callback { (result) in
+            hud.hide()
+            if let result = result,result.isSuccessful {
+                UserInfo.shared.personModel.bindAccountWechat = true
+                if let viewCon = jd.visibleVC() as? JDAccountManagerViewController {
+                    viewCon.updateData()
+                }
+            }
         }
     }
 }

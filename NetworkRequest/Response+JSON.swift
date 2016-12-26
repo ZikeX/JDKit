@@ -9,9 +9,19 @@
 import Foundation
 import Moya
 import HandyJSON
-
+private var ResponseVCKey:UInt8 = 0
+extension Response:AssociatedObjectProtocol {
+    var viewCon:BaseViewController? {
+        get {
+            return associatedObject(&ResponseVCKey)
+        }
+        set {
+            setAssociatedObject(&ResponseVCKey, newValue)
+        }
+    }
+}
 extension Response {
-    func mapResult(_ sectionTitle:String?,showHUD:Bool) throws -> DictResultModel {
+    func mapResult(_ sectionTitle:String?, showHUD:Bool) throws -> DictResultModel {
         debugSelf()
         guard let dict = try mapJSON() as? NSDictionary,let result = JSONDeserializer<DictResultModel>.deserializeFrom(dict:dict) else {
             throw Moya.Error.jsonMapping(self)
@@ -23,21 +33,21 @@ extension Response {
             result.data = data as? [String : String]
         }
         
-        handle(showHUD: showHUD, result: result)
+        handle(result, showHUD)
         return result
     }
     
-    func mapObject<T: HandyJSON>(type: T.Type, _ sectionTitle:String,showHUD:Bool) throws -> ObjectResultModel<T> {
+    func mapObject<T: HandyJSON>(type: T.Type, _ sectionTitle:String, showHUD:Bool) throws -> ObjectResultModel<T> {
         debugSelf()
         guard let dict = try mapJSON() as? NSDictionary,let result = JSONDeserializer<ObjectResultModel<T>>.deserializeFrom(dict:dict) else {
             throw Moya.Error.jsonMapping(self)
         }
         result.data = JSONDeserializer<T>.deserializeFrom(dict: dict, designatedPath: "data.\(sectionTitle)")
         
-        handle(showHUD: showHUD, result: result)
+        handle(result, showHUD)
         return result
     }
-    func mapArray<T: HandyJSON>(type: T.Type, _ sectionTitle:String,showHUD:Bool) throws -> ArrayResultModel<T> {
+    func mapArray<T: HandyJSON>(type: T.Type, _ sectionTitle:String, showHUD:Bool) throws -> ArrayResultModel<T> {
         debugSelf()
         guard let dict = try mapJSON() as? NSDictionary,let result = JSONDeserializer<ArrayResultModel<T>>.deserializeFrom(dict:dict) else {
             throw Moya.Error.jsonMapping(self)
@@ -52,15 +62,16 @@ extension Response {
             }
             result.data = modelArray
         }
-        handle(showHUD: showHUD, result: result)
+        handle(result, showHUD)
         return result
     }
     
-    func handle(showHUD:Bool,result:ResultModel) {
+    func handle(_ result:ResultModel, _ showHUD:Bool) {
+        let view = self.viewCon?.view
         switch result.resultCode ?? .prompt {
         case .successful,.newUpdateVersion:
             if showHUD {
-                HUD.showSuccess(result.msg ?? "数据加载成功！")
+                HUD.showSuccess(result.msg ?? "数据加载成功！", to: view)
             }
             if result.resultCode == .newUpdateVersion {
                 Alert.showChoice(title:"有新的版本", result.msg!, { (index) in
@@ -74,7 +85,7 @@ extension Response {
                 RouterManager.present(Route_个人.登录)
             })
         case .unregistered:
-            HUD.showError(result.msg ?? "用户没有注册")
+            HUD.showError(result.msg ?? "用户没有注册", to: view)
         case .versionTooLow:
             Alert.showPrompt(title:"版本过低", result.msg ?? "App版本过低", { (index) in
                 exit(0)
@@ -82,7 +93,7 @@ extension Response {
         case .error:
             Alert.showPrompt(title:"账户被禁止", result.msg ?? "账户已被禁止")
         case .prompt:
-            HUD.showError(result.msg ?? "请求出现未知错误")
+            HUD.showError(result.msg ?? "请求出现未知错误", to: view)
         }
     }
     func debugSelf() {
