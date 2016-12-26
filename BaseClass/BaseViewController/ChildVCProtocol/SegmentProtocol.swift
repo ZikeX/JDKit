@@ -8,35 +8,39 @@
 
 import UIKit
 
-protocol SegmentProtocol:TransitionProtocol {
-    var segmentedControl:SegmentedControl {get}
+protocol SegmentProtocol:PageProtocol {
     // MARK: - 根据segmentedControl的item数量来创建子控制器
+    var segmentedControl:SegmentedControl {get}
 }
 extension SegmentProtocol where Self:BaseViewController {
-    func didAddTransitionVC(_ edgesToFill: Bool) {
-        _ = segmentedControl.rx.value.asObservable().subscribe(onNext: {[unowned self] (index) in
-            if index < self.transitionVC.scrollVCCount {
-                self.transitionVC.selectedIndex = index
+    func didAddPageVC(_ edgesToFill: Bool) {
+        _ = segmentedControl.rx.valueChanged({[unowned self] (segmentedControl) in
+            let index = segmentedControl.selectedSegmentIndex
+            if index < self.pageVC.scrollVCCount {
+                self.pageVC.scroll(to: index)
             }
         })
+        let pageVC:PageViewController = self.pageVC
+        pageVC.currentIndexChanged.distinctUntilChanged().subscribe(onNext:{ [unowned self](index) in
+            self.segmentedControl.selectedSegmentIndex = index
+        }).addDisposableTo((self as BaseViewController).disposeBag)
     }
-    func updateChildVC() {
-        self.transitionVC.clearAllChildVC()
-        self.transitionVC.scrollVCCount = self.segmentedControl.modelArray.count
-        self.transitionVC.createScrollVCClosure = {[unowned self] (index) in
-            let listVC = self.addChildScrollVC(edgesToFill: nil, index: index)
-            var viewModel:ListViewModel?
-            if let tableVC = listVC as? TableViewController {
-                viewModel = tableVC.viewModel
-            }else if let collectionVC = listVC as? CollectionViewController {
-                viewModel = collectionVC.viewModel
-            }
-            if let viewModel = viewModel {
-                let model = self.segmentedControl.modelArray[index]
-                viewModel.listTitle = model.title
-            }
-            return listVC
+    func resetChildVC() {
+        self.pageVC.scrollVCCount = self.segmentedControl.modelArray.count
+        self.updateChildVC()
+    }
+    func configChildVC(index: Int, childVC: Self.ChildScrollVCType) {
+        var viewModel:ListViewModel?
+        if let tableVC = childVC as? TableViewController {
+            viewModel = tableVC.viewModel
+        }else if let collectionVC = childVC as? CollectionViewController {
+            viewModel = collectionVC.viewModel
+        }else {
+            childVC.index = index
         }
-        self.transitionVC.transition()
+        if let viewModel = viewModel {
+            let model = self.segmentedControl.modelArray[index]
+            viewModel.listTitle = model.title
+        }
     }
 }

@@ -20,7 +20,7 @@ extension CreateChildListVCProtocol where Self:BaseViewController {
 }
 // MARK: - 
 protocol AddChildListProtocol:AddChildScrollProtocol,CreateChildListVCProtocol {}
-protocol ListTransitionProtocol:TransitionProtocol,CreateChildListVCProtocol {}
+protocol ListPageProtocol:PageProtocol,CreateChildListVCProtocol {}
 protocol ListSegmentProtocol:SegmentProtocol,CreateChildListVCProtocol {}
 protocol ListHeaderViewProtocol:HeaderViewProtocol,CreateChildListVCProtocol {}
 protocol ListHeaderViewWithSegmentProtocol:HeaderViewWithSegmentProtocol,CreateChildListVCProtocol {}

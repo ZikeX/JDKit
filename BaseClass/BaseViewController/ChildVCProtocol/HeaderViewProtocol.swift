@@ -8,14 +8,19 @@
 
 import UIKit
 
-protocol HeaderViewProtocol:TransitionProtocol {
+protocol HeaderViewProtocol:PageProtocol {
     associatedtype HeaderViewType:BaseScrollHeaderView
     var headerView:HeaderViewType {get}
 }
+private var PageVCKey:UInt8 = 0
 extension HeaderViewProtocol where Self:BaseViewController {
-    func willAddTransitionVC(_ edgesToFill: Bool) {
-        self.transitionVC.defaultHeaderHeight = self.headerView.defaultHeight
-        self.installHeaderView(self.headerView)
+    var pageVC:HeaderPageController {
+        return associatedObject(&PageVCKey, createIfNeed:{ HeaderPageController() })
+    }
+    func willAddPageVC(_ edgesToFill: Bool) {
+        let pageVC:HeaderPageController = self.pageVC as! HeaderPageController
+        pageVC.defaultHeaderHeight = self.headerView.defaultHeight
+        pageVC.headerView = self.headerView
     }
 }
 protocol HeaderViewWithSegmentProtocol:SegmentProtocol,HeaderViewProtocol {

@@ -12,7 +12,6 @@ import SnapKit
 import FBRetainCycleDetector
 
 class BaseViewController: UIViewController {
-    var hasSegmentedControl:Bool = false
     
     // MARK: - Button
     lazy var messageButton:Button = {
@@ -54,8 +53,6 @@ class BaseViewController: UIViewController {
         })
         return button
     }()
-    // MARK: - transitionVC
-    lazy var transitionVC:TransitionViewController = TransitionViewController()
     // MARK: - init
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)

@@ -16,7 +16,7 @@ class ScreeningViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addTransitionVC()
+        addPageVC()
         configTitleView()
         configBlackView()
     }
@@ -25,7 +25,7 @@ extension ScreeningViewController {
     func configBlackView() {
         self.view.addSubview(self.bgBlackView)
         self.bgBlackView.snp.makeConstraints { (maker) in
-            maker.edges.equalTo(self.transitionVC.mainView)
+            maker.edges.equalTo(self.mainVC.view)
         }
         self.bgBlackView.isHidden = true
         self.bgBlackView.alpha = 0
@@ -62,11 +62,8 @@ extension ScreeningViewController {
         })
     }
 }
-extension ScreeningViewController:ListTransitionProtocol {
-    
-    func configTransitionVC(_ edgesToFill: Bool) {
-        self.installTitleView(self.titleView)
-    }
+extension ScreeningViewController:ListPageProtocol {
+
     func createListViewModel(index: Int) -> ListViewModel {
         fatalError("子类实现")
     }
