@@ -71,7 +71,10 @@ extension Response {
         switch result.resultCode ?? .prompt {
         case .successful,.newUpdateVersion:
             if showHUD {
-                HUD.showSuccess(result.msg ?? "数据加载成功！", to: view)
+                self.viewCon?.taskCenter.addTask({ (task) in
+                    HUD.showSuccess(result.msg ?? "数据加载成功！", to: view)
+                    task.end()
+                })
             }
             if result.resultCode == .newUpdateVersion {
                 Alert.showChoice(title:"有新的版本", result.msg!, { (index) in
@@ -85,15 +88,21 @@ extension Response {
                 RouterManager.present(Route_个人.登录)
             })
         case .unregistered:
-            HUD.showError(result.msg ?? "用户没有注册", to: view)
+            self.viewCon?.taskCenter.addTask({ (task) in
+                HUD.showError(result.msg ?? "用户没有注册", to: view)
+                task.end()
+            })
         case .versionTooLow:
             Alert.showPrompt(title:"版本过低", result.msg ?? "App版本过低", { (index) in
                 exit(0)
             })
         case .error:
-            Alert.showPrompt(title:"账户被禁止", result.msg ?? "账户已被禁止")
+            Alert.showPrompt(title:"严重错误", result.msg ?? "请求出现严重错误")
         case .prompt:
-            HUD.showError(result.msg ?? "请求出现未知错误", to: view)
+            self.viewCon?.taskCenter.addTask({ (task) in
+                HUD.showError(result.msg ?? "请求出现未知错误", to: view)
+                task.end()
+            })
         }
     }
     func debugSelf() {

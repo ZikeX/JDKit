@@ -10,7 +10,6 @@ import UIKit
 import RxSwift
 class CollectionViewModel: ListViewModel {
     var layout:UICollectionViewLayout = UICollectionViewFlowLayout()
-    let updateCellSelectedState = PublishSubject<Void>()
     weak var collectionView:CollectionView!
     weak var listVC:CollectionViewController?
     override var listTitle:String? {
@@ -27,7 +26,6 @@ class CollectionViewModel: ListViewModel {
     
     override func configInit() {
         super.configInit()
-        subscribeUpdateCellSelectedState()
         
     }
     // MARK: - 
@@ -57,40 +55,30 @@ class CollectionViewModel: ListViewModel {
         self.resetInit()
         return collectionView
     }
-}
-extension CollectionViewModel {
+    // MARK: - CellSelectedState
     override func whenCellSelected(_ indexPath:IndexPath) {
         guard self.maxSelectedCount > 0 else {
             return
         }
         super.whenCellSelected(indexPath)
-        if self.selectedIndexPaths.contains(indexPath) {
-            self.updateSelectedState(true, indexPath: indexPath, index: self.selectedIndexPaths.count-1)
-            while self.selectedIndexPaths.count > maxSelectedCount {
-                let firstIndexPath = self.selectedIndexPaths.removeFirst()
-                self.updateSelectedState(false, indexPath: firstIndexPath, index: nil)
+        
+        self.getModel(indexPath)!.isSelected = self.selectedIndexPaths.contains(indexPath)
+        while self.selectedIndexPaths.count > maxSelectedCount {
+            let firstIndexPath = self.selectedIndexPaths.removeFirst()
+            self.getModel(firstIndexPath)?.isSelected = false
+        }
+        selectedIndexPathsChanged.onNext(self.selectedIndexPaths)
+        
+        self.collectionView.indexPathsForVisibleItems.forEach { (indexPath) in
+            guard let cell = self.collectionView.cellForItem(at: indexPath) as? CollectionCell else {
+                return
             }
-        }else {
-            self.updateSelectedState(false, indexPath: indexPath, index: nil)
+            if let index = self.selectedIndexPaths.index(of: indexPath) {
+                updateCellSelectedState(true, cell: cell, index: index)
+            }else {
+                updateCellSelectedState(false, cell: cell, index: nil)
+            }
         }
-    }
-    private func updateSelectedState(_ selected:Bool,indexPath:IndexPath,index:Int?) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? CollectionCell {
-            updateCellSelectedState(selected, cell: cell, index: index)
-        }
-        self.rxDataSource[indexPath].isSelected = selected
-        if index == nil {
-            updateCellSelectedState.onNext()
-        }
-    }
-    func subscribeUpdateCellSelectedState() {
-        self.updateCellSelectedState
-            .throttle(0.3, scheduler: MainScheduler.instance)
-            .subscribe(onNext:{ [unowned self]() in
-            self.selectedIndexPaths.enumerated().forEach({ (index,indexPath) in
-                self.updateSelectedState(true, indexPath: indexPath, index: index)
-            })
-        }).addDisposableTo(disposeBag)
     }
     func updateCellSelectedState(_ selected:Bool,cell:CollectionCell,index:Int?) {
         fatalError("待实现")
@@ -121,13 +109,16 @@ extension CollectionViewModel:UICollectionViewDelegateFlowLayout {
         if let cell = cell as? CollectionCell {
             let model = getModel(indexPath)!
             cell.itemWillAppear(model)
+            var index:Int? = nil
             if self.maxSelectedCount > 0 {
-                if model.isSelected {
+                let modelIndex = self.selectedIndexPaths.index(of: indexPath)
+                if model.isSelected && modelIndex == nil {
                     self.selectedIndexPaths.append(indexPath)
-                }else if let index = self.selectedIndexPaths.index(of: indexPath) {
+                    index = self.selectedIndexPaths.count - 1
+                }else if model.isSelected == false, let index = modelIndex {
                     self.selectedIndexPaths.remove(at: index)
                 }
-                updateCellSelectedState.onNext()
+                updateCellSelectedState(model.isSelected, cell: cell, index: index)
             }
         }
     }
@@ -143,6 +134,9 @@ extension CollectionViewModel:UICollectionViewDelegateFlowLayout {
         return model.enabled ?? true
     }
     final func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        whenCellSelected(indexPath)
+        
         let model = getModel(indexPath)!
         self.didSelectItemAt(indexPath: indexPath, model: model)
     }

@@ -16,7 +16,13 @@ protocol ScrollVCProtocol {
 }
 class PageViewController: UIViewController {
     
-    lazy var pageVC:UIPageViewController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+    lazy var pageVC:UIPageViewController = {
+        let pageVC = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        pageVC.edgesToVC(self, edgesToFill: true)
+        pageVC.dataSource = self
+        pageVC.delegate = self
+        return pageVC
+    }()
     
     var scrollVCCount:Int = 0
     var createScrollVCClosure:((Int)->(ScrollVCProtocol))!
@@ -40,9 +46,7 @@ class PageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.automaticallyAdjustsScrollViewInsets = false
-        self.pageVC.edgesToVC(self, edgesToFill: true)
-        self.pageVC.dataSource = self
-        self.pageVC.delegate = self
+        
     }
 }
 extension PageViewController:UIPageViewControllerDataSource {

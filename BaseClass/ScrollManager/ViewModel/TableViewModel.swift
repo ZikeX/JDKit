@@ -116,21 +116,22 @@ class TableViewModel: ListViewModel {
             return
         }
         super.whenCellSelected(indexPath)
-        if self.selectedIndexPaths.contains(indexPath) {
-            self.updateSelectedState(true, indexPath: indexPath)
-            while self.selectedIndexPaths.count > maxSelectedCount {
-                let firstIndexPath = self.selectedIndexPaths.removeFirst()
-                self.updateSelectedState(false, indexPath: firstIndexPath)
-            }
-        }else {
-            self.updateSelectedState(false, indexPath: indexPath)
+        
+        self.getModel(indexPath)!.isSelected = self.selectedIndexPaths.contains(indexPath)
+        while self.selectedIndexPaths.count > maxSelectedCount {
+            let firstIndexPath = self.selectedIndexPaths.removeFirst()
+            self.getModel(firstIndexPath)?.isSelected = false
         }
+        selectedIndexPathsChanged.onNext(self.selectedIndexPaths)
+        
+        self.tableView.indexPathsForVisibleRows?.forEach({ (indexPath) in
+            if let cell = tableView.cellForRow(at: indexPath) as? TableCell {
+                let selected = self.selectedIndexPaths.contains(indexPath)
+                updateCellSelectedState(selected, cell: cell)
+            }
+        })
     }
     private func updateSelectedState(_ selected:Bool,indexPath:IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) as? TableCell {
-            updateCellSelectedState(selected, cell: cell)
-        }
-        self.getModel(indexPath)?.isSelected = selected
     }
     func updateCellSelectedState(_ selected:Bool,cell:TableCell) {
         cell.accessoryView = selected ? ImageView(image: R.image.ic_cell_checkmark()) : nil
@@ -163,9 +164,10 @@ extension TableViewModel:UITableViewDelegate {
             let model = getModel(indexPath)!
             cell.itemWillAppear(model)
             if self.maxSelectedCount > 0 {
-                if model.isSelected {
+                let modelIndex = self.selectedIndexPaths.index(of: indexPath)
+                if model.isSelected && modelIndex == nil {
                     self.selectedIndexPaths.append(indexPath)
-                }else if let index = self.selectedIndexPaths.index(of: indexPath){
+                }else if model.isSelected == false, let index = modelIndex {
                     self.selectedIndexPaths.remove(at: index)
                 }
                 updateCellSelectedState(model.isSelected, cell: cell)

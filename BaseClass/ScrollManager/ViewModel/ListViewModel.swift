@@ -31,6 +31,7 @@ class ListViewModel: NSObject {
     }
     // MARK: - selected
     var selectedIndexPaths = [IndexPath]()
+    var selectedIndexPathsChanged = PublishSubject<[IndexPath]>()
     var maxSelectedCount:Int = 0
     
     deinit {
@@ -48,7 +49,6 @@ extension ListViewModel {
             self.selectedIndexPaths.remove(at: index)
         }else {
             self.selectedIndexPaths.append(indexPath)
-            
         }
     }
 }

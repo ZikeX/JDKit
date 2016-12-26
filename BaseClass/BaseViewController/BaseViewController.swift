@@ -33,8 +33,14 @@ class BaseViewController: UIViewController {
     lazy var doneButton:Button = {
         let button = Button(title: "完成")
         button.sizeToFit()
+        self.doneButton.rx.touchUpInside {[unowned self] (button) in
+            self.checkAndSubmit()
+        }
         return button
     }()
+    func checkAndSubmit() {
+        fatalError("子类实现")
+    }
     lazy var cacelButton:Button = {
         let button = Button(image: R.image.ic_cancel(),isTemplate:true)
         button.sizeToFit()
@@ -112,13 +118,19 @@ extension BaseViewController:PluginType {
         case .failure(let error):
             switch error {
             case .requestMapping(let url):
+                self.taskCenter.addTask({ (task) in
                 #if DEBUG
-                    HUD.showError("请求出错-->\(url)", delay:10.0, to: view)
+                    HUD.showError("请求出错-->\(url)", delay:10.0, to: self.view)
                 #else
                     HUD.showError("请求出错", to: view)
                 #endif
+                    task.end()
+                })
             case .underlying(let error):
-                HUD.showError(error.localizedDescription, to: view)
+                self.taskCenter.addTask({ (task) in
+                    HUD.showError(error.localizedDescription, to: self.view)
+                    task.end()
+                })
             default:
                 error.response?.viewCon = self
             }
