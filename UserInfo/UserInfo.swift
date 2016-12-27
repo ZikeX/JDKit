@@ -11,24 +11,26 @@ import HandyJSON
 
 class UserInfo {
     static let shared:UserInfo = UserInfo()
-    lazy var personModel:PersonModel = {
-        let personModel:PersonModel = self.readPersonModel()
-        return personModel
-    }()
-    var loginModel:LoginModel = LoginModel()
-    init() {
+    private init() {
         self.configNotification()
     }
     deinit {
         self.removeNotification()
     }
-    // MARK: - 
+    // MARK: -
+    lazy var personModel:PersonModel = {
+        let personModel:PersonModel = self.readPersonModel()
+        return personModel
+    }()
+    lazy var loginModel:LoginModel = LoginModel()
+    // MARK: -
     func configNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(saveModel), name: .UIApplicationDidEnterBackground, object: nil)
     }
     func removeNotification() {
         NotificationCenter.default.removeObserver(self, name: .UIApplicationDidEnterBackground, object: nil)
     }
+    // MARK: - 
     @objc func saveModel() {
         self.savePersonModel()
     }

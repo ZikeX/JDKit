@@ -10,7 +10,7 @@ import UIKit
 
 class WeiboManager: ThirdManager {
     static let shared = WeiboManager()
-    
+    private override init() {}
     override func jumpAndAuth() {
         let request = WBAuthorizeRequest.request() as! WBAuthorizeRequest
         request.redirectURI = WeiboRedirectURI

@@ -8,44 +8,9 @@
 
 import Foundation
 import MBProgressHUD
+
 class HUD {
-    class _ProgressHUD: MBProgressHUD {
-        var canInteractive:Bool = false
-        override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-            if canInteractive {
-                if self.bezelView.frame.contains(point) {
-                    return self.bezelView
-                }else {
-                    return nil
-                }
-            }else {
-                return super.hitTest(point, with: event)
-            }
-        }
-        func hideWhenTap(falling:Bool = false) {
-            _ = self.bezelView.rx.whenTouch({[unowned self] (bezelView) in
-                self.hide(falling:falling)
-            })
-        }
-        func hide(delay:TimeInterval = 0, duration:TimeInterval = 1.5,falling:Bool = false) {
-            SwiftTimer.asyncAfter(seconds: delay) {
-                self.bezelView.transform = CGAffineTransform.identity
-                UIView.animate(withDuration: duration, animations: {
-                    self.bezelView.alpha = 0
-                    if falling {
-                        self.offset.y = 200
-                        self.setNeedsLayout()
-                        self.layoutIfNeeded()
-                    }else {
-                        self.bezelView.transform = CGAffineTransform(scaleX: 0.1, y: 0.1)
-                    }
-                }, completion: { (finished) in
-                    self.hide(animated: false)
-                })
-            }
-        }
-    }
-    fileprivate var MBhud:_ProgressHUD?
+    fileprivate(set) var MBhud:_ProgressHUD?
     
     static fileprivate func createMBHUD(_ view:UIView) -> _ProgressHUD {
         let MBhud = _ProgressHUD(view: view)
@@ -53,21 +18,12 @@ class HUD {
         MBhud.removeFromSuperViewOnHide = true
         return MBhud
     }
-    @discardableResult
-    static func showMessage(_ text:String, to view:UIView? = nil) -> HUD {
-        let hud = HUD()
-        Async.main {
-            if let view = view ?? jd.visibleVC()?.view {
-                let MBhud = createMBHUD(view)
-                MBhud.label.text = text
-                MBhud.show(animated: true)
-                hud.MBhud = MBhud                
-            }
-        }
-        return hud
+    
+    func show() {
+        self.MBhud?.show(animated: true)
     }
-    func hide() {
-        self.MBhud?.hide()
+    func hide(closure:(()->())? = nil) {
+        self.MBhud?.hide(closure: closure)
     }
     static func hide(for view:UIView, isAll:Bool = false) {
         for subView in view.subviews.reversed() {
@@ -82,9 +38,24 @@ class HUD {
     }
 }
 extension HUD {
+    @discardableResult
+    static func showMessage(_ text:String, to view:UIView? = nil) -> HUD {
+        let hud = HUD()
+        Async.main {
+            if let view = view ?? jd.visibleVC()?.view {
+                let MBhud = createMBHUD(view)
+                MBhud.label.text = text
+                MBhud.show(animated: true)
+                hud.MBhud = MBhud
+            }
+        }
+        return hud
+    }
+}
+extension HUD {
     private static func show(_ text:String, icon:String, delay:TimeInterval, to view:UIView?) {
         Async.main {
-            let view = view ?? jd.keyWindow
+            let view = view ?? jd.rootWindow
             
             let MBhud = createMBHUD(view)
             MBhud.canInteractive = true
@@ -109,7 +80,7 @@ extension HUD {
     
     static func showPrompt(_ text:String, to view:UIView? = nil) {
         Async.main {
-            let view = view ?? jd.keyWindow
+            let view = view ?? jd.rootWindow
             
             let prompt = createMBHUD(view)
             prompt.canInteractive = true
@@ -137,5 +108,33 @@ extension HUD {
             }
             prompt.hide(delay: 0.7,falling:true)
         }
+    }
+}
+extension HUD {
+    func custom(_ closure:(MBBackgroundView)->UIView) -> HUD {
+        let custom = HUD.createMBHUD(jd.rootWindow)
+        custom.margin = 0
+        custom.mode = .customView
+        custom.bezelView.style = .solidColor
+        custom.bezelView.color = Color.clear
+        custom.backgroundView.style = .solidColor
+        custom.backgroundView.color = Color.black.alpha(0.75)
+        custom.customView = closure(custom.backgroundView)
+        
+        self.MBhud = custom
+        return self
+    }
+    static func showCustom(_ closure:@escaping (MBBackgroundView)->UIView) -> HUD {
+        let hud = HUD()
+        Async.main {
+            hud.custom(closure).show()
+        }
+        return hud
+    }
+    func hideNoAnimate() {
+        self.MBhud?.hide(animated: false)
+    }
+    func showNoAnimate() {
+        self.MBhud?.show(animated: false)
     }
 }

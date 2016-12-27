@@ -10,7 +10,7 @@ import Foundation
 
 class WechatManager:ThirdManager {
     static let shared = WechatManager()
-    
+    private override init() {}
     override func jumpAndAuth() {
         guard WXApi.isWXAppSupport() else {
             Alert.showPrompt(title: "微信登录", "请检查是否已经安装微信客户端")

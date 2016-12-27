@@ -10,7 +10,8 @@ import Foundation
 
 class QQManager:ThirdManager {
     static let shared = QQManager()
-    
+    private override init() {}
+    // MARK: -
     lazy var tencentOAuth:TencentOAuth = {
         let tencentOAuth = TencentOAuth(appId: TencentAppid, andDelegate: self)!
         tencentOAuth.openSDKWebViewQQShareEnable()

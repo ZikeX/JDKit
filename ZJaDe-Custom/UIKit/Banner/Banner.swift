@@ -32,9 +32,7 @@ class Banner: UIView {
     func configInit() {
         self.insertSubview(self.scrollView, at: 0)
         self.addSubview(self.pageControl)
-        self.scrollView.snp.makeConstraints { (maker) in
-            maker.edges.equalToSuperview()
-        }
+        
         let updateLayout = self.pageControl.updateLayout
         updateLayout.deactivate()
         updateLayout.constraintArr += self.pageControl.snp.prepareConstraints({ (maker) in
@@ -47,12 +45,16 @@ class Banner: UIView {
             guard self.scrollView.width > 0 else {
                 return
             }
-            let page = self.scrollView.contentOffset.x / self.scrollView.width
-            let progressInPage = self.scrollView.contentOffset.x - (page * self.scrollView.width)
+            let page = self.scrollView.currentPage
+            let progressInPage = self.scrollView.contentOffset.x - self.scrollView.width
             let progress = CGFloat(page) + progressInPage
             self.pageControl.progress = progress
         }).addDisposableTo(disposeBag)
         
         self.dataArray = [R.image.ic_default_image()!,R.image.ic_default_image()!]
+    }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        self.scrollView.frame = self.bounds
     }
 }
