@@ -16,7 +16,7 @@ enum LoginState:String {
 }
 enum LoginType:String {
     case normalLogin
-    case weChatLogin
+    case wechatLogin
     case qqLogin
     case weiboLogin
 }
@@ -66,7 +66,7 @@ extension LoginModel {
     static func checkIsLogined() -> Bool {
         let isLogined = self.isLogined
         if !isLogined {
-            Alert.showChoice(title: "您好", "您还没有登录，请登录之后再来操作，确认要登录吗？", { (index) in
+            Alert.showChoice(title: "您好", "您还没有登录，请登录之后再来操作，确认要登录吗？", {
                 RouterManager.present(Route_个人.登录)
             })
         }
@@ -84,10 +84,10 @@ extension LoginModel {
         switch loginType {
         case .normalLogin:
             paramsModel.loginType = AccountType.common.rawValue
-        case .weChatLogin:
+        case .wechatLogin:
             paramsModel.loginType = AccountType.wechat.rawValue
             paramsModel.refreshToken = Defaults[.wx_refresh_token]
-            paramsModel.openid = Defaults[.wx_openID]
+            paramsModel.openid = Defaults[.wx_openId]
             paramsModel.accessToken = Defaults[.wx_access_token]
         case .qqLogin:
             paramsModel.loginType = AccountType.qq.rawValue
@@ -95,7 +95,7 @@ extension LoginModel {
             paramsModel.accessToken = Defaults[.qq_access_token]
         case .weiboLogin:
             paramsModel.loginType = AccountType.weibo.rawValue
-            paramsModel.openid = Defaults[.wb_userID]
+            paramsModel.openid = Defaults[.wb_userId]
             paramsModel.accessToken = Defaults[.wb_access_token]
         }
         var hud:HUD?
@@ -129,9 +129,9 @@ extension LoginModel {
         switch loginType {
         case .normalLogin:
             paramsModel.regType = AccountType.common.rawValue
-        case .weChatLogin:
+        case .wechatLogin:
             paramsModel.regType = AccountType.wechat.rawValue
-            paramsModel.openid = Defaults[.wx_openID]
+            paramsModel.openid = Defaults[.wx_openId]
             paramsModel.accessToken = Defaults[.wx_access_token]
         case .qqLogin:
             paramsModel.regType = AccountType.qq.rawValue
@@ -139,7 +139,7 @@ extension LoginModel {
             paramsModel.accessToken = Defaults[.qq_access_token]
         case .weiboLogin:
             paramsModel.regType = AccountType.weibo.rawValue
-            paramsModel.openid = Defaults[.wb_userID]
+            paramsModel.openid = Defaults[.wb_userId]
             paramsModel.accessToken = Defaults[.wb_access_token]
         }
         
@@ -191,6 +191,18 @@ extension LoginModel {
             hud.hide()
             if let result = result,result.isSuccessful {
                 UserInfo.shared.personModel.bindAccountWechat = true
+                if let viewCon = jd.visibleVC() as? JDAccountManagerViewController {
+                    viewCon.updateData()
+                }
+            }
+        }
+    }
+    static func requestToBindingWeibo() {
+        let hud = HUD.showMessage("绑定微博中")
+        self.loginProvider.jd_request(.bindingWeibo).mapResult().callback { (result) in
+            hud.hide()
+            if let result = result,result.isSuccessful {
+                UserInfo.shared.personModel.bindAccountWeibo = true
                 if let viewCon = jd.visibleVC() as? JDAccountManagerViewController {
                     viewCon.updateData()
                 }

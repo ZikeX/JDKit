@@ -56,7 +56,7 @@ class TaskCenter {
                 let task = Task()
                 taskArrray.removeFirst()(task)
                 timer?.invalidate()
-                timer = Timer.scheduleTimer(0, { (timer) in
+                timer = Timer.scheduleTimer(0, {[unowned self] (timer) in
                     if task.isComplete {
                         timer?.invalidate()
                         self.taskState = .state_空闲状态

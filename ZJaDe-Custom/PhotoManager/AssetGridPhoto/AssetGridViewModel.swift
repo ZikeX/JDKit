@@ -47,9 +47,9 @@ class AssetGridViewModel: CollectionViewModel {
             }) as! ImageView
             
             if selected {
-                imageView.image = R.image.ic_选择_勾选()
+                imageView.image = R.image.ic_图片选择_勾选()
             }else {
-                imageView.image = R.image.ic_选择_未勾选()
+                imageView.image = R.image.ic_图片选择_未勾选()
             }
         }
     }

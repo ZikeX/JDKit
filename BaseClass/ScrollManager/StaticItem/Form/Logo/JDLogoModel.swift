@@ -11,12 +11,12 @@ import RxSwift
 
 class JDLogoModel: JDFormModel {
     
-    convenience init(image:UIImage? = nil,title:String? = nil,logo:UIImage? = nil,centerTitle:String? = nil) {
+    convenience init(image:UIImage? = nil,title:String? = nil,logo:String? = nil,centerTitle:String? = nil) {
         self.init(image: image, title: title)
         self.logo.value = logo
         self.centerTitle.value = centerTitle
     }
-    var logo:Variable<UIImage?> = Variable(nil)
+    var logo:Variable<String?> = Variable(nil)
     var centerTitle:Variable<String?> = Variable(nil)
     
     override func configModelInit() {

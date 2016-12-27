@@ -63,7 +63,7 @@ class AssetGridViewController: BaseViewController {
                 self.cacelVC()
             })
         }else {
-            Alert.showChoice(title: "选择图片", "您还没有选择图片确定要关闭吗？", { (index) in
+            Alert.showChoice(title: "选择图片", "您还没有选择图片确定要关闭吗？", {
                 self.cacelVC()
             })
         }

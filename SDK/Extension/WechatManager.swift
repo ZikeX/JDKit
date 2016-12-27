@@ -18,15 +18,14 @@ class WechatManager:ThirdManager {
         }
         let req = SendAuthReq()
         req.scope = WechatAuthScope
-        req.openID = Defaults[.wx_openID]
+        req.openId = Defaults[.wx_openId]
         WXApi.sendAuthReq(req, viewController: jd.visibleVC(), delegate: self)
     }
 }
 extension WechatManager {
-    
     override func requestLogin(needRefreshToken:Bool = true,onlyRequest:Bool = false) {
         func requestToLogin() {
-            LoginModel.requestToLogin(loginType: .weChatLogin, onlyRequest: onlyRequest)
+            LoginModel.requestToLogin(loginType: .wechatLogin, onlyRequest: onlyRequest)
         }
         if needRefreshToken {
             self.wechatRefreshToken {
@@ -49,14 +48,14 @@ extension WechatManager {
         _ = thirdAuthProvider.jd_request(.wechatAccessToken(code: resp.code)).mapJSON().subscribe(onNext:{[unowned self] (result) in
             hud.hide()
             guard let dict = result as? NSDictionary,dict[errcode_key] == nil else {
-                Alert.showChoice(title: "微信登录", "获取微信登录参数出错，请重新获取授权", { (index) in
+                Alert.showChoice(title: "微信登录", "获取微信登录参数出错，请重新获取授权", {
                     self.jumpAndAuth()
                 })
                 return
             }
             Defaults[.wx_access_token] = dict[access_token_key] as? String
             Defaults[.wx_refresh_token] = dict[refresh_token_key] as? String
-            Defaults[.wx_openID] = dict[openId_key] as? String
+            Defaults[.wx_openId] = dict[openId_key] as? String
             switch self.authType! {
             case .binding:
                 self.requestToBinding()
@@ -70,7 +69,7 @@ extension WechatManager {
         _ = thirdAuthProvider.jd_request(.wechatRefreshToken).mapJSON().subscribe(onNext:{ (result) in
             hud.hide()
             guard let dict = result as? NSDictionary,dict[errcode_key] == nil,dict[refresh_token_key] != nil else {
-                Alert.showChoice(title: "微信登录", "微信登录失效，请重新获取授权", { (index) in
+                Alert.showChoice(title: "微信登录", "微信登录失效，请重新获取授权", {
                     self.jumpAndAuth()
                 })
                 return

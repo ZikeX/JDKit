@@ -41,7 +41,7 @@ class UserInfo {
                 if let accountParams = self.getAccountParams() {
                     LoginModel.requestToLogin(loginType: loginType, params: accountParams, onlyRequest: true)
                 }
-            case .weChatLogin:
+            case .wechatLogin:
                 WechatManager.shared.requestLogin(onlyRequest: true)
             case .qqLogin:
                 QQManager.shared.requestLogin(onlyRequest: true)

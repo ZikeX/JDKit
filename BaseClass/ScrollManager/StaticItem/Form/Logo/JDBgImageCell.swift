@@ -27,8 +27,8 @@ extension JDBgImageCell {
         guard let model = model as? JDBgImageModel else {
             return
         }
-        model.logo.asObservable().subscribe(onNext:{[unowned self] (image) in
-            self.bgImageView.image = image
+        model.logo.asObservable().subscribe(onNext:{[unowned self] (url) in
+            self.bgImageView.setImage(imageData: url,placeholderImage:UIImage())
         }).addDisposableTo(disposeBag)
         
         model.centerImage.asObservable().subscribe(onNext:{[unowned self] (image) in

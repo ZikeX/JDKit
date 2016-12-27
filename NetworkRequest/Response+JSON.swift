@@ -11,12 +11,12 @@ import Moya
 import HandyJSON
 private var ResponseVCKey:UInt8 = 0
 extension Response:AssociatedObjectProtocol {
-    var viewCon:BaseViewController? {
+    weak var viewCon:BaseViewController? {
         get {
             return associatedObject(&ResponseVCKey)
         }
         set {
-            setAssociatedObject(&ResponseVCKey, newValue)
+            setAssociatedWeakObject(&ResponseVCKey, newValue)
         }
     }
 }
@@ -77,14 +77,14 @@ extension Response {
                 })
             }
             if result.resultCode == .newUpdateVersion {
-                Alert.showChoice(title:"有新的版本", result.msg!, { (index) in
+                AlertController.showChoice(title: "有新的版本", result.msg ?? "您有新的版本需要更新", { (action) in
                     // TODO: 这里跳转新版本
                 })
             }
         case .offline:
             Alert.showPrompt(title:"账户验证", result.msg ?? "账号已被下线")
         case .needLogin:
-            Alert.showChoice(title: "用户未登录", result.msg ?? "点击确定跳转登录", { (index) in
+            Alert.showChoice(title: "用户未登录", result.msg ?? "点击确定跳转登录", {
                 RouterManager.present(Route_个人.登录)
             })
         case .unregistered:
@@ -93,7 +93,7 @@ extension Response {
                 task.end()
             })
         case .versionTooLow:
-            Alert.showPrompt(title:"版本过低", result.msg ?? "App版本过低", { (index) in
+            AlertController.showPrompt(title: "版本过低", result.msg ?? "App版本过低", { (action) in
                 exit(0)
             })
         case .error:

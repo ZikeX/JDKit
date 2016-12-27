@@ -9,10 +9,9 @@
 import UIKit
 
 class Alert: WindowBgView {
-    fileprivate let itemTitleArray:[String]
-    init(itemTitleArray:[String]? = ["确定"],cancelTitle:String = "取消") {
-        self.itemTitleArray = itemTitleArray ?? []
+    init(confirmTitle:String = alertConfirmTitle, cancelTitle:String = alertCancelTitle) {
         super.init()
+        self.confirmButton.textStr = confirmTitle
         self.cancelButton.textStr = cancelTitle
     }
     required init?(coder aDecoder: NSCoder) {
@@ -24,12 +23,8 @@ class Alert: WindowBgView {
     lazy var bottomStackView:UIStackView = {
         let stackView = UIStackView(alignment: .fill, distribution: .fillEqually)
         stackView.addArrangedSubview(self.cancelButton)
-        self.itemTitleArray.enumerated().forEach { (index,title) in
-            stackView.addArrangedSubview(self.createButton(index: index,title: title))
-        }
-        stackView.arrangedSubviews.dropLast().forEach({ (view) in
-            view.addBorderRight(padding:5)
-        })
+        stackView.addArrangedSubview(self.confirmButton)
+        self.confirmButton.addBorderLeft(padding:5)
         return stackView
     }()
     lazy var titleButton:Button = {
@@ -40,36 +35,40 @@ class Alert: WindowBgView {
     }()
     lazy var cancelButton:Button = {
         let button = Button()
-        button.textLabel.font = Font.h1
+        button.textLabel.font = Font.h2
+        button.textLabel.textColor = Color.gray
         button.rx.touchUpInside({[unowned self] (button) in
             self.cancelClosure?()
             Alert.hide()
         })
         return button
     }()
+    lazy var confirmButton:Button = {
+        let button = Button()
+        button.textLabel.font = Font.h2
+        button.textLabel.textColor = Color.gray
+        button.rx.touchUpInside({[unowned self] (button) in
+            self.clickClosure?()
+            Alert.hide()
+        })
+        return button
+    }()
     // MARK: - closure
-    typealias AlertCallBackClosure = (Int)->()
+    typealias AlertCallBackClosure = ()->()
     typealias AlertCancelClosure = ()->()
     fileprivate var clickClosure:AlertCallBackClosure?
     fileprivate var cancelClosure:AlertCancelClosure?
     // MARK: -
-    var tinColor:UIColor? {
-        didSet {
-            self.bottomStackView.subviews.forEach { (view) in
-                view.tintColor = tinColor
-            }
-        }
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.baseView.cornerRadius = 5
+        self.baseView.clipsToBounds = true
         self.baseView.backgroundColor = Color.white
         self.configLayout()
         self.configShowAnimate(animated: false) {[unowned self] in
             self.view.addSubview(self.baseView)
             self.showAnimation()
         }
-        self.tinColor = Color.black
     }
 }
 extension Alert {
@@ -82,22 +81,10 @@ extension Alert {
             maker.height.equalTo(64).priority(999)
         }
         
-        let stackView = UIStackView(arrangedSubviews: [self.titleButton,self.contentView,bottomStackView])
+        let stackView = UIStackView(arrangedSubviews: [self.titleButton,self.contentView,self.bottomStackView])
         stackView.axis = .vertical
         self.baseView.addSubview(stackView)
         stackView.edgesToView()
-    }
-    fileprivate func createButton(index:Int,title:String) -> Button {
-        let button = Button(title: title)
-        button.textLabel.font = Font.h1
-        if index < itemTitleArray.count - 1 {
-            button.addBorderRight(padding:5)
-        }
-        button.rx.touchUpInside({[unowned self] (button) in
-            self.clickClosure?(index)
-            Alert.hide()
-        })
-        return button
     }
 }
 extension Alert {

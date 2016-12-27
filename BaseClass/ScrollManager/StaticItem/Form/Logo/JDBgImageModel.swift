@@ -11,10 +11,11 @@ import RxSwift
 
 class JDBgImageModel: JDLogoModel {
     
-    convenience init(image:UIImage? = nil,title:String? = nil,logo:UIImage? = nil,centerTitle:String? = nil,centerImage:UIImage? = nil) {
+    convenience init(image:UIImage? = nil,title:String? = nil,logo:String? = nil,centerTitle:String? = nil,centerImage:UIImage? = nil) {
         self.init(image: image, title: title, logo: logo, centerTitle: centerTitle)
         self.centerImage.value = centerImage
     }
+    
     var centerImage:Variable<UIImage?> = Variable(nil)
     
     override func configModelInit() {

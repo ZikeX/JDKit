@@ -9,14 +9,16 @@
 import Foundation
 
 protocol AssociatedObjectProtocol:class {
-    func setAssociatedObject<V>(_ key:inout UInt8, _ newValue:V)
+    // MARK: - get
     func associatedObject<V>(_ key:inout UInt8) -> V?
     func associatedObject<V>(_ key:inout UInt8, createIfNeed closure:(()->V)) -> V
+    // MARK: - set
+    func setAssociatedObject<V>(_ key:inout UInt8, _ newValue:V)
+    func setAssociatedWeakObject<V>(_ key:inout UInt8, _ newValue:V)
 }
 extension AssociatedObjectProtocol {
-    func setAssociatedObject<V>(_ key:inout UInt8, _ newValue:V) {
-        objc_setAssociatedObject(self, &key, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
+    
+    // MARK: - get
     func associatedObject<V>(_ key:inout UInt8) -> V? {
         return objc_getAssociatedObject(self, &key) as? V
     }
@@ -29,6 +31,13 @@ extension AssociatedObjectProtocol {
             self.setAssociatedObject(&key, value)
         }
         return value
+    }
+    // MARK: - set
+    func setAssociatedObject<V>(_ key:inout UInt8, _ newValue:V) {
+        objc_setAssociatedObject(self, &key, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+    }
+    func setAssociatedWeakObject<V>(_ key:inout UInt8, _ newValue:V) {
+        objc_setAssociatedObject(self, &key, newValue, .OBJC_ASSOCIATION_ASSIGN)
     }
 }
 extension NSObject:AssociatedObjectProtocol{}

@@ -33,9 +33,8 @@ extension JDUserPhotoCell {
         guard let model = model as? JDUserPhotoModel else {
             return
         }
-        model.logo.asObservable().subscribe(onNext:{[unowned self] (image) in
-            let image = image ?? R.image.ic_default_userImg()!
-            self.centerImageView.image = image
+        model.logo.asObservable().subscribe(onNext:{[unowned self] (url) in
+            self.centerImageView.setImage(imageData: url)
         }).addDisposableTo(disposeBag)
     }
 }

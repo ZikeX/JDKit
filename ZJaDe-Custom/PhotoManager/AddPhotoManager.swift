@@ -40,7 +40,7 @@ class AddPhotoManager {
     
     func show() {
         
-        UIAlertController.actionSheet(title: "选择图片").addDefaultAction(title: "拍照") { (action) in
+        AlertController.actionSheet(title: "选择图片").addDefaultAction(title: "拍照") { (action) in
             let pscope = PermissionScope()
             pscope.addPermission(CameraPermission(), message: "如果拒绝将无法使用照相机功能")
             pscope.bodyLabel.text = "在您照相之前，app需要获取\r\niPhone的照相机权限"
@@ -68,14 +68,9 @@ extension AddPhotoManager:RouteUrlType {
             self.imagePicker.callBack = callbackClosure
             return self.imagePicker
         case .photoAlbum:
-            if self.maxImageCount <= 1 {
-                self.imagePicker.callBack = callbackClosure
-                return self.imagePicker
-            }else {
-                self.assetGridVC.maxImageCount = maxImageCount
-                self.assetGridVC.callBack = callbackClosure
-                return self.assetGridVC
-            }
+            self.assetGridVC.maxImageCount = maxImageCount <= 1 ? 1 : maxImageCount
+            self.assetGridVC.callBack = callbackClosure
+            return self.assetGridVC
         }
     }
 }

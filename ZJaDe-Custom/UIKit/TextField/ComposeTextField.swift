@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxSwift
 
 enum EntryType {
     case `default`
@@ -16,6 +17,7 @@ enum EntryType {
     case number
     case count(min:Int?,max:Int?)
     case date(mode:UIDatePickerMode)
+    case birthday
 }
 
 class ComposeTextField: UITextField {
@@ -23,10 +25,12 @@ class ComposeTextField: UITextField {
     var suffix:String?
     
     lazy var datePicker = UIDatePicker()
+    var datePickerDisposeBag = DisposeBag()
     
     var entryType:EntryType = .default {
         didSet {
-            self.removeTarget(self, action: #selector(showDatePicker), for: .touchUpInside)
+            self.isEnabled = true
+            datePickerDisposeBag = DisposeBag()
             switch entryType {
             case .phone:
                 self.keyboardType = .phonePad
@@ -36,8 +40,11 @@ class ComposeTextField: UITextField {
                 self.keyboardType = .decimalPad
             case .count,.number:
                 self.keyboardType = .numberPad
-            case .date(mode: _):
-                self.addTarget(self, action: #selector(showDatePicker), for: .touchUpInside)
+            case .date(mode: _), .birthday:
+                self.isEnabled = false
+                self.rx.whenTouch {[unowned self] (view) in
+                    self.showDatePicker()
+                }.addDisposableTo(datePickerDisposeBag)
             default:
                 self.keyboardType = .default
             }
@@ -67,9 +74,11 @@ extension ComposeTextField:UITextFieldDelegate {
         }
     }
     func showDatePicker() {
+        let dateMode:UIDatePickerMode
+        let format:String
+        let dateAlertTitle:String
         switch self.entryType {
         case .date(mode:let mode):
-            let format:String
             switch mode {
             case .date:
                 format = "yyyy.MM.dd"
@@ -80,15 +89,25 @@ extension ComposeTextField:UITextFieldDelegate {
             case .countDownTimer:
                 format = "HH:mm:ss"
             }
-            datePicker.datePickerMode = mode
-            _ = datePicker.dateObservable.subscribe(onNext: {[unowned self] (date) in
-                self.text = date.toString(format: format)
-                self.sendActions(for: .editingChanged)
-            });
-            datePicker.show(title: placeholder ?? "日期")
+            dateMode = mode
+            dateAlertTitle = placeholder ?? "日期"
+            datePicker.minimumDate = Date()
+            datePicker.maximumDate = nil
+        case .birthday:
+            dateMode = .date
+            format = "yyyy-MM-dd"
+            dateAlertTitle = "选择生日"
+            datePicker.minimumDate = nil
+            datePicker.maximumDate = Date()
         default:
-            break
+            return
         }
+        datePicker.dateObservable.subscribe(onNext: {[unowned self] (date) in
+            self.text = date.toString(format: format)
+            self.sendActions(for: .editingChanged)
+        }).addDisposableTo(datePickerDisposeBag)
+        datePicker.datePickerMode = dateMode
+        datePicker.show(title: dateAlertTitle)
     }
 }
 extension ComposeTextField {

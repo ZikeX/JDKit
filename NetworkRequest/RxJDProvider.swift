@@ -21,16 +21,13 @@ extension StructTarget:JDStructTargetProtocol {
 }
 class RxJDProvider<Target>: RxMoyaProvider<Target.StructType> where Target: JDStructTargetProtocol {
     
-    init(endpointClosure: @escaping EndpointClosure = RxJDProvider.endpointMapping,
+    override init(endpointClosure: @escaping EndpointClosure = RxJDProvider.endpointMapping,
          requestClosure: @escaping RequestClosure = RxJDProvider.requestMapping,
          stubClosure: @escaping StubClosure = MoyaProvider.neverStub,
          manager: Manager = RxJDProvider.alamofireManager(),
          plugins: [PluginType] = [],
-         trackInflights: Bool = false,viewCon:BaseViewController? = nil) {
-        var plugins = plugins
-        if let plain = viewCon as? PluginType {
-           plugins.append(plain)
-        }
+         trackInflights: Bool = false) {
+        
         super.init(endpointClosure: endpointClosure, requestClosure: requestClosure, stubClosure: stubClosure, plugins: plugins, trackInflights: trackInflights)
     }
     func jd_request(_ token: Target) -> Observable<Response> {

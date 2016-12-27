@@ -20,7 +20,7 @@ extension DefaultsKeys {
     // MARK: - wechat
     static let wx_refresh_token = DefaultsKey<String?>("wx_refresh_token")
     static let wx_access_token = DefaultsKey<String?>("wx_access_token")
-    static let wx_openID = DefaultsKey<String?>("wx_openID")
+    static let wx_openId = DefaultsKey<String?>("wx_openId")
     
     // MARK: - QQ
     static let qq_access_token = DefaultsKey<String?>("qq_access_token")
@@ -30,7 +30,7 @@ extension DefaultsKeys {
     // MARK: - weibo
     static let wb_refresh_token = DefaultsKey<String?>("wb_refresh_token")
     static let wb_access_token = DefaultsKey<String?>("wb_access_token")
-    static let wb_userID = DefaultsKey<String?>("wb_userID")
+    static let wb_userId = DefaultsKey<String?>("wb_userId")
     static let wb_expirationDate = DefaultsKey<Date?>("wb_expirationDate")
     
 }

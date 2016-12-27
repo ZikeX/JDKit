@@ -10,7 +10,6 @@ import UIKit
 import RxSwift
 import SnapKit
 import Moya
-import Result
 
 class BaseViewController: UIViewController {
     
@@ -33,7 +32,7 @@ class BaseViewController: UIViewController {
     lazy var doneButton:Button = {
         let button = Button(title: "完成")
         button.sizeToFit()
-        self.doneButton.rx.touchUpInside {[unowned self] (button) in
+        button.rx.touchUpInside {[unowned self] (button) in
             self.checkAndSubmit()
         }
         return button
@@ -76,7 +75,8 @@ class BaseViewController: UIViewController {
     let taskCenter = TaskCenter()
     // MARK: - 
     lazy var networkProvider:RxJDProvider<StructTarget> = {
-        let provider = RxJDProvider<StructTarget>(viewCon:self)
+        let plugin = ViewConPlugin(self)
+        let provider = RxJDProvider<StructTarget>(plugins:[plugin])
         return provider
     }()
     // MARK: - BaseVCProtocol
@@ -107,33 +107,4 @@ class BaseViewController: UIViewController {
         self.taskCenter.clear()
     }
 }
-extension BaseViewController:PluginType {
-    func willSendRequest(_ request: RequestType, target: TargetType) {
-        
-    }
-    func didReceiveResponse(_ result: Result<Response, Moya.Error>, target: TargetType) {
-        switch result {
-        case .success(let response):
-            response.viewCon = self
-        case .failure(let error):
-            switch error {
-            case .requestMapping(let url):
-                self.taskCenter.addTask({ (task) in
-                #if DEBUG
-                    HUD.showError("请求出错-->\(url)", delay:10.0, to: self.view)
-                #else
-                    HUD.showError("请求出错", to: view)
-                #endif
-                    task.end()
-                })
-            case .underlying(let error):
-                self.taskCenter.addTask({ (task) in
-                    HUD.showError(error.localizedDescription, to: self.view)
-                    task.end()
-                })
-            default:
-                error.response?.viewCon = self
-            }
-        }
-    }
-}
+
