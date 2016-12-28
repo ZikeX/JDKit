@@ -93,6 +93,7 @@ class BaseViewController: UIViewController {
         super.viewDidAppear(animated)
         self.jdViewDidAppear()
         self.taskCenter.start()
+        self.needUpdateDataHandle()
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -105,6 +106,38 @@ class BaseViewController: UIViewController {
     }
     deinit {
         self.taskCenter.clear()
+    }
+    // MARK: - updateData
+    private var isNeedUpdateData = false
+    private var isNeedRetryRequest = true
+    private func needUpdateDataHandle() {
+        if self.isNeedRetryRequest {
+            self.isNeedRetryRequest = false
+            request()
+        }
+        if self.isNeedUpdateData {
+            self.isNeedUpdateData = false
+            updateData()
+        }
+    }
+    func setNeedRetryRequest() {
+        isNeedRetryRequest = true
+        if self.viewState == .viewDidAppear {
+            needUpdateDataHandle()
+        }
+    }
+    func setNeedUpdateData() {
+        isNeedUpdateData = true
+        if self.viewState == .viewDidAppear {
+            needUpdateDataHandle()
+        }
+    }
+    /// ZJaDe: need override
+    func request() {
+        updateData()
+    }
+    func updateData() {
+        logError("子类实现相关逻辑")
     }
 }
 

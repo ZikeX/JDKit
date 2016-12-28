@@ -8,31 +8,48 @@
 
 import Foundation
 
+typealias CatchParamsClosure = () -> [String:Any]
 protocol CatchParamsProtocol {
     var key:String {get}
     func catchParams() -> [String:Any]
-    
-    typealias CatchParamsClosure = () -> [String:Any]
-    func configCatchParams(_ closure:@escaping CatchParamsClosure)
 }
 extension CatchParamsProtocol where Self:TableModel {
+    
+}
+// MARK: -
+typealias  CheckParamsClosure = () -> Bool
+protocol CheckParamsProtocol {
+    func checkParams() -> Bool
+}
+// MARK: - 
+private var CatchParamsClosureKey:UInt8 = 0
+private var CheckParamsClosureKey:UInt8 = 0
+extension TableModel {
+    fileprivate(set) var catchParamsClosure:CatchParamsClosure? {
+        get {
+            return associatedObject(&CatchParamsClosureKey)
+        }
+        set {
+            setAssociatedObject(&CatchParamsClosureKey, newValue)
+        }
+    }
+    fileprivate(set) var checkParamsClosure:CheckParamsClosure? {
+        get {
+            return associatedObject(&CheckParamsClosureKey)
+        }
+        set {
+            setAssociatedObject(&CheckParamsClosureKey, newValue)
+        }
+    }
+    /// ZJaDe:
     func configCatchParams(_ closure:@escaping CatchParamsClosure) {
         self.catchParamsClosure = closure
     }
-}
-// MARK: - 
-protocol CheckParamsProtocol {
-    func checkParams() -> Bool
-    
-    typealias  CheckParamsClosure = () -> Bool
-    func configCheckParams(_ closure:@escaping CheckParamsClosure)
-}
-extension CheckParamsProtocol where Self:TableModel {
     func configCheckParams(_ closure:@escaping CheckParamsClosure) {
         self.checkParamsClosure = closure
     }
+    
 }
-
 
 
 

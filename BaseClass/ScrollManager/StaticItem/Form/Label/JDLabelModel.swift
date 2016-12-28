@@ -27,3 +27,17 @@ extension JDLabelModel {
         return self.detailTitle.value?.isEmpty != false && detailAttributeTitle.value == nil
     }
 }
+extension JDLabelModel:CatchParamsProtocol,CheckParamsProtocol {
+    func catchParams() -> [String : Any] {
+        var params = [String:Any]()
+        params[key] = detailTitle.value
+        return params
+    }
+    func checkParams() -> Bool {
+        guard let detailTitle = detailTitle.value, detailTitle.length > 0 else {
+            HUD.showPrompt("您还没有完善信息！")
+            return false
+        }
+        return true
+    }
+}

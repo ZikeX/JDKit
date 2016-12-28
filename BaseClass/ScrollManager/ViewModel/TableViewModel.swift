@@ -144,9 +144,6 @@ extension TableViewModel {
     }
 }
 extension TableViewModel:UITableViewDelegate {
-    final func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        self.tableView.endEditing(true)
-    }
     func getModel(_ indexPath:IndexPath) -> TableModel? {
         guard indexPath.section < rxDataSource.sectionModels.count else {
             return nil
