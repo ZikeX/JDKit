@@ -42,6 +42,8 @@ class BaseMapViewController: BaseViewController {
             navItem.titleView = self.searchView
         }
         configSearchView()
+        
+        self.mapView.showsUserLocation = true
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -61,7 +63,6 @@ class BaseMapViewController: BaseViewController {
         }).addDisposableTo(disposeBag)
     }
     override func updateData() {
-        self.mapView.showsUserLocation = true
         self.mapView.updateLocationData(self.currentLocation)
         self.mapView.userTrackingMode = BMKUserTrackingModeFollow
     }
