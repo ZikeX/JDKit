@@ -45,7 +45,7 @@ extension JDLogoCell {
         }).addDisposableTo(disposeBag)
         
         centerImageView.rx.whenTouch { (image) in
-            AddPhotoManager.shared.callback { (images) in
+            AddPhotoManager().callback { (images) in
                 
             }.show()
         }.addDisposableTo(disposeBag)

@@ -78,14 +78,14 @@ extension PageViewController:UIPageViewControllerDelegate {
     }
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if let currentVC = self.pageVC.viewControllers?.first {
-            self.allScrollVC.enumerated().forEach({ (offset,element) in
+            for element in self.allScrollVC {
                 if let value = element.value as? UIViewController, value == currentVC {
                     self.currentIndex = element.key
                     self.currentScrollVC = currentVC
                     self.currentIndexChanged.onNext(self.currentIndex)
+                    break
                 }
-            })
-            
+            }
         }
     }
 }

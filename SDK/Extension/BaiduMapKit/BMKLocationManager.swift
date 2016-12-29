@@ -13,7 +13,7 @@ import RxSwift
 class BMKLocationManager:NSObject {
     // MARK: 反编码 坐标转地址
     lazy var geoCodeSearch = BMKGeoCodeSearch()
-    fileprivate lazy var reverseGeoCodeSubject = ReplaySubject<BMKReverseGeoCodeResult>.create(bufferSize: 1)
+    fileprivate lazy var reverseGeoCodeSubject = ReplaySubject<AddressComponentModel>.create(bufferSize: 1)
     // MARK: 定位
     lazy var locationService = BMKLocationService()
     fileprivate lazy var locationSubject = ReplaySubject<BMKUserLocation>.create(bufferSize: 1)
@@ -21,20 +21,23 @@ class BMKLocationManager:NSObject {
 }
 // MARK: - 反编码 坐标转地址
 extension BMKLocationManager {
-    func locationAndReverseGeoCode() -> Observable<BMKReverseGeoCodeResult> {
-        return self.getLocation().flatMap {[unowned self] (location) -> Observable<BMKReverseGeoCodeResult> in
+    func locationAndReverseGeoCode() -> Observable<AddressComponentModel> {
+        return self.getLocation().flatMap {[unowned self] (location) -> Observable<AddressComponentModel> in
             return self.reverseGeoCode(location.location.coordinate)
         }
     }
-    func reverseGeoCode(_ coordinate:CLLocationCoordinate2D) -> Observable<BMKReverseGeoCodeResult> {
+    func reverseGeoCode(_ coordinate:CLLocationCoordinate2D) -> Observable<AddressComponentModel> {
         self.beginSearch(coordinate)
-        return self.reverseGeoCodeSubject.take(1)
+        return self.reverseGeoCodeSubject.retry(3).take(1).do( onDispose: {
+            self.endSearch()
+        })
     }
     fileprivate func beginSearch(_ coordinate:CLLocationCoordinate2D) {
         self.geoCodeSearch.delegate = self
         let result = BMKReverseGeoCodeOption()
         result.reverseGeoPoint = coordinate
         if self.geoCodeSearch.reverseGeoCode(result) == false {
+            self.reverseGeoCodeSubject.onError(NSError(domain: "反geo检索失败", code: -1, userInfo: nil))
             logDebug("反geo检索发送失败")
         }
     }
@@ -51,12 +54,18 @@ extension BMKLocationManager:BMKGeoCodeSearchDelegate {
     /// ZJaDe: 返回反地理编码搜索结果
     func onGetReverseGeoCodeResult(_ searcher: BMKGeoCodeSearch!, result: BMKReverseGeoCodeResult!, errorCode error: BMKSearchErrorCode) {
         if result.address != nil, result.address.length > 0 {
-            self.reverseGeoCodeSubject.onNext(result)
-            self.reverseGeoCodeSubject.onCompleted()
+            let addressModel = AddressComponentModel()
+            addressModel.province = result.addressDetail.province
+            addressModel.city = result.addressDetail.city
+            addressModel.area = result.addressDetail.district
+            addressModel.streetName = result.addressDetail.streetName
+            addressModel.streetNumber = result.addressDetail.streetNumber
+            addressModel.coordinate = result.location
+            
+            self.reverseGeoCodeSubject.onNext(addressModel)
         }else if (error != BMK_SEARCH_NO_ERROR) {
             HUD.showError("反编码错误->\(error)")
         }
-        self.endSearch()
     }
 }
 // MARK: - 定位
@@ -69,15 +78,14 @@ extension BMKLocationManager {
         self.checkCanLocation {
             self.startUserLocationService()
         }
-        return self.locationSubject.do(onDispose: {
+        return self.locationSubject.retry(3).do(onDispose: {
             self.endLocation()
-            
         })
     }
     // MARK: 只请求定位，不提示错误
     func onlyLocation() -> Observable<BMKUserLocation> {
         self.startUserLocationService()
-        return self.locationSubject.do(onDispose: {
+        return self.locationSubject.retry(3).do(onDispose: {
             self.endLocation()
         })
     }

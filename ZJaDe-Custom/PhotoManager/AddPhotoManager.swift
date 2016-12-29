@@ -13,9 +13,6 @@ typealias AddPhotoCallbackClosure = ([UIImage])->()
 
 class AddPhotoManager {
     // MARK: -
-    static let shared = AddPhotoManager()
-    private init() {}
-    // MARK: -
     enum SelectImageType {
         case camera
         case photoAlbum
@@ -34,22 +31,24 @@ class AddPhotoManager {
         return self
     }
     // MARK: -
+    private var pscope:PermissionScope! = PermissionScope()
     func show() {
-        let pscope = PermissionScope()
         AlertController.actionSheet(title: "选择图片").addDefaultAction(title: "拍照") { (action) in
-            pscope.addPermission(CameraPermission(), message: "如果拒绝将无法使用照相机功能")
-            pscope.bodyLabel.text = "在您照相之前，app需要获取\r\niPhone的照相机权限"
-            pscope.show({[unowned self] (finished, results) in
+            self.pscope.addPermission(CameraPermission(), message: "如果拒绝将无法使用照相机功能")
+            self.pscope.bodyLabel.text = "在您照相之前，app需要获取\r\niPhone的照相机权限"
+            self.pscope.show({[unowned self] (finished, results) in
                 self.selectImageType = .camera
                 RouterManager.present(self)
+                self.pscope = nil
             }, cancelled: {(results) in
             })
         }.addDefaultAction(title: "从手机相册选择") { (action) in
-            pscope.addPermission(PhotosPermission(), message: "如果拒绝将无法使用相册功能")
-            pscope.bodyLabel.text = "在您选择相片之前，app需要获取\r\niPhone的访问相册的权限"
-            pscope.show({[unowned self] (finished, results) in
+            self.pscope.addPermission(PhotosPermission(), message: "如果拒绝将无法使用相册功能")
+            self.pscope.bodyLabel.text = "在您选择相片之前，app需要获取\r\niPhone的访问相册的权限"
+            self.pscope.show({[unowned self] (finished, results) in
                 self.selectImageType = .photoAlbum
                 RouterManager.present(self)
+                self.pscope = nil
                 }, cancelled: {(results) in
             })
         }.show()

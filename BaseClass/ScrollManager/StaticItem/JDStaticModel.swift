@@ -32,7 +32,7 @@ extension JDEntryModel {//DateTextField
                 let firstTextField = self.createTextField()
                 firstTextField.entryType = .date(mode:.date)
                 return firstTextField
-            }) as! ComposeTextField
+            }) as! TextFieldView
             stackView.createIfNotExisting(tag: 1002, { (stackView) -> UIView in
                 let label = UILabel(text: "至", color: Color.black, font: Font.h3)
                 label.contentHuggingHorizontalPriority = UILayoutPriorityRequired
@@ -44,7 +44,7 @@ extension JDEntryModel {//DateTextField
                 return textField
             }).makeLayoutView({ (view, maker) in
                 maker.width.equalTo(firstTextField)
-            }) as! ComposeTextField
+            }) as! TextFieldView
             cell.binding(textField: firstTextField, model: self, index: 0)
             cell.binding(textField: secondTextField, model: self, index: 1)
         }
@@ -82,14 +82,14 @@ extension JDEntryModel {//DateTextField
                 textField.rightViewMode = .always
                 textField.rightView = monthLabel()
                 return textField
-            }) as! ComposeTextField
+            }) as! TextFieldView
             let secondTextField = stackView.createIfNotExisting(tag: 1003, { (stackView) -> UIView in
                 let textField = self.createTextField()
                 textField.entryType = .count(min:1,max:12)
                 textField.rightView = monthLabel()
                 textField.rightViewMode = .always
                 return textField
-            }) as! ComposeTextField
+            }) as! TextFieldView
             cell.binding(textField: firstTextField, model: self, index: 0)
             cell.binding(textField: secondTextField, model: self, index: 1)
         }
@@ -178,8 +178,8 @@ extension JDEntryModel {//DateTextField
     }
 }
 extension JDStaticModel {
-    func createTextField() -> ComposeTextField {
-        let textField = ComposeTextField(color: Color.black, font: Font.h3)
+    func createTextField() -> TextFieldView {
+        let textField = TextFieldView(color: Color.black, font: Font.h3)
         textField.textAlignment = .center
         return textField
     }

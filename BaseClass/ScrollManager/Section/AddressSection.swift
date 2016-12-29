@@ -7,18 +7,30 @@
 //
 
 import UIKit
-class AddressDataModel: BaseEntityModel {
-    var detailAddress:String = ""
+class AddressComponentModel: BaseEntityModel {
     var province:String = ""
     var city:String = ""
     var area:String = ""
+    var streetName:String = ""
+    var streetNumber:String = ""
+    
     var coordinate:CLLocationCoordinate2D?
-    func provinces() -> String {
+    
+    func detailAddress() -> String {
+        return self.provinceAddress() + self.streetAddress()
+    }
+    func provinceAddress() -> String {
         return self.province + self.city + self.area
+    }
+    func areaAddress() -> String {
+        return self.area + self.streetName + self.streetNumber
+    }
+    func streetAddress() -> String {
+        return self.streetName + self.streetNumber
     }
 }
 class AddressSection: TableSection {
-    var model = AddressDataModel()
+    var model = AddressComponentModel()
     
     lazy var locationModel:JDLabelModel = {
         let locationModel = JDLabelModel(title: "快速定位", detailTitle: "选择小区、大厦或者街道")
@@ -34,8 +46,8 @@ class AddressSection: TableSection {
         return [locationModel,detailAddressModel]
     }
     func updateData() {
-        self.locationModel.detailTitle.value = self.model.provinces()
-        self.detailAddressModel.text = self.model.detailAddress
+        self.locationModel.detailTitle.value = self.model.provinceAddress()
+        self.detailAddressModel.text = self.model.streetAddress()
     }
 }
 extension AddressSection {

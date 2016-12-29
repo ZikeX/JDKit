@@ -93,7 +93,7 @@ class BaseViewController: UIViewController {
         super.viewDidAppear(animated)
         self.jdViewDidAppear()
         self.taskCenter.start()
-        self.needUpdateDataHandle()
+        self.updateDataIfNeed()
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -109,27 +109,27 @@ class BaseViewController: UIViewController {
     }
     // MARK: - updateData
     private var isNeedUpdateData = false
-    private var isNeedRetryRequest = true
-    private func needUpdateDataHandle() {
-        if self.isNeedRetryRequest {
-            self.isNeedRetryRequest = false
-            request()
-        }
-        if self.isNeedUpdateData {
-            self.isNeedUpdateData = false
-            updateData()
-        }
-    }
-    func setNeedRetryRequest() {
-        isNeedRetryRequest = true
+    private var isNeedToRequest = false
+    func setNeedToRequest() {
+        isNeedToRequest = true
         if self.viewState == .viewDidAppear {
-            needUpdateDataHandle()
+            updateDataIfNeed()
         }
     }
     func setNeedUpdateData() {
         isNeedUpdateData = true
         if self.viewState == .viewDidAppear {
-            needUpdateDataHandle()
+            updateDataIfNeed()
+        }
+    }
+    private func updateDataIfNeed() {
+        if self.isNeedToRequest {
+            self.isNeedToRequest = false
+            request()
+        }
+        if self.isNeedUpdateData {
+            self.isNeedUpdateData = false
+            updateData()
         }
     }
     /// ZJaDe: need override

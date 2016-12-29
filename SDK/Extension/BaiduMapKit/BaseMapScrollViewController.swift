@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxSwift
 
 class BaseMapScrollViewController: ScrollViewController {
     lazy private(set) var mapView = BMKMapView()
@@ -23,7 +24,10 @@ class BaseMapScrollViewController: ScrollViewController {
     override func loadView() {
         self.view = self.mapView
     }
-    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configMapView()
+    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         mapView.viewWillAppear()
@@ -32,19 +36,28 @@ class BaseMapScrollViewController: ScrollViewController {
         super.viewWillDisappear(animated)
         mapView.viewWillDisappear()
     }
+    
+    
+    var whenShowMyLocation = PublishSubject<Void>()
+    func showMyLocation() {
+        self.mapView.userTrackingMode = BMKUserTrackingModeFollowWithHeading
+        self.whenShowMyLocation.onNext()
+    }
 }
 extension BaseMapScrollViewController {
+    func configMapView() {
+        self.mapView.showsUserLocation = true
+        self.mapView.zoomLevel = 19
+    }
     func configPositionIndicator(_ positionIndicator:Button) {
         positionIndicator.rx.touchUpInside({[unowned self] (button) in
-            self.mapView.userTrackingMode = BMKUserTrackingModeFollowWithHeading
-            self.mapView.showsUserLocation = true
+            self.showMyLocation()
         })
     }
     func configMapZoomView(_ zoomView:MapZoomView) {
         self.mapView.maxZoomLevel = zoomView.maxZoomLevel
         self.mapView.minZoomLevel = zoomView.minZoomLevel
         zoomView.zoomIn.rx.touchUpInside({[unowned self,unowned zoomView] (button) in
-            logDebug("1->zoomLevel\(self.mapView.zoomLevel),maxZoomLevel\(self.mapView.maxZoomLevel)")
             if self.mapView.zoomLevel < zoomView.maxZoomLevel {
                 self.mapView.zoomIn()
             }else {
@@ -52,10 +65,8 @@ extension BaseMapScrollViewController {
                 zoomView.shake()
                 Alert.showPrompt("已经放大到最大级别！")
             }
-            logDebug("2->zoomLevel\(self.mapView.zoomLevel),maxZoomLevel\(self.mapView.maxZoomLevel)")
         })
         zoomView.zoomOut.rx.touchUpInside {[unowned self,unowned zoomView] (button) in
-            logDebug("1->zoomLevel\(self.mapView.zoomLevel),minZoomLevel\(self.mapView.minZoomLevel)")
             if self.mapView.zoomLevel > zoomView.minZoomLevel {
                 self.mapView.zoomOut()
             }else {
@@ -63,7 +74,6 @@ extension BaseMapScrollViewController {
                 zoomView.shake()
                 Alert.showPrompt("已经缩小到最小级别！")
             }
-            logDebug("2->zoomLevel\(self.mapView.zoomLevel),minZoomLevel\(self.mapView.minZoomLevel)")
         }
     }
 }

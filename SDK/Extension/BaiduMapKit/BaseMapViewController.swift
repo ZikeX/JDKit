@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxSwift
 
 class BaseMapViewController: BaseViewController {
     lazy var searchView:UIView = UIView()
@@ -27,15 +28,15 @@ class BaseMapViewController: BaseViewController {
         return self.mapVC.mapView
     }
     var currentLocation:BMKUserLocation?
-    private var needUpdateMyLocation = true
+    private var needShowMyLocation = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         addChildScrollVC(edgesToFill: true)
         self.view.addSubview(self.headerShadowView)
         
-        self.navBarAlpha = 0
-        self.navTintColor = Color.white
+        self.navBarAlpha = 0.9
+        self.navTintColor = Color.black
         self.backButton.addShadowInWhiteView()
         self.configNavBarItem { (navItem) in
             navItem.leftBarButtonItem = self.backButton.barButtonItem()
@@ -43,33 +44,36 @@ class BaseMapViewController: BaseViewController {
         }
         configSearchView()
         
-        self.mapView.showsUserLocation = true
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.setNeedToRequest()
         mapView.delegate = self
-        self.setNeedRetryRequest()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-    }
-    override func request() {
-        BMKLocationManager().getLocation().subscribe(onNext:{[unowned self] (userLocation) in
-            if self.needUpdateMyLocation {
-                self.needUpdateMyLocation = false
-                self.currentLocation = userLocation
-                self.updateData()
-            }
-        }).addDisposableTo(disposeBag)
-    }
-    override func updateData() {
-        self.mapView.updateLocationData(self.currentLocation)
-        self.mapView.userTrackingMode = BMKUserTrackingModeFollow
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         mapView.delegate = nil
     }
+    override func request() {
+        BMKLocationManager().location().subscribe(onNext:{[unowned self] (userLocation) in
+            self.currentLocation = userLocation
+            self.updateData()
+            if self.needShowMyLocation {
+                self.needShowMyLocation = false
+                self.mapVC.showMyLocation()
+            }
+            self.didUpdateLocation.onNext(userLocation)
+        }).addDisposableTo(disposeBag)
+    }
+    override func updateData() {
+        self.mapView.updateLocationData(self.currentLocation)
+    }
+    // MARK: - BMKMapViewDelegate
+    var regionDidChange = PublishSubject<Void>()
+    var didUpdateLocation = PublishSubject<BMKUserLocation>()
 }
 extension BaseMapViewController {
     // MARK: searchView
@@ -81,6 +85,7 @@ extension BaseMapViewController {
         _ = searchView.rx.whenTouch({ (view) in
             // TODO: 点击搜索框时
         })
+        searchTextField.backgroundColor = Color.clear
     }
 }
 extension BaseMapViewController:AddChildScrollProtocol {
@@ -89,5 +94,10 @@ extension BaseMapViewController:AddChildScrollProtocol {
     }
 }
 extension BaseMapViewController:BMKMapViewDelegate {
-    
+    func mapViewDidFinishLoading(_ mapView: BMKMapView!) {
+        
+    }
+    func mapView(_ mapView: BMKMapView!, regionDidChangeAnimated animated: Bool) {
+        self.regionDidChange.onNext()
+    }
 }

@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 
 class JDTextFieldCell: JDEntryCell {
-    var textField = ComposeTextField()
+    var textField = TextFieldView()
     
     override func configItemInit() {
         super.configItemInit()
@@ -45,7 +45,7 @@ extension JDTextFieldCell {
         
         controlEvents(textField: textField, editingState: model.textFieldEditingState)
     }
-    func configTextField(_ textField:ComposeTextField) {
+    func configTextField(_ textField:TextFieldView) {
         textField.backgroundColor = Color.clear
         textField.textColor = Color.black
         textField.font = Font.h3
@@ -56,17 +56,17 @@ extension JDTextFieldCell {
     }
 }
 extension JDTextFieldCell {
-    func controlEvents(textField:ComposeTextField,editingState:PublishSubject<UIControlEvents>) {
-        textField.rx.controlEvent(.editingDidBegin).subscribe(onNext: { (event) in
+    func controlEvents(textField:TextFieldView,editingState:PublishSubject<UIControlEvents>) {
+        textField.textField.rx.controlEvent(.editingDidBegin).subscribe(onNext: { (event) in
             editingState.onNext(.editingDidBegin)
             }).addDisposableTo(disposeBag)
-        textField.rx.controlEvent(.editingChanged).subscribe(onNext: { (event) in
+        textField.textField.rx.controlEvent(.editingChanged).subscribe(onNext: { (event) in
             editingState.onNext(.editingChanged)
             }).addDisposableTo(disposeBag)
-        textField.rx.controlEvent(.editingDidEnd).subscribe(onNext: { (event) in
+        textField.textField.rx.controlEvent(.editingDidEnd).subscribe(onNext: { (event) in
             editingState.onNext(.editingDidEnd)
             }).addDisposableTo(disposeBag)
-        textField.rx.controlEvent(.editingDidEndOnExit).subscribe(onNext: { (event) in
+        textField.textField.rx.controlEvent(.editingDidEndOnExit).subscribe(onNext: { (event) in
             editingState.onNext(.editingDidEndOnExit)
             }).addDisposableTo(disposeBag)
     }

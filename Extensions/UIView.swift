@@ -49,26 +49,6 @@ extension UIView {
             subview.removeFromSuperview()
         }
     }
-    func centerXInSuperView() {
-        guard let parentView = superview else {
-            assertionFailure("ZJade Error: \(self) 没有superview")
-            return
-        }
-        
-        self.x = parentView.width/2 - self.width/2
-    }
-    func centerYInSuperView() {
-        guard let parentView = superview else {
-            assertionFailure("ZJade Error: \(self) 没有superview")
-            return
-        }
-        
-        self.y = parentView.height/2 - self.height/2
-    }
-    func centerInSuperView() {
-        self.centerXInSuperView()
-        self.centerYInSuperView()
-    }
 }
 extension UIView {
     func resizeToFitSubviews(_ tagsToIgnore: [Int]) {

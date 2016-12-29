@@ -12,7 +12,7 @@ class JDEntryCell: JDFormCell {
     
 }
 extension JDEntryCell {
-    func binding(textField:ComposeTextField,model:JDEntryModel,index:Int) {
+    func binding(textField:TextFieldView,model:JDEntryModel,index:Int) {
         if index < model.texts.count {
             model.texts[index].asObservable()
                 .bindTo(textField.rx.text)

@@ -18,7 +18,9 @@ extension UIDatePicker {
             setAssociatedObject(&dateChangeObserKey, newValue)
         }
     }
-    
+    var isShowing:Bool {
+        return self.superview != nil
+    }
     func show(title:String) {
         Alert().configClick { (index) in
             self.dateObservable.onNext(self.date)

@@ -10,7 +10,7 @@ import UIKit
 
 class TitleTextFieldItem: CustomIBControl {
     let stackView:UIStackView = UIStackView(alignment: .fill, spacing: 8)
-    let textField:ComposeTextField = ComposeTextField(color: Color.black, font: Font.h3)
+    let textField:TextFieldView = TextFieldView(color: Color.black, font: Font.h3)
     let titleLabel:UILabel = UILabel(color: Color.black, font: Font.h3)
     override func configInit() {
         super.configInit()

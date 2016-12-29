@@ -29,7 +29,7 @@ class PersonModel: BaseEntityModel {
     var city:String = ""
     var area:String = ""
     var coordinate:CLLocationCoordinate2D?
-    func provinces() -> String {
+    func provinceAddress() -> String {
         return self.province + self.city + self.area
     }
     
