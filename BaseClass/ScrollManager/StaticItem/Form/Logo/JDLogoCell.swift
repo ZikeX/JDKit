@@ -44,12 +44,14 @@ extension JDLogoCell {
             self.centerLabel.text = text
         }).addDisposableTo(disposeBag)
         
-        centerImageView.rx.whenTouch { (image) in
-            AddPhotoManager().callback { (images) in
-                
-            }.show()
+        centerImageView.rx.whenTouch {[unowned self] (image) in
+            self.touchCenterImageView()
         }.addDisposableTo(disposeBag)
     }
-    
+    func touchCenterImageView() {
+        AddPhotoManager().callback { (images) in
+            
+        }.show()
+    }
 }
 
