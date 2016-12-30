@@ -14,7 +14,7 @@ class JDUserPhotoModel: JDLogoModel {
     
     override func configModelInit() {
         super.configModelInit()
-        self.spaceEdges = UIEdgeInsetsMake(8, 20, 8, 20)
+        self.spaceEdges = UIEdgeInsets(top: 8, left: 20, bottom: 8, right: 20)
         self.cellContentHeight = jd.screenWidth * 0.4
     }
 }

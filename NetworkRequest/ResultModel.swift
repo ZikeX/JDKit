@@ -47,7 +47,7 @@ class ResultModel:HandyJSON {
     }
 }
 class DictResultModel:ResultModel {
-    var data:[String:String]!
+    var data:Any!
 }
 class ObjectResultModel<Model>:ResultModel {
     var data:Model!

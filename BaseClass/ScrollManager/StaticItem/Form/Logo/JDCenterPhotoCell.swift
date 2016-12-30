@@ -26,7 +26,7 @@ extension JDCenterPhotoCell {
             self.centerImageView.setImage(imageData: url,placeholderImage:placeholderImage)
         }).addDisposableTo(disposeBag)
     }
-    override func touchCenterImageView() {
+    override func touchCenterImageView(_ model:JDLogoModel) {
         
     }
 }

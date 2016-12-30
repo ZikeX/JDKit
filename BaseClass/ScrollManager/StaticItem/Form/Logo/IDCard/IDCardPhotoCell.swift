@@ -10,7 +10,7 @@ import UIKit
 
 class IDCardPhotoCell: JDCenterPhotoCell {
     
-    override func touchCenterImageView() {
+    override func touchCenterImageView(_ model:JDLogoModel) {
         if self.titleLabel.text == "正面" {
             self.centerImageView.image = R.image.ic_IDCard_上传成功()
             self.centerLabel.text = "上传成功"

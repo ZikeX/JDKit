@@ -9,7 +9,9 @@
 import UIKit
 import Photos
 class AssetGridViewController: BaseViewController {
-    var callBack:AddPhotoCallbackClosure?
+    var callBack:([UIImage])->() = { (images) in
+        logDebug("回调没有写")
+    }
     
     var maxImageCount:Int = 1 {
         didSet {
@@ -59,7 +61,7 @@ class AssetGridViewController: BaseViewController {
     override func checkAndSubmit() {
         if self.viewModel.selectedIndexPaths.count > 0 {
             self.viewModel.requestSelectedImages({ (images) in
-                self.callBack?(images)
+                self.callBack(images)
                 self.cacelVC()
             })
         }else {

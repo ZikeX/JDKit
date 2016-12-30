@@ -15,7 +15,7 @@ class JDButtonModel: JDFormModel {
         super.configModelInit()
         cellHeight = 64
         
-        spaceEdges = UIEdgeInsetsMake(8, 20, 8, 20)
+        spaceEdges = UIEdgeInsets(top: 8, left: 20, bottom: 8, right: 20)
     }
     var buttonClick = PublishSubject<Void>()
 }

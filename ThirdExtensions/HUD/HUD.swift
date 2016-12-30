@@ -20,10 +20,10 @@ class HUD {
     }
     
     func show() {
-        self.MBhud?.show(animated: true)
+        self.MBhud!.show(animated: true)
     }
     func hide(closure:(()->())? = nil) {
-        self.MBhud?.hide(closure: closure)
+        self.MBhud!.hide(closure: closure)
     }
     static func hide(for view:UIView, isAll:Bool = false) {
         for subView in view.subviews.reversed() {

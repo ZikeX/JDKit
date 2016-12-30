@@ -16,7 +16,7 @@ class PersonModel: BaseEntityModel {
     var email:String = ""
     var mobile:String = ""
     
-    var hasPaypwd:Bool?
+    var hasPaypwd:Bool = false
     
     var nickname:String = ""
     var username:String = ""
@@ -28,7 +28,21 @@ class PersonModel: BaseEntityModel {
     var province:String = ""
     var city:String = ""
     var area:String = ""
-    var coordinate:CLLocationCoordinate2D?
+    var coordinate:CLLocationCoordinate2D? {
+        get {
+            if let latitude = latitude, let longitude = longitude {
+                return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+            }else {
+                return nil
+            }
+        }
+        set {
+            latitude = newValue?.latitude
+            longitude = newValue?.longitude
+        }
+    }
+    var latitude:CLLocationDegrees?
+    var longitude:CLLocationDegrees?
     func provinceAddress() -> String {
         return self.province + self.city + self.area
     }
@@ -38,4 +52,8 @@ class PersonModel: BaseEntityModel {
     var bindAccountWechat:Bool = false
     var bindAccountQQ:Bool = false
     var bindAccountWeibo:Bool = false
+    
+    override func setValue(_ value: Any?, forUndefinedKey key: String) {
+        logDebug("找不到对应的key-->\(key),value:\(value)")
+    }
 }

@@ -20,7 +20,7 @@ class JDBgImageModel: JDLogoModel {
     
     override func configModelInit() {
         super.configModelInit()
-        self.spaceEdges = UIEdgeInsetsMake(0, 0, 0, 0)
+        self.spaceEdges = UIEdgeInsets()
         self.cellContentHeight = jd.screenWidth * 0.4
         self.enabled = false
     }

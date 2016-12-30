@@ -31,6 +31,7 @@ extension JDButtonArrCell {
         model.dataArray.asObservable().subscribe(onNext: {[unowned self] (array) in
             self.gridViewItemsData = array
         }).addDisposableTo(disposeBag)
+        
         self.gridView.itemArray.forEach { (button) in
             button.isSelected = model.selectedButtons.contains(button)
             model.buttonsSelectedAppearance(button)
@@ -58,7 +59,7 @@ extension JDButtonArrCell:GridViewProtocol {
     func createGridView() -> GridView<GridViewItemType> {
         let itemsView = GridView<Button>()
         itemsView.columns = 4
-        itemsView.gridEdges = UIEdgeInsetsMake(10, 0, 10, 0)
+        itemsView.gridEdges = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         itemsView.verticalSpace = 10
         itemsView.backgroundColor = Color.white
         return itemsView

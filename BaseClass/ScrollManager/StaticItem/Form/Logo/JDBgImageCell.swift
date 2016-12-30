@@ -19,6 +19,7 @@ class JDBgImageCell: JDLogoCell {
         bgImageView.snp.makeConstraints { (maker) in
             maker.edges.equalToSuperview()
         }
+        bgImageView.contentMode = .scaleAspectFill
     }
 }
 extension JDBgImageCell {

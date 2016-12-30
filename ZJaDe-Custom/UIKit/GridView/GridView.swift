@@ -12,7 +12,7 @@ class GridView<ItemType:UIView>: UIView {
     /// ZJaDe:columns 总列数
     var columns:Int = 0 {
         didSet {
-            if visiableItemArray.count > 0 {
+            if visiableItemArray.count > 0,columns != oldValue {
                 configItemsArray()
             }
         }

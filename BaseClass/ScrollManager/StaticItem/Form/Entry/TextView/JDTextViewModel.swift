@@ -20,7 +20,7 @@ class JDTextViewModel: JDEntryModel {
 }
 extension JDTextViewModel {
     func configTopTitleBottomTextViewModel() {
-        self.spaceEdges = UIEdgeInsetsMake(10, 10, 10, 10)
+        self.spaceEdges = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         self.titleRightSpace = 15
         self.lineHeight = 0
         self.invalidateCellHeight()

@@ -187,7 +187,7 @@ extension JDStaticModel {
         let item = TitleTextFieldItem()
         item.titleLabel.textColor = Color.gray
         item.titleLabel.textAlignment = .right
-        item.contentEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 5)
+        item.contentEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
         return item
     }
 }

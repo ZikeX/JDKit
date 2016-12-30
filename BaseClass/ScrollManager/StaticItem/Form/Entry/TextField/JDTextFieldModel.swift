@@ -21,7 +21,7 @@ class JDTextFieldModel: JDEntryModel {
 extension JDTextFieldModel {
     func configColorTitleModel() {
         self.lineHeight = 0
-        self.spaceEdges = UIEdgeInsetsMake(10, 10, 0, 10)
+        self.spaceEdges = UIEdgeInsets(top: 10, left: 10, bottom: 0, right: 10)
         self.reuseIdentifier = "titleCell"
         self.cellContentHeight = 44
         self.configBindingCell { (cell) in

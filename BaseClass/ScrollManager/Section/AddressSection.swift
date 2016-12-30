@@ -49,13 +49,21 @@ class AddressSection: TableSection {
         self.locationModel.detailTitle.value = self.model.provinceAddress()
         self.detailAddressModel.text = self.model.streetAddress()
     }
+    func setValue(for personModel:PersonModel) {
+        self.locationModel.detailTitle.value = personModel.provinceAddress()
+        self.detailAddressModel.text = personModel.address
+        self.model.coordinate = personModel.coordinate
+        self.model.province = personModel.province
+        self.model.area = personModel.area
+        self.model.city = personModel.city
+    }
 }
 extension AddressSection {
     func configLocationCell(model:JDLabelModel) {
         configCell(model: model)
         model.reuseIdentifier = "LocationCell"
         model.accessoryType.value = .disclosureIndicator
-        model.configBindingCell { (cell) in
+        model.configBindingCell {[unowned self] (cell) in
             guard let cell = cell as? JDLabelCell else {
                 return
             }
@@ -107,7 +115,7 @@ extension AddressSection {
         }
     }
     func configCell(model:JDFormModel) {
-        model.spaceEdges = UIEdgeInsetsMake(10, 10, 10, 10)
+        model.spaceEdges = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         model.cellHeight = 64
         model.titleRightSpace = 50
     }

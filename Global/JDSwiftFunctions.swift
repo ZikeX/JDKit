@@ -128,6 +128,9 @@ extension jd {
         }
         return currentNavigationController
     }
+    static var appRootNavc:UINavigationController {
+        return (rootWindow.rootViewController as! UINavigationController)
+    }
     static var appRootVC:UIViewController {
         return rootWindow.rootViewController!
     }

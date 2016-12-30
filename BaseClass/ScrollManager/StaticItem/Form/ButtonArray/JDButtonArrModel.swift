@@ -12,11 +12,13 @@ class JDButtonArrModel: JDFormModel {
     
     override func configModelInit() {
         super.configModelInit()
+        self.enabled = false
     }
+    var selectedButtons = [Button]()
     //最大可被选中的button的数量
     var maxSelectButtonCount:Int = 0
-    var selectedButtons = [Button]()
     var dataArray:Variable<[(String?,UIImage?)]> = Variable([(String?,UIImage?)]())
+    
     typealias ButtonsSelectedAppearanceClosure = (Button) -> ()
     var buttonsSelectedAppearance:ButtonsSelectedAppearanceClosure = { (button) in
         if button.isSelected {

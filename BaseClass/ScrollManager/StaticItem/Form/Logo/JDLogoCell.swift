@@ -32,6 +32,7 @@ class JDLogoCell: JDFormCell {
         centerImageView.edgesToView()
         centerImageView.clipsToBounds = true
         centerImageView.isUserInteractionEnabled = true
+        centerImageView.contentMode = .scaleAspectFill
     }
 }
 extension JDLogoCell {
@@ -44,13 +45,14 @@ extension JDLogoCell {
             self.centerLabel.text = text
         }).addDisposableTo(disposeBag)
         
-        centerImageView.rx.whenTouch {[unowned self] (image) in
-            self.touchCenterImageView()
+        centerImageView.rx.whenTouch {[unowned self, unowned model] (image) in
+            self.touchCenterImageView(model)
         }.addDisposableTo(disposeBag)
     }
-    func touchCenterImageView() {
-        AddPhotoManager().callback { (images) in
-            
+    func touchCenterImageView(_ model:JDLogoModel) {
+        AddPhotoManager().callback {[weak model, weak self] (url, images) in
+            model?.logo.value = url.first!
+            self?.centerImageView.image = images.first!
         }.show()
     }
 }

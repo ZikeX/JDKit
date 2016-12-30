@@ -9,7 +9,7 @@
 import Foundation
 import PermissionScope
 
-typealias AddPhotoCallbackClosure = ([UIImage])->()
+typealias AddPhotoCallbackClosure = ([String],[UIImage])->()
 
 class AddPhotoManager {
     // MARK: -
@@ -59,16 +59,29 @@ class AddPhotoManager {
 }
 extension AddPhotoManager:RouteUrlType {
     func createViewCon(_ manager: RouterManager) -> UIViewController? {
+        let callbackClosure = self.callbackClosure!
+        func imageToUrl(_ images:[UIImage]) {
+            UIImage.jd_upload(images: images, closure: { (urlArr) in
+                if let urlArr = urlArr {
+                    callbackClosure(urlArr,images)
+                }
+            })
+        }
+        
         switch self.selectImageType {
         case .camera:
             let imagePicker = ImagePickerController()
             imagePicker.sourceType = .camera
-            imagePicker.callBack = callbackClosure
+            imagePicker.callBack = { (image) in
+                imageToUrl([image])
+            }
             return imagePicker
         case .photoAlbum:
             let assetGridVC = AssetGridViewController()
             assetGridVC.maxImageCount = maxImageCount <= 1 ? 1 : maxImageCount
-            assetGridVC.callBack = callbackClosure
+            assetGridVC.callBack = { (images) in
+                imageToUrl(images)
+            }
             return assetGridVC
         }
     }

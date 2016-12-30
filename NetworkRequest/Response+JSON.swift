@@ -28,9 +28,9 @@ extension Response {
         }
         let data = dict["data"] as? [String:Any]
         if let sectionTitle = sectionTitle {
-            result.data = data![sectionTitle] as! [String : String]
+            result.data = data![sectionTitle]
         }else {
-            result.data = data as? [String : String]
+            result.data = data
         }
         
         handle(result, showHUD)
