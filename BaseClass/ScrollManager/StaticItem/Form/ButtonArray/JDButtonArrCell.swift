@@ -38,6 +38,11 @@ extension JDButtonArrCell {
             
             button.rx.touchUpInside({[unowned self] (button) in
                 button.isSelected = !button.isSelected
+                if button.isSelected && !model.selectedButtons.contains(button) {
+                    model.selectedButtons.append(button)
+                }else if !button.isSelected, let index = model.selectedButtons.index(of: button) {
+                    model.selectedButtons.remove(at: index)
+                }
                 model.buttonsSelectedAppearance(button)
                 self.checkMaxCount(model: model)
             }).addDisposableTo(disposeBag)

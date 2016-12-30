@@ -39,9 +39,7 @@ class GridView<ItemType:UIView>: UIView {
     }
     var horizontalSpace:CGFloat = 0 {
         didSet {
-            itemsStackViews.forEach({ (stackView) in
-                stackView.spacing = self.horizontalSpace
-            })
+            updateItemWidth()
         }
     }
     var verticalSpace:CGFloat = 0 {
@@ -72,7 +70,6 @@ class GridView<ItemType:UIView>: UIView {
         self.addSubview(sectionsStackView)
         updateSectionLayout()
     }
-    
 }
 extension GridView {
     /// ZJaDe: 更新edge边距
@@ -97,7 +94,6 @@ extension GridView {
         itemsStackViews.forEach{$0.removeAllSubviews()}
         let lineTotalNum = self.lineTotalNum
         if lineTotalNum != itemsStackViews.count {
-            itemsStackViews = [UIStackView]()
             itemsStackViews.countIsEqual(lineTotalNum) {return UIStackView()}
             
             sectionsStackView.removeAllSubviews()
@@ -107,20 +103,32 @@ extension GridView {
                 stackView.spacing = self.horizontalSpace
             })
         }
+        
         visiableItemArray.enumerated().forEach { (offset: Int, element: ItemType) in
             /// ZJaDe: 在每一行的位置
             let lineNo = offset / columns
             let itemStackView = itemsStackViews[lineNo]
-            
             itemStackView.addArrangedSubview(element)
-            let _columns = columns.toCGFloat
-            let offset = itemStackView.spacing * (_columns - 1) / _columns
-            element.snp.makeConstraints({ (maker) in
-                maker.width.equalTo(itemStackView).dividedBy(columns).offset(-offset)
-            })
         }
+        updateItemWidth()
         if let lastStackView = itemsStackViews.last,lastStackView.arrangedSubviews.count < columns {
             lastStackView.addArrangedSubview(placeholderView)
         }
+    }
+    func updateItemWidth() {
+        self.sectionsStackView.updateLayout.deactivate()
+        visiableItemArray.enumerated().forEach { (offset: Int, element: ItemType) in
+            /// ZJaDe: 在每一行的位置
+            let lineNo = offset / columns
+            let itemStackView = itemsStackViews[lineNo]
+            itemStackView.spacing = self.horizontalSpace
+            
+            let _columns = columns.toCGFloat
+            let offset = itemStackView.spacing * (_columns - 1) / _columns
+            self.sectionsStackView.updateLayout.constraintArr += element.snp.prepareConstraints({ (maker) in
+                maker.width.equalTo(itemStackView).dividedBy(columns).offset(-offset)
+            })
+        }
+        self.sectionsStackView.updateLayout.activate()
     }
 }

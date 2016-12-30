@@ -14,7 +14,12 @@ class JDButtonArrModel: JDFormModel {
         super.configModelInit()
         self.enabled = false
     }
-    var selectedButtons = [Button]()
+    var selectedButtons = [Button]() {
+        didSet {
+            selectedButtonsChanged.onNext(selectedButtons)
+        }
+    }
+    var selectedButtonsChanged = PublishSubject<[Button]>()
     //最大可被选中的button的数量
     var maxSelectButtonCount:Int = 0
     var dataArray:Variable<[(String?,UIImage?)]> = Variable([(String?,UIImage?)]())
