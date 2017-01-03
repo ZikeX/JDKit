@@ -15,7 +15,9 @@ class ImageView: UIImageView {
         }
         set {
             self.willChangeValue(forKey: "image")
-            if isTemplate == true {
+            if newValue?.size == CGSize() {
+                super.image = newValue
+            }else if isTemplate == true {
                 super.image = newValue?.templateImage
             }else {
                 super.image = newValue?.originalImage

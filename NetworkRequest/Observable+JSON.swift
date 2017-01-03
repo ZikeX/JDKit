@@ -33,8 +33,8 @@ extension ObservableType where E == Response {
     
 }
 extension ObservableType where E:ResultModel {
-    func callback(_ closure:@escaping (E?)->()) {
-        _ = self.subscribe(onNext: { (model) in
+    func callback(_ closure:@escaping (E?)->()) -> Disposable {
+        return self.subscribe(onNext: { (model) in
             closure(model)
         }, onError: { (error) in
             if let error = error as? Moya.Error {

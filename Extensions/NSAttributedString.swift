@@ -45,6 +45,12 @@ class AttrStrContainer {
     func underLine(_ color:UIColor = Color.gray, range:NSRange? = nil) -> Self {
         let range = range ?? defaultRange
         let underLineStyle:NSUnderlineStyle = .styleSingle
+        self.attrStr.addAttributes([NSUnderlineStyleAttributeName:NSNumber(value: underLineStyle.rawValue),NSUnderlineColorAttributeName:color], range: range)
+        return self
+    }
+    func deleteLine(_ color:UIColor = Color.gray, range:NSRange? = nil) -> Self {
+        let range = range ?? defaultRange
+        let underLineStyle:NSUnderlineStyle = .styleSingle
         self.attrStr.addAttributes([NSStrikethroughStyleAttributeName:NSNumber(value: underLineStyle.rawValue),NSStrikethroughColorAttributeName:color], range: range)
         return self
     }

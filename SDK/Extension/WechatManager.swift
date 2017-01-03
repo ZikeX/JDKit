@@ -18,7 +18,8 @@ class WechatManager:ThirdManager {
         }
         let req = SendAuthReq()
         req.scope = WechatAuthScope
-        req.openId = Defaults[.wx_openId]
+        /// ZJaDe: -[SendAuthReq setOpenId:]: unrecognized selector sent to instance 0x17064b19
+//        req.openId = Defaults[.wx_openId]
         WXApi.sendAuthReq(req, viewController: jd.visibleVC(), delegate: self)
     }
 }

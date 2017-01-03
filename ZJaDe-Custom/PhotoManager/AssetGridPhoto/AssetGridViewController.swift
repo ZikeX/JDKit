@@ -58,7 +58,7 @@ class AssetGridViewController: BaseViewController {
             self.viewModel.updateImages(fetchResult)
         }
     }
-    override func checkAndSubmit() {
+    override func checkAndSubmit(_ button:Button) {
         if self.viewModel.selectedIndexPaths.count > 0 {
             self.viewModel.requestSelectedImages({ (images) in
                 self.callBack(images)

@@ -33,11 +33,11 @@ class BaseViewController: UIViewController {
         let button = Button(title: "完成")
         button.sizeToFit()
         button.rx.touchUpInside {[unowned self] (button) in
-            self.checkAndSubmit()
+            self.checkAndSubmit(button)
         }
         return button
     }()
-    func checkAndSubmit() {
+    func checkAndSubmit(_ button:Button) {
         fatalError("子类实现")
     }
     lazy var cacelButton:Button = {

@@ -104,7 +104,7 @@ extension LoginModel {
             UserInfo.shared.loginModel.loginState = .logining
             hud = HUD.showMessage("正在登录")
         }
-        self.loginProvider.jd_request(.login(loginParams: paramsModel)).mapObject(type: PersonModel.self, "userLogin",showHUD:true).callback { (result) in
+        _ = self.loginProvider.jd_request(.login(loginParams: paramsModel)).mapObject(type: PersonModel.self, "userLogin",showHUD:true).callback { (result) in
             hud?.hide()
             self.userAuthCompleteHandle(result,onlyRequest:onlyRequest)
             guard let result = result else {
@@ -145,7 +145,7 @@ extension LoginModel {
         
         UserInfo.shared.loginModel.loginState = .logining
         let hud = HUD.showMessage("注册中")
-        self.loginProvider.jd_request(.register(registerParams: paramsModel)).mapObject(type: PersonModel.self,"userReg",showHUD:true).callback({ (result) in
+        _ = self.loginProvider.jd_request(.register(registerParams: paramsModel)).mapObject(type: PersonModel.self,"userReg",showHUD:true).callback({ (result) in
             hud.hide()
             self.userAuthCompleteHandle(result)
             guard let result = result else {
@@ -175,7 +175,7 @@ extension LoginModel {
 extension LoginModel {
     static func requestToBindingQQ() {
         let hud = HUD.showMessage("绑定QQ中")
-        self.loginProvider.jd_request(.bindingQQ).mapResult().callback { (result) in
+        _ = self.loginProvider.jd_request(.bindingQQ).mapResult().callback { (result) in
             hud.hide()
             if let result = result,result.isSuccessful {
                 UserInfo.shared.personModel.bindAccountQQ = true
@@ -187,7 +187,7 @@ extension LoginModel {
     }
     static func requestToBindingWechat() {
         let hud = HUD.showMessage("绑定微信中")
-        self.loginProvider.jd_request(.bindingWechat).mapResult().callback { (result) in
+        _ = self.loginProvider.jd_request(.bindingWechat).mapResult().callback { (result) in
             hud.hide()
             if let result = result,result.isSuccessful {
                 UserInfo.shared.personModel.bindAccountWechat = true
@@ -199,7 +199,7 @@ extension LoginModel {
     }
     static func requestToBindingWeibo() {
         let hud = HUD.showMessage("绑定微博中")
-        self.loginProvider.jd_request(.bindingWeibo).mapResult().callback { (result) in
+        _ = self.loginProvider.jd_request(.bindingWeibo).mapResult().callback { (result) in
             hud.hide()
             if let result = result,result.isSuccessful {
                 UserInfo.shared.personModel.bindAccountWeibo = true

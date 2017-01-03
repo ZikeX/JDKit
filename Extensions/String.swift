@@ -105,7 +105,37 @@ extension String {
         return false
     }
 }
-
+extension String {
+    private func isValidate(by regex:String) -> Bool {
+        let pre = NSPredicate(format: "SELF MATCHES %@", regex)
+        return pre.evaluate(with: self)
+    }
+    /// ZJaDe: 是否全是数字
+    var isPureInt:Bool {
+        let scan = Scanner(string: self)
+        var val:Int = 0
+        return scan.scanInt(&val)
+    }
+    /// ZJaDe: 是否手机号
+    var isMobile:Bool {
+        return self.length == 11 && self.hasPrefix("1") && self.isPureInt
+    }
+    /// ZJaDe: 是否全是小写字母
+    var isLowercase:Bool {
+        let regex = "^[a-z]+$"
+        return self.isValidate(by: regex)
+    }
+    /// ZJaDe: 是否全是大写字母
+    var isCapitalized:Bool {
+        let regex = "^[A-Z]+$"
+        return self.isValidate(by: regex)
+    }
+    /// ZJaDe: 是否是价格
+    var isPrice:Bool {
+        let regex = "^\\d*\\.?\\d{0,2}$"
+        return self.isValidate(by: regex)
+    }
+}
 extension String {
     /// ZJaDe: 提取所有URl
     var extractURLs: [URL] {

@@ -9,7 +9,7 @@
 import UIKit
 import RxSwift
 protocol ListModelStateProtocol {
-    var enabled:Bool? {get set}
+    var enabled:Bool {get set}
     func canEnabled() -> Bool
     var isSelected:Bool {get set}
 }
@@ -44,8 +44,8 @@ class ListModel:NSObject {
         return self.hashValue
     }
     // MARK: - ListModelProtocol
-    private(set) var enabledVariable:Variable<Bool?> = Variable(nil)
-    var enabled:Bool? {
+    private(set) var enabledVariable:Variable<Bool> = Variable(true)
+    var enabled:Bool {
         get {
             return enabledVariable.value
         }
@@ -54,7 +54,7 @@ class ListModel:NSObject {
         }
     }
     func canEnabled() -> Bool {
-        return self.enabled ?? true
+        return self.enabled
     }
     var key:String = ""
     var isSelected:Bool = false

@@ -131,7 +131,7 @@ extension CollectionViewModel:UICollectionViewDelegateFlowLayout {
     // MARK: didSelectItemAt
     final func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
         let model = getModel(indexPath)!
-        return model.enabled ?? true
+        return model.enabled
     }
     final func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         

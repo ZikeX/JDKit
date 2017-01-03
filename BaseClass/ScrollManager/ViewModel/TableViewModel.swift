@@ -126,8 +126,10 @@ class TableViewModel: ListViewModel {
         
         self.tableView.indexPathsForVisibleRows?.forEach({ (indexPath) in
             if let cell = tableView.cellForRow(at: indexPath) as? TableCell {
-                let selected = self.selectedIndexPaths.contains(indexPath)
-                updateCellSelectedState(selected, cell: cell)
+                if cell.enabled {
+                    let selected = self.selectedIndexPaths.contains(indexPath)
+                    updateCellSelectedState(selected, cell: cell)
+                }
             }
         })
     }
@@ -167,7 +169,9 @@ extension TableViewModel:UITableViewDelegate {
                 }else if model.isSelected == false, let index = modelIndex {
                     self.selectedIndexPaths.remove(at: index)
                 }
-                updateCellSelectedState(model.isSelected, cell: cell)
+                if model.enabled {
+                    updateCellSelectedState(model.isSelected, cell:cell)
+                }
             }
         }
     }
@@ -180,7 +184,7 @@ extension TableViewModel:UITableViewDelegate {
     // MARK: - didSelectRow
     final func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         let model = getModel(indexPath)!
-        return model.enabled ?? true
+        return model.enabled 
     }
     final func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.autoDeselectRow {
