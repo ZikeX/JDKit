@@ -33,7 +33,20 @@ extension String {
         let range = start..<end
         return self[range]
     }
-
+    /// ZJaDe: Prefix 前缀
+    func prefix(_ count:Int) -> String {
+        guard self.length <= count else {
+            return self
+        }
+        return substring(to: index(startIndex, offsetBy: count))
+    }
+    /// ZJaDe: Suffix 后缀
+    func suffix(_ count:Int) -> String {
+        guard self.length <= count else {
+            return self
+        }
+        return substring(from: index(endIndex, offsetBy: -count))
+    }
     /// ZJaDe:字符串长度
     var length: Int {
         return self.characters.count

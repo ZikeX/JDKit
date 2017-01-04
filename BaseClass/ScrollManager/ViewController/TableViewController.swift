@@ -35,5 +35,4 @@ class TableViewController: ListViewController {
         super.viewDidLoad()
         self.viewModel.resetInit()
     }
-
 }

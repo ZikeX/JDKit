@@ -57,7 +57,7 @@ class BaseMapViewController: BaseViewController {
         super.viewWillDisappear(animated)
         mapView.delegate = nil
     }
-    override func request() {
+    override func request(refresh: Bool) {
         BMKLocationManager().location().subscribe(onNext:{[unowned self] (userLocation) in
             self.currentLocation = userLocation
             self.updateData()

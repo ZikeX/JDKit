@@ -17,7 +17,7 @@ class HeaderPageController: PageViewController {
     var headerView:UIView? {
         didSet {
             addHeaderViewToScrollView()
-            bindingHeaderViewHeight()
+            headerViewBinding()
         }
     }
     
@@ -41,7 +41,7 @@ class HeaderPageController: PageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bindingHeaderViewHeight()
+        headerViewBinding()
     }
 }
 extension HeaderPageController {
@@ -79,7 +79,7 @@ extension HeaderPageController {
         scrollView.contentOffset.y = y
         logDebug("scrollView-contentOffsetY】】\(scrollView.contentOffset.y)")
     }
-    fileprivate func bindingHeaderViewHeight() {
+    fileprivate func headerViewBinding() {
         if self.defaultHeaderHeight == nil {
             //headerViewHeight改变时
             headerView?.rx.observe(CGRect.self, "bounds", retainSelf:false).subscribe(onNext: {[unowned self] (event) in

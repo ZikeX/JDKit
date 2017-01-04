@@ -7,8 +7,8 @@
 //
 
 import Foundation
-
 import RxSwift
+
 class TableViewModel: ListViewModel {
     var listStyle:UITableViewStyle = .grouped
     
@@ -23,7 +23,6 @@ class TableViewModel: ListViewModel {
     var sectionModelsChanged = PublishSubject<[AnimatableSectionModel<TableSection,TableModel>]>()
     let rxDataSource = RxTableViewSectionedAnimatedDataSource<AnimatableSectionModel<TableSection,TableModel>>()
     public var dataArray = [(TableSection,[TableModel])]()
-    var page = 1
     
     /// ZJaDe: - 自动取消选择
     var autoDeselectRow = true

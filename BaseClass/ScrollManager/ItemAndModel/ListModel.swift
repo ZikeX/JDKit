@@ -44,7 +44,7 @@ class ListModel:NSObject {
         return self.hashValue
     }
     // MARK: - ListModelProtocol
-    private(set) var enabledVariable:Variable<Bool> = Variable(true)
+    var enabledVariable:Variable<Bool> = Variable(true)
     var enabled:Bool {
         get {
             return enabledVariable.value

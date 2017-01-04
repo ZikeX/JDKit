@@ -20,7 +20,7 @@ class BaseTableModel: TableModel,HandyJSON {
     }
     
     func mapping(mapper: HelpingMapper) {
-        
+        mapper.exclude(property: &enabledVariable)
     }
     
 }

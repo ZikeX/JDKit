@@ -79,6 +79,7 @@ class BaseViewController: UIViewController {
         let provider = RxJDProvider<StructTarget>(plugins:[plugin])
         return provider
     }()
+    var page = 1
     // MARK: - BaseVCProtocol
     var isFirstIn: Bool = true
     override func viewDidLoad() {
@@ -106,38 +107,6 @@ class BaseViewController: UIViewController {
     }
     deinit {
         self.taskCenter.clear()
-    }
-    // MARK: - updateData
-    private var isNeedUpdateData = false
-    private var isNeedToRequest = false
-    func setNeedToRequest() {
-        isNeedToRequest = true
-        if self.viewState == .viewDidAppear {
-            updateDataIfNeed()
-        }
-    }
-    func setNeedUpdateData() {
-        isNeedUpdateData = true
-        if self.viewState == .viewDidAppear {
-            updateDataIfNeed()
-        }
-    }
-    private func updateDataIfNeed() {
-        if self.isNeedToRequest {
-            self.isNeedToRequest = false
-            request()
-        }
-        if self.isNeedUpdateData {
-            self.isNeedUpdateData = false
-            updateData()
-        }
-    }
-    /// ZJaDe: need override
-    func request() {
-        updateData()
-    }
-    func updateData() {
-        logError("子类实现相关逻辑")
     }
 }
 

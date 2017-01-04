@@ -26,11 +26,13 @@ extension Response {
         guard let dict = try mapJSON() as? NSDictionary,let result = JSONDeserializer<DictResultModel>.deserializeFrom(dict:dict) else {
             throw Moya.Error.jsonMapping(self)
         }
-        let data = dict["data"] as? [String:Any]
-        if let sectionTitle = sectionTitle {
-            result.data = data![sectionTitle]
-        }else {
-            result.data = data
+        if result.isSuccessful {
+            let data = dict["data"] as? [String:Any]
+            if let sectionTitle = sectionTitle {
+                result.data = data![sectionTitle]
+            }else {
+                result.data = data
+            }            
         }
         
         handle(result, showHUD)
