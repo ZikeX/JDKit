@@ -15,6 +15,8 @@ class ListSection: NSObject {
     deinit {
         logDebug("\(type(of:self))->\(self)注销")
     }
+    
+    var maxSelectedCount:Int = 0
 }
 extension ListSection: IdentifiableType {
     

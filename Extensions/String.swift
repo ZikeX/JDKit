@@ -42,7 +42,7 @@ extension String {
     }
     /// ZJaDe: Suffix 后缀
     func suffix(_ count:Int) -> String {
-        guard self.length <= count else {
+        guard self.length > count else {
             return self
         }
         return substring(from: index(endIndex, offsetBy: -count))

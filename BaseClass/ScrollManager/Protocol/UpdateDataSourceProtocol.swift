@@ -20,7 +20,7 @@ protocol UpdateDataSourceProtocol:class {
     typealias UpdateDataClosureType = (DataArrayType) -> DataArrayType?
     var dataArray:[(SectionType,[ModelType])] {get set}
     var sectionModelsChanged:PublishSubject<[SectionModelType]> {get set}
-    @discardableResult
+    
     func updateDataSource(_ closure:@escaping UpdateDataClosureType)
     /// ZJaDe: 初始化dataSource 和 delegate
     func configDataSource()
@@ -29,7 +29,6 @@ protocol UpdateDataSourceProtocol:class {
     func dataArrayDidSet()
 }
 extension UpdateDataSourceProtocol where Self:ListViewModel {
-    @discardableResult
     final func updateDataSource(_ closure:@escaping UpdateDataClosureType) {
         Async.background { () -> [AnimatableSectionModel<SectionType,ModelType>]? in
             if let newData = closure(self.dataArray) {
@@ -51,8 +50,11 @@ extension UpdateDataSourceProtocol where Self:ListViewModel {
                 self.sectionModelsChanged.onNext(sectionModels)
                 self.updateItemsAnimated()
             }
-            if let scrollView = self.listView as? UIScrollView {
-                scrollView.reloadEmptyDataSet(.loaded)
+            /// ZJaDe: 这里加一个Async.main，主要是因为上面更新数据源的时候可能有延时
+            Async.main {
+                if let scrollView = self.listView as? UIScrollView {
+                    scrollView.reloadEmptyDataSet(.loaded)
+                }
             }
         }
     }
@@ -130,6 +132,49 @@ extension TableViewModel:UpdateDataSourceProtocol {
                 timer?.invalidate()
             }
         }
+    }
+    // MARK: - 更新数据
+    func updateDateScouceAppend(_ modelArray:[TableModel]) {
+        self.updateDataSource { (oldData) -> [(TableSection, [TableModel])]? in
+            var newData = oldData
+            let section:TableSection
+            let models:[TableModel]
+            if let last = newData.popLast() {
+                section = last.0
+                models = last.1 + modelArray
+            }else {
+                section = TableSection()
+                models = modelArray
+            }
+            newData.append((section,models))
+            return newData
+        }
+    }
+    // MARK:
+    func updateDateScouceDeleteIndexPaths(_ indexPaths:[IndexPath]) {
+        let models = indexPaths.map{self.getModel($0)}.filter{$0 != nil} as! [TableModel]
+        updateDateScouceDeleteModels(models)
+    }
+    func updateDateScouceDeleteModels(_ models:[TableModel]) {
+        self.updateDataSource { (oldData) -> [(TableSection, [TableModel])]? in
+            var newData = oldData
+            self.deleteModel(&newData, models)
+            return newData
+        }
+    }
+    private func deleteModel(_ dataArray:inout [(TableSection, [TableModel])], _ models:[TableModel]) {
+        var newDataArray = [(TableSection, [TableModel])]()
+        
+        for sectionModel in dataArray {
+            var newModels = [TableModel]()
+            for model in sectionModel.1 {
+                if !models.contains(model) {
+                    newModels.append(model)
+                }
+            }
+            newDataArray.append((sectionModel.0,newModels))
+        }
+        dataArray = newDataArray
     }
 }
 extension CollectionViewModel:UpdateDataSourceProtocol {

@@ -37,6 +37,20 @@ class BaseViewController: UIViewController {
         }
         return button
     }()
+    
+    lazy var submitBottomButton:Button = {
+        let button = Button(title:"提交")
+        button.textLabel.font = Font.h2
+        button.heightValue(height: 50)
+        button.addBorderTop(color:Color.white)
+        button.backgroundColor = Color.tintColor
+        button.tintColor = Color.white
+        
+        button.rx.touchUpInside {[unowned self] (button) in
+            self.checkAndSubmit(button)
+        }
+        return button
+    }()
     func checkAndSubmit(_ button:Button) {
         fatalError("子类实现")
     }
@@ -80,6 +94,9 @@ class BaseViewController: UIViewController {
         return provider
     }()
     var page = 1
+    func resetPageIndex() {
+        self.page = 1
+    }
     // MARK: - BaseVCProtocol
     var isFirstIn: Bool = true
     override func viewDidLoad() {

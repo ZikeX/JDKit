@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RxSwift
 import HandyJSON
 
 class BaseTableModel: TableModel,HandyJSON {
@@ -20,8 +21,11 @@ class BaseTableModel: TableModel,HandyJSON {
     }
     
     func mapping(mapper: HelpingMapper) {
-        mapper.exclude(property: &enabledVariable)
+        
     }
-    
 }
-
+extension Variable:Property {}
+extension UIEdgeInsets:Property {}
+extension CGFloat:Property {}
+extension UIColor:Property {}
+extension UIView:Property {}

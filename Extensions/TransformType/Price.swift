@@ -19,20 +19,24 @@ typealias PriceValue = Double
 struct Price {
     typealias NativeType = PriceValue
     
-    var value:NativeType
+    var value:NativeType?
     var toValueStr:String {
-        return String(format: "%.2f", value)
+        if let value = self.value {
+            return String(format: "%.2f", value)
+        }else {
+            return "??.??"
+        }
     }
     var currencySymbol:String {
         return PriceFormatter().currencySymbol
     }
 }
 extension Price {
-    init(_ double:Double) {
+    init(_ double:Double?) {
         self.value = double
     }
-    init(_ float:Float) {
-        self.value = float.toDouble
+    init(_ float:Float?) {
+        self.value = float?.toDouble
     }
 }
 extension Price:ExpressibleByFloatLiteral {

@@ -17,7 +17,12 @@ class PriceFormatter:NumberFormatter {
         self.numberStyle = .currencyAccounting
     }
     func string(from price: Price) -> String {
-        return self.string(from: NSNumber(value: price.value)) ?? "金额出错"
+        if let value = price.value {
+            let number = NSNumber(value: value)
+            return self.string(from: number) ?? "金额出错"
+        }else {
+            return "金额出错"
+        }
     }
     
     func price(from string: String) -> Price? {

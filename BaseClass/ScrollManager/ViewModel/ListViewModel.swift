@@ -41,15 +41,7 @@ class ListViewModel: NSObject {
 
 extension ListViewModel {
     func whenCellSelected(_ indexPath:IndexPath) {
-        guard self.maxSelectedCount > 0 else {
-            return
-        }
-        // MARK: - cell
-        if let index = self.selectedIndexPaths.index(of: indexPath) {
-            self.selectedIndexPaths.remove(at: index)
-        }else {
-            self.selectedIndexPaths.append(indexPath)
-        }
+        
     }
 }
 extension ListViewModel:CreateListProtocol {

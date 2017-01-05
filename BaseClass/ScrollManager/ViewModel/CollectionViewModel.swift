@@ -57,10 +57,16 @@ class CollectionViewModel: ListViewModel {
     }
     // MARK: - CellSelectedState
     override func whenCellSelected(_ indexPath:IndexPath) {
+        super.whenCellSelected(indexPath)
         guard self.maxSelectedCount > 0 else {
             return
         }
-        super.whenCellSelected(indexPath)
+        // MARK: - cell
+        if let index = self.selectedIndexPaths.index(of: indexPath) {
+            self.selectedIndexPaths.remove(at: index)
+        }else {
+            self.selectedIndexPaths.append(indexPath)
+        }
         
         self.getModel(indexPath)!.isSelected = self.selectedIndexPaths.contains(indexPath)
         while self.selectedIndexPaths.count > maxSelectedCount {

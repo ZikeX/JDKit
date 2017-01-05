@@ -13,8 +13,9 @@ protocol NetworkListVCProtocol:NetworkVCProtocol {
     associatedtype ViewModelType:TableViewModel
     var viewModel:ViewModelType {get}
     var page:Int {get set}
+    func resetPageIndex()
     /// ZJaDe: 解析数组
-    func parseModelArray(_ modelArray:[TableModel])
+    func parseModelArray(_ modelArray:[TableModel],_ refresh:Bool)
     // ZJaDe: 调用此方法来设置是否可以上拉加载或者是否下拉刷新
     func configRefresh(refreshHeader:Bool,refreshFooter:Bool)
     /// ZJaDe: 调用此方法来下拉刷新
@@ -29,8 +30,11 @@ extension NetworkListVCProtocol {
         return self.viewModel.tableView
     }
     /// ZJaDe: 解析数组
-    func parseModelArray(_ modelArray:[TableModel]) {
+    func parseModelArray(_ modelArray:[TableModel],_ refresh:Bool) {
         self.tableView.mj_header?.endRefreshing()
+        if refresh {
+            self.resetPageIndex()
+        }
         if modelArray.count > 0 {
             self.page += 1
         }else {
@@ -38,10 +42,20 @@ extension NetworkListVCProtocol {
             return
         }
         let viewModel:TableViewModel = self.viewModel
-        viewModel.updateDataSource { (oldData) -> [(TableSection, [TableModel])]? in
-            let section = oldData.last?.0 ?? TableSection()
-            let models = (oldData.last?.1 ?? [TableModel]()) + modelArray
-            return [(section,models)]
+        if refresh {
+            viewModel.updateDataSource { (oldData) -> [(TableSection, [TableModel])]? in
+                var newData = oldData
+                let section:TableSection
+                if let last = newData.popLast() {
+                    section = last.0
+                }else {
+                    section = TableSection()
+                }
+                newData.append((section,modelArray))
+                return newData
+            }
+        }else {
+            viewModel.updateDateScouceAppend(modelArray)
         }
     }
     /// ZJaDe: 调用此方法来设置是否可以上拉加载或者是否下拉刷新

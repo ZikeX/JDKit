@@ -110,19 +110,40 @@ class TableViewModel: ListViewModel {
         }
     }
     // MARK: - CellSelectedState
+    func checkCanSelected(_ indexPath:IndexPath) -> Bool {
+        return self.maxSelectedCount > 0 || getSection(indexPath.section)?.maxSelectedCount ?? -1 > 0
+    }
     override func whenCellSelected(_ indexPath:IndexPath) {
-        guard self.maxSelectedCount > 0 else {
+        super.whenCellSelected(indexPath)
+        guard checkCanSelected(indexPath) else {
             return
         }
-        super.whenCellSelected(indexPath)
+        // MARK: 将选中的indexPath添加到数组
+        if let index = self.selectedIndexPaths.index(of: indexPath) {
+            self.selectedIndexPaths.remove(at: index)
+        }else {
+            self.selectedIndexPaths.append(indexPath)
+        }
         
         self.getModel(indexPath)!.isSelected = self.selectedIndexPaths.contains(indexPath)
-        while self.selectedIndexPaths.count > maxSelectedCount {
-            let firstIndexPath = self.selectedIndexPaths.removeFirst()
-            self.getModel(firstIndexPath)?.isSelected = false
+        // MARK: 判断数组是否超出最大数量
+        if self.maxSelectedCount > 0 {
+            while self.selectedIndexPaths.count > maxSelectedCount {
+                let firstIndexPath = self.selectedIndexPaths.removeFirst()
+                self.getModel(firstIndexPath)?.isSelected = false
+            }
+        }else if let section = self.getSection(indexPath.section), section.maxSelectedCount > 0 {
+            var selectedIndexPaths = self.selectedIndexPaths.filter{$0.section == indexPath.section}
+            while selectedIndexPaths.count > section.maxSelectedCount {
+                let firstIndexPath = selectedIndexPaths.removeFirst()
+                let index = self.selectedIndexPaths.index(of: firstIndexPath)!
+                self.selectedIndexPaths.remove(at: index)
+                self.getModel(firstIndexPath)?.isSelected = false
+            }
         }
+        // MARK: selectedIndexPathsChanged
         selectedIndexPathsChanged.onNext(self.selectedIndexPaths)
-        
+        // MARK: 更新视图
         self.tableView.indexPathsForVisibleRows?.forEach({ (indexPath) in
             if let cell = tableView.cellForRow(at: indexPath) as? TableCell {
                 if cell.enabled {
@@ -146,22 +167,29 @@ extension TableViewModel {
 }
 extension TableViewModel:UITableViewDelegate {
     func getModel(_ indexPath:IndexPath) -> TableModel? {
-        guard indexPath.section < rxDataSource.sectionModels.count else {
+        guard let sectionModel = getSectionModel(indexPath.section) else {
             return nil
         }
-        let sectionModel = rxDataSource[indexPath.section]
         guard indexPath.row < sectionModel.items.count else {
             return nil
         }
         return sectionModel.items[indexPath.row]
     }
-
+    func getSection(_ section:Int) -> TableSection? {
+        return getSectionModel(section)?.model
+    }
+    func getSectionModel(_ section:Int) -> AnimatableSectionModel<TableSection,TableModel>? {
+        guard section < rxDataSource.sectionModels.count else {
+            return nil
+        }
+        return rxDataSource[section]
+    }
     // MARK: - display
     final func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         if let cell = cell as? TableCell {
             let model = getModel(indexPath)!
             cell.itemWillAppear(model)
-            if self.maxSelectedCount > 0 {
+            if checkCanSelected(indexPath) {
                 let modelIndex = self.selectedIndexPaths.index(of: indexPath)
                 if model.isSelected && modelIndex == nil {
                     self.selectedIndexPaths.append(indexPath)
@@ -201,55 +229,47 @@ extension TableViewModel:UITableViewDelegate {
     }
     // MARK: - headerView
     final func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if rxDataSource.sectionModels.count > section {
-            let sectionModel = rxDataSource[section].model
-            let headerView = sectionModel.headerView
-            if let headerColor = sectionModel.headerViewColor  {
-                headerView.backgroundView = UIView()
-                headerView.backgroundView?.backgroundColor = headerColor
-                
-            }
-            return headerView
-        }else {
+        guard let sectionItem = getSection(section) else {
             return nil
         }
+        let headerView = sectionItem.headerView
+        if let headerColor = sectionItem.headerViewColor  {
+            headerView.backgroundView = UIView()
+            headerView.backgroundView?.backgroundColor = headerColor
+            
+        }
+        return headerView
     }
     final func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         /// ZJaDe: 该方法暂时无用
         
     }
     final func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if rxDataSource.sectionModels.count > section {
-            let sectionModel = rxDataSource[section].model
-            return sectionModel.headerViewHeight
-        }else {
+        guard let sectionItem = getSection(section) else {
             return 0
         }
+        return sectionItem.headerViewHeight
     }
     // MARK: - footerView
     final func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if rxDataSource.sectionModels.count > section {
-            let sectionModel = rxDataSource[section].model
-            let footerView = sectionModel.footerView
-            if let footerColor = sectionModel.footerViewColor {
-                footerView.backgroundView = UIView()
-                footerView.backgroundView?.backgroundColor = footerColor
-            }
-            return footerView
-        }else {
+        guard let sectionItem = getSection(section) else {
             return nil
         }
+        let footerView = sectionItem.footerView
+        if let footerColor = sectionItem.footerViewColor {
+            footerView.backgroundView = UIView()
+            footerView.backgroundView?.backgroundColor = footerColor
+        }
+        return footerView
     }
     final func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         /// ZJaDe: 该方法暂时无用
         
     }
     final func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if rxDataSource.sectionModels.count > section {
-            let sectionModel = rxDataSource[section].model
-            return sectionModel.footerViewHeight
-        }else {
+        guard let sectionItem = getSection(section) else {
             return 0
         }
+        return sectionItem.footerViewHeight
     }
 }

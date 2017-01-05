@@ -23,6 +23,7 @@ class UserInfo {
         return personModel
     }()
     lazy var loginModel:LoginModel = LoginModel()
+    lazy var walletModel:WalletModel = WalletModel()
     // MARK: -
     func configNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(saveModel), name: .UIApplicationDidEnterBackground, object: nil)
