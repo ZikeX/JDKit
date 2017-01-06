@@ -34,6 +34,6 @@ extension UIDatePicker {
         }.show()
     }
     func hide() {
-        Alert.hide()
+        WindowBgView.hide()
     }
 }

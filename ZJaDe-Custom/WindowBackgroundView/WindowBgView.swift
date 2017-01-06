@@ -34,8 +34,8 @@ class WindowBgView: UIViewController {
         super.viewDidLoad()
         self.view.addSubview(self.bgView)
         self.bgView.edgesToView()
-        _ = self.bgView.rx.whenTouch({ (view) in
-            WindowBgView.hide()
+        _ = self.bgView.rx.whenTouch({[unowned self] (view) in
+            self.hide()
         })
         self.view.alpha = 0
     }
@@ -55,56 +55,70 @@ extension WindowBgView {
         self.hideAnimateClosure = closure
         return self
     }
-    @discardableResult
-    func toHideState() -> WindowBgView {
-        self.hideAnimateClosure?()
-        return self
-    }
 }
-private var windowBgViews = [WindowBgView]()
+
 extension WindowBgView {
-    func show(tohide:Bool = true) {
-        if tohide {
-            toHideState()
+    func show(resetToHide:Bool = true, in viewCon:UIViewController? = nil) {
+        if resetToHide {
+            self.hideAnimateClosure?()
         }
-        windowBgViews.append(self)
-        jd.keyWindow.showFirstBgView()
+        let viewCon = viewCon ?? jd.currentNavC
+        viewCon.windowBgArrs.append(self)
+        viewCon.showFirstBgView()
     }
-    func mustHide() {
+    /**
+     func mustHide() {
         self.view.removeFromSuperview()
-        if let index = windowBgViews.index(of: self) {
-            windowBgViews.remove(at: index)
+        self.removeFromParentViewController()
+        let navC = jd.currentNavC
+        if let index = navC.windowBgArrs.index(of: self) {
+            navC.windowBgArrs.remove(at: index)
         }
     }
+     */
     static func hide() {
-        jd.keyWindow.hideFirstBgView()
+        jd.currentNavC.hideFirstBgView()
+    }
+    func hide(in viewCon:UIViewController? = nil) {
+        let viewCon = self.parent ?? jd.currentNavC
+        viewCon.hideFirstBgView()
     }
 }
-extension UIWindow {
+private var WindowBgArrKey:UInt8 = 0
+extension UIViewController {
     // MARK: -
     fileprivate func showFirstBgView() {
-        if let bgView = windowBgViews.first,!bgView.isShowing {
-            self.addSubview(bgView.view)
-            bgView.isShowing = true
+        if let windowBg = windowBgArrs.first,!windowBg.isShowing {
+            self.addChildViewController(windowBg)
+            self.view.addSubview(windowBg.view)
+            windowBg.isShowing = true
             UIView.spring(duration: 0.35) {
-                bgView.view.alpha = 1
+                windowBg.view.alpha = 1
             }
-            bgView.showAnimateClosure?()
+            windowBg.showAnimateClosure?()
         }
     }
     func hideFirstBgView() {
-        if let bgView = windowBgViews.first {
+        if let bgView = windowBgArrs.first {
             UIView.animate(withDuration: 0.35, animations: {
                 bgView.hideAnimateClosure?()
                 bgView.view.alpha = 0
             }) { (finish) in
                 bgView.view.removeFromSuperview()
-                if windowBgViews.count > 0 {
-                    windowBgViews.removeFirst()
+                bgView.removeFromParentViewController()
+                if self.windowBgArrs.count > 0 {
+                    self.windowBgArrs.removeFirst()
                     self.showFirstBgView()
                 }
             }
         }
     }
-
+    fileprivate var windowBgArrs:[WindowBgView] {
+        get {
+            return associatedObject(&WindowBgArrKey) {[WindowBgView]()}
+        }
+        set {
+            setAssociatedObject(&WindowBgArrKey, newValue)
+        }
+    }
 }

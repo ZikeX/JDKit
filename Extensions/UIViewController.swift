@@ -23,13 +23,13 @@ extension UIViewController {
 extension UIViewController {
     // MARK: - VC Flow
     func pushVC(_ vc: UIViewController) {
-        navigationController?.pushViewController(vc, animated: true)
+        navC?.pushViewController(vc, animated: true)
     }
     func popVC(animated:Bool = true) {
-        _ = navigationController?.popViewController(animated: animated)
+        _ = navC?.popViewController(animated: animated)
     }
     func popToRootVC(animated:Bool = true) {
-        _ = navigationController?.popToRootViewController(animated: animated)
+        _ = navC?.popToRootViewController(animated: animated)
     }
     func presentVC(_ vc: UIViewController,animated:Bool = true) {
         present(vc, animated: animated, completion: nil)
@@ -42,6 +42,15 @@ extension UIViewController {
         toView.addSubview(vc.view)
         self.addChildViewController(vc)
         vc.didMove(toParentViewController: self)
+    }
+    
+    func popToVC<T:UIViewController>(_ vcType:T.Type) -> T? {
+        if let viewCon = navC?.viewControllers.filter({$0 is T}).last {
+            _ = navC?.popToViewController(viewCon, animated: true)
+            return viewCon as? T
+        }else {
+            return nil
+        }
     }
 }
 extension UIViewController {

@@ -91,7 +91,7 @@ class TableViewModel: ListViewModel {
     }
     func checkAllParams() -> Bool {
         func checkModelParams(_ model:TableModel) -> Bool {
-            if model.catchParamsClosure != nil {
+            if model.checkParamsClosure != nil {
                 return model.checkParamsClosure!()
             }else if let model = model as? CheckParamsProtocol,model.checkParams() == false {
                 return false
@@ -164,6 +164,9 @@ extension TableViewModel {
     func didSelectRowAt(indexPath:IndexPath,model:TableModel) {
         
     }
+    func shouldHighlightRowAt(indexPath:IndexPath,model:TableModel) -> Bool {
+        return true
+    }
 }
 extension TableViewModel:UITableViewDelegate {
     func getModel(_ indexPath:IndexPath) -> TableModel? {
@@ -211,7 +214,11 @@ extension TableViewModel:UITableViewDelegate {
     // MARK: - didSelectRow
     final func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         let model = getModel(indexPath)!
-        return model.enabled 
+        if shouldHighlightRowAt(indexPath: indexPath, model: model) == false {
+            return false
+        }else {
+            return model.enabled
+        }
     }
     final func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if self.autoDeselectRow {

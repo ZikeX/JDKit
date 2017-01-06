@@ -24,7 +24,7 @@ struct Price {
         if let value = self.value {
             return String(format: "%.2f", value)
         }else {
-            return "??.??"
+            return "??"
         }
     }
     var currencySymbol:String {

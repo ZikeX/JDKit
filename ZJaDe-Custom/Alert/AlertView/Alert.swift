@@ -8,17 +8,14 @@
 
 import UIKit
 
-class Alert: WindowBgView {
-    init(confirmTitle:String = alertConfirmTitle, cancelTitle:String = alertCancelTitle) {
-        super.init()
+class Alert: BaseAlert {
+    convenience init(confirmTitle:String = alertConfirmTitle, cancelTitle:String = alertCancelTitle) {
+        self.init()
         self.confirmButton.textStr = confirmTitle
         self.cancelButton.textStr = cancelTitle
     }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     // MARK: -
-    let baseView = UIView()
+
     let contentView = UIView()
     lazy var bottomStackView:UIStackView = {
         let stackView = UIStackView(alignment: .fill, distribution: .fillEqually)
@@ -39,7 +36,7 @@ class Alert: WindowBgView {
         button.textLabel.textColor = Color.gray
         button.rx.touchUpInside({[unowned self] (button) in
             self.cancelClosure?()
-            Alert.hide()
+            self.hide()
         })
         return button
     }()
@@ -49,7 +46,7 @@ class Alert: WindowBgView {
         button.textLabel.textColor = Color.gray
         button.rx.touchUpInside({[unowned self] (button) in
             self.clickClosure?()
-            Alert.hide()
+            self.hide()
         })
         return button
     }()
@@ -61,18 +58,9 @@ class Alert: WindowBgView {
     // MARK: -
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.baseView.cornerRadius = 5
-        self.baseView.clipsToBounds = true
-        self.baseView.backgroundColor = Color.white
-        self.configLayout()
-        self.configShowAnimate(animated: false) {[unowned self] in
-            self.view.addSubview(self.baseView)
-            self.showAnimation()
-        }
+        
     }
-}
-extension Alert {
-    fileprivate func configLayout() {
+    override func configBaseLayout() {
         self.baseView.translatesAutoresizingMaskIntoConstraints = false
         self.bottomStackView.snp.makeConstraints { (maker) in
             maker.height.equalTo(64).priority(999)
@@ -87,6 +75,7 @@ extension Alert {
         stackView.edgesToView()
     }
 }
+
 extension Alert {
     @discardableResult
     func configShowLayout(_ closure:(Alert,UIView)->()) -> Alert {
@@ -102,47 +91,5 @@ extension Alert {
     func configCancel(_ closure:AlertCancelClosure?) -> Alert {
         self.cancelClosure = closure
         return self
-    }
-}
-extension Alert {
-    fileprivate func showAnimation(_ animationStyle: AlertAnimationStyle = .topToBottom, animationStartOffset: CGFloat = -400.0, boundingAnimationOffset: CGFloat = 15.0, animationDuration: TimeInterval = 0.75) {
-        
-        let rv = jd.keyWindow
-        var animationStartOrigin = self.baseView.origin
-        var animationCenter : CGPoint = rv.center
-        
-        switch animationStyle {
-            
-        case .noAnimation:
-            return;
-            
-        case .topToBottom:
-            animationStartOrigin.y += animationStartOffset
-            animationCenter.y += boundingAnimationOffset
-            
-        case .bottomToTop:
-            animationStartOrigin.y -= animationStartOffset
-            animationCenter.y -= boundingAnimationOffset
-            
-        case .leftToRight:
-            animationStartOrigin.x += animationStartOffset
-            animationCenter.x += boundingAnimationOffset
-            
-        case .rightToLeft:
-            animationStartOrigin.x -= animationStartOffset
-            animationCenter.x -= boundingAnimationOffset
-        }
-        
-        self.baseView.origin = animationStartOrigin
-        self.baseView.transform = CGAffineTransform(scaleX: 0.3, y: 0.3)
-        UIView.animate(withDuration: animationDuration, animations: {
-            self.baseView.center = animationCenter
-            self.baseView.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
-        }, completion: { finished in
-            UIView.spring(duration: animationDuration, animations: {
-                self.baseView.center = rv.center
-                self.baseView.transform = CGAffineTransform.identity
-            })
-        })
     }
 }

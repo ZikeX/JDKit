@@ -73,10 +73,7 @@ extension Response {
         switch result.resultCode ?? .prompt {
         case .successful,.newUpdateVersion:
             if showHUD {
-                self.viewCon?.taskCenter.addTask({ (task) in
-                    HUD.showSuccess(result.msg ?? "数据加载成功！", to: view)
-                    task.end()
-                })
+                HUD.showSuccess(result.msg ?? "数据加载成功！")
             }
             if result.resultCode == .newUpdateVersion {
                 AlertController.showChoice(title: "有新的版本", result.msg ?? "您有新的版本需要更新", { (action) in

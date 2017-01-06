@@ -19,9 +19,9 @@ class PriceFormatter:NumberFormatter {
     func string(from price: Price) -> String {
         if let value = price.value {
             let number = NSNumber(value: value)
-            return self.string(from: number) ?? "金额出错"
+            return self.string(from: number) ?? "￥ ? "
         }else {
-            return "金额出错"
+            return "￥ ? "
         }
     }
     

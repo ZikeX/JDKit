@@ -11,18 +11,14 @@ import UIKit
 class WalletModel: BaseEntityModel {
     var balance:PriceValue?
     var hasPaypwd:Bool = false
-    var hasIdcard:Bool = false
+    var idcardAuditState:String = ""
     
     var bankAmount:Int = 0
-    var bankCode:String = ""
-    var aliAccount:String = ""
-    
     var hasBank:Bool {
         return self.bankAmount > 0
     }
-    var hasAlipay:Bool {
-        return self.aliAccount.length > 0
-    }
+    
+    var hasAlipay:Bool = false
     
     var incomeAmount:String = ""
     var expendAmount:String = ""
