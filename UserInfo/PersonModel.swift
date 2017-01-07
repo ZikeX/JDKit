@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class PersonModel: BaseEntityModel {
     var authToken:String?
     
@@ -23,6 +24,10 @@ class PersonModel: BaseEntityModel {
     var imgUrl:String = ""
     var gender:String?
     var birthday:String?
+    
+    var shopAuditFailCause:String?
+    var shopState:ShopState = .neverApply
+    var shopAuditState:ShopAuditState = .neverApply
     
     var address:String = ""
     var province:String = ""

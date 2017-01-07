@@ -156,7 +156,7 @@ class TableViewModel: ListViewModel {
     private func updateSelectedState(_ selected:Bool,indexPath:IndexPath) {
     }
     func updateCellSelectedState(_ selected:Bool,cell:TableCell) {
-        cell.accessoryView = selected ? ImageView(image: R.image.ic_cell_checkmark()) : nil
+        cell.accessoryView = ImageView(image: selected ? R.image.ic_选择_勾选() : R.image.ic_选择_未勾选())
     }
 }
 extension TableViewModel {

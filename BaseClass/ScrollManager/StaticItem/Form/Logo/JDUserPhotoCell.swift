@@ -34,7 +34,7 @@ extension JDUserPhotoCell {
             return
         }
         model.logo.asObservable().subscribe(onNext:{[unowned self] (url) in
-            self.centerImageView.setImage(imageData: url)
+            self.centerImageView.setImage(imageData: url,placeholderImage:R.image.ic_default_userImg())
         }).addDisposableTo(disposeBag)
     }
 }

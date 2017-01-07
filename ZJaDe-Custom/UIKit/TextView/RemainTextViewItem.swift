@@ -45,7 +45,7 @@ class RemainTextViewItem: CustomIBControl {
         }
         let text = self.textView.text ?? ""
         if text.length <= maxLength {
-            self.remainLabel.text = "\(text.length)/500字"
+            self.remainLabel.text = "\(text.length)/\(maxLength)字"
             self.remainLabel.textColor = Color.gray
         }else {
             self.remainLabel.text = "您已超出\(text.length - maxLength)个字"

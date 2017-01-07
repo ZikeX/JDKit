@@ -22,6 +22,21 @@ class RouterManager {
     init(_ routeType:RouteType) {
         self.routeType = routeType
     }
+    static func popToRootVCAndPush(_ routeUrl:RouteUrlType) {
+        let count = jd.currentNavC.viewControllers.count - 1
+        self.popAndPush(routeUrl, popCount: count)
+    }
+    @discardableResult
+    static func popToVCAndPush<T:UIViewController>(to VCType:T.Type, _ routeUrl:RouteUrlType) -> Bool {
+        if let index = jd.currentNavC.viewControllers.enumerated().filter({$0.element is T}).last?.offset {
+            let count = jd.currentNavC.viewControllers.count - index - 1
+            self.popAndPush(routeUrl, popCount: count)
+            return true
+        }else {
+            self.push(routeUrl)
+            return false
+        }
+    }
     static func popAndPush(_ routeUrl:RouteUrlType, popCount:Int = 1) {
         let routerManager = RouterManager(.popAndPush(popCount: popCount))
         routerManager.show(routeUrl)

@@ -19,6 +19,19 @@ class JDTextViewModel: JDEntryModel {
     var contentSizeChanged = PublishSubject<(PlaceholderTextView,CGSize)>()
 }
 extension JDTextViewModel {
+    override func checkParams() -> Bool {
+        guard let text = text, text.length > 0 else {
+            HUD.showPrompt(self.placeholder ?? "请把数据填写完整")
+            return false
+        }
+        if let maxLength = self.maxLength {
+            guard text.length <= maxLength else {
+                HUD.showPrompt("您输入的文本过长，已超出\(text.length - maxLength)个字")
+                return false
+            }
+        }
+        return true
+    }
     func configTopTitleBottomTextViewModel() {
         self.spaceEdges = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         self.titleRightSpace = 15

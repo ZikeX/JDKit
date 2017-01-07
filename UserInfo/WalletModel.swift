@@ -11,7 +11,7 @@ import UIKit
 class WalletModel: BaseEntityModel {
     var balance:PriceValue?
     var hasPaypwd:Bool = false
-    var idcardAuditState:String = ""
+    var idcardAuditState:IdcardAuditState = .neverAuth
     
     var bankAmount:Int = 0
     var hasBank:Bool {
