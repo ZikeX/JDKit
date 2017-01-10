@@ -31,6 +31,9 @@ class BaseViewController: UIViewController {
     }()
     lazy var doneButton:Button = {
         let button = Button(title: "完成")
+        button.textLabel.font = Font.h3
+        button.cornerRadius = 10
+        button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 15, bottom: 5, right: 15)
         button.sizeToFit()
         button.rx.touchUpInside {[unowned self] (button) in
             self.checkAndSubmit(button)

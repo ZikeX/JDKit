@@ -18,9 +18,9 @@ extension UIImageView {
     }
     fileprivate func addActivityIndicator(style:UIActivityIndicatorViewStyle) {
         if self.activityIndicator == nil {
-            self.activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: style)
             
             Async.main {
+                self.activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: style)
                 self.addSubview(self.activityIndicator!)
                 self.activityIndicator!.edgesToView()
             }
