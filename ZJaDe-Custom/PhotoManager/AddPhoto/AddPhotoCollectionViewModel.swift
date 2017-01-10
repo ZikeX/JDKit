@@ -91,7 +91,7 @@ extension AddPhotoCollectionViewModel {
             if var models = self.models,let index = models.index(of: model) {
                 self.updateDataSource({ (oldDataSection) -> [(CollectionSection, [CollectionModel])]? in
                     models.remove(at: index)
-                    if models.count < self.maxImageCount {
+                    if models.count < self.maxImageCount, !models.contains(self.addPhotoModel) {
                         models.append(self.addPhotoModel)
                     }
                     return [(self.section!,models)]
