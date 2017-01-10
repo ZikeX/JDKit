@@ -55,7 +55,7 @@ extension NetworkVCProtocol where Self:BaseViewController {
 extension BaseViewController:NetworkVCProtocol {
     /// ZJaDe: need override
     func request(refresh: Bool = true) {
-        fatalError("子类实现相关逻辑")
+        updateData()
     }
     func updateData() {
         fatalError("子类实现相关逻辑")

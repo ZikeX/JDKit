@@ -60,6 +60,9 @@ extension UserInfo {
     }
     // MARK: -
     fileprivate func savePersonModel() {
+        var dict = self.personModel.toSimpleDictionary()
+        dict["shopState"] = self.personModel.shopState.rawValue
+        dict["shopAuditState"] = self.personModel.shopAuditState.rawValue
         let result = NSKeyedArchiver.archiveRootObject(self.personModel.toSimpleDictionary(), toFile: self.getFilePath("personModel"))
         logInfo("保存PersonModel->\(result ? "成功" : "失败")")
     }

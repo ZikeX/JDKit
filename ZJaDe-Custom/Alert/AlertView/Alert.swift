@@ -25,13 +25,13 @@ class Alert: BaseAlert {
         return stackView
     }()
     lazy var titleButton:Button = {
-        let button = Button()
+        let button = Button(title:alertTitle)
         button.tintColor = Color.black
         button.textLabel.font = Font.h1
         return button
     }()
     lazy var cancelButton:Button = {
-        let button = Button()
+        let button = Button(title:alertCancelTitle)
         button.textLabel.font = Font.h2
         button.textLabel.textColor = Color.gray
         button.rx.touchUpInside({[unowned self] (button) in
@@ -41,7 +41,7 @@ class Alert: BaseAlert {
         return button
     }()
     lazy var confirmButton:Button = {
-        let button = Button()
+        let button = Button(title:alertConfirmTitle)
         button.textLabel.font = Font.h2
         button.textLabel.textColor = Color.gray
         button.rx.touchUpInside({[unowned self] (button) in
