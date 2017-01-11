@@ -30,7 +30,7 @@ class AddressComponentModel: BaseEntityModel {
     }
 }
 class AddressSection: TableSection {
-    var model = AddressComponentModel()
+    var dataModel = AddressComponentModel()
     
     lazy var locationModel:JDLabelModel = {
         let locationModel = JDLabelModel(title: "快速定位", detailTitle: "选择小区、大厦或者街道")
@@ -46,16 +46,16 @@ class AddressSection: TableSection {
         return [locationModel,detailAddressModel]
     }
     func updateData() {
-        self.locationModel.detailTitle.value = self.model.provinceAddress()
-        self.detailAddressModel.text = self.model.streetAddress()
+        self.locationModel.detailTitle.value = self.dataModel.provinceAddress()
+        self.detailAddressModel.text = self.dataModel.streetAddress()
     }
     func setValue(for personModel:PersonModel) {
         self.locationModel.detailTitle.value = personModel.provinceAddress()
         self.detailAddressModel.text = personModel.address
-        self.model.coordinate = personModel.coordinate
-        self.model.province = personModel.province
-        self.model.area = personModel.area
-        self.model.city = personModel.city
+        self.dataModel.coordinate = personModel.coordinate
+        self.dataModel.province = personModel.province
+        self.dataModel.area = personModel.area
+        self.dataModel.city = personModel.city
     }
 }
 extension AddressSection {
@@ -71,17 +71,17 @@ extension AddressSection {
             cell.detailTitleLabel.textAlignment = .left
             cell.touchCell = {[unowned self] in
                 RouterManager.push(Route_地图.定位({ (model) in
-                    self.model = model
+                    self.dataModel = model
                     self.updateData()
                 }))
             }
         }
         model.configCheckParams({[unowned self] () -> Bool in
-            guard self.model.coordinate != nil else {
+            guard self.dataModel.coordinate != nil else {
                 HUD.showPrompt("请点击进行定位")
                 return false
             }
-            guard self.model.province.length > 0 else {
+            guard self.dataModel.province.length > 0 else {
                 HUD.showPrompt("定位没有转换成地址，请重新尝试")
                 return false
             }
@@ -89,11 +89,11 @@ extension AddressSection {
         })
         model.configCatchParams({[unowned self] () -> [String : Any] in
             var params = [String : Any]()
-            params["latitude"] = self.model.coordinate?.latitude
-            params["longitude"] = self.model.coordinate?.longitude
-            params["province"] = self.model.province
-            params["city"] = self.model.city
-            params["area"] = self.model.area
+            params["latitude"] = self.dataModel.coordinate?.latitude
+            params["longitude"] = self.dataModel.coordinate?.longitude
+            params["province"] = self.dataModel.province
+            params["city"] = self.dataModel.city
+            params["area"] = self.dataModel.area
             return params
         })
     }

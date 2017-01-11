@@ -23,6 +23,7 @@ class JDFormModel: JDStaticModel {
         self.image.value = image
     }
     var accessoryType = Variable(UITableViewCellAccessoryType.none)
+    var accessoryView:Variable<UIView?> = Variable(nil)
     var title:Variable<String?> = Variable(nil)
     var image:Variable<UIImage?> = Variable(nil)
 }

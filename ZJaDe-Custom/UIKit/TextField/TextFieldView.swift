@@ -138,11 +138,11 @@ extension TextFieldView {
         case .date(mode:let mode):
             switch mode {
             case .date:
-                format = "yyyy.MM.dd"
+                format = "yyyy-MM-dd"
             case .time:
                 format = "HH:mm"
             case .dateAndTime:
-                format = "yyyy.MM.dd HH:mm"
+                format = "yyyy-MM-dd HH:mm"
             case .countDownTimer:
                 format = "HH:mm:ss"
             }

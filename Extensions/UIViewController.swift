@@ -43,7 +43,7 @@ extension UIViewController {
         self.addChildViewController(vc)
         vc.didMove(toParentViewController: self)
     }
-    
+    @discardableResult
     func popToVC<T:UIViewController>(_ vcType:T.Type) -> T? {
         if let viewCon = navC?.viewControllers.filter({$0 is T}).last {
             _ = navC?.popToViewController(viewCon, animated: true)

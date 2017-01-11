@@ -32,12 +32,12 @@ extension JDTextViewModel {
         }
         return true
     }
-    func configTopTitleBottomTextViewModel() {
+    func configTopTitleBottomTextViewModel(_ textViewScale:CGFloat = 0.28) {
         self.spaceEdges = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         self.titleRightSpace = 15
         self.lineHeight = 0
         self.invalidateCellHeight()
-        self.maxLength = 500
+        self.maxLength = 200
         let oldLayoutClosure = self.layoutCellClosure
         self.configLayoutCell { (cell) in
             oldLayoutClosure?(cell)
@@ -45,7 +45,7 @@ extension JDTextViewModel {
                 return
             }
             cell.textViewItem.remakeLayoutView({ (view, maker) in
-                maker.height_width(scale: 0.77)
+                maker.height_width(scale: textViewScale)
                 maker.left.right.bottom.equalToSuperview()
                 maker.topSpace(cell.stackView)
             })

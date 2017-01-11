@@ -16,7 +16,9 @@ class JDTextFieldCell: JDEntryCell {
         super.configItemInit()
         self.jdFocusView = textField
         jdContentView.addSubview(textField)
-        
+        layoutStackView()
+    }
+    func layoutStackView() {
         stackView.snp.makeConstraints { (maker) in
             maker.centerY.equalToSuperview()
         }
@@ -29,7 +31,8 @@ extension JDTextFieldCell {
             return
         }
         textField.snp.remakeConstraints({ (maker) in
-            maker.centerY.top.right.equalToSuperview()
+            maker.top.right.equalToSuperview()
+            maker.centerY.equalTo(stackView)
             maker.leftSpace(stackView).offset(model.titleRightSpace)
         })
     }

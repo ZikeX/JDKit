@@ -7,9 +7,11 @@
 //
 
 import UIKit
+import RxSwift
 
 class AddPhotoCollectionViewModel: CollectionViewModel {
     var maxImageCount:Int = 4
+    lazy var phtotosChanged = PublishSubject<[AddPhotoModel]>()
     override func configInit() {
         super.configInit()
         self.layout = {
@@ -55,47 +57,53 @@ extension AddPhotoCollectionViewModel {
         return self.dataArray.last?.0
     }
     func addPhoto() {
-        var models = self.models?.filter({$0 != self.addPhotoModel}) ?? [AddPhotoModel]()
+        let models = self.models?.filter({$0 != self.addPhotoModel}) ?? [AddPhotoModel]()
         let count = self.maxImageCount - models.count
         guard count > 0 else {
             Alert.showPrompt("您的图片数已达到最大可上传数量")
             return
         }
-        let section = self.section ?? CollectionSection()
         AddPhotoManager().config({ (manager) in
             manager.maxImageCount = count
         }).callback {[unowned self] (urls, images) in
-            let newModels = urls.lazy.map({ (url) -> AddPhotoModel in
+            let newModels = urls.map({ (url) -> AddPhotoModel in
                 let model = AddPhotoModel()
                 model.imageData.value = url
                 return model
             })
-            for model in newModels {
-                if models.count < self.maxImageCount {
-                    models.append(model)
-                }else {
-                    break
-                }
-            }
-            if models.count < self.maxImageCount {
-                models.append(self.addPhotoModel)
-            }
-            self.updateDataSource({ (oldDataArray) -> [(CollectionSection, [CollectionModel])]? in
-                return [(section,models)]
-            })
+            self.appendPhotos(newModels)
             }.show()
     }
-    func delectPhoto(_ model:AddPhotoModel) {
+    func appendPhotos(_ newModels:[AddPhotoModel]) {
+        let section = self.section ?? CollectionSection()
+        var models = self.models?.filter({$0 != self.addPhotoModel}) ?? [AddPhotoModel]()
         
+        for model in newModels {
+            if models.count < self.maxImageCount {
+                models.append(model)
+            }else {
+                break
+            }
+        }
+        if models.count < self.maxImageCount {
+            models.append(self.addPhotoModel)
+        }
+        self.updateDataSource({ (oldDataArray) -> [(CollectionSection, [CollectionModel])]? in
+            return [(section,models)]
+        })
+        self.phtotosChanged.onNext(models.filter({$0 != self.addPhotoModel}))
+    }
+    func delectPhoto(_ model:AddPhotoModel) {
         Alert.showChoice(title: "删除图片", "确定要删除图片吗？", {
             if var models = self.models,let index = models.index(of: model) {
+                models.remove(at: index)
+                if models.count < self.maxImageCount, !models.contains(self.addPhotoModel) {
+                    models.append(self.addPhotoModel)
+                }
                 self.updateDataSource({ (oldDataSection) -> [(CollectionSection, [CollectionModel])]? in
-                    models.remove(at: index)
-                    if models.count < self.maxImageCount, !models.contains(self.addPhotoModel) {
-                        models.append(self.addPhotoModel)
-                    }
                     return [(self.section!,models)]
                 })
+                self.phtotosChanged.onNext(models.filter({$0 != self.addPhotoModel}))
             }else {
                 Alert.showPrompt("删除失败")
             }

@@ -32,16 +32,16 @@ extension JDButtonArrCell {
             self.gridViewItemsData = array
         }).addDisposableTo(disposeBag)
         
-        self.gridView.itemArray.forEach { (button) in
-            button.isSelected = model.selectedButtons.contains(button)
+        self.gridView.itemArray.enumerated().forEach { (offset,button) in
+            button.isSelected = model.selectedButtonIndexs.contains(offset)
             model.buttonsSelectedAppearance(button)
             
             button.rx.touchUpInside({[unowned self] (button) in
                 button.isSelected = !button.isSelected
-                if button.isSelected && !model.selectedButtons.contains(button) {
-                    model.selectedButtons.append(button)
-                }else if !button.isSelected, let index = model.selectedButtons.index(of: button) {
-                    model.selectedButtons.remove(at: index)
+                if button.isSelected && !model.selectedButtonIndexs.contains(offset) {
+                    model.selectedButtonIndexs.append(offset)
+                }else if !button.isSelected, let index = model.selectedButtonIndexs.index(of: offset) {
+                    model.selectedButtonIndexs.remove(at: index)
                 }
                 model.buttonsSelectedAppearance(button)
                 self.checkMaxCount(model: model)
@@ -51,8 +51,9 @@ extension JDButtonArrCell {
     private func checkMaxCount(model:JDButtonArrModel) {
         let maxSelectButtonCount = model.maxSelectButtonCount
         
-        if maxSelectButtonCount > 0 && model.selectedButtons.count > maxSelectButtonCount {
-            let button = model.selectedButtons.removeFirst()
+        if maxSelectButtonCount > 0 && model.selectedButtonIndexs.count > maxSelectButtonCount {
+            let index = model.selectedButtonIndexs.removeFirst()
+            let button = self.gridView.itemArray[index]
             button.isSelected = false
             model.buttonsSelectedAppearance(button)
         }

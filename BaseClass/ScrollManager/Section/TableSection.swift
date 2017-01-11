@@ -18,5 +18,11 @@ class TableSection:ListSection {
     var headerView:UITableViewHeaderFooterView = UITableViewHeaderFooterView()
     var footerView:UITableViewHeaderFooterView = UITableViewHeaderFooterView()
     
-
+    func setHeaderTitle(_ title:String,font:UIFont = Font.h4,color:UIColor = Color.lightGray) {
+        self.headerView.thenMain { (headerView) in
+            headerView.textLabel?.text = title
+            headerView.textLabel?.font = font
+            headerView.textLabel?.textColor = color
+        }
+    }
 }
